@@ -1,19 +1,15 @@
-import React, {Fragment} from 'react';
+import React from "react";
+import FixedElements from "./components/FixedElements";
+import Header from "./components/Header";
 
-const App = (): JSX.Element => (
-	<Fragment>
-		<div className="flex h-screen">
-			<div className="m-auto">
-				<h1 className="text-6xl">
-					Welcome to InfinityMint!
-				</h1>
-				<p>
-					Read the docs <a className='text-blue' href="https://docs.infinitymint.app">here </a>
-					to get started!
-				</p>
-			</div>
-		</div>
-	</Fragment>
-);
+const App = (): JSX.Element => {
+  return (
+    <>
+      <Header />
+      {/** Contains the footer and the 0x0zLogo with the console button */}
+      <FixedElements />
+    </>
+  );
+};
 
 export default App;

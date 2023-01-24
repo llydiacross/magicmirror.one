@@ -1,9 +1,31 @@
 /* TODO: Link these manually & dont rely on font servers. */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap");
 @import url("https://use.typekit.net/ttg4ufb.css");
 
+@font-face {
+  font-family: "Apocalypse Grunge";
+  src: url("./resources/Apocalypse Grunge.ttf");
+}
+
+@keyframes blink-text {
+  0% {
+    color: transparent;
+  }
+  50% {
+    color: transparent;
+  }
+  50.1% {
+    color: black;
+  }
+  100% {
+    color: black;
+  }
+}
+
+.blink-text {
+  animation: 1s blink-text step-end infinite;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
