@@ -1,19 +1,39 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import storage from "../storage";
 import { AppContext } from "../contexts/appContext";
+import WebEvents from "../webEvents";
+import config from "../config";
 
-function ConsoleModal({ hidden, onHide }) {
+function SettingsModal({ hidden, onHide }) {
   const web3StorageRef = useRef(null);
   const ipfsCompanionRef = useRef(null);
+  const defaultThemeRef = useRef(null);
   const context = useContext(AppContext);
+  const [currentTheme, setCurrentTheme] = useState("luxury");
+  const eventEmitterCallbackRef = useRef(null);
+
+  useEffect(() => {
+    if (storage.getGlobalPreference("default_theme"))
+      setCurrentTheme(storage.getGlobalPreference("default_theme"));
+
+    if (eventEmitterCallbackRef.current === null) {
+      eventEmitterCallbackRef.current = () => {
+        if (storage.getGlobalPreference("default_theme"))
+          setCurrentTheme(storage.getGlobalPreference("default_theme"));
+      };
+    }
+
+    WebEvents.on("reload", eventEmitterCallbackRef.current);
+  }, []);
 
   return (
     <div
-      className="mx-auto sm:w-3/5 md:w-3/4 lg:w-2/4 fixed inset-0 flex items-center  overflow-y-auto"
+      data-theme={currentTheme}
+      className="mx-auto sm:w-3/5 md:w-3/5 lg:w-4/5 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
       hidden={hidden}
     >
-      <div className="bg-white rounded-md flex w-full">
+      <div className="bg-white rounded-md flex w-full overflow-y-auto max-h-screen shadow shadow-lg">
         <div className="flex flex-col w-full">
           <div className="bg-yellow-400 p-2 text-black text-3xl">
             <b>⚙️</b>
@@ -39,7 +59,7 @@ function ConsoleModal({ hidden, onHide }) {
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
                 />
-                <button className="btn bg-black w-[12em] hover:text-white">
+                <button className="btn bg-black w-[14em] hover:text-white">
                   Sign Up To Web3 Storage
                 </button>
               </div>
@@ -62,7 +82,7 @@ function ConsoleModal({ hidden, onHide }) {
                   placeholder="Enter your IPFS Companion Endpoint..."
                   className="input input-bordered  w-full"
                 />
-                <button className="btn bg-black w-[12em] hover:text-white">
+                <button className="btn bg-black w-[14em] hover:text-white">
                   Check
                 </button>
               </div>
@@ -102,6 +122,23 @@ function ConsoleModal({ hidden, onHide }) {
             ) : (
               <></>
             )}
+            <div className="form-control mt-4">
+              <p className="text-2xl mb-4 border-b-2 text-black">
+                Default Theme
+              </p>
+              <div className="input-group">
+                <select className="select w-full" ref={defaultThemeRef}>
+                  {config.themes.map((theme) => {
+                    if (
+                      theme === storage.getGlobalPreference("default_theme")
+                    ) {
+                      return <option selected>{theme}</option>;
+                    }
+                    return <option>{theme}</option>;
+                  })}
+                </select>
+              </div>
+            </div>
             <p className="mt-4">
               More information on what this means can{" "}
               <a href="?" className="underline text-yellow-500">
@@ -120,7 +157,12 @@ function ConsoleModal({ hidden, onHide }) {
                   "ipfs_companion_endpoint",
                   ipfsCompanionRef.current.value
                 );
+                storage.setGlobalPreference(
+                  "default_theme",
+                  defaultThemeRef.current.value
+                );
                 storage.saveData();
+                WebEvents.emit("reload");
                 if (onHide) onHide();
               }}
             >
@@ -133,9 +175,9 @@ function ConsoleModal({ hidden, onHide }) {
   );
 }
 
-ConsoleModal.propTypes = {
+SettingsModal.propTypes = {
   hidden: PropTypes.bool,
   onHide: PropTypes.func,
 };
 
-export default ConsoleModal;
+export default SettingsModal;

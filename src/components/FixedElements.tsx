@@ -13,11 +13,11 @@ function FixedElements({ onSettings, walletError }) {
       <div className="fixed top-0 left-0">
         {context.walletError ? (
           <>
-            <div className="alert alert-error shadow-lg m-5 animate-bounce">
+            <div className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0">
               <div>
                 <ErrorIcon />
                 <span>
-                  <b className="mr-2">No Web3</b>
+                  <b className="mr-2">No Web3 Session</b>
                   {context.walletError?.message ||
                     context.walletError?.toString() ||
                     "We don't know why!"}
@@ -87,6 +87,14 @@ function FixedElements({ onSettings, walletError }) {
               className="text-yellow-100 underline"
             >
               GitHub
+            </a>
+            . Our lovely themes we can offer you were created by the lovely
+            people at{" "}
+            <a
+              href="https://daisyui.com/"
+              className="text-yellow-100 underline"
+            >
+              daisyui
             </a>
             .
           </div>

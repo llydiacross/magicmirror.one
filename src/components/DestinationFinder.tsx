@@ -13,8 +13,6 @@ export default function DestinationFinder() {
     setError(false);
     destination = destination.toString();
     destination = destination.trim();
-    destination = destination.split(".eth")[0];
-    destination = destination.split(".infinitymint")[0];
     //remove leading and trailing dots
     destination = destination.replace(/^\.+|\.+$/g, "");
     //remove http:// or https:// from the destination
@@ -24,16 +22,31 @@ export default function DestinationFinder() {
     if (destination.includes("https://")) {
       destination = destination.replace("https://", "");
     }
-
+    //remove html tags from the destination
+    destination = destination.replace(/<[^>]*>/g, "");
     //remove any colons and stuff
     destination = destination.replace(/:|;|\?|\|\*|#/g, "");
     //remove leading and trailing spaces
     destination = destination.trim();
 
-    //if the destination is empty, throw an error
+    let isInfinityMint = false;
+    if (
+      destination.indexOf(".im") !== -1 ||
+      destination.indexOf(".infinitymint") !== -1
+    ) {
+      isInfinityMint = true;
+      destination = destination.split(".").slice(0, -1).join(".");
+    }
+
+    if (destination.indexOf(".eth") !== -1)
+      destination = destination.split(".").slice(0, -1).join(".");
 
     if (destination.length === 0)
       throw new Error("Please enter a destination to visit!");
+
+    if (destination.length > 100) throw new Error("Destination is too long!");
+
+    destination = destination + (isInfinityMint ? ".infinitymint" : ".eth");
 
     //emit that we are going to this destination with the app wide event emitter
     WebEvents.emit("gotoDestination", destination);
@@ -55,7 +68,7 @@ export default function DestinationFinder() {
     gotoAddress(destination)
       .catch(errorHandler)
       .finally(() => {
-        // setLoading(false);
+        setLoading(false);
       });
   };
 
@@ -64,13 +77,13 @@ export default function DestinationFinder() {
     gotoAddress("xxx.eth")
       .catch(errorHandler)
       .finally(() => {
-        //setLoading(false);
+        setLoading(false);
       });
   };
 
   return (
-    <>
-      <div className="alert alert-error shadow-lg" hidden={!error}>
+    <div className="w-full">
+      <div className="alert alert-error shadow-lg mb-3" hidden={!error}>
         <div>
           <ErrorIcon />
           <span>
@@ -79,13 +92,14 @@ export default function DestinationFinder() {
           </span>
         </div>
       </div>
-      <div className="form-control lg:min-w-[54em] md:min-w-[46em] w-full">
+      <div className="form-control lg:min-w-[54em] md:min-w-[46em]">
         <div className="input-group">
           <input
             type="text"
             data-loading={loading}
             disabled={loading}
             ref={inputElement}
+            maxLength={150}
             onKeyDown={(e) => {
               if (e.key === "Enter") handleVisit();
             }}
@@ -113,6 +127,6 @@ export default function DestinationFinder() {
           TAKE ME ANYWHERE
         </button>
       </div>
-    </>
+    </div>
   );
 }

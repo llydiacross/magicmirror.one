@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import DestinationFinder from "./DestinationFinder";
 import WebEvents from "../webEvents";
+import storage from "../storage";
 
 /**
  * Might move these to a config file...
@@ -152,13 +153,34 @@ function Header({
   const typeWriterElement = useRef(
     `#${btoa(Math.floor(Math.random() * 100000).toString())}`
   );
+  const [currentTheme, setCurrentTheme] = useState(theme || null);
   const speedRef = useRef(typeWriterSpeed);
   const textRef = useRef(initialText);
   const callbackRef = useRef(null);
   const writeTextRef = useRef(null);
+  const eventEmitterCallbackRef = useRef(null);
+  const themeRef = useRef(theme || null);
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
+    if (
+      themeRef.current === null &&
+      storage.getGlobalPreference("default_theme")
+    )
+      setCurrentTheme(storage.getGlobalPreference("default_theme"));
+
+    if (eventEmitterCallbackRef.current === null) {
+      eventEmitterCallbackRef.current = () => {
+        if (
+          themeRef.current === null &&
+          storage.getGlobalPreference("default_theme")
+        )
+          setCurrentTheme(storage.getGlobalPreference("default_theme"));
+      };
+    }
+
+    WebEvents.on("reload", eventEmitterCallbackRef.current);
+
     //cb for the typeWriter animation
     callbackRef.current = (destination: string) => {
       if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
@@ -229,15 +251,13 @@ function Header({
 
     return () => {
       WebEvents.off("gotoDestination", callbackRef.current);
+      WebEvents.off("reload", eventEmitterCallbackRef.current);
     };
   }, []);
 
   return (
-    <div
-      className="hero min-h-screen bg-base-200"
-      data-theme={theme || "luxury"}
-    >
-      <div className="hero-content text-center">
+    <div className="hero min-h-screen bg-base-200" data-theme={currentTheme}>
+      <div className="hero-content text-center max-w-full">
         <div className="flex flex-col gap-4">
           {/** mobile title */}
 
@@ -250,7 +270,7 @@ function Header({
           </h1>
 
           <h1
-            className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2"
+            className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 overflow-hidden"
             id={typeWriterElement.current}
           >
             {/** The initial input is controlled by a prop */}
