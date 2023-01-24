@@ -1,9 +1,51 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import ErrorIcon from "./Icons/ErrorIcon";
+import { AppContext } from "../contexts/appContext";
+import SuccessIcon from "./Icons/SuccessIcon";
 
-function FixedElements({ onSettings }) {
+function FixedElements({ onSettings, walletError }) {
+  const context = useContext(AppContext);
+
   return (
     <>
+      {/** Element for the Wallet Error */}
+      <div className="fixed top-0 left-0">
+        {context.walletError ? (
+          <>
+            <div className="alert alert-error shadow-lg m-5 animate-bounce">
+              <div>
+                <ErrorIcon />
+                <span>
+                  <b className="mr-2">No Web3</b>
+                  {context.walletError?.message ||
+                    context.walletError?.toString() ||
+                    "We don't know why!"}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+      <div className="fixed top-0 left-0">
+        {context.walletConnected ? (
+          <>
+            <div className="alert alert-success shadow-lg m-5">
+              <div>
+                <SuccessIcon className="animate-bounce mr-5" />
+                <span>
+                  <b>{context.accounts[0]}</b>
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+      {/** 0x0zLogo */}
       <div className="fixed top-0 right-0 ">
         <div className="flex flex-col">
           <img
@@ -19,6 +61,7 @@ function FixedElements({ onSettings }) {
           </button>
         </div>
       </div>
+      {/** Footer */}
       <div className="fixed bottom-0 w-full">
         <div className="flex flex-col">
           <div className="w-full bg-black text-white text-center p-4">
@@ -47,5 +90,6 @@ function FixedElements({ onSettings }) {
 
 FixedElements.propTypes = {
   onSettings: PropTypes.func,
+  walletError: PropTypes.object,
 };
 export default FixedElements;

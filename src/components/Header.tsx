@@ -139,18 +139,23 @@ const destinations = [
 ];
 
 //handle for the typeWriter animation
-
-function Header({ theme, title, typeWriterSpeed, initialText }) {
-  let pickDestinationHandle = useRef(null);
-  let typeWriterHandle = useRef(null);
+function Header({
+  theme,
+  title,
+  typeWriterSpeed = 50,
+  initialText = "Where will you go today?",
+  showFinder = true,
+}) {
+  const pickDestinationHandle = useRef(null);
+  const typeWriterHandle = useRef(null);
   //to allow more than one header
-  let typeWriterElement = useRef(
+  const typeWriterElement = useRef(
     `#${btoa(Math.floor(Math.random() * 100000).toString())}`
   );
-  let speedRef = useRef(typeWriterSpeed || 50);
-  let textRef = useRef(initialText || "Where will you go today?");
-  let callbackRef = useRef(null);
-  let writeTextRef = useRef(null);
+  const speedRef = useRef(typeWriterSpeed);
+  const textRef = useRef(initialText);
+  const callbackRef = useRef(null);
+  const writeTextRef = useRef(null);
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
@@ -250,7 +255,7 @@ function Header({ theme, title, typeWriterSpeed, initialText }) {
           >
             {/** The initial input is controlled by a prop */}
           </h1>
-          <DestinationFinder />
+          {showFinder ? <DestinationFinder /> : <></>}
         </div>
       </div>
     </div>
@@ -261,6 +266,7 @@ Header.propTypes = {
   theme: PropTypes.string,
   title: PropTypes.string,
   initialText: PropTypes.string,
+  showFinder: PropTypes.bool,
   typeWriterSpeed: PropTypes.number,
 };
 

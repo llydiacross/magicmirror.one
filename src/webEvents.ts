@@ -2,6 +2,8 @@ import EventEmitter from "events";
 
 export interface WebEmitterEvents {
   gotoDestination: Function;
+  walletError: Function;
+  reload: Function;
 }
 
 export declare interface WebEventEmitter {
