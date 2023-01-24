@@ -1,29 +1,34 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import PropTypes from "prop-types";
 import storage from "../storage";
+import { AppContext } from "../contexts/appContext";
 
 function ConsoleModal({ hidden, onHide }) {
   const web3StorageRef = useRef(null);
   const ipfsCompanionRef = useRef(null);
+  const context = useContext(AppContext);
 
   return (
     <div
-      className="mx-auto sm:w-3/4 md:w-2/4 fixed inset-0 flex items-center"
+      className="mx-auto sm:w-3/5 md:w-3/4 lg:w-2/4 fixed inset-0 flex items-center  overflow-y-auto"
       hidden={hidden}
     >
       <div className="bg-white rounded-md flex w-full">
         <div className="flex flex-col w-full">
           <div className="bg-yellow-400 p-2 text-black text-3xl">
-            <b>⚙️ The Settings</b>
+            <b>⚙️</b>
           </div>
           <div className="flex flex-col flex-1 p-3">
             <p className="mt-4">
-              In order to edit your ens domains using web.eth you will need to
-              have a valid IPFS endpoint or a Web3.Storage account.
+              Here you can specify the storage provider you want to use. You
+              must have an account with web3.storage or an IPFS Companion on
+              your system.
             </p>
 
             <div className="form-control mt-4">
-              <p className="text-2xl mb-4 border-b-2">Web3.Storage</p>
+              <p className="text-2xl mb-4 border-b-2 text-black">
+                Web3.Storage
+              </p>
               <div className="input-group">
                 <input
                   type="text"
@@ -38,12 +43,12 @@ function ConsoleModal({ hidden, onHide }) {
                   Sign Up To Web3 Storage
                 </button>
               </div>
-              <button className="btn btn-sm bg-yellow-500 mt-2 text-black hover:text-white">
+              <button className="btn btn-sm bg-blue-500 mt-2 text-black hover:text-white">
                 Check Web3 Storage Key
               </button>
             </div>
             <div className="form-control mt-4">
-              <p className="text-2xl mb-4 border-b-2">
+              <p className="text-2xl mb-4 text-black border-b-2">
                 IPFS Companion / Endpoint
               </p>
               <div className="input-group">
@@ -62,6 +67,41 @@ function ConsoleModal({ hidden, onHide }) {
                 </button>
               </div>
             </div>
+            {context.walletConnected ? (
+              <>
+                <p className="text-2xl mb-4 mt-2 text-black border-b-2">
+                  Your Connected Accounts
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="table w-full mb-2">
+                    <thead>
+                      <tr>
+                        <th></th>
+
+                        <th>Wallet Address</th>
+                        <th>ENS Address</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {context.accounts.map((account, index) => {
+                        return (
+                          <tr key={index}>
+                            <th>{index}</th>
+                            <td>{account}</td>
+                            <td>Waiting...</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <button className="btn btn-sm w-full bg-red-500 mt-2 text-white hover:bg-black">
+                  Disconnect
+                </button>
+              </>
+            ) : (
+              <></>
+            )}
             <p className="mt-4">
               More information on what this means can{" "}
               <a href="?" className="underline text-yellow-500">
@@ -70,7 +110,7 @@ function ConsoleModal({ hidden, onHide }) {
               .
             </p>
             <button
-              className="btn bg-pink-500 text-white mt-4 hover:bg-success animate-pulse hover:animate-none"
+              className="btn bg-success text-white mt-4 hover:bg-black animate-pulse hover:animate-none"
               onClick={() => {
                 storage.setGlobalPreference(
                   "web3_storage_key",

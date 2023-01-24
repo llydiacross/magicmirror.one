@@ -32,11 +32,19 @@ function FixedElements({ onSettings, walletError }) {
       <div className="fixed top-0 left-0">
         {context.walletConnected ? (
           <>
-            <div className="alert alert-success shadow-lg m-5">
+            <div className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0">
               <div>
-                <SuccessIcon className="animate-bounce mr-5" />
+                <SuccessIcon className="animate-bounce" />
                 <span>
                   <b>{context.accounts[0]}</b>
+                </span>
+              </div>
+            </div>
+            <div className="alert alert-success shadow-lg m-5 block md:hidden lg:hidden pr-4 mr-4">
+              <div>
+                <SuccessIcon className="animate-bounce" />
+                <span>
+                  <b>Connected</b>
                 </span>
               </div>
             </div>

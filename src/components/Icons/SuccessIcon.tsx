@@ -4,7 +4,7 @@ export default function SuccessIcon({ scale = 24, className = "" }) {
   return (
     <svg
       viewBox={"0 0 " + scale + " " + scale}
-      className={"text-green-600 w-10 h-10 sm:w-5 sm:h-5 " + className}
+      className={"text-green-600 sm:w-5 sm:h-5 " + className}
     >
       <path
         fill="currentColor"
