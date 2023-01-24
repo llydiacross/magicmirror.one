@@ -92,6 +92,50 @@ const destinations = [
   "🎧club.eth",
   "sow3.eth",
   "sow3.🎧club.eth",
+  "deer.eth",
+  "rabbit.eth",
+  "fox.eth",
+  "bear.eth",
+  "wolf.eth",
+  "lion.eth",
+  "tiger.eth",
+  "elephant.eth",
+  "giraffe.eth",
+  "rhino.eth",
+  "hippo.eth",
+  "zebra.eth",
+  "gorilla.eth",
+  "monkey.eth",
+  "panda.eth",
+  "koala.eth",
+  "penguin.eth",
+  "dolphin.eth",
+  "whale.eth",
+  "shark.eth",
+  "seal.eth",
+  "octopus.eth",
+  "squid.eth",
+  "crab.eth",
+  "lobster.eth",
+  "shrimp.eth",
+  "salmon.eth",
+  "trout.eth",
+  "eel.eth",
+  "frog.eth",
+  "toad.eth",
+  "lizard.eth",
+  "snake.eth",
+  "turtle.eth",
+  "chameleon.eth",
+  "iguana.eth",
+  "alligator.eth",
+  "jimmy.eth",
+  "jimmy-omar.eth",
+  "jimmy-song.eth",
+  "jimmy-dorsey.eth",
+  "jimmy-ma.eth",
+  "jimmy-graham.eth",
+  "jimmy-omar.eth",
 ];
 
 //handle for the typeWriter animation
@@ -99,6 +143,10 @@ const destinations = [
 function Header({ theme, title }) {
   let pickDestinationHandle = useRef(null);
   let typeWriterHandle = useRef(null);
+  //to allow more than one header
+  let typeWriterElement = useRef(
+    `#${btoa(Math.floor(Math.random() * 100000).toString())}`
+  );
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
@@ -118,14 +166,14 @@ function Header({ theme, title }) {
     WebEvents.off("gotoDestination", cb);
     WebEvents.on("gotoDestination", cb);
 
-    if (!document.getElementById("animated-text"))
-      throw new Error('no element with id "animated-text" found');
+    if (!document.getElementById(typeWriterElement.current))
+      throw new Error(`no element with id ${typeWriterElement.current} found`);
 
     //fixes reloading
     if (pickDestinationHandle.current)
       clearTimeout(pickDestinationHandle.current);
 
-    let text = document.getElementById("animated-text");
+    let text = document.getElementById(typeWriterElement.current);
     // make the text animate like a typewriter
     let i = 0;
     let txt = " Where will you go today?";
@@ -189,7 +237,7 @@ function Header({ theme, title }) {
 
           <h1
             className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2"
-            id="animated-text"
+            id={typeWriterElement.current}
           >
             Where will you go today?
           </h1>

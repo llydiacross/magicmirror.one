@@ -30,11 +30,7 @@ div[hidden] {
   @apply hidden;
 }
 
-.alert[aria-hidden="true"] {
-  @apply hidden;
-}
-
-.alert[aria-hidden="false"] {
+.alert[hidden="false"] {
   @apply animate-pulse;
 }
 

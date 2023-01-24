@@ -2,12 +2,12 @@ import React, { useRef, useState } from "react";
 import ErrorIcon from "./Icons/ErrorIcon";
 import WebEvents from "../webEvents";
 
-let errorTimeout: any;
 export default function DestinationFinder() {
   const inputElement = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [hasInput, setHasInput] = useState(false);
+  const errorRef = useRef(null);
 
   let gotoAddress = async (destination: string) => {
     setError(false);
@@ -42,8 +42,8 @@ export default function DestinationFinder() {
   const errorHandler = (error: any) => {
     setError(error.message);
     //fade out the error after 5 seconds
-    clearTimeout(errorTimeout);
-    errorTimeout = setTimeout(() => {
+    clearTimeout(errorRef.current);
+    errorRef.current = setTimeout(() => {
       setError(false);
     }, 10000);
   };
@@ -70,7 +70,7 @@ export default function DestinationFinder() {
 
   return (
     <>
-      <div className="alert alert-error shadow-lg" aria-hidden={!error}>
+      <div className="alert alert-error shadow-lg" hidden={!error}>
         <div>
           <ErrorIcon />
           <span>
