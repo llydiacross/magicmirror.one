@@ -55,7 +55,7 @@ export default function DestinationFinder() {
     gotoAddress(destination)
       .catch(errorHandler)
       .finally(() => {
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
@@ -64,7 +64,7 @@ export default function DestinationFinder() {
     gotoAddress("xxx.eth")
       .catch(errorHandler)
       .finally(() => {
-        setLoading(false);
+        //setLoading(false);
       });
   };
 

@@ -107,6 +107,7 @@ function Header({ theme, title }) {
       if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
       if (pickDestinationHandle.current)
         clearTimeout(pickDestinationHandle.current);
+
       text.innerHTML = "";
       buffer = "";
       i = 0;
@@ -124,7 +125,7 @@ function Header({ theme, title }) {
     let text = document.getElementById("animated-text");
     // make the text animate like a typewriter
     let i = 0;
-    let txt = text.innerHTML;
+    let txt = " Where will you go today?";
     let speed = 50;
     let buffer = "";
 
@@ -166,7 +167,7 @@ function Header({ theme, title }) {
 
     buffer = "";
     text.innerHTML = "";
-    typeWriter(true);
+    if (!typeWriterHandle.current) typeWriter(true);
   });
 
   return (
