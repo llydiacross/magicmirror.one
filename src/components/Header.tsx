@@ -1,8 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import DestinationFinder from "./DestinationFinder";
+import WebEvents from "../webEvents";
 
-const locations = [
+/**
+ * Might move these to a config file...
+ */
+const destinations = [
   "xxx.eth",
   "web.eth",
   "infinitymint.eth",
@@ -91,42 +95,62 @@ const locations = [
 ];
 
 //handle for the typeWriter animation
-let handle: any;
-let typeHandle: any;
 
-function Header({ theme, title, forceTypeWriter }) {
+function Header({ theme, title }) {
+  let pickDestinationHandle = useRef(null);
+  let typeWriterHandle = useRef(null);
+
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
+    //cb for the typeWriter animation
+    let cb = (destination: string) => {
+      if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
+      if (pickDestinationHandle.current)
+        clearTimeout(pickDestinationHandle.current);
+      text.innerHTML = "";
+      buffer = "";
+      i = 0;
+      txt = destination;
+      typeWriter();
+    };
+
     if (!document.getElementById("animated-text"))
       throw new Error('no element with id "animated-text" found');
+
+    //fixes reloading
+    if (pickDestinationHandle.current)
+      clearTimeout(pickDestinationHandle.current);
 
     let text = document.getElementById("animated-text");
     // make the text animate like a typewriter
     let i = 0;
     let txt = text.innerHTML;
-    let buffer = "";
     let speed = 50;
+    let buffer = "";
 
-    //fixes reloading
-    if (handle) clearTimeout(handle);
+    WebEvents.off("gotoDestination", cb);
+    WebEvents.on("gotoDestination", cb);
 
-    let typeWriter = () => {
+    let typeWriter = (doRandomName?: boolean) => {
       if (i < txt.length) {
         buffer += txt.charAt(i);
         text.innerHTML = buffer;
         i++;
-        typeHandle = setTimeout(typeWriter, speed);
+        typeWriterHandle.current = setTimeout(
+          () => typeWriter(doRandomName),
+          speed
+        );
       } else {
         text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
 
-        if (!forceTypeWriter || forceTypeWriter.length === 0)
-          handle = setTimeout(() => {
-            if (typeHandle) clearTimeout(typeHandle);
+        if (doRandomName)
+          pickDestinationHandle.current = setTimeout(() => {
             randomNames();
-          }, 1000 * Math.floor(Math.random() * 10) + 10000);
+          }, 1000 * Math.floor(Math.random() * 10) + 6000);
         else {
-          if (typeHandle) clearTimeout(typeHandle);
-          if (handle) clearTimeout(handle);
+          if (pickDestinationHandle.current)
+            clearTimeout(pickDestinationHandle.current);
+          if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
         }
       }
     };
@@ -135,25 +159,15 @@ function Header({ theme, title, forceTypeWriter }) {
       text.innerHTML = "";
       buffer = "";
       i = 0;
-      let randomIndex = Math.floor(Math.random() * locations.length);
-      txt = `${locations[randomIndex]}`;
-      typeWriter();
+      let randomIndex = Math.floor(Math.random() * destinations.length);
+      txt = `${destinations[randomIndex]}`;
+      typeWriter(true);
     };
 
-    if (!forceTypeWriter || forceTypeWriter.length === 0) {
-      text.innerHTML = "";
-      typeWriter();
-    } else {
-      if (typeHandle) clearTimeout(typeHandle);
-      if (handle) clearTimeout(handle);
-      //if forceTypeWriter is greather than 20 characters, truncate it
-      txt =
-        forceTypeWriter.length > 20
-          ? forceTypeWriter.slice(0, 20) + "..."
-          : forceTypeWriter;
-      typeWriter();
-    }
-  }, [forceTypeWriter]);
+    buffer = "";
+    text.innerHTML = "";
+    typeWriter(true);
+  });
 
   return (
     <div
@@ -188,7 +202,6 @@ function Header({ theme, title, forceTypeWriter }) {
 Header.propTypes = {
   theme: PropTypes.string,
   title: PropTypes.string,
-  forceTypeWriter: PropTypes.string,
 };
 
 export default Header;
