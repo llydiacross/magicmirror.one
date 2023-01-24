@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import ErrorIcon from "./Icons/ErrorIcon";
+import WebEvents from "../webEvents";
 
 let errorTimeout: any;
 export default function DestinationFinder() {
@@ -9,12 +10,13 @@ export default function DestinationFinder() {
   const [hasInput, setHasInput] = useState(false);
 
   let gotoAddress = async (destination: string) => {
+    setError(false);
     destination = destination.toString();
     destination = destination.trim();
-    destination = destination.split("eth")[0];
-    if (destination[destination.length - 1] === ".")
-      destination = destination.slice(0, -1);
-
+    destination = destination.split(".eth")[0];
+    destination = destination.split(".infinitymint")[0];
+    //remove leading and trailing dots
+    destination = destination.replace(/^\.+|\.+$/g, "");
     //remove http:// or https:// from the destination
     if (destination.includes("http://")) {
       destination = destination.replace("http://", "");
@@ -23,8 +25,27 @@ export default function DestinationFinder() {
       destination = destination.replace("https://", "");
     }
 
+    //remove any colons and stuff
+    destination = destination.replace(/:|;|\?|\|\*|#/g, "");
+    //remove leading and trailing spaces
+    destination = destination.trim();
+
+    //if the destination is empty, throw an error
+
     if (destination.length === 0)
       throw new Error("Please enter a destination to visit!");
+
+    //emit that we are going to this destination with the app wide event emitter
+    WebEvents.emit("gotoDestination", destination);
+  };
+
+  const errorHandler = (error: any) => {
+    setError(error.message);
+    //fade out the error after 5 seconds
+    clearTimeout(errorTimeout);
+    errorTimeout = setTimeout(() => {
+      setError(false);
+    }, 10000);
   };
 
   //get the current destination from the box and goes to it
@@ -32,14 +53,7 @@ export default function DestinationFinder() {
     setLoading(true);
     let destination = inputElement.current.value;
     gotoAddress(destination)
-      .catch((error) => {
-        setError(error.message);
-        //clear the error after 5 seconds
-        clearTimeout(errorTimeout);
-        errorTimeout = setTimeout(() => {
-          setError(false);
-        }, 5000);
-      })
+      .catch(errorHandler)
       .finally(() => {
         setLoading(false);
       });
@@ -48,14 +62,7 @@ export default function DestinationFinder() {
   //pick random tokenId from ENS and try and got to it...
   const handleTakeMeAnywhere = () => {
     gotoAddress("xxx.eth")
-      .catch((error) => {
-        setError(error.message);
-        //fade out the error after 5 seconds
-        clearTimeout(errorTimeout);
-        errorTimeout = setTimeout(() => {
-          setError(false);
-        }, 5000);
-      })
+      .catch(errorHandler)
       .finally(() => {
         setLoading(false);
       });
@@ -79,6 +86,9 @@ export default function DestinationFinder() {
             data-loading={loading}
             disabled={loading}
             ref={inputElement}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleVisit();
+            }}
             onInput={() => {
               setHasInput(inputElement.current.value.length > 0);
             }}
@@ -88,7 +98,7 @@ export default function DestinationFinder() {
           <button
             data-loading={loading}
             disabled={loading || !hasInput}
-            className="btn bg-warning text-black w-[10em] hover:text-white"
+            className="btn bg-warning text-black w-[10em] hover:text-white hover:bg-black hover:text-yellow-500"
             onClick={handleVisit}
           >
             VISIT

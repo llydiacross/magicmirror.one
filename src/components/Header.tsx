@@ -92,8 +92,9 @@ const locations = [
 
 //handle for the typeWriter animation
 let handle: any;
+let typeHandle: any;
 
-function Header({ theme }) {
+function Header({ theme, title, forceTypeWriter }) {
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
     if (!document.getElementById("animated-text"))
@@ -102,7 +103,7 @@ function Header({ theme }) {
     let text = document.getElementById("animated-text");
     // make the text animate like a typewriter
     let i = 0;
-    let txt = text.textContent;
+    let txt = text.innerHTML;
     let buffer = "";
     let speed = 50;
 
@@ -114,12 +115,19 @@ function Header({ theme }) {
         buffer += txt.charAt(i);
         text.innerHTML = buffer;
         i++;
-        setTimeout(typeWriter, speed);
+        typeHandle = setTimeout(typeWriter, speed);
       } else {
         text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
-        handle = setTimeout(() => {
-          randomNames();
-        }, 1000 * Math.floor(Math.random() * 10) + 10000);
+
+        if (!forceTypeWriter || forceTypeWriter.length === 0)
+          handle = setTimeout(() => {
+            if (typeHandle) clearTimeout(typeHandle);
+            randomNames();
+          }, 1000 * Math.floor(Math.random() * 10) + 10000);
+        else {
+          if (typeHandle) clearTimeout(typeHandle);
+          if (handle) clearTimeout(handle);
+        }
       }
     };
 
@@ -132,9 +140,20 @@ function Header({ theme }) {
       typeWriter();
     };
 
-    text.innerHTML = "";
-    typeWriter();
-  }, []);
+    if (!forceTypeWriter || forceTypeWriter.length === 0) {
+      text.innerHTML = "";
+      typeWriter();
+    } else {
+      if (typeHandle) clearTimeout(typeHandle);
+      if (handle) clearTimeout(handle);
+      //if forceTypeWriter is greather than 20 characters, truncate it
+      txt =
+        forceTypeWriter.length > 20
+          ? forceTypeWriter.slice(0, 20) + "..."
+          : forceTypeWriter;
+      typeWriter();
+    }
+  }, [forceTypeWriter]);
 
   return (
     <div
@@ -144,13 +163,15 @@ function Header({ theme }) {
       <div className="hero-content text-center">
         <div className="flex flex-col gap-4">
           {/** mobile title */}
+
           <h1 className="text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400">
-            www.eth
+            {!title || title.length === 0 ? "web.eth" : title}
           </h1>
           {/** tablet/desktop title */}
           <h1 className="text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400">
-            www.eth
+            {!title || title.length === 0 ? "web.eth" : title}
           </h1>
+
           <h1
             className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2"
             id="animated-text"
@@ -166,6 +187,8 @@ function Header({ theme }) {
 
 Header.propTypes = {
   theme: PropTypes.string,
+  title: PropTypes.string,
+  forceTypeWriter: PropTypes.string,
 };
 
 export default Header;
