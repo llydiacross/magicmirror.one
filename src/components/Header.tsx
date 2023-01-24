@@ -140,18 +140,22 @@ const destinations = [
 
 //handle for the typeWriter animation
 
-function Header({ theme, title }) {
+function Header({ theme, title, typeWriterSpeed, initialText }) {
   let pickDestinationHandle = useRef(null);
   let typeWriterHandle = useRef(null);
   //to allow more than one header
   let typeWriterElement = useRef(
     `#${btoa(Math.floor(Math.random() * 100000).toString())}`
   );
+  let speedRef = useRef(typeWriterSpeed || 50);
+  let textRef = useRef(initialText || "Where will you go today?");
+  let callbackRef = useRef(null);
+  let writeTextRef = useRef(null);
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
     //cb for the typeWriter animation
-    let cb = (destination: string) => {
+    callbackRef.current = (destination: string) => {
       if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
       if (pickDestinationHandle.current)
         clearTimeout(pickDestinationHandle.current);
@@ -160,11 +164,11 @@ function Header({ theme, title }) {
       buffer = "";
       i = 0;
       txt = destination;
-      typeWriter();
+      writeTextRef.current();
     };
 
-    WebEvents.off("gotoDestination", cb);
-    WebEvents.on("gotoDestination", cb);
+    WebEvents.off("gotoDestination", callbackRef.current);
+    WebEvents.on("gotoDestination", callbackRef.current);
 
     if (!document.getElementById(typeWriterElement.current))
       throw new Error(`no element with id ${typeWriterElement.current} found`);
@@ -176,18 +180,17 @@ function Header({ theme, title }) {
     let text = document.getElementById(typeWriterElement.current);
     // make the text animate like a typewriter
     let i = 0;
-    let txt = " Where will you go today?";
-    let speed = 50;
+    let txt = textRef.current;
     let buffer = "";
 
-    let typeWriter = (doRandomName?: boolean) => {
+    writeTextRef.current = (doRandomName?: boolean) => {
       if (i < txt.length) {
         buffer += txt.charAt(i);
         text.innerHTML = buffer;
         i++;
         typeWriterHandle.current = setTimeout(
-          () => typeWriter(doRandomName),
-          speed
+          () => writeTextRef.current(doRandomName),
+          speedRef.current
         );
       } else {
         text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
@@ -210,12 +213,18 @@ function Header({ theme, title }) {
       i = 0;
       let randomIndex = Math.floor(Math.random() * destinations.length);
       txt = `${destinations[randomIndex]}`;
-      typeWriter(true);
+      writeTextRef.current(true);
     };
 
     buffer = "";
     text.innerHTML = "";
-    if (!typeWriterHandle.current) typeWriter(true);
+
+    if (!typeWriterHandle.current && writeTextRef.current !== null)
+      writeTextRef.current(true);
+
+    return () => {
+      WebEvents.off("gotoDestination", callbackRef.current);
+    };
   }, []);
 
   return (
@@ -239,7 +248,7 @@ function Header({ theme, title }) {
             className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2"
             id={typeWriterElement.current}
           >
-            Where will you go today?
+            {/** The initial input is controlled by a prop */}
           </h1>
           <DestinationFinder />
         </div>
@@ -251,6 +260,8 @@ function Header({ theme, title }) {
 Header.propTypes = {
   theme: PropTypes.string,
   title: PropTypes.string,
+  initialText: PropTypes.string,
+  typeWriterSpeed: PropTypes.number,
 };
 
 export default Header;
