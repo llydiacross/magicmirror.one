@@ -115,6 +115,9 @@ function Header({ theme, title }) {
       typeWriter();
     };
 
+    WebEvents.off("gotoDestination", cb);
+    WebEvents.on("gotoDestination", cb);
+
     if (!document.getElementById("animated-text"))
       throw new Error('no element with id "animated-text" found');
 
@@ -128,9 +131,6 @@ function Header({ theme, title }) {
     let txt = " Where will you go today?";
     let speed = 50;
     let buffer = "";
-
-    WebEvents.off("gotoDestination", cb);
-    WebEvents.on("gotoDestination", cb);
 
     let typeWriter = (doRandomName?: boolean) => {
       if (i < txt.length) {
@@ -168,7 +168,7 @@ function Header({ theme, title }) {
     buffer = "";
     text.innerHTML = "";
     if (!typeWriterHandle.current) typeWriter(true);
-  });
+  }, []);
 
   return (
     <div

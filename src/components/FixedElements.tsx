@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export default function FixedElements() {
+function FixedElements({ onSettings }) {
   return (
     <>
       <div className="fixed top-0 right-0 ">
@@ -10,8 +11,11 @@ export default function FixedElements() {
             alt="InfinityMint Logo"
             className="w-20"
           />
-          <button className="btn btn-square rounded-none bg-transparent border-none text-white w-20 hover:text-white hover:bg-pink-500">
-            CONSOLE
+          <button
+            className="btn btn-square rounded-none bg-transparent border-none text-white w-20 hover:text-white hover:bg-pink-500"
+            onClick={onSettings}
+          >
+            SETTINGS
           </button>
         </div>
       </div>
@@ -40,3 +44,8 @@ export default function FixedElements() {
     </>
   );
 }
+
+FixedElements.propTypes = {
+  onSettings: PropTypes.func,
+};
+export default FixedElements;
