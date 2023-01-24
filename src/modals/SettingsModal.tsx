@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 
 function ConsoleModal({ hidden, onHide }) {
+  const web3StorageRef = useRef(null);
+  const ipfsCompanionRef = useRef(null);
+
   return (
     <div
       className="mx-auto sm:w-3/4 md:w-2/4 fixed inset-0 flex items-center"
@@ -9,7 +12,7 @@ function ConsoleModal({ hidden, onHide }) {
     >
       <div className="bg-white rounded-md flex w-full">
         <div className="flex flex-col w-full">
-          <div className="bg-pink-500 p-2 text-white text-2xl">
+          <div className="bg-yellow-400 p-2 text-black text-3xl">
             <b>⚙️ The Settings</b>
           </div>
           <div className="flex flex-col flex-1 p-3">
@@ -23,6 +26,7 @@ function ConsoleModal({ hidden, onHide }) {
               <div className="input-group">
                 <input
                   type="text"
+                  ref={web3StorageRef}
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
                 />
@@ -32,10 +36,13 @@ function ConsoleModal({ hidden, onHide }) {
               </div>
             </div>
             <div className="form-control mt-4">
-              <p className="text-2xl mb-4 border-b-2">IPFS Companion</p>
+              <p className="text-2xl mb-4 border-b-2">
+                IPFS Companion / Endpoint
+              </p>
               <div className="input-group">
                 <input
                   type="text"
+                  ref={ipfsCompanionRef}
                   placeholder="Enter your IPFS Companion Endpoint..."
                   className="input input-bordered  w-full"
                 />
@@ -52,8 +59,10 @@ function ConsoleModal({ hidden, onHide }) {
               .
             </p>
             <button
-              className="btn bg-success text-black mt-4 hover:text-white"
-              onClick={onHide}
+              className="btn bg-pink-500 text-white mt-4 hover:bg-success animate-pulse hover:animate-none"
+              onClick={() => {
+                if (onHide) onHide();
+              }}
             >
               Save & Close
             </button>

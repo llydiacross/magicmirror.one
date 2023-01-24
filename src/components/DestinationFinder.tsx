@@ -79,7 +79,7 @@ export default function DestinationFinder() {
           </span>
         </div>
       </div>
-      <div className="form-control lg:min-w-[56em] md:min-w-[48em] w-full">
+      <div className="form-control lg:min-w-[54em] md:min-w-[46em] w-full">
         <div className="input-group">
           <input
             type="text"
