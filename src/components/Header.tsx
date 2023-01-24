@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import DestinationFinder from "./DestinationFinder";
 
 const locations = [
   "xxx.eth",
@@ -156,18 +157,7 @@ function Header({ theme }) {
           >
             Where will you go today?
           </h1>
-          <div className="form-control lg:min-w-[56em] md:min-w-[48em] w-full">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Enter a location..."
-                className="input input-bordered w-full"
-              />
-              <button className="btn btn-square bg-warning text-black w-[10em] hover:text-white">
-                VISIT
-              </button>
-            </div>
-          </div>
+          <DestinationFinder />
           <button className="btn btn-square text-white  hover:bg-pink-500 w-full">
             TAKE ME ANYWHERE
           </button>
