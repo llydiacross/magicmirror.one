@@ -10,7 +10,7 @@ export default function FixedElements() {
             alt="InfinityMint Logo"
             className="w-20"
           />
-          <button className="btn btn-square rounded-none bg-transparent border-none text-white w-20 hover:text-black hover:bg-yellow-300">
+          <button className="btn btn-square rounded-none bg-transparent border-none text-white w-20 hover:text-white hover:bg-pink-500">
             CONSOLE
           </button>
         </div>

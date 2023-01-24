@@ -158,9 +158,6 @@ function Header({ theme }) {
             Where will you go today?
           </h1>
           <DestinationFinder />
-          <button className="btn btn-square text-white  hover:bg-pink-500 w-full">
-            TAKE ME ANYWHERE
-          </button>
         </div>
       </div>
     </div>

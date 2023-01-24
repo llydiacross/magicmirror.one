@@ -7,6 +7,10 @@
   src: url("./resources/Apocalypse Grunge.ttf");
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @keyframes blink-text {
   0% {
     color: transparent;
@@ -22,10 +26,29 @@
   }
 }
 
+div[hidden="true"] {
+  @apply hidden;
+}
+
+.alert[aria-hidden="true"] {
+  @apply hidden;
+}
+
+.alert[aria-hidden="false"] {
+  @apply animate-pulse;
+}
+
+input[disabled]:hover {
+  @apply input-warning text-gray-500 border-gray-500;
+}
+
+input[data-loading="true"] {
+  @apply text-gray-500;
+}
+
+button[data-loading="true"] {
+  @apply loading bg-gray-500;
+}
 .blink-text {
   animation: 1s blink-text step-end infinite;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
