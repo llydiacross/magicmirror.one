@@ -26,8 +26,10 @@ export default function DestinationFinder() {
     destination = destination.replace(/<[^>]*>/g, "");
     //remove any colons and stuff
     destination = destination.replace(/:|;|\?|\|\*|#/g, "");
+    destination = destination.replace(/ /g, "-");
     //remove leading and trailing spaces
     destination = destination.trim();
+    destination = destination.toLowerCase();
 
     let isInfinityMint = false;
     if (

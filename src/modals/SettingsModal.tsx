@@ -27,6 +27,12 @@ function SettingsModal({ hidden, onHide }) {
     WebEvents.on("reload", eventEmitterCallbackRef.current);
   }, []);
 
+  //disables scrolling while this modal is active
+  useEffect(() => {
+    if (!hidden) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
+  }, [hidden]);
+
   return (
     <div
       data-theme={currentTheme}
@@ -127,14 +133,19 @@ function SettingsModal({ hidden, onHide }) {
                 Default Theme
               </p>
               <div className="input-group">
-                <select className="select w-full" ref={defaultThemeRef}>
-                  {config.themes.map((theme) => {
-                    if (
-                      theme === storage.getGlobalPreference("default_theme")
-                    ) {
-                      return <option selected>{theme}</option>;
-                    }
-                    return <option>{theme}</option>;
+                <select
+                  className="select w-full"
+                  ref={defaultThemeRef}
+                  defaultValue={
+                    storage.getGlobalPreference("default_theme") || "luxury"
+                  }
+                >
+                  {config.themes.map((theme, index) => {
+                    return (
+                      <option key={index} value={theme}>
+                        {theme}
+                      </option>
+                    );
                   })}
                 </select>
               </div>

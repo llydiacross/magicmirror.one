@@ -70,7 +70,7 @@ function FixedElements({ onSettings, walletError }) {
         </div>
       </div>
       {/** Footer */}
-      <div className="fixed bottom-0 w-full">
+      <div className="fixed bottom-0 w-full z-50">
         <div className="flex flex-col">
           <div className="w-full bg-black text-white text-center p-4">
             {" "}

@@ -34,6 +34,75 @@ div[hidden] {
   @apply animate-pulse;
 }
 
+div[data-theme="luxury"] {
+  @apply text-gray-200;
+}
+
+input[data-theme="luxury"] {
+  @apply text-gray-200;
+}
+
+div[data-theme="luxury"] p {
+  @apply text-black;
+}
+
+div[data-theme="aqua"] p {
+  @apply text-black;
+}
+
+div[data-theme="forest"] p {
+  @apply text-black;
+}
+
+div[data-theme="dracula"] p {
+  @apply text-black;
+}
+
+div[data-theme="black"] p {
+  @apply text-black;
+}
+
+div[data-theme="halloween"] p {
+  @apply text-black;
+}
+
+div[data-theme="coffee"] p {
+  @apply text-black;
+}
+
+div[data-theme="cyberpunk"] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme="light"] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme="emerald"] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme="lemonade"] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme="corporate"] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+table[data-theme="luxury"] {
+  @apply text-gray-200;
+}
+
+select[data-theme="luxury"] {
+  @apply text-gray-200;
+}
+
 input[disabled]:hover {
   @apply input-warning text-gray-500 border-gray-500;
 }

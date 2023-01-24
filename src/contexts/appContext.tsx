@@ -47,7 +47,7 @@ const AppContextProvider = ({ children }) => {
       {loaded ? (
         <>{children}</>
       ) : (
-        <Header theme="acid" title="welcome" showFinder={false} />
+        <Header theme="dark" title="welcome" showFinder={false} />
       )}
     </AppContext.Provider>
   );

@@ -140,24 +140,8 @@ const destinations = [
 ];
 
 //handle for the typeWriter animation
-function Header({
-  theme,
-  title,
-  typeWriterSpeed = 50,
-  initialText = "Where will you go today?",
-  showFinder = true,
-}) {
-  const pickDestinationHandle = useRef(null);
-  const typeWriterHandle = useRef(null);
-  //to allow more than one header
-  const typeWriterElement = useRef(
-    `#${btoa(Math.floor(Math.random() * 100000).toString())}`
-  );
+function Hero({ theme, children }) {
   const [currentTheme, setCurrentTheme] = useState(theme || null);
-  const speedRef = useRef(typeWriterSpeed);
-  const textRef = useRef(initialText);
-  const callbackRef = useRef(null);
-  const writeTextRef = useRef(null);
   const eventEmitterCallbackRef = useRef(null);
   const themeRef = useRef(theme || null);
 
@@ -181,113 +165,28 @@ function Header({
 
     WebEvents.on("reload", eventEmitterCallbackRef.current);
 
-    //cb for the typeWriter animation
-    callbackRef.current = (destination: string) => {
-      if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
-      if (pickDestinationHandle.current)
-        clearTimeout(pickDestinationHandle.current);
-
-      text.innerHTML = "";
-      buffer = "";
-      i = 0;
-      txt = destination;
-      writeTextRef.current();
-    };
-
-    WebEvents.off("gotoDestination", callbackRef.current);
-    WebEvents.on("gotoDestination", callbackRef.current);
-
-    if (!document.getElementById(typeWriterElement.current))
-      throw new Error(`no element with id ${typeWriterElement.current} found`);
-
-    //fixes reloading
-    if (pickDestinationHandle.current)
-      clearTimeout(pickDestinationHandle.current);
-
-    let text = document.getElementById(typeWriterElement.current);
-    // make the text animate like a typewriter
-    let i = 0;
-    let txt = textRef.current;
-    let buffer = "";
-
-    writeTextRef.current = (doRandomName?: boolean) => {
-      if (i < txt.length) {
-        buffer += txt.charAt(i);
-        text.innerHTML = buffer;
-        i++;
-        typeWriterHandle.current = setTimeout(
-          () => writeTextRef.current(doRandomName),
-          speedRef.current
-        );
-      } else {
-        text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
-
-        if (doRandomName)
-          pickDestinationHandle.current = setTimeout(() => {
-            randomNames();
-          }, 1000 * Math.floor(Math.random() * 10) + 6000);
-        else {
-          if (pickDestinationHandle.current)
-            clearTimeout(pickDestinationHandle.current);
-          if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
-        }
-      }
-    };
-
-    let randomNames = () => {
-      text.innerHTML = "";
-      buffer = "";
-      i = 0;
-      let randomIndex = Math.floor(Math.random() * destinations.length);
-      txt = `${destinations[randomIndex]}`;
-      writeTextRef.current(true);
-    };
-
-    buffer = "";
-    text.innerHTML = "";
-
-    if (!typeWriterHandle.current && writeTextRef.current !== null)
-      writeTextRef.current(true);
-
     return () => {
-      WebEvents.off("gotoDestination", callbackRef.current);
       WebEvents.off("reload", eventEmitterCallbackRef.current);
     };
   }, []);
 
   return (
-    <div className="hero min-h-screen bg-base-200" data-theme={currentTheme}>
-      <div className="hero-content text-center max-w-screen">
-        <div className="flex flex-col gap-4">
-          {/** mobile title */}
-
-          <h1 className="text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title">
-            {!title || title.length === 0 ? "web.eth" : title}
-          </h1>
-          {/** tablet/desktop title */}
-          <h1 className="text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title">
-            {!title || title.length === 0 ? "web.eth" : title}
-          </h1>
-
-          <h1
-            className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 overflow-hidden"
-            id={typeWriterElement.current}
-          >
-            {/** The initial input is controlled by a prop */}
-          </h1>
-          {showFinder ? <DestinationFinder /> : <></>}
-        </div>
-      </div>
+    <div
+      className="hero min-h-screen bg-base-200 w-full z-50"
+      data-theme={currentTheme}
+    >
+      {children}
     </div>
   );
 }
 
-Header.propTypes = {
+Hero.propTypes = {
   theme: PropTypes.string,
   title: PropTypes.string,
   initialText: PropTypes.string,
+  children: PropTypes.node,
   showFinder: PropTypes.bool,
   typeWriterSpeed: PropTypes.number,
 };
 
-export default Header;
+export default Hero;
