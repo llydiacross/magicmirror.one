@@ -38,6 +38,9 @@ function ConsoleModal({ hidden, onHide }) {
                   Sign Up To Web3 Storage
                 </button>
               </div>
+              <button className="btn btn-sm bg-yellow-500 mt-2 text-black hover:text-white">
+                Check Web3 Storage Key
+              </button>
             </div>
             <div className="form-control mt-4">
               <p className="text-2xl mb-4 border-b-2">
