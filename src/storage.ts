@@ -1,5 +1,5 @@
 //works with local storage to save and load data we will use in the react application
-class StorageController {
+export class StorageController {
   public values: any;
   public pagePreferences: any;
   //private
@@ -26,6 +26,8 @@ class StorageController {
       awaitingCollection: {},
       pagePrefrences: {},
     };
+    this.values = {};
+    this.pagePreferences = {};
   }
 
   /**
@@ -46,6 +48,7 @@ class StorageController {
    * @returns
    */
   getGlobalPreference(key) {
+    if (!this.values.pagePrefrences) return null;
     return this.getGlobalPreferences()[key];
   }
 
@@ -55,6 +58,8 @@ class StorageController {
    * @returns
    */
   isGlobalPreference(key) {
+    if (!this.values.pagePrefrences) return false;
+
     return this.getGlobalPreferences()[key] === true;
   }
 
@@ -63,6 +68,8 @@ class StorageController {
    * @returns
    */
   getGlobalPreferences() {
+    if (!this.values.pagePrefrences) return;
+
     return this.values.pagePrefrences["global"] || {};
   }
 
@@ -258,5 +265,5 @@ class StorageController {
   }
 }
 
-const instance = new StorageController();
-export default instance;
+const storage = new StorageController();
+export default storage;

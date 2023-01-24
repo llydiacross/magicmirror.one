@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import PropTypes from "prop-types";
+import storage from "../storage";
 
 function ConsoleModal({ hidden, onHide }) {
   const web3StorageRef = useRef(null);
@@ -27,6 +28,9 @@ function ConsoleModal({ hidden, onHide }) {
                 <input
                   type="text"
                   ref={web3StorageRef}
+                  defaultValue={
+                    storage.getGlobalPreference("web3_storage_key") || ""
+                  }
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
                 />
@@ -41,7 +45,11 @@ function ConsoleModal({ hidden, onHide }) {
               </p>
               <div className="input-group">
                 <input
-                  type="text"
+                  type="url"
+                  defaultValue={
+                    storage.getGlobalPreference("ipfs_companion_endpoint") ||
+                    "http://localhost:5001/api/v0"
+                  }
                   ref={ipfsCompanionRef}
                   placeholder="Enter your IPFS Companion Endpoint..."
                   className="input input-bordered  w-full"
@@ -61,6 +69,15 @@ function ConsoleModal({ hidden, onHide }) {
             <button
               className="btn bg-pink-500 text-white mt-4 hover:bg-success animate-pulse hover:animate-none"
               onClick={() => {
+                storage.setGlobalPreference(
+                  "web3_storage_key",
+                  web3StorageRef.current.value
+                );
+                storage.setGlobalPreference(
+                  "ipfs_companion_endpoint",
+                  ipfsCompanionRef.current.value
+                );
+                storage.saveData();
                 if (onHide) onHide();
               }}
             >
