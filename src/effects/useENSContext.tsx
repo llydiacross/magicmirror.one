@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useState, useEffect, useContext, useRef } from "react";
 import { Web3Context } from "../contexts/web3Context";
 import WebEvents from "../webEvents";
@@ -5,7 +6,7 @@ import WebEvents from "../webEvents";
 const useENSContext = ({ ensAddress }) => {
   const context = useContext(Web3Context);
   const [currentEnsAddress, setCurrentEnsAddress] = useState(ensAddress);
-  const [resolver, setResolver] = useState(null);
+  const [resolver, setResolver] = useState<ethers.providers.Resolver>(null);
   const [avatar, setAvatar] = useState(null);
   const [email, setEmail] = useState(null);
   const [owner, setOwner] = useState(null);
@@ -63,6 +64,13 @@ const useENSContext = ({ ensAddress }) => {
       let email = await resolver.getText("email");
       let avatar = await resolver.getText("avatar");
 
+      //cheap way to get the owner
+      const abi = ["function addr(bytes32 node) view returns (string value)"];
+      const contract = new ethers.Contract(resolver.address, abi, provider);
+      var address = await provider.resolveName(currentEnsAddress);
+      console.log(owner);
+      console.log(address);
+      setOwner(owner);
       setAvatar(avatar); //need to parse NFTs returned
       setEmail(email);
       setResolver(resolver);
@@ -73,6 +81,7 @@ const useENSContext = ({ ensAddress }) => {
         cid,
         email,
         avatar,
+        owner,
       });
       setValid(true);
     };
