@@ -5,10 +5,10 @@ import SettingsModal from "../modals/SettingsModal";
 import { Web3Context } from "../contexts/web3Context";
 import { ENSContext } from "../contexts/ensContext";
 import { withRouter, useHistory } from "react-router-dom";
-import { getPreferedProvider } from "../helpers";
-import config from "../config";
-import { Web3File } from "web3.storage";
+import { Web3File, Web3Response } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
+import { getIPFSProvider } from "../helpers";
+
 function Viewer({ match }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -17,7 +17,6 @@ function Viewer({ match }) {
   const [dir, setDir] = useState(null);
   const [buffer, setBuffer] = useState(null);
   const [percentage, setPercentage] = useState(0);
-  const context = useContext(Web3Context);
   const [currentEnsDomain, setCurrentEnsDomain] = useState(
     match?.params?.token
   );
@@ -26,72 +25,56 @@ function Viewer({ match }) {
 
   useEffect(() => {
     setError(null);
-    if (!ensContext.loaded) return;
-    if (currentEnsDomain !== undefined)
-      ensContext.setCurrentEnsAddress(
-        currentEnsDomain.indexOf(".eth") === -1
-          ? currentEnsDomain + ".eth"
-          : currentEnsDomain
-      );
-    else setError(new Error("Invalid ENS domain. Please check your URL."));
-  }, [currentEnsDomain, ensContext, match]);
 
-  useEffect(() => {
-    setPercentage(0);
-    setCurrentEnsDomain(match?.params?.token);
-    setError(null);
-    setLoaded(false);
+    if (ensContext.loaded) ensContext.setCurrentEnsAddress(currentEnsDomain);
+    if (!ensContext.loaded && !ensContext.valid) return;
 
-    if (!context.loaded) return;
-    if (!ensContext.loaded) return;
-
-    if (
-      ensContext.currentEnsAddress ===
-        (currentEnsDomain.indexOf(".eth") === -1
-          ? currentEnsDomain + ".eth"
-          : currentEnsDomain) &&
-      ensContext.ensError
-    ) {
+    if (ensContext.ensError !== null) {
       setError(ensContext.ensError);
+      setLoaded(true);
       return;
     }
 
+    setPercentage(0);
+
     let main = async () => {
-      let ipfs = getPreferedProvider("web3-storage");
-      ipfs.createInstance(config.defaultWeb3Storage);
+      let ipfs = getIPFSProvider("web3-storage", true);
 
       setPercentage(50);
       if (ensContext.contentHash !== null) {
-        let dir: Web3File[] = (await ipfs.getDirectory(
-          ensContext.contentHash.replace("ipfs://", "")
-        )) as Web3File[];
-        setDir(dir);
         setEmpty(false);
 
-        let html = await dir
-          .filter((file) => file.name === "index.html")[0]
-          .text();
+        try {
+          let dir = (await ipfs.getDirectory(
+            ensContext.contentHash
+          )) as Web3Response;
+          let files = await dir.files();
+          setDir(files);
+          let html = await files
+            .filter((file) => file.name === "index.html")[0]
+            .stream()
+            .getReader()
+            .read();
 
-        setBuffer(html);
+          let decode = new TextDecoder().decode(html.value);
+          setBuffer(decode);
+        } catch (error) {
+          console.error(error);
+          setDir([]);
+        }
       } else {
         setEmpty(true);
       }
 
-      //successfully loaded
-      setTimeout(() => {
-        setPercentage(90);
-        setTimeout(() => {
-          setLoaded(true);
-          setPercentage(100);
-        }, 1000);
-      }, 1000);
+      setLoaded(true);
+      setPercentage(100);
     };
 
     main().catch((error) => {
       console.error(error);
       setError(error);
     });
-  }, [context, ensContext, currentEnsDomain, match]);
+  }, [ensContext, currentEnsDomain]);
 
   return (
     <div>
@@ -109,7 +92,8 @@ function Viewer({ match }) {
                 <p className="mb-5 text-black">
                   We encountered an error while trying to find this eth domain.
                   This usually means the eth domain is non existent or does not
-                  have a registry controller yet. Double check that you have{" "}
+                  have a registry controller yet or it could be an IPFS cache
+                  issue. Double check that you have{" "}
                   <u>deployed your registry controller</u>. Then try refreshing
                   the page.
                 </p>
@@ -120,6 +104,14 @@ function Viewer({ match }) {
                   }}
                 >
                   Home
+                </button>
+                <button
+                  className="btn btn-dark w-full mt-2"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  Retry
                 </button>
               </div>
             </div>

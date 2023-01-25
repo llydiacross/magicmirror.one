@@ -49,8 +49,24 @@ function FixedElements({
         ) : (
           <></>
         )}
-      </div>
-      <div className="fixed top-0 left-0 max-w-[90vw]">
+        <div
+          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw]"
+          onClick={() => {
+            ensErrorRef.current.hidden = true;
+          }}
+          ref={ensErrorRef}
+          hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
+        >
+          <div className="truncate p-2  max-w-[85vw]">
+            <ErrorIcon />
+            <span>
+              <b>
+                {ensContext.ensError?.message ||
+                  ensContext?.ensError?.toString()}
+              </b>
+            </span>
+          </div>
+        </div>
         {context.walletConnected ? (
           <div hidden={hideAlerts || hideUserInfo}>
             <div
@@ -85,6 +101,7 @@ function FixedElements({
           hidden={
             !ensContext.loaded ||
             !context.loaded ||
+            !context.walletConnected ||
             hideAlerts ||
             hideUserInfo ||
             ensContext.owner?.toLowerCase() !==
@@ -102,21 +119,6 @@ function FixedElements({
               <b>
                 Click <u>here to edit your domain...</u>
               </b>
-            </span>
-          </div>
-        </div>
-        <div
-          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw]"
-          onClick={() => {
-            ensErrorRef.current.hidden = true;
-          }}
-          ref={ensErrorRef}
-          hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
-        >
-          <div className="truncate p-2  max-w-[85vw]">
-            <ErrorIcon />
-            <span>
-              <b>{ensContext.ensError?.message}</b>
             </span>
           </div>
         </div>

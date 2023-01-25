@@ -129,7 +129,7 @@ function HTMLRenderer({
       srcDoc={implicit || _html}
       seamless
       title="preview"
-      sandbox="allow-same-origin allow-scripts"
+      sandbox="allow-scripts"
       className="w-full h-full block border-l-1 border-black overflow-scroll"
     ></iframe>
   );

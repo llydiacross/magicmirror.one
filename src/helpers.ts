@@ -1,12 +1,29 @@
 import storage from "./storage";
-import { getProvider } from "./ipfs";
+import { getProvider, getReadOnlyProvider } from "./ipfs";
+import { read } from "fs";
+import config from "./config";
 
-export const getPreferedProvider = (
-  provider?: "web3-storage" | "ipfs-companion"
+export const getIPFSProvider = (
+  provider?: "web3-storage" | "ipfs-companion",
+  readOnly?: boolean
 ) => {
-  let instance = getProvider(
-    provider || storage.getGlobalPreference("ipfs_provider") || "web3-storage"
+  let instance = readOnly
+    ? getReadOnlyProvider(
+        provider ||
+          storage.getGlobalPreference("ipfs_provider") ||
+          "web3-storage"
+      )
+    : getProvider(
+        provider ||
+          storage.getGlobalPreference("ipfs_provider") ||
+          "web3-storage"
+      );
+
+  instance.createInstance(
+    readOnly
+      ? config.defaultWeb3Storage
+      : storage.getGlobalPreference("web3_storage_token")
   );
-  instance.createInstance(storage.getGlobalPreference("web3_storage_token"));
+
   return instance;
 };

@@ -1,3 +1,4 @@
+import { read } from "fs";
 import { Web3Storage, File } from "web3.storage";
 import storage from "./storage";
 
@@ -5,6 +6,11 @@ import storage from "./storage";
  * IPFS Provider abstract class defining the methods that need to be implemented
  */
 abstract class IPFSProvider {
+  protected readOnly: boolean;
+
+  constructor(readOnly?: boolean) {
+    this.readOnly = readOnly === undefined ? false : readOnly;
+  }
   abstract createInstance(apikey: string): void;
   abstract uploadFile(filename: string, data: any, type?: string): Promise<any>;
   abstract getFile(cid: string, fileName: string): Promise<any>;
@@ -21,6 +27,8 @@ class IPFSCompanionProvider extends IPFSProvider {
     throw new Error("Method not implemented.");
   }
   uploadFile(filename: string, data: any, type?: string): Promise<any> {
+    if (this.readOnly) throw new Error("IPFS Provider is read only");
+
     throw new Error("Method not implemented.");
   }
   getContentType(type: string): string {
@@ -70,15 +78,15 @@ class Web3StorageProvider extends IPFSProvider {
     if (this.instance === undefined || this.instance === null)
       throw new Error("create instance needs to be ran first");
 
-    let result = await this.instance.get(cid);
+    let result = await this.instance.get(cid.replace("ipfs://", ""));
     if (!result.ok)
       throw new Error('bad IPFS CID "' + cid + '" : ' + result.status);
 
-    return await result.files();
+    return result;
   }
 
   async getFile(cid: string, fileName: string): Promise<any> {
-    let files = await this.getDirectory(cid);
+    let files = await (await this.getDirectory(cid)).files();
     return files.filter((file) => file.name === fileName)[0];
   }
 
@@ -125,6 +133,25 @@ class Web3StorageProvider extends IPFSProvider {
 }
 
 export { IPFSProvider as Provider, IPFSCompanionProvider, Web3StorageProvider };
+let _IPFSCompanionProviderReadOnly: IPFSCompanionProvider;
+let _Web3StorageProviderReadOnly: Web3StorageProvider;
+export const getReadOnlyProvider = (
+  provider?: "web3-storage" | "ipfs-companion"
+) => {
+  provider = provider || "web3-storage";
+  switch (provider) {
+    case "ipfs-companion":
+      if (_IPFSCompanionProviderReadOnly) return _IPFSCompanionProviderReadOnly;
+      _IPFSCompanionProviderReadOnly = new IPFSCompanionProvider(true);
+      return _IPFSCompanionProviderReadOnly;
+    case "web3-storage":
+      if (_Web3StorageProviderReadOnly) return _Web3StorageProviderReadOnly;
+      _Web3StorageProviderReadOnly = new Web3StorageProvider(true);
+      return _Web3StorageProviderReadOnly;
+    default:
+      throw new Error("invalid provider");
+  }
+};
 
 let _IPFSCompanionProvider: IPFSCompanionProvider;
 let _Web3StorageProvider: Web3StorageProvider;

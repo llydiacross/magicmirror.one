@@ -134,10 +134,6 @@ const useWeb3Context = () => {
     main();
   }, [loaded]);
 
-  useEffect(() => {
-    if (accounts && web3Provider) requestBalance(web3Provider, accounts[0]);
-  }, [accounts, web3Provider]);
-
   return {
     walletConnected,
     walletInstalled,

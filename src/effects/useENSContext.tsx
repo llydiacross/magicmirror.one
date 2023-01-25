@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { off } from "process";
 import { useState, useEffect, useContext, useRef } from "react";
 import { Web3Context } from "../contexts/web3Context";
 import WebEvents from "../webEvents";
@@ -14,82 +15,61 @@ const useENSContext = ({ ensAddress }) => {
   const [loaded, setLoaded] = useState(false);
   const [valid, setValid] = useState(false);
   const [ensError, setEnsError] = useState(null);
-  const reloadListener = useRef(null);
+  const changeDestination = useRef(null);
+
+  changeDestination.current = (destination: string) => {
+    setLoaded(false);
+    setResolver(null);
+    setAvatar(null);
+    setEmail(null);
+    setOwner(null);
+    setContentHash(null);
+    setEnsError(null);
+    setValid(false);
+    setCurrentEnsAddress(
+      destination.indexOf(".eth") > -1 ? destination : destination + ".eth"
+    );
+  };
+
+  useEffect(() => {
+    WebEvents.off("gotoDestination", changeDestination.current);
+    WebEvents.on("gotoDestination", changeDestination.current);
+
+    return () => {
+      WebEvents.off("gotoDestination", changeDestination.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!context.loaded) return;
-    setValid(false);
 
-    if (reloadListener.current === null) {
-      reloadListener.current = (destination) => {
-        setEnsError(null);
-        setCurrentEnsAddress(destination);
-      };
-    }
-
-    WebEvents.off("gotoDestination", reloadListener.current);
-    WebEvents.on("gotoDestination", reloadListener.current);
-
-    if (currentEnsAddress === null) {
+    setLoaded(false);
+    if (currentEnsAddress == null) {
       setLoaded(true);
       return;
     }
+    let main = async () => {
+      let resolver = await context.web3Provider.getResolver(currentEnsAddress);
 
-    let _async = async () => {
-      setEnsError(null);
+      if (resolver === null)
+        throw new Error('No resolver found for "' + currentEnsAddress + '"');
 
-      if (currentEnsAddress === null) {
-        return;
-      }
-
-      let provider = context.web3Provider;
-      let resolver = await provider.getResolver(currentEnsAddress);
-
-      if (resolver === null) {
-        setEnsError(
-          new Error('Invalid ENS address "' + currentEnsAddress + '"')
-        );
-        setLoaded(true);
-        return;
-      }
-
-      let cid: string;
-      try {
-        cid = await resolver.getContentHash();
-        setContentHash(cid);
-      } catch (error) {
-        console.error(error);
-      }
-
-      let email = await resolver.getText("email");
-      let avatar = await resolver.getText("avatar");
-      let owner = await provider.resolveName(currentEnsAddress);
-      setOwner(owner);
-      setAvatar(avatar); //need to parse NFTs returned
-      setEmail(email);
       setResolver(resolver);
-      setLoaded(true);
-
-      console.log("successfully set ENS context of " + currentEnsAddress, {
-        resolver,
-        cid,
-        email,
-        avatar,
-        owner,
-      });
+      setAvatar(await resolver.getText("avatar"));
+      setEmail(await resolver.getText("email"));
+      setOwner(await context.web3Provider.resolveName(currentEnsAddress));
+      setContentHash(await resolver.getContentHash());
       setValid(true);
+      console.log("loaded ens: " + currentEnsAddress);
     };
-
-    _async().catch((error) => {
-      console.error(error);
-      setEnsError(new Error('Invalid ENS address "' + currentEnsAddress + '"'));
-      setLoaded(true);
-    });
-
-    return () => {
-      WebEvents.off("reloadENS", reloadListener.current);
-    };
-  }, [context, ensAddress, loaded, currentEnsAddress]);
+    main()
+      .catch((error) => {
+        setEnsError(error.message);
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  }, [currentEnsAddress, context]);
 
   return {
     resolver,
@@ -99,6 +79,7 @@ const useENSContext = ({ ensAddress }) => {
     owner,
     ensError,
     avatar,
+    valid,
     currentEnsAddress,
     setCurrentEnsAddress,
   };
