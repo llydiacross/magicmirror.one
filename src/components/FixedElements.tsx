@@ -4,7 +4,13 @@ import ErrorIcon from "./Icons/ErrorIcon";
 import { AppContext } from "../contexts/appContext";
 import SuccessIcon from "./Icons/SuccessIcon";
 
-function FixedElements({ onSettings, walletError }) {
+function FixedElements({
+  onSettings,
+  walletError,
+  hideAlerts = false,
+  hideSettings = false,
+  hideFooter = false,
+}) {
   const context = useContext(AppContext);
 
   return (
@@ -13,7 +19,10 @@ function FixedElements({ onSettings, walletError }) {
       <div className="fixed top-0 left-0">
         {context.walletError ? (
           <>
-            <div className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0">
+            <div
+              hidden={hideAlerts}
+              className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0"
+            >
               <div>
                 <ErrorIcon />
                 <span>
@@ -31,7 +40,7 @@ function FixedElements({ onSettings, walletError }) {
       </div>
       <div className="fixed top-0 left-0">
         {context.walletConnected ? (
-          <>
+          <div hidden={hideAlerts}>
             <div className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0">
               <div>
                 <SuccessIcon className="animate-bounce" />
@@ -48,13 +57,14 @@ function FixedElements({ onSettings, walletError }) {
                 </span>
               </div>
             </div>
-          </>
+          </div>
         ) : (
           <></>
         )}
       </div>
+
       {/** 0x0zLogo */}
-      <div className="fixed top-0 right-0 ">
+      <div className="fixed top-0 right-0" hidden={hideSettings}>
         <div className="flex flex-col">
           <img
             src={"/img/0x0zLogo.jpg"}
@@ -70,7 +80,7 @@ function FixedElements({ onSettings, walletError }) {
         </div>
       </div>
       {/** Footer */}
-      <div className="fixed bottom-0 w-full z-50">
+      <div className="fixed bottom-0 w-full z-50" hidden={hideFooter}>
         <div className="flex flex-col">
           <div className="w-full bg-black text-white text-center p-4">
             {" "}
