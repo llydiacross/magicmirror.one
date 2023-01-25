@@ -129,13 +129,16 @@ function FixedElements({
             >
               GitHub
             </a>
-            . Our lovely themes we can offer you were created by the lovely
-            people at{" "}
+            . Themes provided by{" "}
             <a
               href="https://daisyui.com/"
               className="text-yellow-100 underline"
             >
               daisyui
+            </a>
+            . Made with <u className="text-error">love</u> by{" "}
+            <a href="/view/llydia.eth" className="text-yellow-100 underline">
+              llydia.eth
             </a>
             .
           </div>

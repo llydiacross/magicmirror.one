@@ -81,8 +81,11 @@ function IDE({ theme }) {
     };
   }, []);
 
-  if (!savedCode.current[selectedTab])
-    savedCode.current[selectedTab] = currentCode;
+  savedCode.current["css"] = storage.getPagePreference("css") || "";
+  savedCode.current["js"] = storage.getPagePreference("js") || "";
+  savedCode.current[selectedTab] =
+    storage.getPagePreference(selectedTab) || currentCode;
+
   return (
     <div data-theme={currentTheme}>
       <div className="flex flex-col lg:flex-row w-full overflow-hidden">
@@ -102,13 +105,13 @@ function IDE({ theme }) {
                   className="btn rounded-none border-none text-white hover:text-white hover:bg-black"
                   onClick={() => {
                     clearTimeout(cooldown.current);
-                    storage.setPagePreference(
-                      selectedTab,
-                      savedCode.current[selectedTab] || tabs[tabIndex].code
-                    );
                     storage.saveData();
                     setSelectedTab(tabIndex);
-                    setCode(savedCode.current[tabIndex] || tabs[tabIndex].code);
+                    setCode(
+                      storage.getPagePreference(tabIndex) ||
+                        savedCode.current[tabIndex] ||
+                        tabs[tabIndex].code
+                    );
                   }}
                 >
                   {tab.name}
@@ -128,8 +131,7 @@ function IDE({ theme }) {
           <Editor
             value={currentCode}
             onValueChange={(code) => {
-              setCode(code);
-
+              if (code !== currentCode) setCode(code);
               //wait for the user to stop typing
               clearTimeout(cooldown.current);
               cooldown.current = setTimeout(() => {
