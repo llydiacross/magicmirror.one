@@ -63,13 +63,7 @@ const useENSContext = ({ ensAddress }) => {
 
       let email = await resolver.getText("email");
       let avatar = await resolver.getText("avatar");
-
-      //cheap way to get the owner
-      const abi = ["function addr(bytes32 node) view returns (string value)"];
-      const contract = new ethers.Contract(resolver.address, abi, provider);
-      var address = await provider.resolveName(currentEnsAddress);
-      console.log(owner);
-      console.log(address);
+      let owner = await provider.resolveName(currentEnsAddress);
       setOwner(owner);
       setAvatar(avatar); //need to parse NFTs returned
       setEmail(email);
