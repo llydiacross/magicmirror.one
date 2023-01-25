@@ -40,7 +40,10 @@ function Viewer({ match }) {
     if (!ensContext.loaded) return;
 
     if (
-      ensContext.currentEnsAddress === currentEnsDomain &&
+      ensContext.currentEnsAddress ===
+        (currentEnsDomain.indexOf(".eth") === -1
+          ? currentEnsDomain + ".eth"
+          : currentEnsDomain) &&
       ensContext.ensError
     ) {
       setError(ensContext.ensError);
@@ -98,7 +101,7 @@ function Viewer({ match }) {
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content">
               <div className="max-w-md">
-                <h1 className="mb-5 text-5xl font-bold">
+                <h1 className="mb-5 text-5xl font-bold m-w-50 truncate">
                   Loading <u>{ensContext.currentEnsAddress}</u>
                 </h1>
                 <p className="mb-5">
@@ -106,7 +109,7 @@ function Viewer({ match }) {
                 </p>
                 <div
                   style={{ "--value": percentage } as any}
-                  className="radial-progress bg-primary text-primary-content border-4 border-primary"
+                  className="radial-progress bg-warning text-primary-content border-4 border-warning"
                 >
                   {percentage + "%"}
                 </div>

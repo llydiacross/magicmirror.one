@@ -17,6 +17,7 @@ function FixedElements({
   const context = useContext(Web3Context);
   const ensContext = useContext(ENSContext);
   const errorRef = useRef(null);
+  const ensErrorRef = useRef(null);
   const history = useHistory();
 
   return (
@@ -28,12 +29,12 @@ function FixedElements({
             <div
               ref={errorRef}
               hidden={hideAlerts}
-              className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0"
+              className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0 max-w-50"
               onClick={() => {
                 errorRef.current.hidden = true;
               }}
             >
-              <div>
+              <div className="truncate max-w-50">
                 <ErrorIcon />
                 <span>
                   <b className="mr-2">No Web3 Session</b>
@@ -48,27 +49,27 @@ function FixedElements({
           <></>
         )}
       </div>
-      <div className="fixed top-0 left-0">
+      <div className="fixed top-0 left-0 max-w-[90vw]">
         {context.walletConnected ? (
           <div hidden={hideAlerts || hideUserInfo}>
             <div
-              className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0 cursor-pointer underline"
+              className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0 cursor-pointer underline max-w-50"
               onClick={() => {
                 history.push(
                   `/view/${context.ensAddresses[0] || context.accounts[0]}`
                 );
               }}
             >
-              <div>
-                <SuccessIcon className="animate-bounce" />
+              <div className="truncate max-w-50">
+                <SuccessIcon />
                 <span>
                   <b>{context.ensAddresses[0] || context.accounts[0]}</b>
                 </span>
               </div>
             </div>
-            <div className="alert alert-success shadow-lg m-5 block md:hidden lg:hidden pr-4 mr-4">
-              <div>
-                <SuccessIcon className="animate-bounce" />
+            <div className="alert alert-success shadow-lg m-5 block md:hidden lg:hidden pr-4 mr-4 max-w-50">
+              <div className="truncate max-w-50">
+                <SuccessIcon className="w-[20px]" />
                 <span>
                   <b>Connected</b>
                 </span>
@@ -79,10 +80,14 @@ function FixedElements({
           <></>
         )}
         <div
-          className="alert alert-error shadow-lg m-5 block pr-0 mr-0"
+          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw]"
+          onClick={() => {
+            ensErrorRef.current.hidden = true;
+          }}
+          ref={ensErrorRef}
           hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
         >
-          <div>
+          <div className="truncate p-2  max-w-[85vw]">
             <ErrorIcon />
             <span>
               <b>{ensContext.ensError?.message}</b>
@@ -95,7 +100,7 @@ function FixedElements({
       <div className="fixed top-0 right-0" hidden={hideSettings}>
         <div className="flex flex-col">
           <img
-            src={"/img/0x0zLogo.jpg"}
+            src={ensContext.avatar || "/img/0x0zLogo.jpg"}
             alt="InfinityMint Logo"
             className="w-20 cursor-pointer"
             onClick={() => {

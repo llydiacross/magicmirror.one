@@ -37,7 +37,7 @@ function Hero({ theme, children }) {
 
   return (
     <div
-      className="hero min-h-screen bg-base-200 w-full z-50"
+      className="hero min-h-screen bg-base-200 w-full z-50 max-w-screen"
       data-theme={currentTheme}
     >
       {children}

@@ -17,7 +17,7 @@ function HTMLRenderer({
 
   let head = `
       <head>
-        <!--Web.eth Site Builder by Llydia Cross (0x0zAgency)-->
+        <!--Web.eth Site Builder by Llydia Cross (0x0zAgency) @lydsmas-->
         ${stylesheets.map((sheet) => {
           return `<link href="${sheet}" rel="stylesheet" type="text/css" />`;
         })}
@@ -62,8 +62,11 @@ function HTMLRenderer({
   `;
 
   let safeJS = code.js || "";
-  //remove html tags from savejs code
-  safeJS = safeJS.replace(/<[^>]*>?/gm, "");
+  //remove script tags from savejs code
+  safeJS = safeJS.replace(/<script>/g, "");
+  safeJS = safeJS.replace(/<\/script>/g, "");
+  safeJS = safeJS.replace(/<\/S/g, "");
+  safeJS = safeJS.replace(/<\/s/g, "");
 
   let _html = `
     <html>
@@ -92,9 +95,6 @@ function HTMLRenderer({
         </div>
       </body>
       <script>
-        ${safeJS}
-      </script>
-      <script>
         document.body.innerHTML = document.body.innerHTML + \`${
           code.html || ""
         }\`;
@@ -117,14 +117,18 @@ function HTMLRenderer({
           }
         }
       </script>
+      <script>
+        ${safeJS}
+      </script>
     </html>`;
 
   return (
     <iframe
       style={style}
       srcDoc={_html}
+      seamless
       title="preview"
-      sandbox="allow-links allow-same-origin allow-scripts"
+      sandbox="allow-same-origin allow-scripts"
       className="w-full h-full block border-l-1 border-black overflow-scroll"
     ></iframe>
   );

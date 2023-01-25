@@ -59,7 +59,7 @@ export default function DestinationFinder() {
       setTimeout(() => {
         history.push("/view/" + destination);
         resolve(true);
-      }, 3000)
+      }, 5000)
     );
   };
 
@@ -94,7 +94,7 @@ export default function DestinationFinder() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-screen">
       <div className="alert alert-error shadow-lg mb-3" hidden={!error}>
         <div>
           <ErrorIcon />
@@ -104,47 +104,41 @@ export default function DestinationFinder() {
           </span>
         </div>
       </div>
-      <div className="form-control lg:min-w-[54em] md:min-w-[46em]">
-        <div className="input-group">
-          <input
-            type="text"
-            data-loading={loading}
-            disabled={loading}
-            ref={inputElement}
-            maxLength={150}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleVisit();
-            }}
-            onInput={() => {
-              setHasInput(inputElement.current.value.length > 0);
-            }}
-            placeholder="Enter a destination..."
-            className="input input-bordered w-full"
-          />
-          <button
-            data-loading={loading}
-            disabled={loading || !hasInput}
-            className="btn bg-warning text-black w-[10em] hover:text-white hover:bg-black hover:text-yellow-500"
-            onClick={handleVisit}
-          >
-            VISIT
-          </button>
+      <div className="flex flex-col">
+        <div className="form-control w-full">
+          <div className="input-group w-75">
+            <input
+              type="text"
+              data-loading={loading}
+              disabled={loading}
+              ref={inputElement}
+              maxLength={52}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleVisit();
+              }}
+              onInput={() => {
+                setHasInput(inputElement.current.value.length > 0);
+              }}
+              placeholder="Enter a destination..."
+              className="input input-bordered w-full"
+            />
+            <button
+              data-loading={loading}
+              disabled={loading || !hasInput}
+              className="btn bg-warning text-black w-25 hover:text-white hover:bg-black hover:text-yellow-500"
+              onClick={handleVisit}
+            >
+              VISIT
+            </button>
+          </div>
         </div>
-        <button
-          className="btn text-white hover:bg-pink-500 w-full mt-5 sm:mt-2 mb-3"
-          data-loading={loading}
-          disabled={loading}
-          onClick={handleTakeMeAnywhere}
-        >
-          TAKE ME ANYWHERE
-        </button>
-        <p className="text-1xl text-shadow bg-warning text-black p-1 hidden lg:block">
+        <p className="text-1xl text-shadow bg-warning text-black p-1 mt-4 mb-1 hidden lg:block">
           <b>
             create your next <u>masterpiece</u> using the
           </b>
         </p>
         <button
-          className="btn text-white bg-pink-500 hover:bg-purple-500 w-full mt-2 lg:mt-4 animate-pulse"
+          className="btn text-white bg-pink-500 hover:bg-purple-500 w-full mt-4 lg:mt-3 animate-pulse"
           data-loading={loading}
           disabled={loading}
           onClick={() => {
@@ -152,6 +146,14 @@ export default function DestinationFinder() {
           }}
         >
           🎨 WEB.ETH STUDIO 🎨
+        </button>
+        <button
+          className="btn text-white hover:bg-gray-500 w-full mt-4 sm:mt-2"
+          data-loading={loading}
+          disabled={loading}
+          onClick={handleTakeMeAnywhere}
+        >
+          TAKE ME ANYWHERE
         </button>
       </div>
     </div>

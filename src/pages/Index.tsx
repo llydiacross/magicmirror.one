@@ -83,6 +83,7 @@ export default function Index() {
       </Hero>
       {/** Contains the footer and the 0x0zLogo with the console button */}
       <FixedElements
+        hideUserInfo={false}
         onSettings={() => {
           setShouldShowSettings(!shouldShowSettings);
         }}

@@ -1,6 +1,23 @@
 import React, { createContext } from "react";
 import Header from "../components/Header";
 import useWeb3Context from "../effects/useWeb3Context";
+import { ethers } from "ethers";
+
+export interface Web3ContextType {
+  balance: null;
+  accounts: string[];
+  ensAddresses: string[];
+  walletInstalled: false;
+  walletConnected: false;
+  walletAddress: "0x0";
+  web3Provider:
+    | ethers.providers.Web3Provider
+    | ethers.providers.JsonRpcProvider;
+  walletError: Error;
+  chainId: 0;
+  loaded: false;
+  signer: null;
+}
 
 export const Web3Context = createContext({
   balance: null,
@@ -13,8 +30,7 @@ export const Web3Context = createContext({
   walletError: null,
   chainId: 0,
   loaded: false,
-  signer: null,
-});
+} as Web3ContextType);
 
 const Web3ContextProvider = ({ children }) => {
   const {
@@ -33,19 +49,21 @@ const Web3ContextProvider = ({ children }) => {
 
   return (
     <Web3Context.Provider
-      value={{
-        accounts,
-        walletInstalled,
-        walletConnected,
-        walletAddress,
-        chainId,
-        loaded,
-        ensAddresses,
-        web3Provider,
-        signer,
-        walletError,
-        balance,
-      }}
+      value={
+        {
+          accounts,
+          walletInstalled,
+          walletConnected,
+          walletAddress,
+          chainId,
+          loaded,
+          ensAddresses,
+          web3Provider,
+          signer,
+          walletError,
+          balance,
+        } as Web3ContextType
+      }
     >
       {loaded ? (
         <>{children}</>

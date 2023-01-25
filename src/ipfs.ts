@@ -39,6 +39,7 @@ class Web3StorageProvider extends IPFSProvider {
   private instance: Web3Storage;
 
   createInstance(apikey) {
+    if (this.instance) return;
     this.instance = new Web3Storage({ token: apikey });
   }
 

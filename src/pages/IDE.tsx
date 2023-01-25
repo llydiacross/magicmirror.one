@@ -9,6 +9,7 @@ import storage from "../storage";
 import WebEvents from "../webEvents";
 import SettingsModal from "../modals/SettingsModal";
 import { useHistory } from "react-router-dom";
+import PublishModal from "../modals/PublishModal";
 
 const defaultTabs = {
   html: {
@@ -51,6 +52,7 @@ function IDE({ theme }) {
   const eventEmitterCallbackRef = useRef(null);
   const themeRef = useRef(theme || null);
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
+  const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const cooldown = useRef(null);
   const savedCode = useRef({});
   const history = useHistory();
@@ -124,7 +126,12 @@ function IDE({ theme }) {
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               🗃️
             </button>
-            <button className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black">
+            <button
+              className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                setShouldShowPublish(!shouldShowPublish);
+              }}
+            >
               🌟
             </button>
           </div>
@@ -271,6 +278,12 @@ function IDE({ theme }) {
         hidden={!shouldShowSettings}
         onHide={() => {
           setShouldShowSettings(false);
+        }}
+      />
+      <PublishModal
+        hidden={!shouldShowPublish}
+        onHide={() => {
+          setShouldShowPublish(false);
         }}
       />
     </div>

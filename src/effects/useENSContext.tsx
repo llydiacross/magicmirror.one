@@ -8,6 +8,7 @@ const useENSContext = ({ ensAddress }) => {
   const [resolver, setResolver] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [email, setEmail] = useState(null);
+  const [owner, setOwner] = useState(null);
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [valid, setValid] = useState(false);
@@ -92,6 +93,7 @@ const useENSContext = ({ ensAddress }) => {
     loaded,
     email,
     contentHash,
+    owner,
     ensError,
     avatar,
     currentEnsAddress,

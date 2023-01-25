@@ -11,7 +11,9 @@ const useWeb3Context = () => {
   const [accounts, setAccounts] = useState([]);
   const [walletAddress, setWalletAddress] = useState("0x0");
   const [signer, setSigner] = useState(null);
-  const [web3Provider, setWeb3Provider] = useState(null);
+  const [web3Provider, setWeb3Provider] = useState<
+    ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider
+  >(null);
   const [loaded, setLoaded] = useState(false);
   const [walletError, setWalletError] = useState(null);
   const [balance, setBalance] = useState(null);
@@ -85,7 +87,9 @@ const useWeb3Context = () => {
       setWalletConnected(connected);
 
       if (!connected) setWalletError(new Error("Wallet not connected"));
-      let provider;
+      let provider:
+        | ethers.providers.Web3Provider
+        | ethers.providers.JsonRpcProvider;
       if (connected)
         provider = new ethers.providers.Web3Provider((window as any).ethereum);
       else {
