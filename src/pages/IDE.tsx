@@ -111,9 +111,11 @@ function IDE(props) {
           <div
             className={
               "w-full bg-gray-700 border-1 border-black z-10 " +
-              "flex flex-col lg:flex-row md:flex-row" +
+              (showPreview
+                ? "flex flex-col lg:flex-row md:flex-row"
+                : "flex flex-col") +
               " " +
-              (overlayPreview ? "h-40 pt-5 mt-4" : "")
+              (overlayPreview && showPreview ? "h-40 pt-5 mt-4" : "")
             }
           >
             <button
