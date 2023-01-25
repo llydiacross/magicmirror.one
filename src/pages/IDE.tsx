@@ -13,13 +13,13 @@ const defaultTabs = {
     name: "HTML",
     icon: "code",
     language: "html",
-    code: `<h1 class='text-7xl'>Welcome to Web.eth</h1>`,
+    code: `<h1 class='text-6xl text-center mt-4'>Welcome to Web.eth</h1>`,
   },
   css: {
     name: "Styles",
     icon: "code",
     language: "css",
-    code: `body, html { background: black; }`,
+    code: `body, html { padding: 0; margin: 0; }`,
   },
   js: {
     name: "Scripts",
@@ -38,7 +38,9 @@ const defaultTabs = {
 function IDE({ theme }) {
   const [selectedTab, setSelectedTab] = useState("html");
   const [tabs, setTabs] = useState(defaultTabs);
-  const [currentCode, setCode] = useState(tabs[selectedTab].code);
+  const [currentCode, setCode] = useState(
+    storage.getPagePreference(selectedTab) || tabs[selectedTab].code
+  );
   const [showPreview, setShowPreview] = useState(true);
   const [showCode, setShowCode] = useState(true);
   const [codeBuffer, setCodeBuffer] = useState(currentCode);
@@ -47,6 +49,8 @@ function IDE({ theme }) {
   const eventEmitterCallbackRef = useRef(null);
   const themeRef = useRef(theme || null);
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
+  const cooldown = useRef(null);
+  const savedCode = useRef({});
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
@@ -72,9 +76,9 @@ function IDE({ theme }) {
       WebEvents.off("reload", eventEmitterCallbackRef.current);
     };
   }, []);
-  const cooldown = useRef(null);
-  const savedCode = useRef({});
 
+  if (!savedCode.current[selectedTab])
+    savedCode.current[selectedTab] = currentCode;
   return (
     <div data-theme={currentTheme}>
       <div className="flex flex-col lg:flex-row w-full overflow-hidden">
@@ -93,16 +97,23 @@ function IDE({ theme }) {
                   data-selected={selectedTab === tabIndex}
                   className="btn rounded-none border-none text-white hover:text-white hover:bg-black"
                   onClick={() => {
-                    setSelectedTab(tabIndex);
-                    setCode(
+                    clearTimeout(cooldown.current);
+                    storage.setPagePreference(
+                      selectedTab,
                       savedCode.current[selectedTab] || tabs[tabIndex].code
                     );
+                    storage.saveData();
+                    setSelectedTab(tabIndex);
+                    setCode(savedCode.current[tabIndex] || tabs[tabIndex].code);
                   }}
                 >
                   {tab.name}
                 </button>
               );
             })}
+            <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
+              Libraries
+            </button>
             <button className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black">
               Publish
             </button>
@@ -111,10 +122,13 @@ function IDE({ theme }) {
             value={currentCode}
             onValueChange={(code) => {
               setCode(code);
-              savedCode.current[selectedTab] = code;
+
               //wait for the user to stop typing
               clearTimeout(cooldown.current);
               cooldown.current = setTimeout(() => {
+                storage.setPagePreference(selectedTab, code);
+                storage.saveData();
+                savedCode.current[selectedTab] = code;
                 setCodeBuffer(code);
               }, 800);
             }}
@@ -163,7 +177,18 @@ function IDE({ theme }) {
             }}
           >
             <HTMLRenderer
-              thatHtml={codeBuffer}
+              code={savedCode.current}
+              stylesheets={[
+                "https://cdn.jsdelivr.net/npm/daisyui@2.47.0/dist/full.css",
+              ]}
+              meta={[
+                {
+                  tag: "title",
+                  children: "web3.eth",
+                },
+              ]}
+              scripts={["https://cdn.tailwindcss.com"]}
+              currentFile={selectedTab}
               style={{
                 ...(!overlayPreview
                   ? {

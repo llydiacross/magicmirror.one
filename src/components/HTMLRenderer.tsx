@@ -3,47 +3,71 @@ import React from "react";
 import PropTypes from "prop-types";
 
 //create a react component that takes html code as a string and renders it
-function HTMLRenderer({ thatHtml, style }) {
-  let _html = `
-    <html>
+function HTMLRenderer({
+  style,
+  code,
+  currentFile,
+  stylesheets = [],
+  scripts = [],
+  meta = [],
+}) {
+  let safeCSS = code.css || "";
+  //remove html tags from savejs code
+  safeCSS = safeCSS.replace(/<[^>]*>?/gm, "");
+
+  let head = `
       <head>
-        <link
-          href="https://cdn.jsdelivr.net/npm/daisyui@2.47.0/dist/full.css"
-          rel="stylesheet"
-          type="text/css"
-        />
+        <!--Web.eth Site Builder by Llydia Cross (0x0zAgency)-->
+        ${stylesheets.map((sheet) => {
+          return `<link href="${sheet}" rel="stylesheet" type="text/css" />`;
+        })}
+        ${meta.map((meta) => {
+          return `<${meta.tag} ${meta.properties || ""}>${meta.children}</${
+            meta.tag
+          }>`;
+        })}
         <style>
-           ::-webkit-scrollbar{
-                direction: rtl; 
-                overflow: auto; 
-                width: 12px;
-                padding: 6px;
-             } 
+          ::-webkit-scrollbar{
+            direction: rtl; 
+            overflow: auto; 
+            width: 12px;
+            padding: 6px;
+          } 
 
-/* Track */
-::-webkit-scrollbar-track {
-    direction: rtl; 
-  background: #f1f1f1; 
-}
+          /* Track */
+          ::-webkit-scrollbar-track {
+            direction: rtl; 
+            background: #f1f1f1; 
+          }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    direction: rtl; 
-  background: #888; 
-}
+          /* Handle */
+          ::-webkit-scrollbar-thumb {
+            direction: rtl; 
+            background: #888; 
+          }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    direction: rtl; 
-  background: #555; 
-}
-          html, body {
-            margin: 0;
-            padding: 0;
+          /* Handle on hover */
+          ::-webkit-scrollbar-thumb:hover {
+            direction: rtl; 
+            background: #555; 
           }
         </style>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+          ${safeCSS}
+        </style>
+        ${scripts.map((script) => {
+          return `<script src="${script}"></script>`;
+        })}
       </head>
+  `;
+
+  let safeJS = code.js || "";
+  //remove html tags from savejs code
+  safeJS = safeJS.replace(/<[^>]*>?/gm, "");
+
+  let _html = `
+    <html>
+      ${head}
       <body>
         <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 600px; min-height: 400px; display: none; z-index: 50;" id="box">  
           <div style="border-radius: 15px; background-color: white;">
@@ -68,7 +92,12 @@ function HTMLRenderer({ thatHtml, style }) {
         </div>
       </body>
       <script>
-        document.body.innerHTML = document.body.innerHTML + \`${thatHtml}\`;
+        ${safeJS}
+      </script>
+      <script>
+        document.body.innerHTML = document.body.innerHTML + \`${
+          code.html || ""
+        }\`;
       
         //remove all href tags from all links in the body
         let links = document.getElementsByTagName("a");
@@ -102,7 +131,6 @@ function HTMLRenderer({ thatHtml, style }) {
 }
 
 HTMLRenderer.propTypes = {
-  html: PropTypes.string.isRequired,
   style: PropTypes.object,
 };
 
