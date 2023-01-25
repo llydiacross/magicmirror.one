@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import AppContextProvider from "./contexts/appContext";
+import Web3ContextProvider from "./contexts/web3Context";
 import ENSContextProvider from "./contexts/ensContext";
 import IDE from "./pages/IDE";
 import Index from "./pages/Index";
+import Viewer from "./pages/Viewer";
 import WebEvents from "./webEvents";
 
 const App = (): JSX.Element => {
   return (
-    <AppContextProvider>
+    <Web3ContextProvider>
       <ENSContextProvider ensAddress={"0x0z.eth"}>
-        <Index />
+        <Viewer />
       </ENSContextProvider>
-    </AppContextProvider>
+    </Web3ContextProvider>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import ErrorIcon from "./Icons/ErrorIcon";
-import { AppContext } from "../contexts/appContext";
+import { Web3Context } from "../contexts/web3Context";
 import SuccessIcon from "./Icons/SuccessIcon";
 import { ENSContext } from "../contexts/ensContext";
 
@@ -13,7 +13,7 @@ function FixedElements({
   hideFooter = false,
   hideUserInfo = false,
 }) {
-  const context = useContext(AppContext);
+  const context = useContext(Web3Context);
   const ensContext = useContext(ENSContext);
   const errorRef = useRef(null);
 

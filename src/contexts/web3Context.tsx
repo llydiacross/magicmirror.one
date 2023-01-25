@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import Header from "../components/Header";
 import useWeb3Context from "../effects/useWeb3Context";
 
-export const AppContext = createContext({
+export const Web3Context = createContext({
   balance: null,
   accounts: [],
   ensAddresses: [],
@@ -16,7 +16,7 @@ export const AppContext = createContext({
   signer: null,
 });
 
-const AppContextProvider = ({ children }) => {
+const Web3ContextProvider = ({ children }) => {
   const {
     accounts,
     walletInstalled,
@@ -32,7 +32,7 @@ const AppContextProvider = ({ children }) => {
   } = useWeb3Context();
 
   return (
-    <AppContext.Provider
+    <Web3Context.Provider
       value={{
         accounts,
         walletInstalled,
@@ -52,7 +52,7 @@ const AppContextProvider = ({ children }) => {
       ) : (
         <Header theme="dark" title="welcome" showFinder={false} />
       )}
-    </AppContext.Provider>
+    </Web3Context.Provider>
   );
 };
-export default AppContextProvider;
+export default Web3ContextProvider;

@@ -1,7 +1,7 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import storage from "../storage";
-import { AppContext } from "../contexts/appContext";
+import { Web3Context } from "../contexts/web3Context";
 import WebEvents from "../webEvents";
 import config from "../config";
 
@@ -9,7 +9,7 @@ function SettingsModal({ hidden, onHide }) {
   const web3StorageRef = useRef(null);
   const ipfsCompanionRef = useRef(null);
   const defaultThemeRef = useRef(null);
-  const context = useContext(AppContext);
+  const context = useContext(Web3Context);
   const [currentTheme, setCurrentTheme] = useState("luxury");
   const eventEmitterCallbackRef = useRef(null);
 

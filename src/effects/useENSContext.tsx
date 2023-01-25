@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import { AppContext } from "../contexts/appContext";
+import { Web3Context } from "../contexts/web3Context";
 import WebEvents from "../webEvents";
 
 const useENSContext = ({ ensAddress }) => {
-  const context = useContext(AppContext);
+  const context = useContext(Web3Context);
   const [currentEnsAddress, setCurrentEnsAddress] = useState(ensAddress);
   const [resolver, setResolver] = useState(null);
   const [avatar, setAvatar] = useState(null);
@@ -99,6 +99,7 @@ const useENSContext = ({ ensAddress }) => {
     contentHash,
     ensError,
     avatar,
+    currentEnsAddress,
     setCurrentEnsAddress,
   };
 };
