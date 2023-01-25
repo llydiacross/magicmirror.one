@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useRef } from "react";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/prism";
 import "prismjs/themes/prism.css"; //Example style, you can use another
@@ -10,7 +9,7 @@ function IDE(props) {
   const [code, setCode] = React.useState(
     `<h1 class='text-7xl'>Welcome to Web.eth</h1>`
   );
-  const [tab, setTabs] = React.useState({});
+
   const [showPreview, setShowPreview] = React.useState(true);
   const [showCode, setShowCode] = React.useState(true);
   const [codeBuffer, setCodeBuffer] = React.useState(code);
@@ -19,9 +18,9 @@ function IDE(props) {
 
   return (
     <>
-      <div className="flex flex-row w-full overflow-hidden pb-4 mb-4">
+      <div className="flex flex-col lg:flex-row w-full overflow-hidden pb-4 mb-4">
         <div
-          className="w-full overflow-y-scroll min-h-screen max-h-screen"
+          className="w-50 lg:w-full md:w-full overflow-y-scroll min-h-screen max-h-screen"
           hidden={!showCode || (overlayPreview && !showPreview)}
         >
           <Editor
@@ -111,8 +110,8 @@ function IDE(props) {
           </div>
           <div
             className={
-              "w-full bg-gray-700 border-1 border-black z-50 " +
-              (!showPreview ? "flex flex-col" : "") +
+              "w-full bg-gray-700 border-1 border-black z-10 " +
+              "flex flex-col lg:flex-row md:flex-row" +
               " " +
               (overlayPreview ? "h-40 pt-5 mt-4" : "")
             }
@@ -135,29 +134,26 @@ function IDE(props) {
             >
               {!overlayPreview ? "Overlay Preview" : "Stop Overlaying Preview"}
             </button>
-            <button
-              className="btn rounded-none bg-transparent bg-success border-none text-white hover:text-white hover:bg-black"
-              onClick={() => setShowPreview(!showPreview)}
-            >
-              Publish
-            </button>
-            <button
-              className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black"
-              onClick={() => setShowPreview(!showPreview)}
-            >
+            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
               Save
+            </button>
+            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
+              Upload
+            </button>
+            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
+              Download
+            </button>
+            <button className="btn rounded-none bg-transparent bg-success border-none text-white hover:text-white hover:bg-black">
+              Publish
             </button>
           </div>
         </div>
       </div>
-      {overlayPreview ? (
-        <>
-          <br />
-          <br />
-        </>
-      ) : (
-        <></>
-      )}
+      <div className="block lg:hidden">
+        <br />
+        <br />
+      </div>
+
       <FixedElements
         hideAlerts={true}
         hideSettings={true}

@@ -1,5 +1,5 @@
 //import react and prop-types
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 //create a react component that takes html code as a string and renders it
