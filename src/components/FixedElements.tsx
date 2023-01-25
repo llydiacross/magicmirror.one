@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import ErrorIcon from "./Icons/ErrorIcon";
 import { AppContext } from "../contexts/appContext";
@@ -12,16 +12,21 @@ function FixedElements({
   hideFooter = false,
 }) {
   const context = useContext(AppContext);
+  const errorRef = useRef(null);
 
   return (
     <>
       {/** Element for the Wallet Error */}
-      <div className="fixed top-0 left-0">
+      <div className="fixed top-0 left-0 z-50">
         {context.walletError ? (
           <>
             <div
+              ref={errorRef}
               hidden={hideAlerts}
               className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0"
+              onClick={() => {
+                errorRef.current.hidden = true;
+              }}
             >
               <div>
                 <ErrorIcon />

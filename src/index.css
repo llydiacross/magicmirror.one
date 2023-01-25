@@ -114,6 +114,10 @@ input[data-loading="true"] {
 button[data-loading="true"] {
   @apply loading bg-gray-500;
 }
+
+button[data-selected="true"] {
+  @apply bg-success;
+}
 .blink-text {
   animation: 1s blink-text step-end infinite;
 }

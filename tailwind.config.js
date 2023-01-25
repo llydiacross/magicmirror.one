@@ -49,7 +49,7 @@ module.exports = {
         "10xl": "5rem",
         "11xl": "5.5rem",
         "12xl": "6rem",
-        giant: "10rem",
+        giant: "10.5rem",
       },
     },
   },

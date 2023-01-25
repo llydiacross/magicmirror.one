@@ -13,15 +13,15 @@ export default function Index() {
       <Hero>
         <div className="hero-content text-center w-full bg-warning pb-5 mb-5">
           <div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
-            <div>
-              <p className="text-10xl ml-4 lg:text-14x xl:text-giant text-black font-apocalypse text-center md:text-left xl:text-left">
-                Ultimate Creative Freedom
+            <div className="lg:pl-5 lg:ml-5 md:pl-2 md:ml-2">
+              <p className="text-10xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-14x xl:text-giant text-black font-apocalypse text-center md:text-left xl:text-left">
+                LETS BUILD
               </p>
             </div>
             <div className="p-4">
               <h1 className="text-3xl md:text-5xl lg:text-7xl text-black text-right font-bold mb-4 pb-4">
-                Harness the power of <u>decentralized web</u> & <u>magic</u> to
-                create a new <u>destination</u>
+                Harness the power of <u>decentralized web</u> to create{" "}
+                <u>something magical</u>
               </h1>
               <p className="text-black text-1xl lg:text-2xl text-right">
                 We've made an easy online IDE for you to use.

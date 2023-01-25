@@ -1,73 +1,139 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/prism";
 import "prismjs/themes/prism.css"; //Example style, you can use another
 import FixedElements from "../components/FixedElements";
 import HTMLRenderer from "../components/HTMLRenderer";
+import storage from "../storage";
+import WebEvents from "../webEvents";
+import SettingsModal from "../modals/SettingsModal";
+const defaultTabs = {
+  html: {
+    name: "HTML",
+    icon: "code",
+    language: "html",
+    code: `<h1 class='text-7xl'>Welcome to Web.eth</h1>`,
+  },
+  css: {
+    name: "Styles",
+    icon: "code",
+    language: "css",
+    code: `body, html { background: black; }`,
+  },
+  js: {
+    name: "Scripts",
+    icon: "code",
+    language: "js",
+    code: `console.log("Hello World")`,
+  },
+  ".xens": {
+    name: "Xens",
+    icon: "code",
+    language: "txt",
+    code: `{"name": "Web.eth"}`,
+  },
+};
 
-function IDE(props) {
-  const [code, setCode] = React.useState(
-    `<h1 class='text-7xl'>Welcome to Web.eth</h1>`
-  );
-
-  const [showPreview, setShowPreview] = React.useState(true);
-  const [showCode, setShowCode] = React.useState(true);
-  const [codeBuffer, setCodeBuffer] = React.useState(code);
+function IDE({ theme }) {
+  const [selectedTab, setSelectedTab] = useState("html");
+  const [tabs, setTabs] = useState(defaultTabs);
+  const [currentCode, setCode] = useState(tabs[selectedTab].code);
+  const [showPreview, setShowPreview] = useState(true);
+  const [showCode, setShowCode] = useState(true);
+  const [codeBuffer, setCodeBuffer] = useState(currentCode);
   const [overlayPreview, setOverlayPreview] = React.useState(false);
+  const [currentTheme, setCurrentTheme] = useState(theme || null);
+  const eventEmitterCallbackRef = useRef(null);
+  const themeRef = useRef(theme || null);
+  const [shouldShowSettings, setShouldShowSettings] = useState(false);
+
+  //code for the h1 text animation is in the animation.ts file
+  useEffect(() => {
+    if (
+      themeRef.current === null &&
+      storage.getGlobalPreference("default_theme")
+    )
+      setCurrentTheme(storage.getGlobalPreference("default_theme"));
+
+    if (eventEmitterCallbackRef.current === null) {
+      eventEmitterCallbackRef.current = () => {
+        if (
+          themeRef.current === null &&
+          storage.getGlobalPreference("default_theme")
+        )
+          setCurrentTheme(storage.getGlobalPreference("default_theme"));
+      };
+    }
+
+    WebEvents.on("reload", eventEmitterCallbackRef.current);
+
+    return () => {
+      WebEvents.off("reload", eventEmitterCallbackRef.current);
+    };
+  }, []);
   const cooldown = useRef(null);
+  const savedCode = useRef({});
 
   return (
-    <>
-      <div className="flex flex-col lg:flex-row w-full overflow-hidden pb-4 mb-4">
+    <div data-theme={currentTheme}>
+      <div className="flex flex-col lg:flex-row w-full overflow-hidden">
         <div
           className="w-50 lg:w-full md:w-full overflow-y-scroll min-h-screen max-h-screen"
           hidden={!showCode || (overlayPreview && !showPreview)}
         >
+          <div
+            className="inline-flex w-full rounded-sm border-1 shadow-sm overflow-hidden z-50"
+            role="group"
+          >
+            {Object.keys(tabs).map((tabIndex) => {
+              let tab = tabs[tabIndex];
+              return (
+                <button
+                  data-selected={selectedTab === tabIndex}
+                  className="btn rounded-none border-none text-white hover:text-white hover:bg-black"
+                  onClick={() => {
+                    setSelectedTab(tabIndex);
+                    setCode(
+                      savedCode.current[selectedTab] || tabs[tabIndex].code
+                    );
+                  }}
+                >
+                  {tab.name}
+                </button>
+              );
+            })}
+            <button className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black">
+              Publish
+            </button>
+          </div>
           <Editor
-            value={code}
+            value={currentCode}
             onValueChange={(code) => {
               setCode(code);
+              savedCode.current[selectedTab] = code;
               //wait for the user to stop typing
               clearTimeout(cooldown.current);
               cooldown.current = setTimeout(() => {
                 setCodeBuffer(code);
               }, 800);
             }}
-            highlight={(code) => highlight(code, languages.html)}
+            highlight={(code) =>
+              highlight(code, languages[tabs[selectedTab].language || "html"])
+            }
             padding={24}
             className="z-50"
             spellCheck={true}
             style={{
               fontFamily: '"Fira code", "Fira Mono", monospace',
               fontSize: 12,
-              marginTop: 50,
               background: "rgba(0,0,0,0.1)",
               ...(!overlayPreview ? { border: "1px solid black" } : {}),
             }}
           />
-          <div
-            className="inline-flex fixed top-0 left-0 rounded-sm border-1 shadow-sm w-[50%] overflow-hidden z-50"
-            role="group"
-          >
-            <button className="btn rounded-none bg-success border-none text-white w-[20%] hover:text-white hover:bg-black">
-              HTML
-            </button>
-            <button className="btn rounded-none bg-primary border-none text-white w-[20%]  hover:text-white hover:bg-black">
-              CSS
-            </button>
-            <button className="btn rounded-none bg-secondary border-none text-white w-[20%]  hover:text-white hover:bg-black">
-              JS
-            </button>
-            <button className="btn rounded-none bg-warning border-none text-white w-[20%] hover:text-white hover:bg-black">
-              .xens
-            </button>
-            <button className="btn rounded-none bg-black border-none text-white w-[20%] hover:text-white hover:bg-light">
-              ⚙️
-            </button>
-          </div>
         </div>
         <div
-          className={"h-full mb-0 " + (showPreview ? "w-full" : "w-auto")}
+          className={"h-full " + (showPreview ? "w-full" : "w-auto")}
           style={{
             borderLeft: "1px solid black",
             ...(overlayPreview
@@ -75,6 +141,7 @@ function IDE(props) {
                   position: "absolute",
                   left: "0",
                   opacity: 0.4,
+                  marginTop: 40,
                 }
               : {}),
           }}
@@ -88,7 +155,6 @@ function IDE(props) {
                     pointerEvents: "none",
                     touchEvents: "none",
                     paddingTop: 20,
-                    marginTop: 40,
                     width: "90%",
                     marginLeft: "5%",
                     paddingLeft: 20,
@@ -110,12 +176,12 @@ function IDE(props) {
           </div>
           <div
             className={
-              "w-full bg-gray-700 border-1 border-black z-10 " +
+              "w-full bg-gray-700 border-1 border-black p-2 " +
               (showPreview
                 ? "flex flex-col lg:flex-row md:flex-row"
                 : "flex flex-col") +
               " " +
-              (overlayPreview && showPreview ? "h-40 pt-5 mt-4" : "")
+              (overlayPreview && showPreview ? "h-40" : "")
             }
           >
             <button
@@ -136,35 +202,36 @@ function IDE(props) {
             >
               {!overlayPreview ? "Overlay Preview" : "Stop Overlaying Preview"}
             </button>
-            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
-              Save
+            <button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
+              💾
             </button>
-            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
-              Upload
+            <button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
+              📁
             </button>
-            <button className="btn rounded-none bg-transparent bg-info border-none text-white hover:text-white hover:bg-black">
-              Download
-            </button>
-            <button className="btn rounded-none bg-transparent bg-success border-none text-white hover:text-white hover:bg-black">
-              Publish
+            <button
+              className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
+              onClick={() => {
+                setShouldShowSettings(!shouldShowSettings);
+              }}
+            >
+              Settings
             </button>
           </div>
         </div>
       </div>
-      <div className="block lg:hidden">
-        <br />
-        <br />
-      </div>
-
-      <FixedElements
-        hideAlerts={true}
-        hideSettings={true}
-        hideFooter={!showCode}
+      <FixedElements hideAlerts={false} hideSettings={true} hideFooter={true} />
+      <SettingsModal
+        hidden={!shouldShowSettings}
+        onHide={() => {
+          setShouldShowSettings(false);
+        }}
       />
-    </>
+    </div>
   );
 }
 
-IDE.propTypes = {};
+IDE.propTypes = {
+  theme: PropTypes.string,
+};
 
 export default IDE;

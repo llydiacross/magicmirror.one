@@ -6,7 +6,6 @@ import Index from "./pages/Index";
 const App = (): JSX.Element => {
   return (
     <AppContextProvider>
-      {/**  <Index />*/}
       <IDE />
     </AppContextProvider>
   );
