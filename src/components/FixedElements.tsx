@@ -10,6 +10,7 @@ function FixedElements({
   hideAlerts = false,
   hideSettings = false,
   hideFooter = false,
+  hideUserInfo = false,
 }) {
   const context = useContext(AppContext);
   const errorRef = useRef(null);
@@ -45,7 +46,7 @@ function FixedElements({
       </div>
       <div className="fixed top-0 left-0">
         {context.walletConnected ? (
-          <div hidden={hideAlerts}>
+          <div hidden={hideAlerts || hideUserInfo}>
             <div className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0">
               <div>
                 <SuccessIcon className="animate-bounce" />

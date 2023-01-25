@@ -10,25 +10,25 @@ import WebEvents from "../webEvents";
 import SettingsModal from "../modals/SettingsModal";
 const defaultTabs = {
   html: {
-    name: "HTML",
+    name: "📃",
     icon: "code",
     language: "html",
     code: `<h1 class='text-6xl text-center mt-4'>Welcome to Web.eth</h1>`,
   },
   css: {
-    name: "Styles",
+    name: "🖌️",
     icon: "code",
     language: "css",
     code: `body, html { padding: 0; margin: 0; }`,
   },
   js: {
-    name: "Scripts",
+    name: "🧩",
     icon: "code",
     language: "js",
     code: `console.log("Hello World")`,
   },
   ".xens": {
-    name: "Xens",
+    name: "📜",
     icon: "code",
     language: "txt",
     code: `{"name": "Web.eth"}`,
@@ -112,10 +112,13 @@ function IDE({ theme }) {
               );
             })}
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
-              Libraries
+              📦
+            </button>
+            <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
+              🗃️
             </button>
             <button className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black">
-              Publish
+              🌟
             </button>
           </div>
           <Editor
@@ -244,7 +247,12 @@ function IDE({ theme }) {
           </div>
         </div>
       </div>
-      <FixedElements hideAlerts={false} hideSettings={true} hideFooter={true} />
+      <FixedElements
+        hideAlerts={false}
+        hideSettings={true}
+        hideFooter={true}
+        hideUserInfo={true}
+      />
       <SettingsModal
         hidden={!shouldShowSettings}
         onHide={() => {
