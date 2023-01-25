@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import ErrorIcon from "./Icons/ErrorIcon";
 import { AppContext } from "../contexts/appContext";
 import SuccessIcon from "./Icons/SuccessIcon";
+import { ENSContext } from "../contexts/ensContext";
 
 function FixedElements({
   onSettings,
@@ -13,6 +14,7 @@ function FixedElements({
   hideUserInfo = false,
 }) {
   const context = useContext(AppContext);
+  const ensContext = useContext(ENSContext);
   const errorRef = useRef(null);
 
   return (
@@ -47,11 +49,18 @@ function FixedElements({
       <div className="fixed top-0 left-0">
         {context.walletConnected ? (
           <div hidden={hideAlerts || hideUserInfo}>
-            <div className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0">
+            <div
+              className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0 cursor-pointer underline"
+              onClick={() => {
+                window.location.href = `/view/${
+                  context.ensAddresses[0] || context.accounts[0]
+                }`;
+              }}
+            >
               <div>
                 <SuccessIcon className="animate-bounce" />
                 <span>
-                  <b>{context.accounts[0]}</b>
+                  <b>{context.ensAddresses[0] || context.accounts[0]}</b>
                 </span>
               </div>
             </div>
@@ -67,6 +76,17 @@ function FixedElements({
         ) : (
           <></>
         )}
+        <div
+          className="alert alert-error shadow-lg m-5 block pr-0 mr-0"
+          hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
+        >
+          <div>
+            <ErrorIcon />
+            <span>
+              <b>{ensContext.ensError?.message}</b>
+            </span>
+          </div>
+        </div>
       </div>
 
       {/** 0x0zLogo */}

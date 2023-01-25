@@ -119,7 +119,15 @@ function SettingsModal({ hidden, onHide }) {
                           <tr key={index}>
                             <th>{index}</th>
                             <td>{account}</td>
-                            <td>Waiting...</td>
+                            <td
+                              className="cursor-pointer underline"
+                              onClick={() =>
+                                (window.location.href = `/view/${context.ensAddresses[index]}`)
+                              }
+                            >
+                              {context.ensAddresses[index] ||
+                                "ENS Not Found..."}
+                            </td>
                           </tr>
                         );
                       })}

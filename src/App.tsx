@@ -8,7 +8,7 @@ import WebEvents from "./webEvents";
 const App = (): JSX.Element => {
   return (
     <AppContextProvider>
-      <ENSContextProvider>
+      <ENSContextProvider ensAddress={"0x0z.eth"}>
         <Index />
       </ENSContextProvider>
     </AppContextProvider>

@@ -87,15 +87,12 @@ export default function DestinationFinder() {
 
   return (
     <div className="w-full">
-      <div
-        className="alert alert-error shadow-lg mb-3"
-        hidden={!error && ensContext.ensError === null}
-      >
+      <div className="alert alert-error shadow-lg mb-3" hidden={!error}>
         <div>
           <ErrorIcon />
           <span>
             <b className="mr-2">Error!</b>
-            {error || ensContext.ensError?.message}
+            {error}
           </span>
         </div>
       </div>

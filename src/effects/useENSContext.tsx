@@ -10,12 +10,14 @@ const useENSContext = ({ ensAddress }) => {
   const [email, setEmail] = useState(null);
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [valid, setValid] = useState(false);
   const [ensError, setEnsError] = useState(null);
   const fetchContext = useRef(null);
   const reloadListener = useRef(null);
 
   useEffect(() => {
     if (!context.loaded) return;
+    setValid(false);
 
     if (reloadListener.current === null) {
       reloadListener.current = (destination) => {
@@ -44,9 +46,18 @@ const useENSContext = ({ ensAddress }) => {
         let provider = context.web3Provider;
         let resolver = await provider.getResolver(currentEnsAddress);
 
+        if (resolver === null) {
+          setEnsError(
+            new Error('Invalid ENS address "' + currentEnsAddress + '"')
+          );
+          setLoaded(true);
+          return;
+        }
+
+        let cid: string;
         try {
-          let contentHash = await resolver.getContentHash();
-          setContentHash(contentHash);
+          cid = await resolver.getContentHash();
+          setContentHash(cid);
         } catch (error) {
           console.error(error);
         }
@@ -54,17 +65,18 @@ const useENSContext = ({ ensAddress }) => {
         let email = await resolver.getText("email");
         let avatar = await resolver.getText("avatar");
 
-        setAvatar(avatar);
+        setAvatar(avatar); //need to parse NFTs returned
         setEmail(email);
         setResolver(resolver);
         setLoaded(true);
 
         console.log("successfully set ENS context of " + currentEnsAddress, {
           resolver,
-          contentHash,
+          cid,
           email,
           avatar,
         });
+        setValid(true);
       } catch (error) {
         console.error(error);
         setEnsError(

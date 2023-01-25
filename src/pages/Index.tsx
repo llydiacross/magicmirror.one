@@ -14,13 +14,22 @@ export default function Index() {
   return (
     <>
       <div
-        className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center"
+        className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
         hidden={!shouldShowBackdrop}
         style={{
           backgroundImage: `url("${ensContext.avatar}")`,
-          filter: "blur(10px)",
         }}
       ></div>
+      <div
+        className="hero-bg w-full h-screen absolute z-0 overflow-hidden bg-cover bg-center  bg-black"
+        hidden={
+          !shouldShowBackdrop ||
+          ensContext.avatar === null ||
+          ensContext.avatar.length === 0
+        }
+        style={{ opacity: 0.75 }}
+      ></div>
+
       <Header />
       <Hero>
         <div className="hero-content text-center w-full bg-warning pb-5 mb-5">

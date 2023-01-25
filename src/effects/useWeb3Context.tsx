@@ -6,6 +6,7 @@ import WebEvents from "../webEvents";
 const useWeb3Context = () => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletInstalled, setWalletInstalled] = useState(false);
+  const [ensAddresses, setEnsAddresses] = useState([]);
   const [chainId, setChainId] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [walletAddress, setWalletAddress] = useState("0x0");
@@ -110,6 +111,17 @@ const useWeb3Context = () => {
         setChainId(await requestChainId(provider));
         setWalletAddress(await signer.getAddress());
         setBalance(await requestBalance(provider, accounts[0]));
+
+        let ensAddresses = [];
+        for (let i = 0; i < accounts.length; i++) {
+          try {
+            ensAddresses[i] = await provider.lookupAddress(accounts[i]);
+          } catch (error) {
+            console.log("bad or no ens for: " + accounts[i]);
+            ensAddresses[i] = false;
+          }
+        }
+        setEnsAddresses(ensAddresses);
       }
 
       setWeb3Provider(provider);
@@ -133,6 +145,7 @@ const useWeb3Context = () => {
     signer,
     balance,
     walletError,
+    ensAddresses,
   };
 };
 

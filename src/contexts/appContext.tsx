@@ -5,6 +5,7 @@ import useWeb3Context from "../effects/useWeb3Context";
 export const AppContext = createContext({
   balance: null,
   accounts: [],
+  ensAddresses: [],
   walletInstalled: false,
   walletConnected: false,
   walletAddress: "0x0",
@@ -26,6 +27,7 @@ const AppContextProvider = ({ children }) => {
     web3Provider,
     signer,
     walletError,
+    ensAddresses,
     balance,
   } = useWeb3Context();
 
@@ -38,6 +40,7 @@ const AppContextProvider = ({ children }) => {
         walletAddress,
         chainId,
         loaded,
+        ensAddresses,
         web3Provider,
         signer,
         walletError,
