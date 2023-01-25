@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 //create a react component that takes html code as a string and renders it
 function HTMLRenderer({
   style,
-  code,
+  code = {} as any,
+  implicit,
   currentFile,
   stylesheets = [],
   scripts = [],
@@ -125,7 +126,7 @@ function HTMLRenderer({
   return (
     <iframe
       style={style}
-      srcDoc={_html}
+      srcDoc={implicit || _html}
       seamless
       title="preview"
       sandbox="allow-same-origin allow-scripts"
@@ -136,6 +137,8 @@ function HTMLRenderer({
 
 HTMLRenderer.propTypes = {
   style: PropTypes.object,
+  implicit: PropTypes.string,
+  code: PropTypes.any,
 };
 
 export default HTMLRenderer;

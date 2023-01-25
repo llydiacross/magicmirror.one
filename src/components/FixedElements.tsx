@@ -5,6 +5,7 @@ import { Web3Context } from "../contexts/web3Context";
 import SuccessIcon from "./Icons/SuccessIcon";
 import { ENSContext } from "../contexts/ensContext";
 import { useHistory } from "react-router-dom";
+import HeartIcon from "./Icons/HeartIcon";
 
 function FixedElements({
   onSettings,
@@ -79,6 +80,31 @@ function FixedElements({
         ) : (
           <></>
         )}
+        <div
+          className="alert alert-info shadow-lg m-5 pr-4 mr-4 max-w-50"
+          hidden={
+            !ensContext.loaded ||
+            !context.loaded ||
+            hideAlerts ||
+            hideUserInfo ||
+            ensContext.owner?.toLowerCase() !==
+              context.accounts[0]?.toLowerCase()
+          }
+        >
+          <div
+            className="truncate max-w-50"
+            onClick={() => {
+              history.push(`/ide?url=${ensContext.currentEnsAddress}`);
+            }}
+          >
+            <HeartIcon className="w-[20px]" />
+            <span>
+              <b>
+                Click <u>here to edit your domain...</u>
+              </b>
+            </span>
+          </div>
+        </div>
         <div
           className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw]"
           onClick={() => {

@@ -1,4 +1,5 @@
-import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
+import { Web3Storage, File } from "web3.storage";
+import storage from "./storage";
 
 /**
  * IPFS Provider abstract class defining the methods that need to be implemented
@@ -6,9 +7,10 @@ import { Web3Storage, File } from "web3.storage/dist/bundle.esm.min.js";
 abstract class IPFSProvider {
   abstract createInstance(apikey: string): void;
   abstract uploadFile(filename: string, data: any, type?: string): Promise<any>;
-  abstract getFile(cid?: string, fileName?: string): Promise<any>;
+  abstract getFile(cid: string, fileName: string): Promise<any>;
   abstract getContentType(type: string): string;
   abstract getContentExtension(type: string): string;
+  abstract getDirectory(cid: string): any;
 }
 
 /**
@@ -27,7 +29,10 @@ class IPFSCompanionProvider extends IPFSProvider {
   getContentExtension(type: string): string {
     throw new Error("Method not implemented.");
   }
-  getFile(cid?: string, fileName?: string): Promise<any> {
+  getFile(cid: string, fileName: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  getDirectory(cid: string) {
     throw new Error("Method not implemented.");
   }
 }
@@ -38,9 +43,13 @@ class IPFSCompanionProvider extends IPFSProvider {
 class Web3StorageProvider extends IPFSProvider {
   private instance: Web3Storage;
 
-  createInstance(apikey) {
+  createInstance(apikey: string) {
     if (this.instance) return;
-    this.instance = new Web3Storage({ token: apikey });
+    this.instance = new Web3Storage({
+      token:
+        storage.getGlobalPreference("web3_storage_token") ||
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZjZWYwNjFCYTkxNGZhYTdFNjU3NEI2N0E0NjU4YjIyNzgwMTYxQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTA0MTM0MTMzMjgsIm5hbWUiOiJpbmZpbml0eS1taW50In0.se1kP3g-ssSs0G8DjIrd2pbUeq1b_OzuCqFoxzepZVA",
+    });
   }
 
   async uploadFile(filename: string, data: any, type = "image/png") {
@@ -57,8 +66,20 @@ class Web3StorageProvider extends IPFSProvider {
     return await this.instance.put([file]);
   }
 
-  getFile(cid?: string, fileName?: string): Promise<any> {
-    throw new Error("Method not implemented.");
+  async getDirectory(cid: string) {
+    if (this.instance === undefined || this.instance === null)
+      throw new Error("create instance needs to be ran first");
+
+    let result = await this.instance.get(cid);
+    if (!result.ok)
+      throw new Error('bad IPFS CID "' + cid + '" : ' + result.status);
+
+    return await result.files();
+  }
+
+  async getFile(cid: string, fileName: string): Promise<any> {
+    let files = await this.getDirectory(cid);
+    return files.filter((file) => file.name === fileName)[0];
   }
 
   getContentType(type: string) {
