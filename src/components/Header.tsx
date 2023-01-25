@@ -257,21 +257,34 @@ function Header({
   }, []);
 
   return (
-    <div className="hero min-h-screen bg-base-200" data-theme={currentTheme}>
-      <div className="hero-content text-center max-w-screen">
-        <div className="flex flex-col gap-4">
+    <div
+      className="hero min-h-screen w-full bg-base-200"
+      data-theme={currentTheme}
+    >
+      <div className="hero-content text-center max-w-screen w-full">
+        <div className="flex flex-col gap-5 lg:gap-3 w-full">
           {/** mobile title */}
 
-          <h1 className="text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title">
+          <h1
+            className="text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title"
+            style={{
+              ...(title && title.length > 24 ? { fontSize: "4rem" } : {}),
+            }}
+          >
             {!title || title.length === 0 ? "web.eth" : title}
           </h1>
           {/** tablet/desktop title */}
-          <h1 className="text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title">
+          <h1
+            style={{
+              ...(title && title.length > 14 ? { fontSize: "6rem" } : {}),
+            }}
+            className="text-15xl lg:text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title"
+          >
             {!title || title.length === 0 ? "web.eth" : title}
           </h1>
 
           <h1
-            className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 overflow-hidden"
+            className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 w-full overflow-hidden"
             id={typeWriterElement.current}
           >
             {/** The initial input is controlled by a prop */}

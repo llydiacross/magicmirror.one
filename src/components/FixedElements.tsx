@@ -4,6 +4,7 @@ import ErrorIcon from "./Icons/ErrorIcon";
 import { Web3Context } from "../contexts/web3Context";
 import SuccessIcon from "./Icons/SuccessIcon";
 import { ENSContext } from "../contexts/ensContext";
+import { useHistory } from "react-router-dom";
 
 function FixedElements({
   onSettings,
@@ -16,6 +17,7 @@ function FixedElements({
   const context = useContext(Web3Context);
   const ensContext = useContext(ENSContext);
   const errorRef = useRef(null);
+  const history = useHistory();
 
   return (
     <>
@@ -52,9 +54,9 @@ function FixedElements({
             <div
               className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0 cursor-pointer underline"
               onClick={() => {
-                window.location.href = `/view/${
-                  context.ensAddresses[0] || context.accounts[0]
-                }`;
+                history.push(
+                  `/view/${context.ensAddresses[0] || context.accounts[0]}`
+                );
               }}
             >
               <div>
@@ -95,7 +97,10 @@ function FixedElements({
           <img
             src={"/img/0x0zLogo.jpg"}
             alt="InfinityMint Logo"
-            className="w-20"
+            className="w-20 cursor-pointer"
+            onClick={() => {
+              history.push("/");
+            }}
           />
           <button
             className="btn btn-square rounded-none bg-transparent border-none text-white w-20 hover:text-white hover:bg-pink-500"

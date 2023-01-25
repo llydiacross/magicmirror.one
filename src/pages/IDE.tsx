@@ -8,6 +8,8 @@ import HTMLRenderer from "../components/HTMLRenderer";
 import storage from "../storage";
 import WebEvents from "../webEvents";
 import SettingsModal from "../modals/SettingsModal";
+import { useHistory } from "react-router-dom";
+
 const defaultTabs = {
   html: {
     name: "📃",
@@ -51,6 +53,7 @@ function IDE({ theme }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const cooldown = useRef(null);
   const savedCode = useRef({});
+  const history = useHistory();
 
   //code for the h1 text animation is in the animation.ts file
   useEffect(() => {
@@ -243,7 +246,15 @@ function IDE({ theme }) {
                 setShouldShowSettings(!shouldShowSettings);
               }}
             >
-              Settings
+              ⚙️
+            </button>
+            <button
+              className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              🏠
             </button>
           </div>
         </div>

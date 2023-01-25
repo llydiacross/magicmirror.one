@@ -6,6 +6,10 @@
   font-family: "Apocalypse Grunge";
   src: url("./resources/Apocalypse Grunge.ttf");
 }
+@font-face {
+  font-family: "TheNextFont";
+  src: url("./resources/TheNextFont.ttf");
+}
 
 @tailwind base;
 @tailwind components;

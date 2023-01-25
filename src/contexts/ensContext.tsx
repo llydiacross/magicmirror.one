@@ -43,7 +43,11 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
       {loaded ? (
         <>{children}</>
       ) : (
-        <Header theme="dark" title="welcome" showFinder={false} />
+        <Header
+          theme="dark"
+          initialText="Estabilishing ENS Link..."
+          showFinder={false}
+        />
       )}
     </ENSContext.Provider>
   );

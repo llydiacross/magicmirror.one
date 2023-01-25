@@ -44,12 +44,18 @@ module.exports = {
     extend: {
       fontFamily: {
         apocalypse: ["Apocalypse Grunge", "cursive"],
+        thenextfont: ["TheNextFont", "sans-serif"],
       },
+
       fontSize: {
         "10xl": "5rem",
         "11xl": "5.5rem",
         "12xl": "6rem",
-        giant: "10.5rem",
+        "13xl": "6.5rem",
+        "14xl": "7rem",
+        "15xl": "7.5rem",
+        "16xl": "8rem",
+        giant: "11rem",
       },
     },
   },

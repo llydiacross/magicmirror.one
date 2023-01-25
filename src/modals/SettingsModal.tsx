@@ -4,6 +4,7 @@ import storage from "../storage";
 import { Web3Context } from "../contexts/web3Context";
 import WebEvents from "../webEvents";
 import config from "../config";
+import { useHistory } from "react-router-dom";
 
 function SettingsModal({ hidden, onHide }) {
   const web3StorageRef = useRef(null);
@@ -12,6 +13,7 @@ function SettingsModal({ hidden, onHide }) {
   const context = useContext(Web3Context);
   const [currentTheme, setCurrentTheme] = useState("luxury");
   const eventEmitterCallbackRef = useRef(null);
+  const history = useHistory();
 
   useEffect(() => {
     if (storage.getGlobalPreference("default_theme"))
@@ -121,9 +123,12 @@ function SettingsModal({ hidden, onHide }) {
                             <td>{account}</td>
                             <td
                               className="cursor-pointer underline"
-                              onClick={() =>
-                                (window.location.href = `/view/${context.ensAddresses[index]}`)
-                              }
+                              onClick={() => {
+                                if (onHide) onHide();
+                                history.push(
+                                  `/view/${context.ensAddresses[index]}`
+                                );
+                              }}
                             >
                               {context.ensAddresses[index] ||
                                 "ENS Not Found..."}

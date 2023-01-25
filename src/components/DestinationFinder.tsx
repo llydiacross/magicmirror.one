@@ -2,6 +2,7 @@ import React, { useRef, useState, useContext } from "react";
 import ErrorIcon from "./Icons/ErrorIcon";
 import WebEvents from "../webEvents";
 import { ENSContext } from "../contexts/ensContext";
+import { useHistory } from "react-router-dom";
 
 export default function DestinationFinder() {
   const inputElement = useRef(null);
@@ -10,7 +11,7 @@ export default function DestinationFinder() {
   const [error, setError] = useState(false);
   const [hasInput, setHasInput] = useState(false);
   const errorRef = useRef(null);
-
+  const history = useHistory();
   let gotoAddress = async (destination: string) => {
     setError(false);
     destination = destination.toString();
@@ -53,6 +54,13 @@ export default function DestinationFinder() {
     destination = destination + (isInfinityMint ? ".infinitymint" : ".eth");
 
     WebEvents.emit("gotoDestination", destination);
+
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        history.push("/view/" + destination);
+        resolve(true);
+      }, 3000)
+    );
   };
 
   const errorHandler = (error: any) => {
@@ -123,12 +131,27 @@ export default function DestinationFinder() {
           </button>
         </div>
         <button
-          className="btn text-white hover:bg-pink-500 w-full mt-4"
+          className="btn text-white hover:bg-pink-500 w-full mt-5 sm:mt-2 mb-3"
           data-loading={loading}
           disabled={loading}
           onClick={handleTakeMeAnywhere}
         >
           TAKE ME ANYWHERE
+        </button>
+        <p className="text-1xl text-shadow bg-warning text-black p-1 hidden lg:block">
+          <b>
+            create your next <u>masterpiece</u> using the
+          </b>
+        </p>
+        <button
+          className="btn text-white bg-pink-500 hover:bg-purple-500 w-full mt-2 lg:mt-4 animate-pulse"
+          data-loading={loading}
+          disabled={loading}
+          onClick={() => {
+            history.push("/ide");
+          }}
+        >
+          🎨 WEB.ETH STUDIO 🎨
         </button>
       </div>
     </div>

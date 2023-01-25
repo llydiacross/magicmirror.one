@@ -50,7 +50,11 @@ const Web3ContextProvider = ({ children }) => {
       {loaded ? (
         <>{children}</>
       ) : (
-        <Header theme="dark" title="welcome" showFinder={false} />
+        <Header
+          theme="dark"
+          initialText="Initializing Web3 Connection..."
+          showFinder={false}
+        />
       )}
     </Web3Context.Provider>
   );

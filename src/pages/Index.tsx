@@ -8,9 +8,28 @@ import WebEvents from "../webEvents";
 
 export default function Index() {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
-  const [shouldShowBackdrop, setShouldShowBackdrop] = useState(true);
+  const [shouldShowBackdrop, setShouldShowBackdrop] = useState(false);
+  const [currentDestination, setCurrentDestination] = useState(null);
   const ensContext = useContext(ENSContext);
+  const cooldown = useRef(null);
 
+  useEffect(() => {
+    if (cooldown.current === null)
+      cooldown.current = (destination) => {
+        setShouldShowBackdrop(true);
+
+        setTimeout(() => {
+          setCurrentDestination(destination);
+        }, 1000);
+      };
+
+    WebEvents.off("gotoDestination", cooldown.current);
+    WebEvents.on("gotoDestination", cooldown.current);
+
+    return () => {
+      WebEvents.off("gotoDestination", cooldown.current);
+    };
+  }, []);
   return (
     <>
       <div
@@ -29,8 +48,7 @@ export default function Index() {
         }
         style={{ opacity: 0.75 }}
       ></div>
-
-      <Header />
+      <Header title={currentDestination} />
       <Hero>
         <div className="hero-content text-center w-full bg-warning pb-5 mb-5">
           <div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">

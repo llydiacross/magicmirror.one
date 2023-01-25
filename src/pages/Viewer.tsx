@@ -4,23 +4,58 @@ import FixedElements from "../components/FixedElements";
 import SettingsModal from "../modals/SettingsModal";
 import { Web3Context } from "../contexts/web3Context";
 import { ENSContext } from "../contexts/ensContext";
-function Viewer(props) {
+import { withRouter, useHistory } from "react-router-dom";
+function Viewer({ match }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
+  const [node, setNode] = useState(null);
   const [percentage, setPercentage] = useState(0);
   const context = useContext(Web3Context);
+  const [currentEnsDomain, setCurrentEnsDomain] = useState(
+    match?.params?.token
+  );
   const ensContext = useContext(ENSContext);
+  const history = useHistory();
 
   useEffect(() => {
-    if (!context.loaded) return;
     setError(null);
+    if (!ensContext.loaded) return;
+    if (currentEnsDomain !== undefined)
+      ensContext.setCurrentEnsAddress(
+        currentEnsDomain.indexOf(".eth") === -1
+          ? currentEnsDomain + ".eth"
+          : currentEnsDomain
+      );
+    else setError(new Error("Invalid ENS domain. Please check your URL."));
+  }, [currentEnsDomain, ensContext, match]);
 
-    if (ensContext.ensError) {
+  useEffect(() => {
+    setPercentage(0);
+    setCurrentEnsDomain(match?.params?.token);
+    setError(null);
+    setLoaded(false);
+
+    if (!context.loaded) return;
+    if (!ensContext.loaded) return;
+
+    if (
+      ensContext.currentEnsAddress === currentEnsDomain &&
+      ensContext.ensError
+    ) {
       setError(ensContext.ensError);
       return;
     }
-  }, [context, ensContext]);
+
+    //successfully loaded
+    setTimeout(() => {
+      setPercentage(90);
+      setTimeout(() => {
+        setLoaded(true);
+        setPercentage(100);
+      }, 1000);
+    }, 1000);
+  }, [context, ensContext, currentEnsDomain, match]);
 
   return (
     <div>
@@ -45,7 +80,7 @@ function Viewer(props) {
                 <button
                   className="btn btn-dark w-full"
                   onClick={() => {
-                    window.location.href = "/";
+                    history.push("/");
                   }}
                 >
                   Home
@@ -80,7 +115,13 @@ function Viewer(props) {
           </div>
         </>
       )}
-      <FixedElements />
+      <FixedElements
+        hideSettings={!loaded}
+        onSettings={() => {
+          if (!loaded) return;
+          setShouldShowSettings(!shouldShowSettings);
+        }}
+      />
       <SettingsModal
         hidden={!shouldShowSettings}
         onHide={() => {
@@ -91,6 +132,8 @@ function Viewer(props) {
   );
 }
 
-Viewer.propTypes = {};
+Viewer.propTypes = {
+  match: PropTypes.object,
+};
 
-export default Viewer;
+export default withRouter(Viewer);
