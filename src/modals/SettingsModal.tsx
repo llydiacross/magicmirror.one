@@ -24,7 +24,12 @@ function SettingsModal({ hidden, onHide }) {
       };
     }
 
+    WebEvents.off("reload", eventEmitterCallbackRef.current);
     WebEvents.on("reload", eventEmitterCallbackRef.current);
+
+    return () => {
+      WebEvents.off("reload", eventEmitterCallbackRef.current);
+    };
   }, []);
 
   //disables scrolling while this modal is active

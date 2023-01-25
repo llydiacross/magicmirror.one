@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import ErrorIcon from "./Icons/ErrorIcon";
 import WebEvents from "../webEvents";
+import { ENSContext } from "../contexts/ensContext";
 
 export default function DestinationFinder() {
   const inputElement = useRef(null);
+  const ensContext = useContext(ENSContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [hasInput, setHasInput] = useState(false);
@@ -50,7 +52,6 @@ export default function DestinationFinder() {
 
     destination = destination + (isInfinityMint ? ".infinitymint" : ".eth");
 
-    //emit that we are going to this destination with the app wide event emitter
     WebEvents.emit("gotoDestination", destination);
   };
 
@@ -76,6 +77,7 @@ export default function DestinationFinder() {
 
   //pick random tokenId from ENS and try and got to it...
   const handleTakeMeAnywhere = () => {
+    setLoading(true);
     gotoAddress("xxx.eth")
       .catch(errorHandler)
       .finally(() => {
@@ -85,12 +87,15 @@ export default function DestinationFinder() {
 
   return (
     <div className="w-full">
-      <div className="alert alert-error shadow-lg mb-3" hidden={!error}>
+      <div
+        className="alert alert-error shadow-lg mb-3"
+        hidden={!error && ensContext.ensError === null}
+      >
         <div>
           <ErrorIcon />
           <span>
             <b className="mr-2">Error!</b>
-            {error}
+            {error || ensContext.ensError?.message}
           </span>
         </div>
       </div>

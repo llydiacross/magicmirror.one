@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import Header from "../components/Header";
 import FixedElements from "../components/FixedElements";
 import SettingsModal from "../modals/SettingsModal";
 import Hero from "../components/Hero";
+import { ENSContext } from "../contexts/ensContext";
+import WebEvents from "../webEvents";
 
 export default function Index() {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
+  const [shouldShowBackdrop, setShouldShowBackdrop] = useState(true);
+  const ensContext = useContext(ENSContext);
 
   return (
     <>
+      <div
+        className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center"
+        hidden={!shouldShowBackdrop}
+        style={{
+          backgroundImage: `url("${ensContext.avatar}")`,
+          filter: "blur(10px)",
+        }}
+      ></div>
       <Header />
       <Hero>
         <div className="hero-content text-center w-full bg-warning pb-5 mb-5">

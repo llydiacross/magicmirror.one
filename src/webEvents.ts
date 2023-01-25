@@ -4,6 +4,7 @@ export interface WebEmitterEvents {
   gotoDestination: Function;
   walletError: Function;
   reload: Function;
+  reloadENS: Function;
 }
 
 export declare interface WebEventEmitter {

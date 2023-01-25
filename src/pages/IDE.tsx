@@ -70,6 +70,7 @@ function IDE({ theme }) {
       };
     }
 
+    WebEvents.off("reload", eventEmitterCallbackRef.current);
     WebEvents.on("reload", eventEmitterCallbackRef.current);
 
     return () => {

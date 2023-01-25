@@ -84,7 +84,7 @@ const useWeb3Context = () => {
       setWalletConnected(connected);
 
       if (!connected) setWalletError(new Error("Wallet not connected"));
-      let provider: any;
+      let provider;
       if (connected)
         provider = new ethers.providers.Web3Provider((window as any).ethereum);
       else {

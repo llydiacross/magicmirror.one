@@ -179,6 +179,7 @@ function Header({
       };
     }
 
+    WebEvents.off("reload", eventEmitterCallbackRef.current);
     WebEvents.on("reload", eventEmitterCallbackRef.current);
 
     //cb for the typeWriter animation
