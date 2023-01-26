@@ -17,6 +17,7 @@ const useENSContext = ({ ensAddress }) => {
   useEffect(() => {
     if (!context.loaded) return;
     setLoaded(false);
+
     if (currentEnsAddress === null) {
       setValid(true);
       setLoaded(true);
@@ -43,6 +44,7 @@ const useENSContext = ({ ensAddress }) => {
     main().catch((error) => {
       setValid(false);
       setEnsError(error.message);
+      setLoaded(true);
     });
   }, [currentEnsAddress, context]);
 

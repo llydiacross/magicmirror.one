@@ -10,7 +10,7 @@ const useWeb3Context = () => {
   const [chainId, setChainId] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [walletAddress, setWalletAddress] = useState("0x0");
-  const [signer, setSigner] = useState(null);
+  const [signer, setSigner] = useState<ethers.Signer>(null);
   const [web3Provider, setWeb3Provider] = useState<
     ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider
   >(null);

@@ -16,13 +16,14 @@ export interface Web3ContextType {
   walletError: Error;
   chainId: 0;
   loaded: false;
-  signer: null;
+  signer: ethers.Signer;
 }
 
 export const Web3Context = createContext({
   balance: null,
   accounts: [],
   ensAddresses: [],
+  signer: null,
   walletInstalled: false,
   walletConnected: false,
   walletAddress: "0x0",

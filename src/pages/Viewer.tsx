@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import FixedElements from "../components/FixedElements";
 import SettingsModal from "../modals/SettingsModal";
-import { Web3Context } from "../contexts/web3Context";
 import { ENSContext } from "../contexts/ensContext";
 import { withRouter, useHistory } from "react-router-dom";
-import { Web3File, Web3Response } from "web3.storage";
+import { Web3Response } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
 import { getIPFSProvider } from "../helpers";
 
@@ -66,7 +65,10 @@ function Viewer({ match }) {
               abortRef.current
             )) as Web3Response;
           } catch (error) {
-            setPercentage(100);
+            //ignore abort errors
+            if (error.name === "AbortError") return;
+            setError(error);
+            setLoaded(true);
             return;
           }
 
@@ -246,7 +248,7 @@ function Viewer({ match }) {
         <div className="hero-content text-center text-neutral-content bg-error">
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold text-black">Malfuction</h1>
-            <p className="mb-5 text-black underline">
+            <p className="mb-5 text-black underline truncate">
               {error !== null ? error.message : null}
             </p>
             <p className="mb-5 text-black">
