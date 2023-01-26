@@ -261,7 +261,7 @@ function Header({
       className="hero min-h-screen max-w-screen bg-base-200"
       data-theme={currentTheme}
     >
-      <div className="hero-content text-center w-[70%] max-w-[80vw]">
+      <div className="hero-content text-center w-[100%] md:w-[80%] lg:w-[80%] lg:max-w-[80vw] md:max-w-[80vw] max-w-[95vw]">
         <div className="flex flex-col gap-4 lg:gap-3 w-full">
           {/** mobile title */}
           <div className="max-w-screen mb-2">

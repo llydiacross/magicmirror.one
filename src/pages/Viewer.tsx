@@ -4,15 +4,84 @@ import FixedElements from "../components/FixedElements";
 import SettingsModal from "../modals/SettingsModal";
 import { ENSContext } from "../contexts/ensContext";
 import { withRouter, useHistory } from "react-router-dom";
-import { Web3Response } from "web3.storage";
+import { Web3File, Web3Response } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
 import { getIPFSProvider } from "../helpers";
+
+const parseCDI = async (files: Web3File[], setPercentage: Function) => {
+  let partialFiles = files.filter(
+    (file) => file.name.indexOf(".partial") !== -1
+  );
+  let indexFiles = files.filter((file) => file.name === "index.html");
+
+  let html;
+  if (indexFiles.length === 0 && partialFiles.length === 0) {
+    //no index.html found
+    return {
+      valid: false,
+    };
+  } else if (partialFiles.length > 0) {
+    //found partial files
+    let partialHtml = partialFiles.filter(
+      (file) => file.name === "index.partial"
+    )[0];
+    let partialCss = partialFiles.filter(
+      (file) => file.name === "css.partial"
+    )[0];
+    let partialJS = partialFiles.filter(
+      (file) => file.name === "js.partial"
+    )[0];
+    let partialXens = partialFiles.filter((file) => file.name === ".xens")[0];
+
+    let struct = {};
+    if (partialHtml !== undefined)
+      struct["html"] = new TextDecoder().decode(
+        (await partialHtml.stream().getReader().read()).value
+      );
+
+    if (partialCss !== undefined)
+      struct["css"] = new TextDecoder().decode(
+        (await partialCss.stream().getReader().read()).value
+      );
+    if (partialJS !== undefined)
+      struct["js"] = new TextDecoder().decode(
+        (await partialJS.stream().getReader().read()).value
+      );
+
+    if (partialXens !== undefined)
+      struct[".xens"] = new TextDecoder().decode(
+        (await partialXens.stream().getReader().read()).value
+      );
+
+    return {
+      valid: true,
+      direct: false,
+      source: struct,
+    };
+  } else if (indexFiles.length > 0) {
+    //just use the index.html and draw render it to an iframe
+    let potentialHTML = indexFiles[0];
+    setPercentage(65);
+    html = await potentialHTML.stream().getReader().read();
+    html = new TextDecoder().decode(html.value);
+    return {
+      valid: true,
+      direct: true,
+      source: html,
+    };
+  }
+
+  return {
+    valid: false,
+  };
+};
 
 function Viewer({ match }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [empty, setEmpty] = useState(false);
+  const [direct, setDirect] = useState(false);
   const [dir, setDir] = useState(null);
   const [buffer, setBuffer] = useState(null);
   const [percentage, setPercentage] = useState(0);
@@ -54,7 +123,7 @@ function Viewer({ match }) {
         ) {
           setError(null);
           setEmpty(false);
-
+          setPercentage(25);
           console.log("fetching directory");
           if (abortRef.current !== null) abortRef.current.abort();
           abortRef.current = new AbortController();
@@ -64,6 +133,7 @@ function Viewer({ match }) {
               ensContext.contentHash,
               abortRef.current
             )) as Web3Response;
+            setPercentage(30);
           } catch (error) {
             //ignore abort errors
             if (error.name === "AbortError") return;
@@ -72,28 +142,26 @@ function Viewer({ match }) {
             return;
           }
 
+          setPercentage(40);
           abortRef.current = null;
           let files = await response.files();
           setDir(files);
-          let potentialHTML = await files.filter(
-            (file) => file.name === "index.html"
-          )[0];
-
           setPercentage(50);
-
-          if (potentialHTML === undefined) {
-            setEmpty(true);
-          } else {
-            let html = await potentialHTML.stream().getReader().read();
-            let decode = new TextDecoder().decode(html.value);
-            setBuffer(decode);
-            setEmpty(false);
-          }
+          let buffer = await parseCDI(files, setPercentage);
+          if (buffer.direct) {
+            setDirect(true);
+            setBuffer(buffer?.source || null);
+          } else setDirect(false);
         } else {
           setEmpty(true);
         }
-        setPercentage(50);
         setPercentage(75);
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            setPercentage(100);
+            resolve(true);
+          }, 1000);
+        });
       } catch (error) {
         setError(error);
         setBuffer(null);
@@ -117,12 +185,12 @@ function Viewer({ match }) {
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-center text-neutral-content bg-warning">
           <div className="max-w-md">
-            <h1 className="mb-5 text-5xl font-bold text-black">
+            <h1 className="mb-2 text-5xl font-bold text-black truncate">
               Loading{" "}
-              <span className="truncate underline">
-                {ensContext.currentEnsAddress}
-              </span>
             </h1>
+            <h2 className="mb-3 text-3xl text-black truncate underline">
+              {ensContext.currentEnsAddress}
+            </h2>
             <p className="mb-5 text-black">
               This may take a few seconds, please be patient.
             </p>
@@ -142,7 +210,25 @@ function Viewer({ match }) {
         }
       >
         {buffer !== null && ensContext.ensError === null ? (
-          <HTMLRenderer implicit={buffer} currentFile="index.html" />
+          <>
+            {direct ? (
+              <iframe
+                title={ensContext.currentEnsAddress}
+                style={{ width: "100%", height: "100%" }}
+                src={
+                  "https://dweb.link/ipfs/" +
+                  ensContext.contentHash
+                    .replace("ipfs://", "")
+                    .replace("ipns://", "")
+                }
+              ></iframe>
+            ) : (
+              <HTMLRenderer
+                code={buffer.source}
+                currentFile={(ensContext.currentEnsAddress || "null") + ".web3"}
+              />
+            )}
+          </>
         ) : (
           <div className="hero min-h-screen">
             <div className="hero-overlay bg-opacity-60"></div>
