@@ -64,10 +64,7 @@ function HTMLRenderer({
 
   let safeJS = code.js || "";
   //remove script tags from savejs code
-  safeJS = safeJS.replace(/<script>/g, "");
-  safeJS = safeJS.replace(/<\/script>/g, "");
-  safeJS = safeJS.replace(/<\/S/g, "");
-  safeJS = safeJS.replace(/<\/s/g, "");
+  safeJS = safeJS.replace(/<\//g, "");
 
   let _html = `
     <html>

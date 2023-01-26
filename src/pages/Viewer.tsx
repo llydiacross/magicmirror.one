@@ -17,85 +17,140 @@ function Viewer({ match }) {
   const [dir, setDir] = useState(null);
   const [buffer, setBuffer] = useState(null);
   const [percentage, setPercentage] = useState(0);
-  const [currentEnsDomain, setCurrentEnsDomain] = useState(
-    match?.params?.token
-  );
   const ensContext = useContext(ENSContext);
+  const abortRef = useRef(null);
   const history = useHistory();
 
   useEffect(() => {
-    setError(null);
+    if (ensContext.currentEnsAddress !== match.params.token) {
+      ensContext.setCurrentEnsAddress(match.params.token);
+      return;
+    }
 
-    if (ensContext.loaded) ensContext.setCurrentEnsAddress(currentEnsDomain);
-    if (!ensContext.loaded && !ensContext.valid) return;
+    if (!ensContext.loaded) return;
+    if (loaded || ensContext.currentEnsAddress !== match.params.token) return;
 
-    if (ensContext.ensError !== null) {
-      setError(ensContext.ensError);
+    if (
+      ensContext.contentHash === null &&
+      ensContext.loaded &&
+      ensContext.valid
+    ) {
+      setEmpty(true);
+      setBuffer(null);
       setLoaded(true);
       return;
     }
 
-    setPercentage(0);
-
     let main = async () => {
-      let ipfs = getIPFSProvider("web3-storage", true);
+      try {
+        let ipfs = getIPFSProvider("web3-storage", true);
 
-      setPercentage(50);
-      if (ensContext.contentHash !== null) {
-        setEmpty(false);
+        setPercentage(0);
+        setLoaded(false);
+        setBuffer(null);
 
-        try {
-          let dir = (await ipfs.getDirectory(
-            ensContext.contentHash
-          )) as Web3Response;
-          let files = await dir.files();
+        if (
+          ensContext.contentHash !== null &&
+          ensContext.currentEnsAddress === match.params.token
+        ) {
+          setError(null);
+          setEmpty(false);
+
+          console.log("fetching directory");
+          if (abortRef.current !== null) abortRef.current.abort();
+          abortRef.current = new AbortController();
+          let response: Web3Response;
+          try {
+            response = (await ipfs.getDirectory(
+              ensContext.contentHash,
+              abortRef.current
+            )) as Web3Response;
+          } catch (error) {
+            setPercentage(100);
+            return;
+          }
+
+          abortRef.current = null;
+          let files = await response.files();
           setDir(files);
-          let html = await files
-            .filter((file) => file.name === "index.html")[0]
-            .stream()
-            .getReader()
-            .read();
+          let potentialHTML = await files.filter(
+            (file) => file.name === "index.html"
+          )[0];
 
-          let decode = new TextDecoder().decode(html.value);
-          setBuffer(decode);
-        } catch (error) {
-          console.error(error);
-          setDir([]);
+          setPercentage(50);
+
+          if (potentialHTML === undefined) {
+            setEmpty(true);
+          } else {
+            let html = await potentialHTML.stream().getReader().read();
+            let decode = new TextDecoder().decode(html.value);
+            setBuffer(decode);
+            setEmpty(false);
+          }
+        } else {
+          setEmpty(true);
         }
-      } else {
-        setEmpty(true);
+        setPercentage(50);
+        setPercentage(75);
+      } catch (error) {
+        setError(error);
+        setBuffer(null);
+        console.error(error);
       }
 
       setLoaded(true);
-      setPercentage(100);
     };
 
-    main().catch((error) => {
-      console.error(error);
-      setError(error);
-    });
-  }, [ensContext, currentEnsDomain]);
+    if (ensContext.currentEnsAddress === match.params.token) main();
+  }, [match.params.token, ensContext, loaded]);
 
+  useEffect(() => {
+    return () => {
+      if (abortRef.current !== null) abortRef.current.abort();
+    };
+  }, []);
   return (
     <div>
-      {error == null ? (
-        <></>
-      ) : (
-        <>
+      <div className="hero min-h-screen" hidden={loaded}>
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content bg-warning">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-5xl font-bold text-black">
+              Loading{" "}
+              <span className="truncate underline">
+                {ensContext.currentEnsAddress}
+              </span>
+            </h1>
+            <p className="mb-5 text-black">
+              This may take a few seconds, please be patient.
+            </p>
+            <div
+              className="radial-progress bg-warning text-warning-content"
+              style={{ "--value": percentage } as any}
+            >
+              {percentage + "%"}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="hero min-h-screen"
+        hidden={
+          !loaded || empty || ensContext.ensError !== null || error !== null
+        }
+      >
+        {buffer !== null && ensContext.ensError === null ? (
+          <HTMLRenderer implicit={buffer} currentFile="index.html" />
+        ) : (
           <div className="hero min-h-screen">
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content text-center text-neutral-content bg-error">
               <div className="max-w-md">
                 <h1 className="mb-5 text-5xl font-bold text-black">
-                  Malfuction
+                  Bad Buffer
                 </h1>
                 <p className="mb-5 text-black">
-                  We encountered an error while trying to find this eth domain.
-                  This usually means the eth domain is non existent or does not
-                  have a registry controller yet or it could be an IPFS cache
-                  issue. Double check that you have{" "}
-                  <u>deployed your registry controller</u>. Then try refreshing
-                  the page.
+                  It appears that the buffer is not a valid HTML file.
                 </p>
                 <button
                   className="btn btn-dark w-full"
@@ -116,65 +171,107 @@ function Viewer({ match }) {
               </div>
             </div>
           </div>
-        </>
-      )}
-      {loaded && error === null ? (
-        <>
-          {empty ? (
-            <div className="hero min-h-screen">
-              <div className="hero-overlay bg-opacity-60"></div>
-              <div className="hero-content text-center text-neutral-content bg-error">
-                <div className="max-w-md">
-                  <h1 className="mb-5 text-5xl font-bold text-black">Empty</h1>
-                  <p className="mb-5 text-black">
-                    This ENS address is valid but doesn't have a content hash
-                    set. You should let the owner know they can come to this
-                    site and create an awesome page for it!
-                  </p>
-                  <button
-                    className="btn btn-dark w-full"
-                    onClick={() => {
-                      history.push("/");
-                    }}
-                  >
-                    Home
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              <HTMLRenderer
-                implicit={buffer}
-                currentFile={"index.html"}
-                style={{ width: "100%", height: "100%", position: "absolute" }}
-              />
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          <div className="hero min-h-screen">
-            <div className="hero-overlay bg-opacity-60"></div>
-            <div className="hero-content text-center text-neutral-content">
-              <div className="max-w-md">
-                <h1 className="mb-5 text-5xl font-bold m-w-50 truncate">
-                  Loading <u>{ensContext.currentEnsAddress}</u>
-                </h1>
-                <p className="mb-5">
-                  Please wait while we adjust some things for you...
-                </p>
-                <div
-                  style={{ "--value": percentage } as any}
-                  className="radial-progress bg-warning text-primary-content border-4 border-warning"
-                >
-                  {percentage + "%"}
-                </div>
-              </div>
-            </div>
+        )}
+      </div>
+      <div className="hero-overlay bg-opacity-60"></div>
+      {/** Empty Box */}
+      <div
+        className="hero min-h-screen"
+        hidden={
+          !loaded || !empty || error !== null || ensContext.ensError !== null
+        }
+      >
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content bg-error">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-5xl font-bold text-black">Empty</h1>
+            <p className="mb-5 text-black">
+              It appears that this ENS address does not have any content on it.
+            </p>
+            <button
+              className="btn btn-dark w-full"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Home
+            </button>
+            <button
+              className="btn btn-dark w-full mt-2"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Retry
+            </button>
           </div>
-        </>
-      )}
+        </div>
+      </div>
+      {/** ENS Error Box */}
+      <div
+        className="hero min-h-screen"
+        hidden={!loaded || ensContext.ensError === null}
+      >
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content bg-error">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-5xl font-bold text-black">
+              404 Not Found
+            </h1>
+            <p className="mb-5 text-black">
+              This ENS address does not exist and is can be purchased right now!
+            </p>
+            <button
+              className="btn btn-dark w-full"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Home
+            </button>
+            <button
+              className="btn btn-dark w-full mt-2"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Purchase
+            </button>
+          </div>
+        </div>
+      </div>
+      {/** Error Box */}
+      <div className="hero min-h-screen" hidden={error === null || empty}>
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content bg-error">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-5xl font-bold text-black">Malfuction</h1>
+            <p className="mb-5 text-black underline">
+              {error !== null ? error.message : null}
+            </p>
+            <p className="mb-5 text-black">
+              This is likely due to an issue with the ENS address or the
+              content. If you believe this is an error, please contact us.
+            </p>
+            <button
+              className="btn btn-dark w-full"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Home
+            </button>
+            <button
+              className="btn btn-dark w-full mt-2"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
       <FixedElements
         hideSettings={!loaded}
         onSettings={() => {

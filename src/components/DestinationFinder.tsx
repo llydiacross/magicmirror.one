@@ -55,11 +55,12 @@ export default function DestinationFinder() {
 
     WebEvents.emit("gotoDestination", destination);
 
+    //gives time for animations to animates\
     await new Promise((resolve) =>
       setTimeout(() => {
         history.push("/view/" + destination);
         resolve(true);
-      }, 5000)
+      }, 3000)
     );
   };
 

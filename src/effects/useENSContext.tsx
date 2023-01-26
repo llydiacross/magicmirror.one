@@ -1,8 +1,6 @@
 import { ethers } from "ethers";
-import { off } from "process";
 import { useState, useEffect, useContext, useRef } from "react";
 import { Web3Context } from "../contexts/web3Context";
-import WebEvents from "../webEvents";
 
 const useENSContext = ({ ensAddress }) => {
   const context = useContext(Web3Context);
@@ -15,60 +13,37 @@ const useENSContext = ({ ensAddress }) => {
   const [loaded, setLoaded] = useState(false);
   const [valid, setValid] = useState(false);
   const [ensError, setEnsError] = useState(null);
-  const changeDestination = useRef(null);
-
-  changeDestination.current = (destination: string) => {
-    setLoaded(false);
-    setResolver(null);
-    setAvatar(null);
-    setEmail(null);
-    setOwner(null);
-    setContentHash(null);
-    setEnsError(null);
-    setValid(false);
-    setCurrentEnsAddress(
-      destination.indexOf(".eth") > -1 ? destination : destination + ".eth"
-    );
-  };
-
-  useEffect(() => {
-    WebEvents.off("gotoDestination", changeDestination.current);
-    WebEvents.on("gotoDestination", changeDestination.current);
-
-    return () => {
-      WebEvents.off("gotoDestination", changeDestination.current);
-    };
-  }, []);
 
   useEffect(() => {
     if (!context.loaded) return;
-
     setLoaded(false);
-    if (currentEnsAddress == null) {
+    if (currentEnsAddress === null) {
+      setValid(true);
       setLoaded(true);
       return;
     }
+
     let main = async () => {
       let resolver = await context.web3Provider.getResolver(currentEnsAddress);
 
       if (resolver === null)
         throw new Error('No resolver found for "' + currentEnsAddress + '"');
 
+      setEnsError(null);
       setResolver(resolver);
       setAvatar(await resolver.getText("avatar"));
       setEmail(await resolver.getText("email"));
       setOwner(await context.web3Provider.resolveName(currentEnsAddress));
       setContentHash(await resolver.getContentHash());
-      setValid(true);
+
       console.log("loaded ens: " + currentEnsAddress);
+      setValid(true);
+      setLoaded(true);
     };
-    main()
-      .catch((error) => {
-        setEnsError(error.message);
-      })
-      .finally(() => {
-        setLoaded(true);
-      });
+    main().catch((error) => {
+      setValid(false);
+      setEnsError(error.message);
+    });
   }, [currentEnsAddress, context]);
 
   return {

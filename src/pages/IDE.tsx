@@ -1,8 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/prism";
-import "prismjs/themes/prism.css"; //Example style, you can use another
+
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-json";
+import "prismjs/themes/prism-dark.css";
+
 import FixedElements from "../components/FixedElements";
 import HTMLRenderer from "../components/HTMLRenderer";
 import storage from "../storage";
@@ -27,13 +35,13 @@ const defaultTabs = {
   js: {
     name: "🧩",
     icon: "code",
-    language: "js",
+    language: "javascript",
     code: `console.log("Hello World")`,
   },
   ".xens": {
     name: "📜",
     icon: "code",
-    language: "txt",
+    language: "json",
     code: `{"name": "Web.eth"}`,
   },
 };
@@ -148,11 +156,25 @@ function IDE({ theme }) {
                 setCodeBuffer(code);
               }, 800);
             }}
-            highlight={(code) =>
-              highlight(code, languages[tabs[selectedTab].language || "html"])
-            }
+            highlight={(code) => {
+              try {
+                //make a switch statement for the language
+                switch (tabs[selectedTab].language) {
+                  case "html":
+                    return highlight(code, languages.html);
+                  case "css":
+                    return highlight(code, languages.css);
+                  case "js":
+                    return highlight(code, languages.js);
+                  case "json":
+                    return highlight(code, languages.json);
+                }
+              } catch (error) {}
+
+              return highlight(code, languages.js);
+            }}
             padding={24}
-            className="z-50"
+            className="z-50 line-numbers"
             spellCheck={true}
             style={{
               fontFamily: '"Fira code", "Fira Mono", monospace',

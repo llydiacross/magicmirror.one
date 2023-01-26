@@ -74,11 +74,13 @@ class Web3StorageProvider extends IPFSProvider {
     return await this.instance.put([file]);
   }
 
-  async getDirectory(cid: string) {
+  async getDirectory(cid: string, abort?: any): Promise<any> {
     if (this.instance === undefined || this.instance === null)
       throw new Error("create instance needs to be ran first");
 
-    let result = await this.instance.get(cid.replace("ipfs://", ""));
+    let result = await this.instance.get(cid.replace("ipfs://", ""), {
+      signal: abort?.signal,
+    });
     if (!result.ok)
       throw new Error('bad IPFS CID "' + cid + '" : ' + result.status);
 

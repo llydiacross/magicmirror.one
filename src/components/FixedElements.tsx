@@ -14,6 +14,7 @@ function FixedElements({
   hideSettings = false,
   hideFooter = false,
   hideUserInfo = false,
+  hideOwnership = false,
 }) {
   const context = useContext(Web3Context);
   const ensContext = useContext(ENSContext);
@@ -50,7 +51,7 @@ function FixedElements({
           <></>
         )}
         <div
-          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw]"
+          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw] cursor-pointer"
           onClick={() => {
             ensErrorRef.current.hidden = true;
           }}
@@ -97,13 +98,15 @@ function FixedElements({
           <></>
         )}
         <div
-          className="alert alert-info shadow-lg m-5 pr-4 mr-4 max-w-50"
+          className="alert alert-info shadow-lg m-5 pr-4 mr-4 max-w-50 cursor-pointer"
           hidden={
             !ensContext.loaded ||
+            ensContext.ensError !== null ||
             !context.loaded ||
             !context.walletConnected ||
             hideAlerts ||
             hideUserInfo ||
+            hideOwnership ||
             ensContext.owner?.toLowerCase() !==
               context.accounts[0]?.toLowerCase()
           }
