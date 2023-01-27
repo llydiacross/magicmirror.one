@@ -20,14 +20,13 @@ artifacts/
 # InfinityMint files
 alpha/
 beta/
-infinitymint.config.ts
-infinitymint.config.js
 .session
 /gems/__*
 /gems/@*
 /alpha/__gems/
 /beta/__gems/
 /*/__gems/
+/projects/bundles/
 
 .DS_Store
 dist/
