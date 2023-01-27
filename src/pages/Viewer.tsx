@@ -8,6 +8,7 @@ import { Web3File, Web3Response } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
 import { getIPFSProvider } from "../helpers";
 import { Web3StorageProvider } from "../ipfs";
+import HeartIcon from "../components/Icons/HeartIcon";
 
 const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   let partialFiles = files.filter(
@@ -86,6 +87,9 @@ const prepareDefaultContent = async (setPercentage: Function) => {
 };
 
 function Viewer({ match }) {
+  const ensContext = useContext(ENSContext);
+  const history = useHistory();
+
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
@@ -97,11 +101,11 @@ function Viewer({ match }) {
   const [aborted, setAborted] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [hasSetMatch, setHasSetMatch] = useState(false);
-  const ensContext = useContext(ENSContext);
+
   const abortRef = useRef(null);
   const matchRef = useRef(null);
   const ipfsProvider = useRef<Web3StorageProvider>(null);
-  const history = useHistory();
+  const defaultResponseElement = useRef(null);
 
   if (ipfsProvider.current === null)
     ipfsProvider.current = getIPFSProvider(
@@ -393,6 +397,29 @@ function Viewer({ match }) {
         </div>
       </div>
       <FixedElements
+        children={
+          defaultResponse ? (
+            <div
+              className="alert alert-secondary shadow-lg p-2 opacity-50 hover:opacity-100 cursor-pointer"
+              ref={defaultResponseElement}
+              onClick={() => {
+                defaultResponseElement.current.style.display = "none";
+              }}
+            >
+              <div>
+                <HeartIcon />
+                <span>
+                  <b>
+                    This Website was <u>automatically</u> <u>generated</u> by
+                    web.eth
+                  </b>
+                </span>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )
+        }
         hideSettings={!loaded}
         onSettings={() => {
           if (!loaded) return;

@@ -15,6 +15,7 @@ function FixedElements({
   hideFooter = false,
   hideUserInfo = false,
   hideOwnership = false,
+  children = null,
 }) {
   const context = useContext(Web3Context);
   const ensContext = useContext(ENSContext);
@@ -25,80 +26,9 @@ function FixedElements({
   return (
     <>
       {/** Element for the Wallet Error */}
-      <div className="fixed top-0 left-0 z-50">
-        {context.walletError ? (
-          <>
-            <div
-              ref={errorRef}
-              hidden={hideAlerts}
-              className="alert alert-error shadow-lg m-5 animate-bounce pr-0 mr-0 max-w-50"
-              onClick={() => {
-                errorRef.current.hidden = true;
-              }}
-            >
-              <div className="truncate max-w-50">
-                <ErrorIcon />
-                <span>
-                  <b className="mr-2">No Web3 Session</b>
-                  {context.walletError?.message ||
-                    context.walletError?.toString() ||
-                    "We don't know why!"}
-                </span>
-              </div>
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+      <div className="fixed top-0 left-0 z-50 flex flex-col md:flex-row lg:flex-row gap-2 p-4">
         <div
-          className="alert alert-error shadow-lg m-5 block pr-0 mr-0 max-w-screen overflow-x-clip max-w-[90vw] cursor-pointer"
-          onClick={() => {
-            ensErrorRef.current.hidden = true;
-          }}
-          ref={ensErrorRef}
-          hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
-        >
-          <div className="truncate p-2  max-w-[85vw]">
-            <ErrorIcon />
-            <span>
-              <b>
-                {ensContext.ensError?.message ||
-                  ensContext?.ensError?.toString()}
-              </b>
-            </span>
-          </div>
-        </div>
-        {context.walletConnected ? (
-          <div hidden={hideAlerts || hideUserInfo}>
-            <div
-              className="alert alert-success shadow-lg m-5 hidden md:block lg:block pr-0 mr-0 cursor-pointer underline max-w-50"
-              onClick={() => {
-                history.push(
-                  `/view/${context.ensAddresses[0] || context.accounts[0]}`
-                );
-              }}
-            >
-              <div className="truncate max-w-50">
-                <SuccessIcon />
-                <span>
-                  <b>{context.ensAddresses[0] || context.accounts[0]}</b>
-                </span>
-              </div>
-            </div>
-            <div className="alert alert-success shadow-lg m-5 block md:hidden lg:hidden pr-4 mr-4 max-w-50">
-              <div className="truncate max-w-50">
-                <SuccessIcon className="w-[20px]" />
-                <span>
-                  <b>Connected</b>
-                </span>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-        <div
-          className="alert alert-info shadow-lg m-5 pr-4 mr-4 max-w-50 cursor-pointer"
+          className="alert alert-info shadow-lg p-2 opacity-50 hover:opacity-100 cursor-pointer w-auto"
           hidden={
             !ensContext.loaded ||
             ensContext.ensError !== null ||
@@ -112,19 +42,78 @@ function FixedElements({
           }
         >
           <div
-            className="truncate max-w-50"
+            className="text-center"
             onClick={() => {
               history.push(`/ide?url=${ensContext.currentEnsAddress}`);
             }}
           >
-            <HeartIcon className="w-[20px]" />
-            <span>
+            <span className="text-4xl">
+              <b>✏️</b>
+            </span>
+          </div>
+        </div>
+        {context.walletError ? (
+          <>
+            <div
+              ref={errorRef}
+              hidden={hideAlerts}
+              className="alert alert-error shadow-lg animate-bounce p-2 mb-2 mt-4 opacity-50 hover:opacity-100 cursor-pointer w-auto"
+              onClick={() => {
+                errorRef.current.hidden = true;
+              }}
+            >
+              <div>
+                <ErrorIcon className="h-[20px]" />
+                <span>
+                  <b className="mr-2">No Web3 Session</b>
+                  {context.walletError?.message ||
+                    context.walletError?.toString() ||
+                    "We don't know why!"}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+        <div
+          className="alert alert-error shadow-lg p-2 opacity-50 hover:opacity-100 cursor-pointer"
+          onClick={() => {
+            ensErrorRef.current.hidden = true;
+          }}
+          ref={ensErrorRef}
+          hidden={ensContext.ensError === null || hideAlerts || hideUserInfo}
+        >
+          <div className="truncate p-2">
+            <ErrorIcon />
+            <span className="truncate">
               <b>
-                Click <u>here to edit your domain...</u>
+                {ensContext.ensError?.message ||
+                  ensContext?.ensError?.toString()}
               </b>
             </span>
           </div>
         </div>
+        {context.walletConnected ? (
+          <div
+            hidden={hideAlerts || hideUserInfo}
+            className="alert alert-success shadow-lg p-2 cursor-pointer opacity-50 hover:opacity-100 w-auto"
+            onClick={() => {
+              history.push(
+                `/view/${context.ensAddresses[0] || context.accounts[0]}`
+              );
+            }}
+          >
+            <div className="truncate">
+              <span>
+                <b>{context.ensAddresses[0] || context.accounts[0]}</b>
+              </span>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        {children}
       </div>
 
       {/** 0x0zLogo */}
