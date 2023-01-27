@@ -23,6 +23,9 @@ export default function Index() {
         }, 1000);
       };
 
+    //might cause trouble
+    window.scrollTo(0, 0);
+
     WebEvents.off("gotoDestination", cooldown.current);
     WebEvents.on("gotoDestination", cooldown.current);
 

@@ -114,7 +114,10 @@ function Viewer({ match }) {
 
   useEffect(() => {
     matchRef.current = match.params.token;
-    if (ensContext.currentEnsAddress !== matchRef.current) {
+    if (
+      ensContext.setCurrentEnsAddress !== null &&
+      ensContext.currentEnsAddress !== matchRef.current
+    ) {
       ensContext.setCurrentEnsAddress(match.params.token);
     }
   }, [ensContext, match.params.token, hasSetMatch]);
@@ -397,28 +400,44 @@ function Viewer({ match }) {
         </div>
       </div>
       <FixedElements
+        linkHref={"/"}
         children={
-          defaultResponse ? (
-            <div
-              className="alert alert-secondary shadow-lg p-2 opacity-50 hover:opacity-100 cursor-pointer"
-              ref={defaultResponseElement}
-              onClick={() => {
-                defaultResponseElement.current.style.display = "none";
-              }}
-            >
-              <div>
-                <HeartIcon />
-                <span>
-                  <b>
-                    This Website was <u>automatically</u> <u>generated</u> by
-                    web.eth
-                  </b>
-                </span>
+          <>
+            {defaultResponse &&
+            error === null &&
+            loaded &&
+            ensContext.ensError === null ? (
+              <div
+                className="alert alert-warning shadow-lg p-2 opacity-60 hover:opacity-100 cursor-pointer w-auto"
+                ref={defaultResponseElement}
+                onClick={() => {
+                  defaultResponseElement.current.style.display = "none";
+                }}
+              >
+                <div>
+                  <HeartIcon />
+                  <span>
+                    <b>
+                      This was <u>automatically</u> <u>generated</u> by web.eth
+                    </b>
+                  </span>
+                </div>
               </div>
-            </div>
-          ) : (
-            <></>
-          )
+            ) : (
+              <></>
+            )}
+            {loaded && error === null && ensContext.ensError === null ? (
+              <div className="alert alert-secondary shadow-lg p-2 opacity-70 hover:opacity-100 cursor-pointer w-auto">
+                <div className="underline">
+                  <span>
+                    <b>Tip {ensContext.currentEnsAddress} 💰</b>
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
         }
         hideSettings={!loaded}
         onSettings={() => {

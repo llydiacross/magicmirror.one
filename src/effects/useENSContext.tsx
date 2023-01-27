@@ -1,6 +1,9 @@
 import { ethers } from "ethers";
 import { useState, useEffect, useContext, useRef } from "react";
+import config from "../config";
 import { Web3Context } from "../contexts/web3Context";
+import { resolveDirectory, resolveFile } from "../ipfs";
+import { Buffer } from "buffer";
 
 const useENSContext = ({ ensAddress }) => {
   const context = useContext(Web3Context);
@@ -12,6 +15,8 @@ const useENSContext = ({ ensAddress }) => {
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
+  const directoryRef = useRef(null);
+  const imageRef = useRef(null);
 
   useEffect(() => {
     if (!context.loaded) return;
@@ -32,10 +37,80 @@ const useENSContext = ({ ensAddress }) => {
       setResolver(resolver);
 
       try {
-        setAvatar(await resolver.getText("avatar"));
+        let potentialAvatar = await resolver.getText("avatar");
+
+        if (potentialAvatar === null) {
+          throw new Error("no avatar");
+        }
+
+        if (potentialAvatar.indexOf("eip155:1/erc1155") !== -1) {
+          console.log("avatar2: " + potentialAvatar);
+          let stub = potentialAvatar.split("eip155:1/erc1155:")[1];
+          let [contract, tokenId] = stub.split("/");
+
+          const abi = [
+            "function uri(uint256 tokenId) view returns (string value)",
+          ];
+          let instance = new ethers.Contract(
+            contract,
+            abi,
+            context.web3Provider
+          );
+          let decoded;
+          try {
+            let result = await instance.uri(tokenId);
+            if (imageRef.current !== null) imageRef.current.abort();
+            imageRef.current = new AbortController();
+            let directory = await resolveDirectory(result, imageRef.current);
+            imageRef.current = null;
+            let files = await directory.files();
+            let stream = await files[0].stream().getReader().read();
+            decoded = new TextDecoder().decode(stream.value);
+
+            try {
+              let json = JSON.parse(decoded);
+              let image = json.image;
+
+              if (image.indexOf("ipfs://") !== -1) {
+                if (directoryRef.current !== null) directoryRef.current.abort();
+
+                directoryRef.current = new AbortController();
+                let decodedImage = await resolveFile(
+                  json.image,
+                  undefined,
+                  directoryRef.current
+                );
+                directoryRef.current = null;
+                setAvatar(
+                  "data:image/gif;base64," +
+                    Buffer.from(
+                      (await decodedImage.stream().getReader().read()).value
+                    ).toString("base64")
+                );
+              } else setAvatar(json.image);
+            } catch (error) {
+              if (error.name === "AbortError") return;
+              console.error(error);
+              setAvatar(decoded);
+            }
+          } catch (error) {
+            if (error.name === "AbortError") return;
+            console.error(error);
+            setAvatar(null);
+          }
+        } else {
+          if (
+            potentialAvatar.indexOf("http://") === -1 ||
+            potentialAvatar.indexOf("https://") === -1
+          ) {
+            throw new Error("bad format: " + potentialAvatar);
+          }
+
+          setAvatar(potentialAvatar);
+        }
       } catch (error) {
         console.log("bad avatar: " + error.message);
-        setAvatar(null);
+        setAvatar(config.defaultAvatar);
       }
 
       try {
@@ -66,6 +141,11 @@ const useENSContext = ({ ensAddress }) => {
       setEnsError(error.message);
       setLoaded(true);
     });
+
+    return () => {
+      if (imageRef.current !== null) imageRef.current.abort();
+      if (directoryRef.current !== null) directoryRef.current.abort();
+    };
   }, [currentEnsAddress, context]);
 
   return {

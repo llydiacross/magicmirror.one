@@ -1,5 +1,6 @@
 import { read } from "fs";
-import { Web3Storage, File, Web3Response } from "web3.storage";
+import { Web3Storage, File, Web3Response, Web3File } from "web3.storage";
+import config from "./config";
 import storage from "./storage";
 
 /**
@@ -16,7 +17,7 @@ abstract class IPFSProvider {
   abstract getFile(cid: string, fileName: string): Promise<any>;
   abstract getContentType(type: string): string;
   abstract getContentExtension(type: string): string;
-  abstract getDirectory(cid: string): any;
+  abstract getDirectory(cid: string, abortController: AbortController): any;
 }
 
 /**
@@ -135,6 +136,7 @@ class Web3StorageProvider extends IPFSProvider {
 }
 
 export { IPFSProvider as Provider, IPFSCompanionProvider, Web3StorageProvider };
+
 let _IPFSCompanionProviderReadOnly: IPFSCompanionProvider;
 let _Web3StorageProviderReadOnly: Web3StorageProvider;
 export const getReadOnlyProvider = (
@@ -149,10 +151,50 @@ export const getReadOnlyProvider = (
     case "web3-storage":
       if (_Web3StorageProviderReadOnly) return _Web3StorageProviderReadOnly;
       _Web3StorageProviderReadOnly = new Web3StorageProvider(true);
+      _Web3StorageProviderReadOnly.createInstance(config.defaultWeb3Storage);
       return _Web3StorageProviderReadOnly;
     default:
       throw new Error("invalid provider");
   }
+};
+
+/**
+ *
+ * @param potentialCID
+ * @param fileName
+ * @param provider
+ * @returns
+ */
+export const resolveFile = async (
+  potentialCID: string,
+  fileName?: string,
+  abortController: AbortController = null,
+  provider?: IPFSProvider
+): Promise<Web3File> => {
+  fileName = fileName || potentialCID.split("/").pop();
+  console.log("resolving " + potentialCID);
+  let result = await resolveDirectory(potentialCID, abortController, provider);
+  let files = await result.files();
+  return files.filter((file) => file.name === fileName)[0];
+};
+
+/**
+ *
+ * @param potentialCID
+ * @param provider
+ * @returns
+ */
+export const resolveDirectory = async (
+  potentialCID: string,
+  abortController: AbortController = null,
+  provider?: IPFSProvider
+): Promise<Web3Response> => {
+  provider = provider || getReadOnlyProvider("web3-storage");
+
+  potentialCID = potentialCID.split("ipfs://")[1];
+  potentialCID = potentialCID.split("ipfs/")[1];
+  potentialCID = potentialCID.split("/")[0];
+  return provider.getDirectory(potentialCID, abortController);
 };
 
 let _IPFSCompanionProvider: IPFSCompanionProvider;
