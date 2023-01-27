@@ -143,7 +143,6 @@ function Viewer({ match }) {
               abortRef.current
             );
           } catch (error) {
-            console.error(error);
             if (error.name === "AbortError") {
               setAborted(true);
               return;
