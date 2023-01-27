@@ -7,6 +7,7 @@ import { withRouter, useHistory } from "react-router-dom";
 import { Web3File, Web3Response } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
 import { getIPFSProvider } from "../helpers";
+import { Web3StorageProvider } from "../ipfs";
 
 const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   let partialFiles = files.filter(
@@ -76,109 +77,112 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   };
 };
 
+const prepareDefaultContent = async (setPercentage: Function) => {
+  //get the default content
+  let defaultContent = await fetch("/audio.html");
+  let html = await defaultContent.text();
+  setPercentage(100);
+  return html;
+};
+
 function Viewer({ match }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [empty, setEmpty] = useState(false);
+  const [defaultResponse, setDefaultResponse] = useState(false);
   const [direct, setDirect] = useState(false);
   const [dir, setDir] = useState(null);
   const [buffer, setBuffer] = useState(null);
   const [percentage, setPercentage] = useState(0);
+  const [hasSetMatch, setHasSetMatch] = useState(false);
   const ensContext = useContext(ENSContext);
   const abortRef = useRef(null);
+  const matchRef = useRef(null);
+  const ipfsProvider = useRef<Web3StorageProvider>(null);
   const history = useHistory();
 
+  if (ipfsProvider.current === null)
+    ipfsProvider.current = getIPFSProvider(
+      "web3-storage"
+    ) as Web3StorageProvider;
+
   useEffect(() => {
-    if (ensContext.currentEnsAddress !== match.params.token) {
+    matchRef.current = match.params.token;
+    if (ensContext.currentEnsAddress !== matchRef.current) {
+      if (abortRef.current !== null) abortRef.current.abort();
       ensContext.setCurrentEnsAddress(match.params.token);
-      return;
     }
+  }, [ensContext, match.params.token, hasSetMatch]);
 
+  useEffect(() => {
     if (!ensContext.loaded) return;
-    if (loaded || ensContext.currentEnsAddress !== match.params.token) return;
-
-    if (
-      ensContext.contentHash === null &&
-      ensContext.loaded &&
-      ensContext.valid
-    ) {
-      setEmpty(true);
-      setBuffer(null);
-      setLoaded(true);
-      return;
-    }
+    if (ensContext.currentEnsAddress === null) return;
+    if (ensContext.currentEnsAddress !== matchRef.current) return;
+    if (loaded) return;
 
     let main = async () => {
       try {
-        let ipfs = getIPFSProvider("web3-storage", true);
+        let isEmpty = false;
 
-        setPercentage(0);
-        setLoaded(false);
-        setBuffer(null);
-
+        setPercentage(10);
         if (
-          ensContext.contentHash !== null &&
-          ensContext.currentEnsAddress === match.params.token
+          ensContext.contentHash === null ||
+          ensContext.contentHash.trim().length === 0
         ) {
-          setError(null);
-          setEmpty(false);
-          setPercentage(25);
-          console.log("fetching directory");
-          if (abortRef.current !== null) abortRef.current.abort();
-          abortRef.current = new AbortController();
-          let response: Web3Response;
-          try {
-            response = (await ipfs.getDirectory(
-              ensContext.contentHash,
-              abortRef.current
-            )) as Web3Response;
-            setPercentage(30);
-          } catch (error) {
-            //ignore abort errors
-            if (error.name === "AbortError") return;
-            setError(error);
-            setLoaded(true);
-            return;
-          }
-
-          setPercentage(40);
-          abortRef.current = null;
-          let files = await response.files();
-          setDir(files);
-          setPercentage(50);
-          let buffer = await parseCDI(files, setPercentage);
-          if (buffer.direct) {
-            setDirect(true);
-            setBuffer(buffer?.source || null);
-          } else setDirect(false);
+          isEmpty = true;
         } else {
-          setEmpty(true);
+          let abortController = new AbortController();
+          abortRef.current = abortController;
+          setPercentage(20);
+          let directory = await ipfsProvider.current.getDirectory(
+            ensContext.contentHash,
+            abortRef.current
+          );
+          setPercentage(30);
+          let files = await directory.files();
+
+          setPercentage(50);
+          if (files.length === 0) {
+            isEmpty = true;
+          } else {
+            let parsedCDI = await parseCDI(files, setPercentage);
+            setDir(files);
+            if (parsedCDI.valid) {
+              if (parsedCDI.direct) {
+                setDirect(true);
+              } else {
+                setDirect(false);
+              }
+              setBuffer(parsedCDI.source);
+            } else isEmpty = true;
+          }
         }
-        setPercentage(75);
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            setPercentage(100);
-            resolve(true);
-          }, 1000);
-        });
+
+        if (isEmpty) {
+          let defaultContent = await prepareDefaultContent(setPercentage);
+          setDefaultResponse(defaultContent !== null);
+          setBuffer(defaultContent);
+          isEmpty = defaultContent === null;
+        }
+
+        setEmpty(isEmpty);
+        setLoaded(true);
       } catch (error) {
+        console.log(error);
         setError(error);
-        setBuffer(null);
-        console.error(error);
+      } finally {
+        setLoaded(true);
       }
-
-      setLoaded(true);
     };
-
-    if (ensContext.currentEnsAddress === match.params.token) main();
-  }, [match.params.token, ensContext, loaded]);
-
-  useEffect(() => {
+    //call async
+    main();
     return () => {
       if (abortRef.current !== null) abortRef.current.abort();
     };
-  }, []);
+  }, [ensContext, loaded]);
+
+  useEffect(() => {}, []);
   return (
     <div>
       <div className="hero min-h-screen" hidden={loaded}>
@@ -221,10 +225,19 @@ function Viewer({ match }) {
                     .replace("ipfs://", "")
                     .replace("ipns://", "")
                 }
-              ></iframe>
+              ></iframe> ? (
+                !defaultResponse
+              ) : (
+                <HTMLRenderer
+                  code={buffer.source}
+                  currentFile={
+                    (ensContext.currentEnsAddress || "null") + ".web3"
+                  }
+                />
+              )
             ) : (
               <HTMLRenderer
-                code={buffer.source}
+                implicit={buffer}
                 currentFile={(ensContext.currentEnsAddress || "null") + ".web3"}
               />
             )}
@@ -262,19 +275,28 @@ function Viewer({ match }) {
         )}
       </div>
       <div className="hero-overlay bg-opacity-60"></div>
-      {/** Empty Box */}
+      {/** Completely Empty Box */}
       <div
         className="hero min-h-screen"
         hidden={
-          !loaded || !empty || error !== null || ensContext.ensError !== null
+          !loaded ||
+          !empty ||
+          error !== null ||
+          ensContext.ensError !== null ||
+          defaultResponse
         }
       >
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-center text-neutral-content bg-error">
           <div className="max-w-md">
-            <h1 className="mb-5 text-5xl font-bold text-black">Empty</h1>
+            <h1 className="mb-5 text-5xl font-bold text-black">
+              Completely Empty
+            </h1>
             <p className="mb-5 text-black">
-              It appears that this ENS address does not have any content on it.
+              This ENS address appears to have content hash associated with it.
+              We also couldn't find any files in the directory, we also couldn't
+              pull enough data including twitter, email or reddit to assemble a
+              basic template.
             </p>
             <button
               className="btn btn-dark w-full"

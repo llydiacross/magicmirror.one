@@ -1,5 +1,5 @@
 import { read } from "fs";
-import { Web3Storage, File } from "web3.storage";
+import { Web3Storage, File, Web3Response } from "web3.storage";
 import storage from "./storage";
 
 /**
@@ -74,7 +74,7 @@ class Web3StorageProvider extends IPFSProvider {
     return await this.instance.put([file]);
   }
 
-  async getDirectory(cid: string, abort?: any): Promise<any> {
+  async getDirectory(cid: string, abort?: any): Promise<Web3Response> {
     if (this.instance === undefined || this.instance === null)
       throw new Error("create instance needs to be ran first");
 

@@ -8,7 +8,6 @@ export const ENSContext = createContext({
   email: "",
   contentHash: "",
   avatar: "",
-  valid: false,
   owner: "",
   currentEnsAddress: null,
   setCurrentEnsAddress: null,
@@ -23,7 +22,6 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
     contentHash,
     avatar,
     owner,
-    valid,
     ensError,
     currentEnsAddress,
     setCurrentEnsAddress,
@@ -37,7 +35,6 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         resolver,
         email,
         loaded,
-        valid,
         contentHash,
         owner,
         currentEnsAddress,
@@ -46,7 +43,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         ensError,
       }}
     >
-      {loaded ? (
+      {loaded || (!loaded && ensError !== null) ? (
         <>{children}</>
       ) : (
         <Header

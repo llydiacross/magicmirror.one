@@ -11,7 +11,6 @@ const useENSContext = ({ ensAddress }) => {
   const [owner, setOwner] = useState(null);
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [valid, setValid] = useState(false);
   const [ensError, setEnsError] = useState(null);
 
   useEffect(() => {
@@ -19,30 +18,51 @@ const useENSContext = ({ ensAddress }) => {
     setLoaded(false);
 
     if (currentEnsAddress === null) {
-      setValid(true);
-      setLoaded(true);
+      setEnsError(new Error("No ENS address provided"));
       return;
     }
 
     let main = async () => {
+      setEnsError(null);
       let resolver = await context.web3Provider.getResolver(currentEnsAddress);
 
       if (resolver === null)
         throw new Error('No resolver found for "' + currentEnsAddress + '"');
 
-      setEnsError(null);
       setResolver(resolver);
-      setAvatar(await resolver.getText("avatar"));
-      setEmail(await resolver.getText("email"));
-      setOwner(await context.web3Provider.resolveName(currentEnsAddress));
-      setContentHash(await resolver.getContentHash());
+
+      try {
+        setAvatar(await resolver.getText("avatar"));
+      } catch (error) {
+        console.log("bad avatar: " + error.message);
+        setAvatar(null);
+      }
+
+      try {
+        setEmail(await resolver.getText("email"));
+      } catch (error) {
+        console.log("bad email: " + error.message);
+        setEmail(null);
+      }
+
+      try {
+        setOwner(await context.web3Provider.resolveName(currentEnsAddress));
+      } catch (error) {
+        console.log("bad owner: " + error.message);
+        setOwner(null);
+      }
+
+      try {
+        setContentHash(await resolver.getContentHash());
+      } catch (error) {
+        console.log("bad content hash: " + error.message);
+        setContentHash(null);
+      }
 
       console.log("loaded ens: " + currentEnsAddress);
-      setValid(true);
       setLoaded(true);
     };
     main().catch((error) => {
-      setValid(false);
       setEnsError(error.message);
       setLoaded(true);
     });
@@ -56,7 +76,6 @@ const useENSContext = ({ ensAddress }) => {
     owner,
     ensError,
     avatar,
-    valid,
     currentEnsAddress,
     setCurrentEnsAddress,
   };
