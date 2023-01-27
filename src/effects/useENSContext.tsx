@@ -15,8 +15,8 @@ const useENSContext = ({ ensAddress }) => {
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
-  const directoryRef = useRef(null);
-  const imageRef = useRef(null);
+  const fetchMetadataref = useRef(null);
+  const fetImageRef = useRef(null);
 
   useEffect(() => {
     if (!context.loaded) return;
@@ -43,9 +43,13 @@ const useENSContext = ({ ensAddress }) => {
           throw new Error("no avatar");
         }
 
-        if (potentialAvatar.indexOf("eip155:1/erc1155") !== -1) {
+        if (
+          potentialAvatar.indexOf("eip155:1/erc1155") !== -1 ||
+          potentialAvatar.indexOf("eip155:1/erc721") !== -1
+        ) {
           console.log("avatar2: " + potentialAvatar);
           let stub = potentialAvatar.split("eip155:1/erc1155:")[1];
+          stub = potentialAvatar.split("eip155:1/erc721:")[1];
           let [contract, tokenId] = stub.split("/");
 
           const abi = [
@@ -59,10 +63,10 @@ const useENSContext = ({ ensAddress }) => {
           let decoded;
           try {
             let result = await instance.uri(tokenId);
-            if (imageRef.current !== null) imageRef.current.abort();
-            imageRef.current = new AbortController();
-            let directory = await resolveDirectory(result, imageRef.current);
-            imageRef.current = null;
+            if (fetImageRef.current !== null) fetImageRef.current.abort();
+            fetImageRef.current = new AbortController();
+            let directory = await resolveDirectory(result, fetImageRef.current);
+            fetImageRef.current = null;
             let files = await directory.files();
             let stream = await files[0].stream().getReader().read();
             decoded = new TextDecoder().decode(stream.value);
@@ -72,15 +76,16 @@ const useENSContext = ({ ensAddress }) => {
               let image = json.image;
 
               if (image.indexOf("ipfs://") !== -1) {
-                if (directoryRef.current !== null) directoryRef.current.abort();
+                if (fetchMetadataref.current !== null)
+                  fetchMetadataref.current.abort();
 
-                directoryRef.current = new AbortController();
+                fetchMetadataref.current = new AbortController();
                 let decodedImage = await resolveFile(
                   json.image,
                   undefined,
-                  directoryRef.current
+                  fetchMetadataref.current
                 );
-                directoryRef.current = null;
+                fetchMetadataref.current = null;
                 setAvatar(
                   "data:image/gif;base64," +
                     Buffer.from(
@@ -143,8 +148,8 @@ const useENSContext = ({ ensAddress }) => {
     });
 
     return () => {
-      if (imageRef.current !== null) imageRef.current.abort();
-      if (directoryRef.current !== null) directoryRef.current.abort();
+      if (fetImageRef.current !== null) fetImageRef.current.abort();
+      if (fetchMetadataref.current !== null) fetchMetadataref.current.abort();
     };
   }, [currentEnsAddress, context]);
 

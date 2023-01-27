@@ -192,6 +192,10 @@ function Viewer({ match }) {
         setLoaded(true);
       }
     };
+    if (ensContext.ensError !== null) {
+      setLoaded(true);
+      return;
+    }
     //call async
     main();
   }, [ensContext, loaded]);
@@ -337,7 +341,7 @@ function Viewer({ match }) {
       {/** ENS Error Box */}
       <div
         className="hero min-h-screen"
-        hidden={!loaded || ensContext.ensError === null}
+        hidden={!loaded || ensContext.ensError === null || error !== null}
       >
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-center text-neutral-content bg-error">
