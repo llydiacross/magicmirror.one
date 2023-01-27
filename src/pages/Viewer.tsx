@@ -94,6 +94,7 @@ function Viewer({ match }) {
   const [direct, setDirect] = useState(false);
   const [dir, setDir] = useState(null);
   const [buffer, setBuffer] = useState(null);
+  const [aborted, setAborted] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [hasSetMatch, setHasSetMatch] = useState(false);
   const ensContext = useContext(ENSContext);
@@ -110,7 +111,6 @@ function Viewer({ match }) {
   useEffect(() => {
     matchRef.current = match.params.token;
     if (ensContext.currentEnsAddress !== matchRef.current) {
-      if (abortRef.current !== null) abortRef.current.abort();
       ensContext.setCurrentEnsAddress(match.params.token);
     }
   }, [ensContext, match.params.token, hasSetMatch]);
@@ -132,13 +132,25 @@ function Viewer({ match }) {
         ) {
           isEmpty = true;
         } else {
+          if (abortRef.current !== null) abortRef.current.abort();
           let abortController = new AbortController();
           abortRef.current = abortController;
           setPercentage(20);
-          let directory = await ipfsProvider.current.getDirectory(
-            ensContext.contentHash,
-            abortRef.current
-          );
+          let directory;
+          try {
+            directory = await ipfsProvider.current.getDirectory(
+              ensContext.contentHash,
+              abortRef.current
+            );
+          } catch (error) {
+            console.error(error);
+            if (error.name === "AbortError") {
+              setAborted(true);
+              return;
+            }
+            throw error;
+          }
+
           setPercentage(30);
           let files = await directory.files();
 
@@ -146,19 +158,16 @@ function Viewer({ match }) {
           if (files.length === 0) {
             isEmpty = true;
           } else {
-            let parsedCDI = await parseCDI(files, setPercentage);
+            let parsed = await parseCDI(files, setPercentage);
             setDir(files);
-            if (parsedCDI.valid) {
-              if (parsedCDI.direct) {
-                setDirect(true);
-              } else {
-                setDirect(false);
-              }
-              setBuffer(parsedCDI.source);
+            if (parsed.valid) {
+              setDirect(parsed.direct);
+              setBuffer(parsed.source);
             } else isEmpty = true;
           }
         }
 
+        setPercentage(80);
         if (isEmpty) {
           let defaultContent = await prepareDefaultContent(setPercentage);
           setDefaultResponse(defaultContent !== null);
@@ -166,20 +175,19 @@ function Viewer({ match }) {
           isEmpty = defaultContent === null;
         }
 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setPercentage(90);
         setEmpty(isEmpty);
+        setAborted(false);
         setLoaded(true);
       } catch (error) {
         console.log(error);
         setError(error);
-      } finally {
         setLoaded(true);
       }
     };
     //call async
     main();
-    return () => {
-      if (abortRef.current !== null) abortRef.current.abort();
-    };
   }, [ensContext, loaded]);
 
   useEffect(() => {}, []);
@@ -210,12 +218,24 @@ function Viewer({ match }) {
       <div
         className="hero min-h-screen"
         hidden={
-          !loaded || empty || ensContext.ensError !== null || error !== null
+          !loaded ||
+          empty ||
+          ensContext.ensError !== null ||
+          error !== null ||
+          aborted
         }
       >
-        {buffer !== null && ensContext.ensError === null ? (
+        {buffer !== null && !aborted && ensContext.ensError === null ? (
           <>
-            {direct ? (
+            {defaultResponse ? (
+              <HTMLRenderer
+                code={buffer.source}
+                currentFile={(ensContext.currentEnsAddress || "null") + ".web3"}
+              />
+            ) : (
+              <> </>
+            )}
+            {direct && !defaultResponse ? (
               <iframe
                 title={ensContext.currentEnsAddress}
                 style={{ width: "100%", height: "100%" }}
@@ -225,16 +245,7 @@ function Viewer({ match }) {
                     .replace("ipfs://", "")
                     .replace("ipns://", "")
                 }
-              ></iframe> ? (
-                !defaultResponse
-              ) : (
-                <HTMLRenderer
-                  code={buffer.source}
-                  currentFile={
-                    (ensContext.currentEnsAddress || "null") + ".web3"
-                  }
-                />
-              )
+              ></iframe>
             ) : (
               <HTMLRenderer
                 implicit={buffer}
