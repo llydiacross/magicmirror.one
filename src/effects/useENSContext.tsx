@@ -47,9 +47,10 @@ const useENSContext = ({ ensAddress }) => {
           potentialAvatar.indexOf("eip155:1/erc1155") !== -1 ||
           potentialAvatar.indexOf("eip155:1/erc721") !== -1
         ) {
-          console.log("avatar2: " + potentialAvatar);
           let stub = potentialAvatar.split("eip155:1/erc1155:")[1];
-          stub = potentialAvatar.split("eip155:1/erc721:")[1];
+
+          if (potentialAvatar.indexOf("eip155:1/erc721") !== -1)
+            stub = potentialAvatar.split("eip155:1/erc721:")[1];
           let [contract, tokenId] = stub.split("/");
 
           const abi = [
@@ -87,7 +88,7 @@ const useENSContext = ({ ensAddress }) => {
                 );
                 fetchMetadataref.current = null;
                 setAvatar(
-                  "data:image/gif;base64," +
+                  `data:image/${decodedImage.name.split(".").pop()};base64,` +
                     Buffer.from(
                       (await decodedImage.stream().getReader().read()).value
                     ).toString("base64")
@@ -105,7 +106,7 @@ const useENSContext = ({ ensAddress }) => {
           }
         } else {
           if (
-            potentialAvatar.indexOf("http://") === -1 ||
+            potentialAvatar.indexOf("http://") === -1 &&
             potentialAvatar.indexOf("https://") === -1
           ) {
             throw new Error("bad format: " + potentialAvatar);

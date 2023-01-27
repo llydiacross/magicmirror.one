@@ -52,7 +52,6 @@ export default function DestinationFinder() {
     if (destination.length > 100) throw new Error("Destination is too long!");
 
     destination = destination + (isInfinityMint ? ".infinitymint" : ".eth");
-
     WebEvents.emit("gotoDestination", destination);
 
     //gives time for animations to animates\
@@ -60,7 +59,7 @@ export default function DestinationFinder() {
       setTimeout(() => {
         history.push("/view/" + destination);
         resolve(true);
-      }, 3000)
+      }, 1000)
     );
   };
 
