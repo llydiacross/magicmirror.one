@@ -4,7 +4,7 @@ import FixedElements from "../components/FixedElements";
 import SettingsModal from "../modals/SettingsModal";
 import { ENSContext } from "../contexts/ensContext";
 import { withRouter, useHistory } from "react-router-dom";
-import { Web3File, Web3Response } from "web3.storage";
+import { Web3File } from "web3.storage";
 import HTMLRenderer from "../components/HTMLRenderer";
 import { getIPFSProvider } from "../helpers";
 import { Web3StorageProvider } from "../ipfs";
@@ -100,7 +100,6 @@ function Viewer({ match }) {
   const [buffer, setBuffer] = useState(null);
   const [aborted, setAborted] = useState(false);
   const [percentage, setPercentage] = useState(0);
-  const [hasSetMatch, setHasSetMatch] = useState(false);
 
   const abortRef = useRef(null);
   const matchRef = useRef(null);
@@ -120,7 +119,7 @@ function Viewer({ match }) {
     ) {
       ensContext.setCurrentEnsAddress(match.params.token);
     }
-  }, [ensContext, match.params.token, hasSetMatch]);
+  }, [ensContext, match.params.token]);
 
   useEffect(() => {
     if (!ensContext.loaded) return;
@@ -298,7 +297,7 @@ function Viewer({ match }) {
       <div className="hero-overlay bg-opacity-60"></div>
       {/** Completely Empty Box */}
       <div
-        className="hero min-h-screen"
+        className="hero min-h-screen max-w-screen"
         hidden={
           !loaded ||
           !empty ||
@@ -372,12 +371,15 @@ function Viewer({ match }) {
         </div>
       </div>
       {/** Error Box */}
-      <div className="hero min-h-screen" hidden={error === null || empty}>
+      <div
+        className="hero min-h-screen max-w-screen"
+        hidden={error === null || empty}
+      >
         <div className="hero-overlay bg-opacity-60"></div>
-        <div className="hero-content text-center text-neutral-content bg-error">
-          <div className="max-w-md">
+        <div className="hero-content text-center text-neutral-content bg-error max-w-screen">
+          <div className="max-w-sm">
             <h1 className="mb-5 text-5xl font-bold text-black">Malfuction</h1>
-            <p className="mb-5 text-black underline truncate">
+            <p className="mb-5 text-black underline truncate hidden lg:block md:block">
               {error !== null ? error.message : null}
             </p>
             <p className="mb-5 text-black">

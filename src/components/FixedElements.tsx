@@ -2,10 +2,8 @@ import React, { useContext, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ErrorIcon from "./Icons/ErrorIcon";
 import { Web3Context } from "../contexts/web3Context";
-import SuccessIcon from "./Icons/SuccessIcon";
 import { ENSContext } from "../contexts/ensContext";
 import { useHistory } from "react-router-dom";
-import HeartIcon from "./Icons/HeartIcon";
 import storage from "../storage";
 
 function FixedElements({
