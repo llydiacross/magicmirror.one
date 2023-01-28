@@ -5,6 +5,85 @@ import { Web3Context } from "../contexts/web3Context";
 import { resolveDirectory, resolveFile } from "../ipfs";
 import { Buffer } from "buffer";
 
+const prepareAvatar = async (
+  resolver,
+  context,
+  fetchImageRef,
+  fetchMetadataRef
+) => {
+  try {
+    let potentialAvatar = await resolver.getText("avatar");
+
+    if (potentialAvatar === null) {
+      throw new Error("no avatar");
+    }
+
+    if (
+      potentialAvatar.indexOf("eip155:1/erc1155") !== -1 ||
+      potentialAvatar.indexOf("eip155:1/erc721") !== -1
+    ) {
+      let stub = potentialAvatar.split("eip155:1/erc1155:")[1];
+
+      if (potentialAvatar.indexOf("eip155:1/erc721") !== -1)
+        stub = potentialAvatar.split("eip155:1/erc721:")[1];
+      let [contract, tokenId] = stub.split("/");
+
+      const abi = ["function uri(uint256 tokenId) view returns (string value)"];
+      let instance = new ethers.Contract(contract, abi, context.web3Provider);
+      let decoded;
+      try {
+        let result = await instance.uri(tokenId);
+
+        let directory = await resolveDirectory(result, fetchImageRef.current);
+        fetchImageRef.current = null;
+        let files = await directory.files();
+        let stream = await files[0].stream().getReader().read();
+        decoded = new TextDecoder().decode(stream.value);
+
+        try {
+          let json = JSON.parse(decoded);
+          let image = json.image;
+
+          if (image.indexOf("ipfs://") !== -1) {
+            let decodedImage = await resolveFile(
+              json.image,
+              undefined,
+              fetchMetadataRef.current
+            );
+            fetchMetadataRef.current = null;
+            return (
+              `data:image/${decodedImage.name.split(".").pop()};base64,` +
+              Buffer.from(
+                (await decodedImage.stream().getReader().read()).value
+              ).toString("base64")
+            );
+          } else return json.image;
+        } catch (error) {
+          if (error.name === "AbortError") return;
+          console.error(error);
+          return decoded;
+        }
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        console.error(error);
+        return null;
+      }
+    } else {
+      if (
+        potentialAvatar.indexOf("http://") === -1 &&
+        potentialAvatar.indexOf("https://") === -1
+      ) {
+        throw new Error("bad format: " + potentialAvatar);
+      }
+
+      return potentialAvatar;
+    }
+  } catch (error) {
+    console.log("bad avatar: " + error.message);
+    return config.defaultAvatar;
+  }
+};
+
 const useENSContext = ({ ensAddress }) => {
   const context = useContext(Web3Context);
   const [currentEnsAddress, setCurrentEnsAddress] = useState(ensAddress);
@@ -15,8 +94,8 @@ const useENSContext = ({ ensAddress }) => {
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
-  const fetchMetadataref = useRef(null);
-  const fetImageRef = useRef(null);
+  const fetchMetadataRef = useRef(null);
+  const fetchImageRef = useRef(null);
 
   useEffect(() => {
     if (!context.loaded) return;
@@ -36,88 +115,16 @@ const useENSContext = ({ ensAddress }) => {
 
       setResolver(resolver);
 
-      try {
-        let potentialAvatar = await resolver.getText("avatar");
+      //will kill and make new abort controllers
+      if (fetchImageRef.current !== null) fetchImageRef.current.abort();
+      fetchImageRef.current = new AbortController();
 
-        if (potentialAvatar === null) {
-          throw new Error("no avatar");
-        }
+      if (fetchMetadataRef.current !== null) fetchMetadataRef.current.abort();
+      fetchMetadataRef.current = new AbortController();
 
-        if (
-          potentialAvatar.indexOf("eip155:1/erc1155") !== -1 ||
-          potentialAvatar.indexOf("eip155:1/erc721") !== -1
-        ) {
-          let stub = potentialAvatar.split("eip155:1/erc1155:")[1];
-
-          if (potentialAvatar.indexOf("eip155:1/erc721") !== -1)
-            stub = potentialAvatar.split("eip155:1/erc721:")[1];
-          let [contract, tokenId] = stub.split("/");
-
-          const abi = [
-            "function uri(uint256 tokenId) view returns (string value)",
-          ];
-          let instance = new ethers.Contract(
-            contract,
-            abi,
-            context.web3Provider
-          );
-          let decoded;
-          try {
-            let result = await instance.uri(tokenId);
-            if (fetImageRef.current !== null) fetImageRef.current.abort();
-            fetImageRef.current = new AbortController();
-            let directory = await resolveDirectory(result, fetImageRef.current);
-            fetImageRef.current = null;
-            let files = await directory.files();
-            let stream = await files[0].stream().getReader().read();
-            decoded = new TextDecoder().decode(stream.value);
-
-            try {
-              let json = JSON.parse(decoded);
-              let image = json.image;
-
-              if (image.indexOf("ipfs://") !== -1) {
-                if (fetchMetadataref.current !== null)
-                  fetchMetadataref.current.abort();
-
-                fetchMetadataref.current = new AbortController();
-                let decodedImage = await resolveFile(
-                  json.image,
-                  undefined,
-                  fetchMetadataref.current
-                );
-                fetchMetadataref.current = null;
-                setAvatar(
-                  `data:image/${decodedImage.name.split(".").pop()};base64,` +
-                    Buffer.from(
-                      (await decodedImage.stream().getReader().read()).value
-                    ).toString("base64")
-                );
-              } else setAvatar(json.image);
-            } catch (error) {
-              if (error.name === "AbortError") return;
-              console.error(error);
-              setAvatar(decoded);
-            }
-          } catch (error) {
-            if (error.name === "AbortError") return;
-            console.error(error);
-            setAvatar(null);
-          }
-        } else {
-          if (
-            potentialAvatar.indexOf("http://") === -1 &&
-            potentialAvatar.indexOf("https://") === -1
-          ) {
-            throw new Error("bad format: " + potentialAvatar);
-          }
-
-          setAvatar(potentialAvatar);
-        }
-      } catch (error) {
-        console.log("bad avatar: " + error.message);
-        setAvatar(config.defaultAvatar);
-      }
+      setAvatar(
+        await prepareAvatar(resolver, context, fetchImageRef, fetchMetadataRef)
+      );
 
       try {
         setEmail(await resolver.getText("email"));
@@ -149,8 +156,8 @@ const useENSContext = ({ ensAddress }) => {
     });
 
     return () => {
-      if (fetImageRef.current !== null) fetImageRef.current.abort();
-      if (fetchMetadataref.current !== null) fetchMetadataref.current.abort();
+      if (fetchImageRef.current !== null) fetchImageRef.current.abort();
+      if (fetchMetadataRef.current !== null) fetchMetadataRef.current.abort();
     };
   }, [currentEnsAddress, context]);
 
