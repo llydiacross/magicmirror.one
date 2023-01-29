@@ -20,7 +20,12 @@ import "prismjs/components/prism-css";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism-dark.css";
 
-function ChatGPTModal({ hidden, onHide, savedData = {} }) {
+function ChatGPTModal({
+  hidden,
+  onHide,
+  savedData = {},
+  onSetHTML = (code) => {},
+}) {
   const context = useContext(Web3Context);
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("dracula");
@@ -83,7 +88,7 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
           </div>
           <div className="flex flex-col p-2 w-full mt-2">
             <p className="text-2xl mb-2 text-black">
-              <b>GPT-3 Rating</b>
+              <b>GPT-3 Stats</b>
             </p>
             <div className="stats shadow">
               <div className="stat">
@@ -174,7 +179,7 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
             </div>
             {gptResult !== null ? (
               <div className="flex flex-col gap-2 mt-4">
-                {gptResult.choices.map((choice, index) => {
+                {gptResult?.choices?.map((choice, index) => {
                   return (
                     <div
                       key={index}
@@ -198,7 +203,14 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                         </div>
                       </div>
                       <div className="w-25">
-                        <button className="btn btn-success w-full">Use</button>
+                        <button
+                          className="btn btn-success w-full"
+                          onClick={() => {
+                            onSetHTML(choice.text);
+                          }}
+                        >
+                          Use
+                        </button>
                         <button className="btn btn-dark w-full mt-2">
                           Preview
                         </button>

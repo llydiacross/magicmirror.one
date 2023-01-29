@@ -307,6 +307,19 @@ function IDE({ theme }) {
         hideUserInfo={true}
       />
       <ChatGPTModal
+        onSetHTML={(code) => {
+          setShouldShowChatGPT(false);
+          if (selectedTab === "html") {
+            setCode(code);
+            setCodeBuffer(code);
+          }
+          tabs["html"].code = code;
+          if (codeBuffer.current && codeBuffer.current["html"])
+            codeBuffer.current["html"] = code;
+
+          storage.setPagePreference("html", code);
+          storage.saveData();
+        }}
         hidden={!shouldShowChatGPT}
         onHide={() => {
           setShouldShowChatGPT(false);
