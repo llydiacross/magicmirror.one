@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function ChatGPTHeader() {
+export default function ChatGPTHeader({ hidden = false }) {
   return (
-    <div className="hero pt-5 mb-2">
+    <div className="hero pt-5 mb-2" hidden={hidden}>
       <div className="hero-content text-center w-full bg-info">
         <div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-2">
           <div className="lg:pl-4 lg:ml-4 md:pl-2 md:ml-2">

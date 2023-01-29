@@ -58,13 +58,13 @@ function IDE({ theme }) {
   const [codeBuffer, setCodeBuffer] = useState(currentCode);
   const [overlayPreview, setOverlayPreview] = React.useState(false);
   const [currentTheme, setCurrentTheme] = useState(theme || null);
-  const eventEmitterCallbackRef = useRef(null);
-  const themeRef = useRef(theme || null);
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
   const cooldown = useRef(null);
   const savedCode = useRef({});
+  const eventEmitterCallbackRef = useRef(null);
+  const themeRef = useRef(theme || null);
   const history = useHistory();
 
   //code for the h1 text animation is in the animation.ts file

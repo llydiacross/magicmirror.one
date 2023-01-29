@@ -11,7 +11,7 @@ const port = 9090;
 
 // Configure OpenAI
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: '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',
 });
 const openai = new OpenAIApi(configuration);
 

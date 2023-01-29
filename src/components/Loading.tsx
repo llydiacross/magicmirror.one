@@ -76,10 +76,11 @@ const Loading = ({
     timeoutRef.current = (seconds = 1) => {
       seconds = Math.max(1, seconds);
       setTimeout(() => {
-        timeoutRef.current = timeoutRef.current(AddEmoji(settings));
+        if (timeoutRef.current !== null) timeoutRef.current(AddEmoji(settings));
       }, seconds * 1000);
     };
-    timeoutRef.current();
+
+    if (timeoutRef.current) timeoutRef.current();
   }
 
   useEffect(() => {

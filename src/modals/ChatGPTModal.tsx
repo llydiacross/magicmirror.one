@@ -9,6 +9,16 @@ import HeartIcon from "../components/Icons/HeartIcon";
 import ViewIcon from "../components/Icons/ViewIcon";
 import Loading from "../components/Loading";
 import { fetchPrompt } from "../gpt3";
+import Editor from "react-simple-code-editor";
+
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-json";
+import "prismjs/themes/prism-dark.css";
 
 function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   const context = useContext(Web3Context);
@@ -16,7 +26,9 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
   const inputElement = useRef(null);
+  const [percentage, setPercentage] = useState(0);
   const [hasInput, setHasInput] = useState(false);
+  const [gptResult, setGptResult] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -44,6 +56,12 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
     else document.body.style.overflow = "auto";
   }, [hidden]);
 
+  let temp = 0.6;
+  let sureness = Math.min(
+    100,
+    Math.floor(100 / Math.min(100, (gptResult?.choices?.length || 0) * temp))
+  );
+
   return (
     <div
       data-theme={currentTheme}
@@ -65,19 +83,57 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                   <HeartIcon />
                 </div>
                 <div className="stat-title">Solution Rating</div>
-                <div className="stat-value text-primary">0%</div>
-                <div className="stat-desc">Unknown</div>
+                <div className="stat-value text-primary">{sureness}%</div>
+                <div className="stat-desc">
+                  {sureness > 50 ? "Good" : "Bad"}
+                </div>
               </div>
               <div className="stat">
                 <div className="stat-figure text-primary">
                   <ViewIcon />
                 </div>
                 <div className="stat-title">Amount of Solutions</div>
-                <div className="stat-value text-primary">0</div>
-                <div className="stat-desc">0.6 Complexity</div>
+                <div className="stat-value text-primary">
+                  {gptResult?.choices?.length || 0}
+                </div>
+                <div className="stat-desc">0.6 Temperature</div>
               </div>
             </div>
-            {!loading ? <ChatGPTHeader /> : <Loading />}
+            {!loading ? (
+              <ChatGPTHeader hidden={gptResult !== null} />
+            ) : (
+              <Loading loadingPercentage={percentage} />
+            )}
+            {gptResult !== null ? (
+              <div className="flex flex-col mt-4 text-black">
+                {gptResult.choices.map((choice, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="max-h-[16rem] overflow-scroll border-2 mb-2">
+                        <p className="text-2xl bg-success text-white p-2">
+                          <span className="badge mb-2">{index + 1}</span>
+                        </p>
+                        <div className="max-w-full p-2">
+                          <Editor
+                            className="w-full overflow-scroll"
+                            onValueChange={(code) => {}}
+                            value={choice.text}
+                            highlight={(code) =>
+                              highlight(code, languages.html)
+                            }
+                          />
+                        </div>
+                      </div>
+                      <button className="btn btn-success w-full mt-2">
+                        Use
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="flex flex-col mt-4">
               <div className="form-control">
                 <div className="input-group">
@@ -86,7 +142,7 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                     data-loading={loading}
                     disabled={loading}
                     ref={inputElement}
-                    maxLength={52}
+                    maxLength={128}
                     onKeyDown={(e) => {}}
                     onInput={() => {
                       setHasInput(inputElement.current.value.length > 0);
@@ -98,10 +154,17 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                     data-loading={loading}
                     disabled={loading || !hasInput}
                     onClick={async () => {
+                      setPercentage(0);
                       if (hasInput) {
+                        setLoading(true);
+                        setGptResult(null);
+                        setPercentage(50);
                         let result = await fetchPrompt(
                           inputElement.current.value
                         );
+                        setPercentage(100);
+                        setGptResult(result);
+                        setLoading(false);
                         console.log(result);
                       }
                     }}
