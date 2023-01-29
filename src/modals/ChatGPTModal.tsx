@@ -18,6 +18,7 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism-dark.css";
+import { wordlists } from "ethers";
 
 function ChatGPTModal({
   hidden,
@@ -66,7 +67,7 @@ function ChatGPTModal({
     };
   }, []);
 
-  // Disables scrolling while this modal is active
+  // disables scrolling while this modal is active
   useEffect(() => {
     if (!hidden) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "auto";
@@ -243,7 +244,7 @@ function ChatGPTModal({
                         prompt = prompt.replace(end, "");
                         prompt = prompt.replace(/[^a-zA-Z ]/g, "");
 
-                        // Add create
+                        //add create
                         if (
                           prompt
                             .split(" ")
@@ -254,9 +255,8 @@ function ChatGPTModal({
                                 word.toLowerCase() === "draw" ||
                                 word.toLowerCase() === "embed"
                             ).length === 0
-                        ) {
+                        )
                           prompt = "create " + prompt;
-                        }
 
                         prompt = stub + prompt + end;
 
