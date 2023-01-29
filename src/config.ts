@@ -49,7 +49,7 @@ const config = {
   ],
   resolvers: [
     [".vision", ""],
-    [".im", ".eth"],
+    [".im", ""],
     [".infinitymint", ".eth"],
     [".ethereum", ".eth"],
   ],
