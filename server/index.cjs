@@ -47,7 +47,7 @@ server.post('/gpt/prompt', async (request, response) => {
     prompt: request.body.prompt || 'Create a basic HTML website',
     temperature: temp,
     n: n,
-    max_tokens: 1026,
+    max_tokens: 1028,
   });
 
   response.send(completion.data);

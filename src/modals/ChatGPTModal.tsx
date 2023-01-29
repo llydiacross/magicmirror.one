@@ -29,6 +29,8 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   const [percentage, setPercentage] = useState(0);
   const [hasInput, setHasInput] = useState(false);
   const [gptResult, setGptResult] = useState(null);
+  const [gptError, setGptError] = useState(null);
+  const abortRef = useRef(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -46,6 +48,7 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
     WebEvents.on("reload", eventEmitterCallbackRef.current);
 
     return () => {
+      if (abortRef.current !== null) abortRef.current.abort();
       WebEvents.off("reload", eventEmitterCallbackRef.current);
     };
   }, []);
@@ -57,10 +60,15 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   }, [hidden]);
 
   let temp = 0.6;
-  let sureness = Math.min(
-    100,
-    Math.floor(100 / Math.min(100, (gptResult?.choices?.length || 0) * temp))
-  );
+  let sureness =
+    gptResult?.choices?.length === undefined && gptResult?.choices?.length === 0
+      ? 0
+      : Math.min(
+          100,
+          Math.floor(
+            100 / Math.min(100, (gptResult?.choices?.length || 0) * temp)
+          )
+        );
 
   return (
     <div
@@ -104,32 +112,10 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
             ) : (
               <Loading loadingPercentage={percentage} />
             )}
-            {gptResult !== null ? (
-              <div className="flex flex-col mt-4 text-black">
-                {gptResult.choices.map((choice, index) => {
-                  return (
-                    <div key={index}>
-                      <div className="max-h-[16rem] overflow-scroll border-2 mb-2">
-                        <p className="text-2xl bg-success text-white p-2">
-                          <span className="badge mb-2">{index + 1}</span>
-                        </p>
-                        <div className="max-w-full p-2">
-                          <Editor
-                            className="w-full overflow-scroll"
-                            onValueChange={(code) => {}}
-                            value={choice.text}
-                            highlight={(code) =>
-                              highlight(code, languages.html)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <button className="btn btn-success w-full mt-2">
-                        Use
-                      </button>
-                    </div>
-                  );
-                })}
+
+            {gptError !== null ? (
+              <div className="alert alert-danger m-2 w-full">
+                {gptError?.message}
               </div>
             ) : (
               <></>
@@ -158,14 +144,25 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                       if (hasInput) {
                         setLoading(true);
                         setGptResult(null);
+                        setGptError(null);
                         setPercentage(50);
+
+                        if (abortRef.current !== null) abortRef.current.abort();
+                        abortRef.current = new AbortController();
                         let result = await fetchPrompt(
-                          inputElement.current.value
-                        );
+                          inputElement.current.value,
+                          abortRef.current
+                        )
+                          .catch((error) => {
+                            setGptError(error);
+                            setLoading(false);
+                          })
+                          .finally(() => {
+                            abortRef.current = null;
+                          });
                         setPercentage(100);
                         setGptResult(result);
                         setLoading(false);
-                        console.log(result);
                       }
                     }}
                     className="btn bg-success text-black hover:text-white hover:bg-black hover:text-yellow-500"
@@ -175,11 +172,45 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                 </div>
               </div>
             </div>
-            <div className="overflow-x-auto w-full mt-4"></div>
+            {gptResult !== null ? (
+              <div className="flex flex-col gap-2 mt-4">
+                {gptResult.choices.map((choice, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="flex flex-col md:flex-row lg:flex-row gap-2"
+                    >
+                      <div className="w-full">
+                        <p className="text-2xl bg-warning text-white p-2">
+                          <span className="badge mb-2">{index + 1}</span>
+                        </p>
+                        <div className="max-h-[14rem] overflow-y-scroll border-2 mb-2">
+                          <div className="p-2 bg-black">
+                            <Editor
+                              className="w-full overflow-scroll"
+                              onValueChange={(code) => {}}
+                              value={choice.text}
+                              highlight={(code) =>
+                                highlight(code, languages.html)
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-25">
+                        <button className="btn btn-success w-full">Use</button>
+                        <button className="btn btn-dark w-full mt-2">
+                          Preview
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="btn-group w-full mt-2">
-              <button className="btn btn-success" disabled>
-                Use Solution
-              </button>
               <button
                 className="btn btn-error"
                 onClick={() => {
