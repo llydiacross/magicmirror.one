@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import HeartIcon from "../components/Icons/HeartIcon";
 import ViewIcon from "../components/Icons/ViewIcon";
 import Loading from "../components/Loading";
+import { fetchPrompt } from "../gpt3";
 
 function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   const context = useContext(Web3Context);
@@ -96,8 +97,13 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                   <button
                     data-loading={loading}
                     disabled={loading || !hasInput}
-                    onClick={() => {
-                      setLoading(true);
+                    onClick={async () => {
+                      if (hasInput) {
+                        let result = await fetchPrompt(
+                          inputElement.current.value
+                        );
+                        console.log(result);
+                      }
                     }}
                     className="btn bg-success text-black hover:text-white hover:bg-black hover:text-yellow-500"
                   >
