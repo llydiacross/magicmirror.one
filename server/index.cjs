@@ -34,8 +34,8 @@ server.get('/', (_request, response) => {
 })
 
 server.post('/gpt/prompt', async (request, response) => {
-  let temp = parseFloat(request.body.temp) || 0.6
-  if (isNaN(temp)) temp = 0.6
+  let temperature = parseFloat(request.body.temp) || 0.6
+  if (isNaN(temperature)) temperature = 0.6
 
   if (temp > 3)
     temp = 3
@@ -49,7 +49,7 @@ server.post('/gpt/prompt', async (request, response) => {
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: request.body.prompt || 'Create a basic HTML website',
-    temperature: temp,
+    temperature,
     n,
     max_tokens: 1026
   })

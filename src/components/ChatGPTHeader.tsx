@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export default function ChatGPTHeader({ hidden = false }) {
+export default function ChatGPTHeader ({ hidden = false }) {
   return (
     <div className="hero pt-4" hidden={hidden}>
       <div className="hero-content border-2 text-center w-full bg-info">
@@ -12,10 +13,10 @@ export default function ChatGPTHeader({ hidden = false }) {
           </div>
           <div className="p-2 w-full mt-4">
             <h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-              Your new{" "}
+              Your new{' '}
               <u>
                 <s>artificial</s>
-              </u>{" "}
+              </u>{' '}
               best friend ❤️
             </h1>
             <div className="hidden md:block lg:block">
@@ -37,5 +38,9 @@ export default function ChatGPTHeader({ hidden = false }) {
         </div>
       </div>
     </div>
-  );
+  )
+}
+
+ChatGPTHeader.propTypes = {
+  hidden: PropTypes.bool
 }

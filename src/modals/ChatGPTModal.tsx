@@ -12,7 +12,6 @@ import { fetchPrompt } from "../gpt3";
 import Editor from "react-simple-code-editor";
 
 import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-javascript";
@@ -26,6 +25,7 @@ function ChatGPTModal({
   savedData = {},
   onSetHTML = (code) => {},
 }) {
+  // eslint-disable-next-line no-unused-vars
   const context = useContext(Web3Context);
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("dracula");
@@ -39,16 +39,19 @@ function ChatGPTModal({
   const inputElement = useRef(null);
   const tempElement = useRef(null);
   const nElement = useRef(null);
+  // eslint-disable-next-line no-unused-vars
   const history = useHistory();
 
   useEffect(() => {
-    if (storage.getGlobalPreference("default_theme"))
+    if (storage.getGlobalPreference("default_theme")) {
       setCurrentTheme(storage.getGlobalPreference("default_theme"));
+    }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference("default_theme"))
+        if (storage.getGlobalPreference("default_theme")) {
           setCurrentTheme(storage.getGlobalPreference("default_theme"));
+        }
       };
     }
 
@@ -61,7 +64,7 @@ function ChatGPTModal({
     };
   }, []);
 
-  //disables scrolling while this modal is active
+  // disables scrolling while this modal is active
   useEffect(() => {
     if (!hidden) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "auto";
@@ -177,6 +180,7 @@ function ChatGPTModal({
                   />
                   <button
                     data-loading={loading}
+                    type="submit"
                     disabled={loading || !hasInput}
                     onClick={async () => {
                       setPercentage(0);
@@ -188,7 +192,7 @@ function ChatGPTModal({
 
                         if (abortRef.current !== null) abortRef.current.abort();
                         abortRef.current = new AbortController();
-                        let result = await fetchPrompt(
+                        const result = await fetchPrompt(
                           inputElement.current.value,
                           abortRef.current,
                           {
@@ -208,7 +212,7 @@ function ChatGPTModal({
                         setLoading(false);
                       }
                     }}
-                    className="btn bg-success text-black w-20 hover:text-white hover:bg-black hover:text-yellow-500"
+                    className="btn bg-success text-black w-20 hover:bg-black hover:text-yellow-500"
                   >
                     Ask
                   </button>
@@ -278,6 +282,8 @@ function ChatGPTModal({
 }
 
 ChatGPTModal.propTypes = {
+  onSetHTML: PropTypes.func,
+  savedData: PropTypes.any,
   hidden: PropTypes.bool,
   onHide: PropTypes.func,
 };
