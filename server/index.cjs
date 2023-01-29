@@ -26,12 +26,11 @@ server.use(helmet({
 
 // An error handling middleware
 server.use((err, _request, response, _next) => {
-  response.status(500)
-  response.send('Oops, something went wrong.\n', err)
+  response.status(500).send('Oops, something went wrong.\n', err)
 })
 
 server.get('/', (_request, response) => {
-  response.send('Hello World!')
+  response.status(200).send('Hello World!')
 })
 
 server.post('/gpt/prompt', async (request, response) => {
@@ -49,7 +48,7 @@ server.post('/gpt/prompt', async (request, response) => {
     max_tokens: 1026
   })
 
-  response.send(completion.data);
+  response.status(200).send(completion.data)
 })
 
 server.listen(port, () => {
