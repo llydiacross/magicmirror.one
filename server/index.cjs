@@ -37,8 +37,14 @@ server.post('/gpt/prompt', async (request, response) => {
   let temp = parseFloat(request.body.temp) || 0.6
   if (isNaN(temp)) temp = 0.6
 
+  if (temp > 3)
+    temp = 3
+
   let n = parseInt(request.body.n) || 2
   if (isNaN(n)) n = 2
+
+  if (n > 6)
+    n = 6;
 
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',

@@ -67,21 +67,10 @@ function ChatGPTModal({
     else document.body.style.overflow = "auto";
   }, [hidden]);
 
-  let temp = 0.6;
-  let sureness =
-    gptResult?.choices?.length === undefined && gptResult?.choices?.length === 0
-      ? 0
-      : Math.min(
-          100,
-          Math.floor(
-            100 / Math.min(100, (gptResult?.choices?.length || 0) * temp)
-          )
-        );
-
   return (
     <div
       data-theme={currentTheme}
-      className="mx-auto sm:w-3/5 md:w-3/5 lg:w-4/5 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
+      className="mx-auto sm:w-full md:w-full lg:w-5/6 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
       hidden={hidden}
     >
       <div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow shadow-lg border-2">
@@ -98,10 +87,17 @@ function ChatGPTModal({
                 <div className="stat-figure text-primary">
                   <HeartIcon />
                 </div>
-                <div className="stat-title">Solution Rating</div>
-                <div className="stat-value text-primary">{sureness}%</div>
-                <div className="stat-desc">
-                  {sureness > 50 ? "Good" : "Bad"}
+                <div className="stat-title">Prompt Usage</div>
+                <div className="stat-value text-primary">
+                  {gptResult?.usage?.prompt_tokens || 0}
+                </div>
+                <div
+                  className="stat-desc"
+                  hidden={!gptResult?.usage?.prompt_tokens}
+                >
+                  {parseInt(gptResult?.usage?.prompt_tokens || 0) < 24
+                    ? "Acceptable"
+                    : "Unacceptable"}
                 </div>
               </div>
               <div className="stat">
@@ -112,7 +108,12 @@ function ChatGPTModal({
                 <div className="stat-value text-primary">
                   {gptResult?.choices?.length || 0}
                 </div>
-                <div className="stat-desc">0.6 Temperature</div>
+                <div
+                  className="stat-desc"
+                  hidden={(gptResult?.choices?.length || 0) === 0}
+                >
+                  Temperature: {tempElement?.current?.value || 0.6}
+                </div>
               </div>
             </div>
             {!loading ? (
@@ -152,7 +153,11 @@ function ChatGPTModal({
                     ref={tempElement}
                     maxLength={128}
                     min={0.1}
-                    max={1}
+                    step={0.1}
+                    max={2}
+                    onChange={(e) => {
+                      if (parseFloat(e.target.value) > 2) e.target.value = "2";
+                    }}
                     placeholder="0.6"
                     className="input input-bordered w-25"
                   />
@@ -162,9 +167,12 @@ function ChatGPTModal({
                     disabled={loading}
                     ref={nElement}
                     maxLength={2}
+                    onChange={(e) => {
+                      if (parseInt(e.target.value) > 6) e.target.value = "6";
+                    }}
                     max={6}
                     min={1}
-                    placeholder="2"
+                    placeholder="1"
                     className="input input-bordered w-25"
                   />
                   <button
@@ -185,7 +193,7 @@ function ChatGPTModal({
                           abortRef.current,
                           {
                             n: nElement?.current.value || 1,
-                            temp: nElement?.current.value || 0.6,
+                            temp: tempElement?.current.value || 0.6,
                           }
                         )
                           .catch((error) => {
@@ -219,7 +227,7 @@ function ChatGPTModal({
                         <p className="text-2xl bg-warning text-white p-2">
                           <span className="badge mb-2">{index + 1}</span>
                         </p>
-                        <div className="max-h-[14rem] overflow-y-scroll border-2 mb-2">
+                        <div className="max-h-[12rem] overflow-y-scroll border-2 mb-2">
                           <div className="p-2 bg-black">
                             <Editor
                               className="w-full overflow-scroll"
