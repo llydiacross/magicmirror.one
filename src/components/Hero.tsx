@@ -1,35 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import WebEvents from '../webEvents'
-import storage from '../storage'
+import React, { useEffect, useRef, useState } from "react"
+import PropTypes from "prop-types"
+import WebEvents from "../webEvents"
+import storage from "../storage"
 
-// handle for the typeWriter animation
+// Handle for the typeWriter animation
 function Hero ({ theme, children }) {
   const [currentTheme, setCurrentTheme] = useState(theme || null)
   const eventEmitterCallbackRef = useRef(null)
   const themeRef = useRef(theme || null)
 
-  // code for the h1 text animation is in the animation.ts file
+  // Code for the h1 text animation is in the animation.ts file
   useEffect(() => {
     if (
       themeRef.current === null &&
-      storage.getGlobalPreference('default_theme')
-    ) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+      storage.getGlobalPreference("default_theme")
+    ) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
         if (
           themeRef.current === null &&
-          storage.getGlobalPreference('default_theme')
-        ) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+          storage.getGlobalPreference("default_theme")
+        ) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
       }
     }
 
-    WebEvents.off('reload', eventEmitterCallbackRef.current)
-    WebEvents.on('reload', eventEmitterCallbackRef.current)
+    WebEvents.off("reload", eventEmitterCallbackRef.current)
+    WebEvents.on("reload", eventEmitterCallbackRef.current)
 
     return () => {
-      WebEvents.off('reload', eventEmitterCallbackRef.current)
+      WebEvents.off("reload", eventEmitterCallbackRef.current)
     }
   }, [])
 

@@ -1,17 +1,17 @@
-// works with local storage to save and load data we will use in the react application
+// Works with local storage to save and load data we will use in the react application
 export class StorageController {
   public values: any
   public pagePreferences: any
-  // private
+  // Private
   private readonly fields: any
   /**
    * Constructor
    */
   constructor () {
-    // define new keys here
+    // Define new keys here
     this.fields = {
-      transactions: {}, // all of your transactions
-      tokens: {}, // cached tokens from the block chain,
+      transactions: {}, // All of your transactions
+      tokens: {}, // Cached tokens from the block chain,
       previews: {},
       stickers: {},
       requests: {},
@@ -79,12 +79,12 @@ export class StorageController {
    */
   getLocationHref () {
     let location = window.location.href
-    let split = location.split('?') // no get
+    let split = location.split("?") // No get
     if (split[1] !== undefined) location = split[0]
-    split = location.split('#') // no href
+    split = location.split("#") // No href
     if (split[1] !== undefined) location = split[0]
 
-    if (location.at(-1) !== '/') return location + '/'
+    if (location.at(-1) !== "/") return location + "/"
 
     return location
   }
@@ -96,17 +96,17 @@ export class StorageController {
    * @param {*} id
    */
   setPagePreference (key, value, id = null) {
-    if (id !== null && typeof id !== 'string') { id = id.id || id.name || 'default' } else if (
+    if (id !== null && typeof id !== "string") { id = id.id || id.name || "default" } else if (
       id === null ||
-      (typeof id === 'string' && id.toLowerCase() === 'global')
+      (typeof id === "string" && id.toLowerCase() === "global")
     ) { id = this.getLocationHref() }
 
     console.log(
       "Saving page prefrence for page id '" +
-        (id === null ? 'global' : id) +
+        (id === null ? "global" : id) +
         "' key of: " +
         key,
-      'storage'
+      "storage"
     )
 
     if (this.values.pagePrefrences[id] === undefined) { this.values.pagePrefrences[id] = {} }
@@ -122,18 +122,18 @@ export class StorageController {
    * @returns
    */
   getPagePreference (key, id = null, log = true) {
-    if (id !== null && typeof id !== 'string') { id = id.id || id.name || 'default' } else if (
+    if (id !== null && typeof id !== "string") { id = id.id || id.name || "default" } else if (
       id === null ||
-      (typeof id === 'string' && id.toLowerCase() === 'global')
+      (typeof id === "string" && id.toLowerCase() === "global")
     ) { id = this.getLocationHref() }
 
     if (log) {
       console.log(
         "Reading page prefrence for page id '" +
-          (id === null ? 'global' : id) +
+          (id === null ? "global" : id) +
           "' key of: " +
           key,
-        'storage'
+        "storage"
       )
     }
 
@@ -153,7 +153,7 @@ export class StorageController {
   }
 
   /**
-   * trurns true if the key exists, and is not null. use existsAndNotEmpty if using arrays/objects
+   * Trurns true if the key exists, and is not null. use existsAndNotEmpty if using arrays/objects
    * @param {string} key
    * @param {bool} nullCheck
    * @returns
@@ -175,7 +175,7 @@ export class StorageController {
     if (!this.exists(key)) return false
 
     if (
-      typeof this.values[key] !== 'object' &&
+      typeof this.values[key] !== "object" &&
       !(this.values[key] instanceof Array)
     ) { return false }
 
@@ -188,25 +188,25 @@ export class StorageController {
    * Must be called before Controller.load()
    */
   loadSavedData () {
-    console.log('Loading storaged data from local storage', 'storage')
+    console.log("Loading storaged data from local storage", "storage")
     for (const [key, val] of Object.entries(this.fields)) {
       this.values[key] = null
       const item = localStorage.getItem(key)
 
-      if (item === null && typeof val !== 'object') continue
-      else if (item === null && typeof val === 'object') {
+      if (item === null && typeof val !== "object") continue
+      else if (item === null && typeof val === "object") {
         this.values[key] = {}
         continue
       }
 
       switch (typeof val) {
-        case 'object':
+        case "object":
           this.values[key] = JSON.parse(item)
           break
-        case 'boolean':
-          this.values[key] = item === 'false' ? false : Boolean(item)
+        case "boolean":
+          this.values[key] = item === "false" ? false : Boolean(item)
           break
-        case 'number':
+        case "number":
           this.values[key] = parseInt(item)
           break
         default:
@@ -219,7 +219,7 @@ export class StorageController {
    * Wipes the storage clean. Does not save.
    */
   wipe () {
-    console.log('Wiping storage', 'storage')
+    console.log("Wiping storage", "storage")
     for (const [key] of Object.entries(this.fields)) {
       this.values[key] = {}
     }
@@ -231,27 +231,27 @@ export class StorageController {
    * @param {*} value
    */
   set (key, value) {
-    console.log('Setting ' + key, 'storage')
-    if (this.values[key] === undefined) { throw new Error('trying to set an undefined value') }
+    console.log("Setting " + key, "storage")
+    if (this.values[key] === undefined) { throw new Error("trying to set an undefined value") }
 
     this.values[key] = value
     this.saveData()
   }
 
   /**
-   * saves all the data inside of fields to local storage and packs objects accordingly
+   * Saves all the data inside of fields to local storage and packs objects accordingly
    */
   saveData () {
-    console.log('Saving storage data', 'storage')
+    console.log("Saving storage data", "storage")
     for (const [key, val] of Object.entries(this.fields)) {
       let item = this.values[key]
-      if (typeof val === 'object') {
+      if (typeof val === "object") {
         if (item === null) item = {}
 
         item = JSON.stringify(item)
       }
 
-      // save
+      // Save
       localStorage.setItem(key, item)
     }
   }

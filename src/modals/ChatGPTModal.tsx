@@ -1,24 +1,23 @@
-import React, { useRef, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import storage from '../storage'
-import { Web3Context } from '../contexts/web3Context'
-import WebEvents from '../webEvents'
-import ChatGPTHeader from '../components/ChatGPTHeader'
-import { useHistory } from 'react-router-dom'
-import HeartIcon from '../components/Icons/HeartIcon'
-import ViewIcon from '../components/Icons/ViewIcon'
-import Loading from '../components/Loading'
-import { fetchPrompt } from '../gpt3'
-import Editor from 'react-simple-code-editor'
+import React, { useRef, useContext, useEffect, useState } from "react"
+import PropTypes from "prop-types"
+import storage from "../storage"
+import { Web3Context } from "../contexts/web3Context"
+import WebEvents from "../webEvents"
+import ChatGPTHeader from "../components/ChatGPTHeader"
+import { useHistory } from "react-router-dom"
+import HeartIcon from "../components/Icons/HeartIcon"
+import ViewIcon from "../components/Icons/ViewIcon"
+import Loading from "../components/Loading"
+import { fetchPrompt } from "../gpt3"
+import Editor from "react-simple-code-editor"
 
-import { highlight, languages } from 'prismjs/components/prism-core'
-import 'prismjs/components/prism-clike'
-import 'prismjs/components/prism-markup'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-css'
-import 'prismjs/components/prism-json'
-import 'prismjs/themes/prism-dark.css'
-import { wordlists } from 'ethers'
+import { highlight, languages } from "prismjs/components/prism-core"
+import "prismjs/components/prism-clike"
+import "prismjs/components/prism-markup"
+import "prismjs/components/prism-javascript"
+import "prismjs/components/prism-css"
+import "prismjs/components/prism-json"
+import "prismjs/themes/prism-dark.css"
 
 function ChatGPTModal ({
   hidden,
@@ -29,7 +28,7 @@ function ChatGPTModal ({
   // eslint-disable-next-line no-unused-vars
   const context = useContext(Web3Context)
   const [loading, setLoading] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState('dracula')
+  const [currentTheme, setCurrentTheme] = useState("dracula")
   const eventEmitterCallbackRef = useRef(null)
 
   const [percentage, setPercentage] = useState(0)
@@ -46,31 +45,31 @@ function ChatGPTModal ({
   const history = useHistory()
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'))
+    if (storage.getGlobalPreference("default_theme")) {
+      setCurrentTheme(storage.getGlobalPreference("default_theme"))
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'))
+        if (storage.getGlobalPreference("default_theme")) {
+          setCurrentTheme(storage.getGlobalPreference("default_theme"))
         }
       }
     }
 
-    WebEvents.off('reload', eventEmitterCallbackRef.current)
-    WebEvents.on('reload', eventEmitterCallbackRef.current)
+    WebEvents.off("reload", eventEmitterCallbackRef.current)
+    WebEvents.on("reload", eventEmitterCallbackRef.current)
 
     return () => {
       if (abortRef.current !== null) abortRef.current.abort()
-      WebEvents.off('reload', eventEmitterCallbackRef.current)
+      WebEvents.off("reload", eventEmitterCallbackRef.current)
     }
   }, [])
 
-  // disables scrolling while this modal is active
+  // Disables scrolling while this modal is active
   useEffect(() => {
-    if (!hidden) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = 'auto'
+    if (!hidden) document.body.style.overflow = "hidden"
+    else document.body.style.overflow = "auto"
   }, [hidden])
 
   return (
@@ -183,7 +182,7 @@ function ChatGPTModal ({
                     step={0.1}
                     max={2}
                     onChange={(e) => {
-                      if (parseFloat(e.target.value) > 2) e.target.value = '2'
+                      if (parseFloat(e.target.value) > 2) e.target.value = "2"
                     }}
                     placeholder='0.6'
                     className='input input-bordered w-25'
@@ -195,7 +194,7 @@ function ChatGPTModal ({
                     ref={nElement}
                     maxLength={2}
                     onChange={(e) => {
-                      if (parseInt(e.target.value) > 6) e.target.value = '6'
+                      if (parseInt(e.target.value) > 6) e.target.value = "6"
                     }}
                     max={6}
                     min={1}
@@ -218,48 +217,48 @@ function ChatGPTModal ({
                         abortRef.current = new AbortController()
 
                         let prompt = inputElement.current.value
-                        prompt = prompt.replace(' Tailwind,', '')
-                        prompt = prompt.replace(' css3,', '')
-                        prompt = prompt.replace(' JQuery,', '')
-                        prompt = prompt.replace(' javascript,', '')
-                        prompt = prompt.replace(' Javascript,', '')
-                        prompt = prompt.replace(' svg', '')
-                        prompt = prompt.replace(' SVG', '')
-                        prompt = prompt.replace(' jquery,', '')
-                        prompt = prompt.replace(' canvas,', '')
-                        prompt = prompt.replace(' Canvas,', '')
-                        prompt = prompt.replace(' bootstrap4,', '')
-                        prompt = prompt.replace(' Bootstrap4,', '')
-                        prompt = prompt.replace(' bootstrap5,', '')
-                        prompt = prompt.replace(' Bootstrap5,', '')
-                        prompt = prompt.replace(' bootstrap 4,', '')
-                        prompt = prompt.replace(' Bootstrap 4,', '')
-                        prompt = prompt.replace(' bootstrap 5,', '')
-                        prompt = prompt.replace(' Bootstrap 5,', '')
-                        prompt = prompt.replace('Using HTML, ', '')
+                        prompt = prompt.replace(" Tailwind,", "")
+                        prompt = prompt.replace(" css3,", "")
+                        prompt = prompt.replace(" JQuery,", "")
+                        prompt = prompt.replace(" javascript,", "")
+                        prompt = prompt.replace(" Javascript,", "")
+                        prompt = prompt.replace(" svg", "")
+                        prompt = prompt.replace(" SVG", "")
+                        prompt = prompt.replace(" jquery,", "")
+                        prompt = prompt.replace(" canvas,", "")
+                        prompt = prompt.replace(" Canvas,", "")
+                        prompt = prompt.replace(" bootstrap4,", "")
+                        prompt = prompt.replace(" Bootstrap4,", "")
+                        prompt = prompt.replace(" bootstrap5,", "")
+                        prompt = prompt.replace(" Bootstrap5,", "")
+                        prompt = prompt.replace(" bootstrap 4,", "")
+                        prompt = prompt.replace(" Bootstrap 4,", "")
+                        prompt = prompt.replace(" bootstrap 5,", "")
+                        prompt = prompt.replace(" Bootstrap 5,", "")
+                        prompt = prompt.replace("Using HTML, ", "")
 
                         const stub =
-                          'Using HTML, ' + libraryElement.current.value + ', '
+                          "Using HTML, " + libraryElement.current.value + ", "
                         const end =
                           ". Don't reference any local files. Make it responsive. Use placeholder images for any local images. Don't return HTML tags."
 
-                        prompt = prompt.trim().replace('  ', ' ')
-                        prompt = prompt.replace(stub, '')
-                        prompt = prompt.replace(end, '')
-                        prompt = prompt.replace(/[^a-zA-Z ]/g, '')
+                        prompt = prompt.trim().replace("  ", " ")
+                        prompt = prompt.replace(stub, "")
+                        prompt = prompt.replace(end, "")
+                        prompt = prompt.replace(/[^a-zA-Z ]/g, "")
 
-                        // add create
+                        // Add create
                         if (
                           prompt
-                            .split(' ')
+                            .split(" ")
                             .filter(
                               (word: string) =>
-                                word.toLowerCase() === 'create' ||
-                                word.toLowerCase() === 'make' ||
-                                word.toLowerCase() === 'draw' ||
-                                word.toLowerCase() === 'embed'
+                                word.toLowerCase() === "create" ||
+                                word.toLowerCase() === "make" ||
+                                word.toLowerCase() === "draw" ||
+                                word.toLowerCase() === "embed"
                             ).length === 0
-                        ) { prompt = 'create ' + prompt }
+                        ) { prompt = "create " + prompt }
 
                         prompt = stub + prompt + end
 
@@ -297,7 +296,7 @@ function ChatGPTModal ({
                 <div className='flex flex-col gap-2 mt-4'>
                   <p className='break-words'>
                     <span className='badge badge-lg mr-2 text-white h-full w-full rounded-none p-2'>
-                      🤖 {gptPrompt || ''}
+                      🤖 {gptPrompt || ""}
                     </span>
                   </p>
                   {gptResult?.choices?.map((choice, index) => {
@@ -317,7 +316,7 @@ function ChatGPTModal ({
                   onValueChange={(code) => {}}
                   value={choice.text}
                   highlight={(code) =>
-                                highlight(code, languages.html)}
+                    highlight(code, languages.html)}
                 />
                             </div>
                           </div>

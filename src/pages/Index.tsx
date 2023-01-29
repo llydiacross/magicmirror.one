@@ -1,10 +1,10 @@
-import React, { useContext, useState, useRef, useEffect } from 'react'
-import Header from '../components/Header'
-import FixedElements from '../components/FixedElements'
-import SettingsModal from '../modals/SettingsModal'
-import Hero from '../components/Hero'
-import { ENSContext } from '../contexts/ensContext'
-import WebEvents from '../webEvents'
+import React, { useContext, useState, useRef, useEffect } from "react"
+import Header from "../components/Header"
+import FixedElements from "../components/FixedElements"
+import SettingsModal from "../modals/SettingsModal"
+import Hero from "../components/Hero"
+import { ENSContext } from "../contexts/ensContext"
+import WebEvents from "../webEvents"
 
 export default function Index () {
   const [shouldShowSettings, setShouldShowSettings] = useState(false)
@@ -21,14 +21,14 @@ export default function Index () {
       }
     }
 
-    // might cause trouble
+    // Might cause trouble
     window.scrollTo(0, 0)
 
-    WebEvents.off('gotoDestination', cooldown.current)
-    WebEvents.on('gotoDestination', cooldown.current)
+    WebEvents.off("gotoDestination", cooldown.current)
+    WebEvents.on("gotoDestination", cooldown.current)
 
     return () => {
-      WebEvents.off('gotoDestination', cooldown.current)
+      WebEvents.off("gotoDestination", cooldown.current)
     }
   }, [])
   return (
@@ -60,11 +60,11 @@ export default function Index () {
             </div>
             <div className='p-4'>
               <h1 className='text-3xl md:text-5xl lg:text-7xl text-black text-right font-bold mb-4 pb-4'>
-                Harness the power of <u>decentralized web</u> to create{' '}
+                Harness the power of <u>decentralized web</u> to create{" "}
                 <u>something magical</u>
               </h1>
               <p className='text-black text-1xl lg:text-2xl text-right'>
-                We've made an easy online IDE for you to use.
+                We&apos;ve made an easy online IDE for you to use.
               </p>
               <p className='text-black text-1xl lg:text-2xl  text-right'>
                 You can use it to create <u>anything</u> you like.

@@ -1,19 +1,19 @@
-// import tailwind
-import './index.css'
-import './resources/infinitymint.css'
-// import infintymint client stuff
-import 'infinitymint-client'
-// import react + app
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import reportWebVitals from './reportWebVitals'
-import App from './App'
-import storage from './storage'
+// Import tailwind
+import "./index.css"
+import "./resources/infinitymint.css"
+// Import infintymint client stuff
+import "infinitymint-client"
+// Import react + app
+import React from "react"
+import ReactDOM from "react-dom/client"
+import reportWebVitals from "./reportWebVitals"
+import App from "./App"
+import storage from "./storage"
 
-// load saved data
+// Load saved data
 storage.loadSavedData()
-// standard react
-const root = ReactDOM.createRoot(document.querySelector('#root'))
+// Standard react
+const root = ReactDOM.createRoot(document.querySelector("#root"))
 root.render(
   <React.StrictMode>
     <App />
@@ -21,6 +21,6 @@ root.render(
 )
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// To log results (for example: reportWebVitals(console.log))
+// Or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()

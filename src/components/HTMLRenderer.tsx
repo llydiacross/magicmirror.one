@@ -1,8 +1,9 @@
-// import react and prop-types
-import React from 'react'
-import PropTypes from 'prop-types'
+/* eslint-disable react/prop-types */
+// Import react and prop-types
+import React from "react"
+import PropTypes from "prop-types"
 
-// create a react component that takes html code as a string and renders it
+// Create a react component that takes html code as a string and renders it
 function HTMLRenderer ({
   style,
   code = {} as any,
@@ -12,9 +13,9 @@ function HTMLRenderer ({
   scripts = [],
   meta = []
 }) {
-  let safeCSS = code.css || ''
-  // remove html tags from savejs code
-  safeCSS = safeCSS.replace(/<[^>]*>?/gm, '')
+  let safeCSS = code.css || ""
+  // Remove html tags from savejs code
+  safeCSS = safeCSS.replace(/<[^>]*>?/gm, "")
 
   const head = `
       <head>
@@ -23,7 +24,7 @@ function HTMLRenderer ({
           return `<link href="${sheet}" rel="stylesheet" type="text/css" />`
         })}
         ${meta.map((meta) => {
-          return `<${meta.tag} ${meta.properties || ''}>${meta.children}</${
+          return `<${meta.tag} ${meta.properties || ""}>${meta.children}</${
             meta.tag
           }>`
         })}
@@ -62,9 +63,9 @@ function HTMLRenderer ({
       </head>
   `
 
-  let safeJS = code.js || ''
-  // remove script tags from savejs code
-  safeJS = safeJS.replace(/<\//g, '')
+  let safeJS = code.js || ""
+  // Remove script tags from savejs code
+  safeJS = safeJS.replace(/<\//g, "")
 
   const _html = `
     <html>
@@ -94,7 +95,7 @@ function HTMLRenderer ({
       </body>
       <script>
         document.body.innerHTML = document.body.innerHTML + \`${
-          code.html || ''
+          code.html || ""
         }\`;
       
         //remove all href tags from all links in the body

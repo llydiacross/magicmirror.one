@@ -1,7 +1,7 @@
-import { ethers } from 'ethers'
-import { useState, useEffect } from 'react'
-import config from '../config'
-import WebEvents from '../webEvents'
+import { ethers } from "ethers"
+import { useState, useEffect } from "react"
+import config from "../config"
+import WebEvents from "../webEvents"
 
 const useWeb3Context = () => {
   const [walletConnected, setWalletConnected] = useState(false)
@@ -9,7 +9,7 @@ const useWeb3Context = () => {
   const [ensAddresses, setEnsAddresses] = useState([])
   const [chainId, setChainId] = useState(0)
   const [accounts, setAccounts] = useState([])
-  const [walletAddress, setWalletAddress] = useState('0x0')
+  const [walletAddress, setWalletAddress] = useState("0x0")
   const [signer, setSigner] = useState<ethers.Signer>(null)
   const [web3Provider, setWeb3Provider] = useState<
   ethers.providers.Web3Provider | ethers.providers.JsonRpcProvider
@@ -22,7 +22,7 @@ const useWeb3Context = () => {
     if ((window as any).ethereum === undefined) return []
 
     const result = await (window as any).ethereum.request({
-      method: 'eth_accounts'
+      method: "eth_accounts"
     })
 
     return result
@@ -33,7 +33,7 @@ const useWeb3Context = () => {
 
     try {
       const result = await (window as any).ethereum.request({
-        method: 'eth_accounts'
+        method: "eth_accounts"
       })
       return result && result.length !== 0
     } catch (error) {
@@ -67,26 +67,25 @@ const useWeb3Context = () => {
     if (loaded) return
 
     const main = async () => {
-      try {
-      } catch (walletError) {
-        WebEvents.emit('walletError', walletError)
+      try { /* Empty */ } catch (walletError) {
+        WebEvents.emit("walletError", walletError)
         console.error(walletError)
         setWalletError(walletError)
       }
 
       setWalletInstalled(
         (window as any).ethereum !== undefined &&
-          typeof (window as any).ethereum === 'object'
+          typeof (window as any).ethereum === "object"
       )
 
       const connected = await checkWalletConnected()
       console.log(
-        'wallet: ' + (connected ? 'connected' : 'unconnected'),
-        'web3'
+        "wallet: " + (connected ? "connected" : "unconnected"),
+        "web3"
       )
       setWalletConnected(connected)
 
-      if (!connected) setWalletError(new Error('Wallet not connected'))
+      if (!connected) setWalletError(new Error("Wallet not connected"))
       let provider:
       | ethers.providers.Web3Provider
       | ethers.providers.JsonRpcProvider
@@ -94,13 +93,13 @@ const useWeb3Context = () => {
         provider = new ethers.providers.JsonRpcProvider(config.providerUrl)
       }
 
-      // test it
+      // Test it
       try {
         await provider.getBlockNumber()
       } catch (error) {
         console.error(error)
         setWalletError(
-          new Error('There is something wrong with your provider')
+          new Error("There is something wrong with your provider")
         )
       }
 
@@ -119,7 +118,7 @@ const useWeb3Context = () => {
           try {
             ensAddresses[i] = await provider.lookupAddress(accounts[i])
           } catch (error) {
-            console.log('bad or no ens for: ' + accounts[i])
+            console.log("bad or no ens for: " + accounts[i])
             ensAddresses[i] = false
           }
         }

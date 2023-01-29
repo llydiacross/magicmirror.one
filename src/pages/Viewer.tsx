@@ -1,39 +1,40 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import FixedElements from '../components/FixedElements'
-import SettingsModal from '../modals/SettingsModal'
-import { ENSContext } from '../contexts/ensContext'
-import { withRouter, useHistory } from 'react-router-dom'
-import { Web3File } from 'web3.storage'
-import HTMLRenderer from '../components/HTMLRenderer'
-import { getIPFSProvider } from '../helpers'
-import { Web3StorageProvider } from '../ipfs'
-import HeartIcon from '../components/Icons/HeartIcon'
+/* eslint-disable no-unused-vars */
+import React, { useContext, useEffect, useRef, useState } from "react"
+import PropTypes from "prop-types"
+import FixedElements from "../components/FixedElements"
+import SettingsModal from "../modals/SettingsModal"
+import { ENSContext } from "../contexts/ensContext"
+import { withRouter, useHistory } from "react-router-dom"
+import { Web3File } from "web3.storage"
+import HTMLRenderer from "../components/HTMLRenderer"
+import { getIPFSProvider } from "../helpers"
+import { Web3StorageProvider } from "../ipfs"
+import HeartIcon from "../components/Icons/HeartIcon"
 
 const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   const partialFiles = files.filter(
-    (file) => file.name.includes('.partial')
+    (file) => file.name.includes(".partial")
   )
-  const indexFiles = files.filter((file) => file.name === 'index.html')
+  const indexFiles = files.filter((file) => file.name === "index.html")
 
   let html
   if (indexFiles.length === 0 && partialFiles.length === 0) {
-    // no index.html found
+    // No index.html found
     return {
       valid: false
     }
   } else if (partialFiles.length > 0) {
-    // found partial files
+    // Found partial files
     const partialHtml = partialFiles.filter(
-      (file) => file.name === 'index.partial'
+      (file) => file.name === "index.partial"
     )[0]
     const partialCss = partialFiles.filter(
-      (file) => file.name === 'css.partial'
+      (file) => file.name === "css.partial"
     )[0]
     const partialJS = partialFiles.filter(
-      (file) => file.name === 'js.partial'
+      (file) => file.name === "js.partial"
     )[0]
-    const partialXens = partialFiles.filter((file) => file.name === '.xens')[0]
+    const partialXens = partialFiles.filter((file) => file.name === ".xens")[0]
 
     const struct: any = {}
     if (partialHtml !== undefined) {
@@ -54,7 +55,7 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
     }
 
     if (partialXens !== undefined) {
-      struct['.xens'] = new TextDecoder().decode(
+      struct[".xens"] = new TextDecoder().decode(
         (await partialXens.stream().getReader().read()).value
       )
     }
@@ -65,7 +66,7 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
       source: struct
     }
   } else if (indexFiles.length > 0) {
-    // just use the index.html and draw render it to an iframe
+    // Just use the index.html and draw render it to an iframe
     const potentialHTML = indexFiles[0]
     setPercentage(65)
     html = await potentialHTML.stream().getReader().read()
@@ -83,8 +84,8 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
 }
 
 const prepareDefaultContent = async (setPercentage: Function) => {
-  // get the default content
-  const defaultContent = await fetch('/audio.html')
+  // Get the default content
+  const defaultContent = await fetch("/audio.html")
   const html = await defaultContent.text()
   setPercentage(100)
   return html
@@ -112,7 +113,7 @@ function Viewer ({ match }) {
 
   if (ipfsProvider.current === null) {
     ipfsProvider.current = getIPFSProvider(
-      'web3-storage'
+      "web3-storage"
     ) as Web3StorageProvider
   }
 
@@ -154,7 +155,7 @@ function Viewer ({ match }) {
               abortRef.current
             )
           } catch (error) {
-            if (error.name === 'AbortError') {
+            if (error.name === "AbortError") {
               setAborted(true)
               return
             }
@@ -200,7 +201,7 @@ function Viewer ({ match }) {
       setLoaded(true)
       return
     }
-    // call async
+    // Call async
     main()
   }, [ensContext, loaded])
 
@@ -212,7 +213,7 @@ function Viewer ({ match }) {
         <div className='hero-content text-center text-neutral-content bg-warning'>
           <div className='max-w-md'>
             <h1 className='mb-2 text-5xl font-bold text-black truncate'>
-              Loading{' '}
+              Loading{" "}
             </h1>
             <h2 className='mb-3 text-3xl text-black truncate underline'>
               {ensContext.currentEnsAddress}
@@ -222,9 +223,9 @@ function Viewer ({ match }) {
             </p>
             <div
               className='radial-progress bg-warning text-warning-content'
-              style={{ '--value': percentage } as any}
+              style={{ "--value": percentage } as any}
             >
-              {percentage + '%'}
+              {percentage + "%"}
             </div>
           </div>
         </div>
@@ -246,7 +247,7 @@ function Viewer ({ match }) {
                 ? (
                   <HTMLRenderer
                     code={buffer.source}
-                    currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
+                    currentFile={(ensContext.currentEnsAddress || "null") + ".web3"}
                   />
                   )
                 : (
@@ -256,19 +257,19 @@ function Viewer ({ match }) {
                 ? (
                   <iframe
                     title={ensContext.currentEnsAddress}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: "100%", height: "100%" }}
                     src={
-                  'https://dweb.link/ipfs/' +
+                  "https://dweb.link/ipfs/" +
                   ensContext.contentHash
-                    .replace('ipfs://', '')
-                    .replace('ipns://', '')
+                    .replace("ipfs://", "")
+                    .replace("ipns://", "")
                 }
                   />
                   )
                 : (
                   <HTMLRenderer
                     implicit={buffer}
-                    currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
+                    currentFile={(ensContext.currentEnsAddress || "null") + ".web3"}
                   />
                   )}
             </>
@@ -287,7 +288,7 @@ function Viewer ({ match }) {
                   <button
                     className='btn btn-dark w-full'
                     onClick={() => {
-                      history.push('/')
+                      history.push("/")
                     }}
                   >
                     Home
@@ -325,14 +326,14 @@ function Viewer ({ match }) {
             </h1>
             <p className='mb-5 text-black'>
               This ENS address appears to have content hash associated with it.
-              We also couldn't find any files in the directory, we also couldn't
+              We also couldn&apos;t find any files in the directory, we also couldn&apos;t
               pull enough data including twitter, email or reddit to assemble a
               basic template.
             </p>
             <button
               className='btn btn-dark w-full'
               onClick={() => {
-                history.push('/')
+                history.push("/")
               }}
             >
               Home
@@ -365,7 +366,7 @@ function Viewer ({ match }) {
             <button
               className='btn btn-dark w-full'
               onClick={() => {
-                history.push('/')
+                history.push("/")
               }}
             >
               Home
@@ -400,7 +401,7 @@ function Viewer ({ match }) {
             <button
               className='btn btn-dark w-full'
               onClick={() => {
-                history.push('/')
+                history.push("/")
               }}
             >
               Home
@@ -418,8 +419,13 @@ function Viewer ({ match }) {
       </div>
       <FixedElements
         linkHref='/'
-        children={
-          <>
+        hideSettings={!loaded}
+        onSettings={() => {
+          if (!loaded) return
+          setShouldShowSettings(!shouldShowSettings)
+        }}
+      >{
+        <>
             {defaultResponse &&
             error === null &&
             loaded &&
@@ -429,7 +435,7 @@ function Viewer ({ match }) {
                   className='alert alert-warning shadow-lg p-2 opacity-60 hover:opacity-100 cursor-pointer w-auto'
                   ref={defaultResponseElement}
                   onClick={() => {
-                    defaultResponseElement.current.style.display = 'none'
+                    defaultResponseElement.current.style.display = "none"
                   }}
                 >
                   <div>
@@ -458,14 +464,8 @@ function Viewer ({ match }) {
               : (
                 <></>
                 )}
-          </>
-        }
-        hideSettings={!loaded}
-        onSettings={() => {
-          if (!loaded) return
-          setShouldShowSettings(!shouldShowSettings)
-        }}
-      />
+          </>}
+      </FixedElements>
       <SettingsModal
         hidden={!shouldShowSettings}
         onHide={() => {

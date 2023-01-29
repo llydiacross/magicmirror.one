@@ -1,11 +1,11 @@
-import React from 'react'
-import Web3ContextProvider from './contexts/web3Context'
-import ENSContextProvider from './contexts/ensContext'
-import IDE from './pages/IDE'
-import Index from './pages/Index'
-import Viewer from './pages/Viewer'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import NotFound from './pages/NotFound'
+import React from "react"
+import Web3ContextProvider from "./contexts/web3Context"
+import ENSContextProvider from "./contexts/ensContext"
+import IDE from "./pages/IDE"
+import Index from "./pages/Index"
+import Viewer from "./pages/Viewer"
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+import NotFound from "./pages/NotFound"
 
 function App () {
   return (

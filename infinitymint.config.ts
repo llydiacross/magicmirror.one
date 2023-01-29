@@ -1,6 +1,6 @@
-import { InfinityMintConfig } from "infinitymint/dist/app/interfaces";
+import { InfinityMintConfig } from "infinitymint/dist/app/interfaces"
 
-//please visit docs.infinitymint.app for a more complete starter configuration file
+// Please visit docs.infinitymint.app for a more complete starter configuration file
 const config: InfinityMintConfig = {
   console: true,
   hardhat: {
@@ -9,20 +9,20 @@ const config: InfinityMintConfig = {
       settings: {
         optimizer: {
           enabled: true,
-          runs: 20,
-        },
-      },
+          runs: 20
+        }
+      }
     },
     paths: {
-      tests: "./tests",
-    },
+      tests: "./tests"
+    }
   },
   roots: ["../infinitymint-buildtools/"],
   settings: {
     networks: {},
     scripts: {
-      disableJavascriptRequire: ["/infinitymint-buildtools/"],
-    },
-  },
-};
-export default config;
+      disableJavascriptRequire: ["/infinitymint-buildtools/"]
+    }
+  }
+}
+export default config

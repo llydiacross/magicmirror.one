@@ -1,12 +1,13 @@
-import React from 'react'
+import React from "react"
+import PropTypes from "prop-types"
 
-export default function HeartIcon ({ className = '' }) {
+export default function HeartIcon ({ className = "" }) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       viewBox='0 0 24 24'
-      className={'inline-block w-8 h-8 stroke-current ' + className}
+      className={"inline-block w-8 h-8 stroke-current " + className}
     >
       <path
         strokeLinecap='round'
@@ -16,4 +17,8 @@ export default function HeartIcon ({ className = '' }) {
       />
     </svg>
   )
+}
+
+HeartIcon.propTypes = {
+  className: PropTypes.string
 }

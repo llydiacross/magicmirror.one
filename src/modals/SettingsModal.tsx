@@ -1,41 +1,41 @@
-import React, { useRef, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import storage from '../storage'
-import { Web3Context } from '../contexts/web3Context'
-import WebEvents from '../webEvents'
-import config from '../config'
-import { useHistory } from 'react-router-dom'
+import React, { useRef, useContext, useEffect, useState } from "react"
+import PropTypes from "prop-types"
+import storage from "../storage"
+import { Web3Context } from "../contexts/web3Context"
+import WebEvents from "../webEvents"
+import config from "../config"
+import { useHistory } from "react-router-dom"
 
 function SettingsModal ({ hidden, onHide }) {
   const web3StorageRef = useRef(null)
   const ipfsCompanionRef = useRef(null)
   const defaultThemeRef = useRef(null)
   const context = useContext(Web3Context)
-  const [currentTheme, setCurrentTheme] = useState('dracula')
+  const [currentTheme, setCurrentTheme] = useState("dracula")
   const eventEmitterCallbackRef = useRef(null)
   const history = useHistory()
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+    if (storage.getGlobalPreference("default_theme")) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+        if (storage.getGlobalPreference("default_theme")) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
       }
     }
 
-    WebEvents.off('reload', eventEmitterCallbackRef.current)
-    WebEvents.on('reload', eventEmitterCallbackRef.current)
+    WebEvents.off("reload", eventEmitterCallbackRef.current)
+    WebEvents.on("reload", eventEmitterCallbackRef.current)
 
     return () => {
-      WebEvents.off('reload', eventEmitterCallbackRef.current)
+      WebEvents.off("reload", eventEmitterCallbackRef.current)
     }
   }, [])
 
-  // disables scrolling while this modal is active
+  // Disables scrolling while this modal is active
   useEffect(() => {
-    if (!hidden) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = 'auto'
+    if (!hidden) document.body.style.overflow = "hidden"
+    else document.body.style.overflow = "auto"
   }, [hidden])
 
   return (
@@ -65,7 +65,7 @@ function SettingsModal ({ hidden, onHide }) {
                   type='text'
                   ref={web3StorageRef}
                   defaultValue={
-                    storage.getGlobalPreference('web3_storage_key') || ''
+                    storage.getGlobalPreference("web3_storage_key") || ""
                   }
                   placeholder='Enter Web3 Storage Key...'
                   className='input input-bordered w-full'
@@ -86,8 +86,8 @@ function SettingsModal ({ hidden, onHide }) {
                 <input
                   type='url'
                   defaultValue={
-                    storage.getGlobalPreference('ipfs_companion_endpoint') ||
-                    'http://localhost:5001/api/v0'
+                    storage.getGlobalPreference("ipfs_companion_endpoint") ||
+                    "http://localhost:5001/api/v0"
                   }
                   ref={ipfsCompanionRef}
                   placeholder='Enter your IPFS Companion Endpoint...'
@@ -123,14 +123,14 @@ function SettingsModal ({ hidden, onHide }) {
                               <td
                   className='cursor-pointer underline'
                   onClick={() => {
-                                if (onHide) onHide()
-                                history.push(
-                                  `/view/${context.ensAddresses[index]}`
-                                )
-                              }}
+                    if (onHide) onHide()
+                    history.push(
+                      `/view/${context.ensAddresses[index]}`
+                    )
+                  }}
                 >
                   {context.ensAddresses[index] ||
-                                'ENS Not Found...'}
+                                "ENS Not Found..."}
                 </td>
                             </tr>
                           )
@@ -155,7 +155,7 @@ function SettingsModal ({ hidden, onHide }) {
                   className='select w-full'
                   ref={defaultThemeRef}
                   defaultValue={
-                    storage.getGlobalPreference('default_theme') || 'dracula'
+                    storage.getGlobalPreference("default_theme") || "dracula"
                   }
                 >
                   {config.themes.map((theme, index) => {
@@ -169,7 +169,7 @@ function SettingsModal ({ hidden, onHide }) {
               </div>
             </div>
             <p className='mt-4 text-black'>
-              More information on what this means can{' '}
+              More information on what this means can{" "}
               <a href='?' className='underline text-yellow-500'>
                 be found here
               </a>
@@ -179,19 +179,19 @@ function SettingsModal ({ hidden, onHide }) {
               className='btn bg-success text-white mt-4 hover:bg-black animate-pulse hover:animate-none'
               onClick={() => {
                 storage.setGlobalPreference(
-                  'web3_storage_key',
+                  "web3_storage_key",
                   web3StorageRef.current.value
                 )
                 storage.setGlobalPreference(
-                  'ipfs_companion_endpoint',
+                  "ipfs_companion_endpoint",
                   ipfsCompanionRef.current.value
                 )
                 storage.setGlobalPreference(
-                  'default_theme',
+                  "default_theme",
                   defaultThemeRef.current.value
                 )
                 storage.saveData()
-                WebEvents.emit('reload')
+                WebEvents.emit("reload")
                 if (onHide) onHide()
               }}
             >

@@ -1,9 +1,9 @@
-import { ethers } from 'ethers'
-import { useState, useEffect, useContext, useRef } from 'react'
-import config from '../config'
-import { Web3Context } from '../contexts/web3Context'
-import { resolveDirectory, resolveFile } from '../ipfs'
-import { Buffer } from 'buffer'
+import { ethers } from "ethers"
+import { useState, useEffect, useContext, useRef } from "react"
+import config from "../config"
+import { Web3Context } from "../contexts/web3Context"
+import { resolveDirectory, resolveFile } from "../ipfs"
+import { Buffer } from "buffer"
 
 const prepareAvatar = async (
   resolver,
@@ -12,22 +12,22 @@ const prepareAvatar = async (
   fetchMetadataRef
 ) => {
   try {
-    const potentialAvatar = await resolver.getText('avatar')
+    const potentialAvatar = await resolver.getText("avatar")
 
     if (potentialAvatar === null) {
-      throw new Error('no avatar')
+      throw new Error("no avatar")
     }
 
     if (
-      potentialAvatar.indexOf('eip155:1/erc1155') !== -1 ||
-      potentialAvatar.indexOf('eip155:1/erc721') !== -1
+      potentialAvatar.indexOf("eip155:1/erc1155") !== -1 ||
+      potentialAvatar.indexOf("eip155:1/erc721") !== -1
     ) {
-      let stub = potentialAvatar.split('eip155:1/erc1155:')[1]
+      let stub = potentialAvatar.split("eip155:1/erc1155:")[1]
 
-      if (potentialAvatar.indexOf('eip155:1/erc721') !== -1) { stub = potentialAvatar.split('eip155:1/erc721:')[1] }
-      const [contract, tokenId] = stub.split('/')
+      if (potentialAvatar.indexOf("eip155:1/erc721") !== -1) { stub = potentialAvatar.split("eip155:1/erc721:")[1] }
+      const [contract, tokenId] = stub.split("/")
 
-      const abi = ['function uri(uint256 tokenId) view returns (string value)']
+      const abi = ["function uri(uint256 tokenId) view returns (string value)"]
       const instance = new ethers.Contract(contract, abi, context.web3Provider)
       let decoded
       try {
@@ -43,7 +43,7 @@ const prepareAvatar = async (
           const json = JSON.parse(decoded)
           const image = json.image
 
-          if (image.indexOf('ipfs://') !== -1) {
+          if (image.indexOf("ipfs://") !== -1) {
             const decodedImage = await resolveFile(
               json.image,
               undefined,
@@ -51,34 +51,34 @@ const prepareAvatar = async (
             )
             fetchMetadataRef.current = null
             return (
-              `data:image/${decodedImage.name.split('.').pop()};base64,` +
+              `data:image/${decodedImage.name.split(".").pop()};base64,` +
               Buffer.from(
                 (await decodedImage.stream().getReader().read()).value
-              ).toString('base64')
+              ).toString("base64")
             )
           } else return json.image
         } catch (error) {
-          if (error.name === 'AbortError') return
+          if (error.name === "AbortError") return
           console.error(error)
           return decoded
         }
       } catch (error) {
-        if (error.name === 'AbortError') return
+        if (error.name === "AbortError") return
         console.error(error)
         return null
       }
     } else {
       if (
-        potentialAvatar.indexOf('http://') === -1 &&
-        potentialAvatar.indexOf('https://') === -1
+        potentialAvatar.indexOf("http://") === -1 &&
+        potentialAvatar.indexOf("https://") === -1
       ) {
-        throw new Error('bad format: ' + potentialAvatar)
+        throw new Error("bad format: " + potentialAvatar)
       }
 
       return potentialAvatar
     }
   } catch (error) {
-    console.log('bad avatar: ' + error.message)
+    console.log("bad avatar: " + error.message)
     return config.defaultAvatar
   }
 }
@@ -101,7 +101,7 @@ const useENSContext = ({ ensAddress }) => {
     setLoaded(false)
 
     if (currentEnsAddress === null) {
-      setEnsError(new Error('No ENS address provided'))
+      setEnsError(new Error("No ENS address provided"))
       return
     }
 
@@ -113,7 +113,7 @@ const useENSContext = ({ ensAddress }) => {
 
       setResolver(resolver)
 
-      // will kill and make new abort controllers
+      // Will kill and make new abort controllers
       if (fetchImageRef.current !== null) fetchImageRef.current.abort()
       fetchImageRef.current = new AbortController()
 
@@ -125,27 +125,27 @@ const useENSContext = ({ ensAddress }) => {
       )
 
       try {
-        setEmail(await resolver.getText('email'))
+        setEmail(await resolver.getText("email"))
       } catch (error) {
-        console.log('bad email: ' + error.message)
+        console.log("bad email: " + error.message)
         setEmail(null)
       }
 
       try {
         setOwner(await context.web3Provider.resolveName(currentEnsAddress))
       } catch (error) {
-        console.log('bad owner: ' + error.message)
+        console.log("bad owner: " + error.message)
         setOwner(null)
       }
 
       try {
         setContentHash(await resolver.getContentHash())
       } catch (error) {
-        console.log('bad content hash: ' + error.message)
+        console.log("bad content hash: " + error.message)
         setContentHash(null)
       }
 
-      console.log('loaded ens: ' + currentEnsAddress)
+      console.log("loaded ens: " + currentEnsAddress)
       setLoaded(true)
     }
     main().catch((error) => {

@@ -1,41 +1,42 @@
-import React, { useRef, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import storage from '../storage'
-import { Web3Context } from '../contexts/web3Context'
-import WebEvents from '../webEvents'
-import config from '../config'
-import { useHistory } from 'react-router-dom'
-import HeartIcon from '../components/Icons/HeartIcon'
-import ViewIcon from '../components/Icons/ViewIcon'
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useRef, useContext, useEffect, useState } from "react"
+import PropTypes from "prop-types"
+import storage from "../storage"
+import { Web3Context } from "../contexts/web3Context"
+import WebEvents from "../webEvents"
+import { useHistory } from "react-router-dom"
+import HeartIcon from "../components/Icons/HeartIcon"
+import ViewIcon from "../components/Icons/ViewIcon"
 
 function PublishModal ({ hidden, onHide, savedData = {} }) {
   const defaultThemeRef = useRef(null)
   const context = useContext(Web3Context)
-  const [currentTheme, setCurrentTheme] = useState('dracula')
+  const [currentTheme, setCurrentTheme] = useState("dracula")
   const eventEmitterCallbackRef = useRef(null)
   const history = useHistory()
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+    if (storage.getGlobalPreference("default_theme")) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) { setCurrentTheme(storage.getGlobalPreference('default_theme')) }
+        if (storage.getGlobalPreference("default_theme")) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
       }
     }
 
-    WebEvents.off('reload', eventEmitterCallbackRef.current)
-    WebEvents.on('reload', eventEmitterCallbackRef.current)
+    WebEvents.off("reload", eventEmitterCallbackRef.current)
+    WebEvents.on("reload", eventEmitterCallbackRef.current)
 
     return () => {
-      WebEvents.off('reload', eventEmitterCallbackRef.current)
+      WebEvents.off("reload", eventEmitterCallbackRef.current)
     }
   }, [])
 
-  // disables scrolling while this modal is active
+  // Disables scrolling while this modal is active
   useEffect(() => {
-    if (!hidden) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = 'auto'
+    if (!hidden) document.body.style.overflow = "hidden"
+    else document.body.style.overflow = "auto"
   }, [hidden])
 
   return (

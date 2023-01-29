@@ -1,5 +1,5 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import React from "react"
+import { useHistory } from "react-router-dom"
 export default function NotFound () {
   const history = useHistory()
   return (
@@ -10,12 +10,12 @@ export default function NotFound () {
           <div className='max-w-md'>
             <h1 className='mb-5 text-5xl font-bold text-black'>404</h1>
             <p className='mb-5 text-black'>
-              This page straight up doesn't exist. Try elsewhere.
+              This page straight up doesn&apos;t exist. Try elsewhere.
             </p>
             <button
               className='btn btn-dark w-full'
               onClick={() => {
-                history.push('/')
+                history.push("/")
               }}
             >
               Home
