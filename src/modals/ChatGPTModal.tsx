@@ -35,6 +35,7 @@ function ChatGPTModal({
   const [percentage, setPercentage] = useState(0);
   const [hasInput, setHasInput] = useState(false);
   const [gptResult, setGptResult] = useState(null);
+  const [gptPrompt, setGptPrompt] = useState(null);
   const [gptError, setGptError] = useState(null);
   const abortRef = useRef(null);
   const inputElement = useRef(null);
@@ -100,7 +101,7 @@ function ChatGPTModal({
                   className="stat-desc"
                   hidden={!gptResult?.usage?.prompt_tokens}
                 >
-                  {parseInt(gptResult?.usage?.prompt_tokens || 0) < 24
+                  {parseInt(gptResult?.usage?.prompt_tokens || 0) < 36
                     ? "Acceptable"
                     : "Unacceptable"}
                 </div>
@@ -134,10 +135,10 @@ function ChatGPTModal({
             ) : (
               <></>
             )}
-            <div className="flex flex-col mt-4">
-              <div className="form-control">
+            <div className="flex flex-row mt-4">
+              <div className="form-control w-full">
                 <label className="input-group w-full text-center h-full">
-                  <p className="bg-gray-200 text-black">
+                  <p className="bg-gray-200 text-black hidden md:block lg:block">
                     <span className="label-text h-full">Using</span>
                   </p>
                   <select className="input select" ref={libraryElement}>
@@ -145,7 +146,10 @@ function ChatGPTModal({
                     <option value="jquery">JQuery</option>
                     <option value="bootstrap4">Bootstrap 4</option>
                     <option value="bootstrap5">Bootstrap 5</option>
+                    <option value="javascript">Javascript</option>
                     <option value="css3">CSS3</option>
+                    <option value="svg">SVG</option>
+                    <option value="canvas">Canvas</option>
                   </select>
                   <input
                     type="text"
@@ -157,7 +161,7 @@ function ChatGPTModal({
                     onInput={() => {
                       setHasInput(inputElement.current.value.length > 0);
                     }}
-                    placeholder="create a simple "
+                    placeholder="create a simple blog"
                     className="input input-bordered w-full"
                   />
                   <input
@@ -208,17 +212,27 @@ function ChatGPTModal({
                         prompt = prompt.replace(" Tailwind,", "");
                         prompt = prompt.replace(" css3,", "");
                         prompt = prompt.replace(" JQuery,", "");
+                        prompt = prompt.replace(" javascript,", "");
+                        prompt = prompt.replace(" Javascript,", "");
+                        prompt = prompt.replace(" svg", "");
+                        prompt = prompt.replace(" SVG", "");
                         prompt = prompt.replace(" jquery,", "");
+                        prompt = prompt.replace(" canvas,", "");
+                        prompt = prompt.replace(" Canvas,", "");
                         prompt = prompt.replace(" bootstrap4,", "");
                         prompt = prompt.replace(" Bootstrap4,", "");
                         prompt = prompt.replace(" bootstrap5,", "");
                         prompt = prompt.replace(" Bootstrap5,", "");
+                        prompt = prompt.replace(" bootstrap 4,", "");
+                        prompt = prompt.replace(" Bootstrap 4,", "");
+                        prompt = prompt.replace(" bootstrap 5,", "");
+                        prompt = prompt.replace(" Bootstrap 5,", "");
                         prompt = prompt.replace("Using HTML, ", "");
 
                         let stub =
                           "Using HTML, " + libraryElement.current.value + ", ";
                         let end =
-                          ". Make it just one page. Only return valid HTML. Finish your answer.";
+                          ". Don't reference any local files. Use placeholder images for any local images. Don't return HTML tags.";
 
                         prompt = prompt.trim().replace("  ", " ");
                         prompt = prompt.replace(stub, "");
@@ -232,14 +246,15 @@ function ChatGPTModal({
                             .filter(
                               (word: string) =>
                                 word.toLowerCase() === "create" ||
-                                word.toLowerCase() === "make"
+                                word.toLowerCase() === "make" ||
+                                word.toLowerCase() === "draw" ||
+                                word.toLowerCase() === "embed"
                             ).length === 0
                         )
                           prompt = "create " + prompt;
 
                         prompt = stub + prompt + end;
 
-                        inputElement.current.value = prompt;
                         setPercentage(75);
                         const result = await fetchPrompt(
                           prompt,
@@ -256,12 +271,13 @@ function ChatGPTModal({
                           .finally(() => {
                             abortRef.current = null;
                           });
+                        setGptPrompt(prompt);
                         setPercentage(100);
                         setGptResult(result);
                         setLoading(false);
                       }
                     }}
-                    className="btn bg-success text-black w-20 hover:bg-black hover:text-yellow-500"
+                    className="btn bg-success text-black hover:bg-black hover:text-yellow-500"
                   >
                     Ask
                   </button>
@@ -270,20 +286,25 @@ function ChatGPTModal({
             </div>
             {gptResult !== null ? (
               <div className="flex flex-col gap-2 mt-4">
+                <p className="break-words">
+                  <span className="badge badge-lg mr-2 text-white h-full w-full rounded-none p-2">
+                    🤖 {gptPrompt || ""}
+                  </span>
+                </p>
                 {gptResult?.choices?.map((choice, index) => {
                   return (
                     <div
                       key={index}
                       className="flex flex-col md:flex-row lg:flex-row gap-2 w-full"
                     >
-                      <div className="w-full">
-                        <p className="text-2xl bg-warning text-white p-2">
+                      <div className="w-full lg:max-w-[88%] md:max-w[88%] ">
+                        <p className="text-2xl bg-info text-white p-2">
                           <span className="badge mb-2">{index + 1}</span>
                         </p>
                         <div className="max-h-[12rem] overflow-y-scroll border-2 mb-2">
                           <div className="p-2 bg-black">
                             <Editor
-                              className="w-full overflow-scroll"
+                              className="w-full text-wrap overflow-scroll"
                               onValueChange={(code) => {}}
                               value={choice.text}
                               highlight={(code) =>
@@ -317,7 +338,25 @@ function ChatGPTModal({
               <button
                 className="btn btn-error"
                 onClick={() => {
-                  if (abortRef.current !== null) abortRef.current.abort();
+                  if (abortRef.current !== null) {
+                    abortRef.current.abort();
+                    abortRef.current = null;
+                    return;
+                  }
+                  if (onHide) onHide();
+                }}
+              >
+                Exit
+              </button>
+              <button
+                disabled={!loading}
+                className="btn btn-error"
+                onClick={() => {
+                  if (abortRef.current !== null) {
+                    abortRef.current.abort();
+                    abortRef.current = null;
+                    return;
+                  }
                   if (onHide) onHide();
                 }}
               >
