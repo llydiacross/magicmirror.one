@@ -8,7 +8,10 @@ const config = {
   useLocalApi: false,
   localApiEndpoint: "https://localhost:9090/",
   apiEndpoint: "https://api.web.app/",
-  chatGPTendpoint: "/gpt/",
+  chatGPTendpoint: "gpt/",
+  searchEndpoint: "search/",
+  nftEndpoint: "nft/",
+  ipfsEndpoint: "ipfs/",
   defaultAvatar:
     "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_640.png",
   defaultWeb3Storage:
