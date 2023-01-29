@@ -30,12 +30,15 @@ function ChatGPTModal({
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
-  const inputElement = useRef(null);
+
   const [percentage, setPercentage] = useState(0);
   const [hasInput, setHasInput] = useState(false);
   const [gptResult, setGptResult] = useState(null);
   const [gptError, setGptError] = useState(null);
   const abortRef = useRef(null);
+  const inputElement = useRef(null);
+  const tempElement = useRef(null);
+  const nElement = useRef(null);
   const history = useHistory();
 
   useEffect(() => {
@@ -141,6 +144,29 @@ function ChatGPTModal({
                     placeholder="Ask GPT-3 a question..."
                     className="input input-bordered w-full "
                   />
+
+                  <input
+                    type="number"
+                    data-loading={loading}
+                    disabled={loading}
+                    ref={tempElement}
+                    maxLength={128}
+                    min={0.1}
+                    max={1}
+                    placeholder="0.6"
+                    className="input input-bordered w-25"
+                  />
+                  <input
+                    type="number"
+                    data-loading={loading}
+                    disabled={loading}
+                    ref={nElement}
+                    maxLength={2}
+                    max={6}
+                    min={1}
+                    placeholder="2"
+                    className="input input-bordered w-25"
+                  />
                   <button
                     data-loading={loading}
                     disabled={loading || !hasInput}
@@ -156,7 +182,11 @@ function ChatGPTModal({
                         abortRef.current = new AbortController();
                         let result = await fetchPrompt(
                           inputElement.current.value,
-                          abortRef.current
+                          abortRef.current,
+                          {
+                            n: nElement?.current.value || 1,
+                            temp: nElement?.current.value || 0.6,
+                          }
                         )
                           .catch((error) => {
                             setGptError(error);
@@ -170,7 +200,7 @@ function ChatGPTModal({
                         setLoading(false);
                       }
                     }}
-                    className="btn bg-success text-black hover:text-white hover:bg-black hover:text-yellow-500"
+                    className="btn bg-success text-black w-20 hover:text-white hover:bg-black hover:text-yellow-500"
                   >
                     Ask
                   </button>
