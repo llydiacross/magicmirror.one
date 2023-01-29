@@ -334,7 +334,7 @@ module.exports = function (webpackEnv) {
 				stream: require.resolve('stream-http'),
 				os: require.resolve('os-browserify/browser'),
 				// Webpack > 5 does not polyfill core node modules.
-				events: require.resolve('events/') || false,
+				// events: require.resolve('events/') || false,
 			},
 			plugins: [
 				// Prevents users from importing files from outside of src/ (or node_modules/).
