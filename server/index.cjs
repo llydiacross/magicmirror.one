@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const {Configuration, OpenAIApi} = require('openai');
+const bodyParser = require('body-parser')
 
 const server = express();
 const port = 9090;
@@ -12,6 +13,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+server.use(bodyParser.json());
 
 server.use(cors({
   origin: 'http://localhost:3000',
@@ -25,7 +27,7 @@ server.get('/', (_request, response) => {
   response.send('Hello World!')
 });
 
-server.get('/api/ai/generate', async (request, response) => {
+server.post('/api/gpt/prompt', async (request, response) => {
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: request.body,
@@ -33,7 +35,9 @@ server.get('/api/ai/generate', async (request, response) => {
     max_tokens: 7,
   });
 
-  response.send(completion.data.choices[0].text);
+  console.log(request.body);
+
+  // response.send(completion.data.choices[0].text);
 });
 
 server.listen(port, () => {
