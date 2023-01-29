@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 export default function ChatGPTHeader ({ hidden = false }) {
   return (
     <div className="hero pt-4" hidden={hidden}>
-      <div className="hero-content text-center w-full bg-info">
+      <div className="hero-content border-2 text-center w-full bg-info">
         <div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-2">
           <div className="lg:pl-4 lg:ml-4 md:pl-2 md:ml-2">
             <p className="text-10xl animate-pulse md:hidden block lg:block lg:ml-5 mt-5 pt-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-14x xl:text-giant text-black font-apocalypse text-center md:text-left xl:text-left">
