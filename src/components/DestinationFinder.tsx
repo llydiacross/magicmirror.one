@@ -43,7 +43,7 @@ export default function DestinationFinder() {
       if (destination.indexOf(resolver[0]) !== -1) {
         isResolver = true;
         destination = destination.split(".").slice(0, -1).join(".");
-        resolverExtension = resolver[1] || ".eth";
+        resolverExtension = resolver[1] || "";
         resolverActualExtension = resolver[0];
       }
     });
