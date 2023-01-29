@@ -1,7 +1,7 @@
 import { apiFetch } from "./api";
 
 //fetches a prompt response from chat gpt3, make sure to run prompt through the moderation function first to avoid abuse
-export const fetchPrompt = async (prompt: string, abort: AbortController) => {
+export const fetchPrompt = async (prompt: string, abort?: AbortController) => {
   return await apiFetch("gpt3", "prompt", { prompt }, "POST", abort);
 };
 
