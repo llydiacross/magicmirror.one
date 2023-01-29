@@ -37,8 +37,8 @@ server.post('/gpt/prompt', async (request, response) => {
   let temperature = parseFloat(request.body.temp) || 0.6
   if (isNaN(temperature)) temperature = 0.6
 
-  if (temp > 3)
-    temp = 3
+  if (temperature > 3)
+    temperature = 3
 
   let n = parseInt(request.body.n) || 2
   if (isNaN(n)) n = 2
