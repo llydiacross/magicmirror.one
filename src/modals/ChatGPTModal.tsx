@@ -237,7 +237,7 @@ function ChatGPTModal({
                         let stub =
                           "Using HTML, " + libraryElement.current.value + ", ";
                         let end =
-                          ". Don't reference any local files. Use placekitten for placeholder images. Use placeholder image for all local images. Don't include HTML tags.";
+                          ". Don't reference any local files. Use placekitten for placeholder images. Use placeholder image for all local images. Make it as small as possible. Don't include HTML tags.";
 
                         prompt = prompt.trim().replace("  ", " ");
                         prompt = prompt.replace(stub, "");
