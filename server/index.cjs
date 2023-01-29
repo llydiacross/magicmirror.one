@@ -25,7 +25,6 @@ server.use(helmet({
 }))
 
 // An error handling middleware
-// eslint-disable-next-line n/handle-callback-err
 server.use(function (err, _request, response, _next) {
   response.status(500)
   response.send('Oops, something went wrong.\n', err)
@@ -50,13 +49,7 @@ server.post('/gpt/prompt', async (request, response) => {
     max_tokens: 1026
   })
 
-  response.send(completion.data, function (error, result) {
-    if (error) {
-      response.status(400).send(error)
-    }
-
-    response.status(201).send(`test-resource-a added with id: ${result.insertId}`)
-  })
+  response.send(completion.data);
 })
 
 server.listen(port, () => {
