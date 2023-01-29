@@ -47,7 +47,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         <>{children}</>
       ) : (
         <Header
-          theme="dark"
+          theme="acid"
           initialText="Estabilishing ENS Link..."
           showFinder={false}
         />

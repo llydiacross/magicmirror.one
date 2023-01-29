@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 const CharacterSet = [
@@ -14,8 +14,6 @@ const CharacterSet = [
   "🌈",
 ];
 let Count = [];
-let hasUnmounted = false;
-let timeout;
 let AddEmoji = (settings) => {
   //keep icons below the max icons limit
   if (Count.length >= (settings?.maxIcons || 246)) {
@@ -51,11 +49,11 @@ let AddEmoji = (settings) => {
 
   elm.className = "loadingIcon";
   elm.style.paddingTop =
-    Math.floor(Math.random() * (settings?.range || 100)).toString() + "px";
+    Math.floor(Math.random() * (settings?.range || 200)).toString() + "px";
   elm.style.animationDuration =
     Math.max(
-      settings?.minSpeed || 15,
-      Math.floor(Math.random() * (settings?.speed || 30))
+      settings?.minSpeed || 30,
+      Math.floor(Math.random() * (settings?.speed || 100))
     ).toString() + "s";
 
   try {
@@ -63,60 +61,57 @@ let AddEmoji = (settings) => {
     Count.push(elm);
   } catch (error) {}
 
-  return Math.random() * (settings?.maxWaitTime || 32);
-};
-
-const startLoop = (SaveSettings) => {
-  timeout = (seconds = 1) => {
-    seconds = Math.max(1, seconds);
-    setTimeout(() => {
-      if (!hasUnmounted) timeout(AddEmoji(SaveSettings));
-    }, seconds * 1000);
-  };
-  timeout();
+  return Math.random() * (settings?.maxWaitTime || 48);
 };
 
 const Loading = ({
   settings,
-  loadingReason = "Loading",
+  loadingReason = "Loading Content...",
   showLoadingBar = true,
   loadingPercentage = 0,
 }) => {
-  useEffect(() => {
-    startLoop(settings);
+  const timeoutRef = useRef(null);
 
+  if (timeoutRef.current === null) {
+    timeoutRef.current = (seconds = 1) => {
+      seconds = Math.max(1, seconds);
+      setTimeout(() => {
+        timeoutRef.current = timeoutRef.current(AddEmoji(settings));
+      }, seconds * 1000);
+    };
+    timeoutRef.current();
+  }
+
+  useEffect(() => {
     return () => {
-      hasUnmounted = true;
       Count.forEach((val) => {
         try {
           val.remove();
         } catch (error) {}
       });
+
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     };
   }, [settings]);
 
-  if (hasUnmounted) return <></>;
-
   return (
-    <div className="text-center mt-4">
+    <div className="text-center mt-4 overflow-hidden">
       <div className="flex flex-col p-2">
-        <div className="text-white overflow-hidden border-2 p-2">
+        <div className="bg-gray-100 overflow-hidden border-2 p-2">
           <div className="relative" id="loadingIcons"></div>
-          <div className="items-center mb-2 mt-4">
+          <div className="items-center mb-2 mt-4 text-black">
             <div>
-              <p className="text-6xl">
-                Doing Things
-                <span className="spinText absolute ml-5">🔨</span>
-              </p>
+              <p className="text-6xl spinText mb-2">🔨</p>
               {loadingReason !== undefined && loadingReason !== null ? (
-                <p className="text-2xl mt-2 underline">{loadingReason}</p>
+                <p className="text-1xl mt-5 underline">{loadingReason}</p>
               ) : (
                 <></>
               )}
               {showLoadingBar &&
               loadingPercentage !== undefined &&
               !isNaN(loadingPercentage) ? (
-                <div className="w-full mt-2 pt-4">
+                <div className="w-full mt-2 pt-2">
                   <progress
                     className="progress w-full"
                     value={loadingPercentage}

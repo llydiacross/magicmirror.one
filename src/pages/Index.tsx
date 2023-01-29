@@ -17,10 +17,7 @@ export default function Index() {
     if (cooldown.current === null)
       cooldown.current = (destination) => {
         setShouldShowBackdrop(true);
-
-        setTimeout(() => {
-          setCurrentDestination(destination);
-        }, 1000);
+        setCurrentDestination(destination);
       };
 
     //might cause trouble

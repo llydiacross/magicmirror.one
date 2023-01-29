@@ -12,7 +12,7 @@ import Loading from "../components/Loading";
 function ChatGPTModal({ hidden, onHide, savedData = {} }) {
   const context = useContext(Web3Context);
   const [loading, setLoading] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState("luxury");
+  const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
   const inputElement = useRef(null);
   const [hasInput, setHasInput] = useState(false);
@@ -55,7 +55,7 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
             <b>🤖</b>
           </div>
           <div className="flex flex-col p-2 w-full mt-2">
-            <p className="text-2xl mb-2">
+            <p className="text-2xl mb-2 text-black">
               <b>GPT-3 Rating</b>
             </p>
             <div className="stats shadow">
@@ -64,15 +64,15 @@ function ChatGPTModal({ hidden, onHide, savedData = {} }) {
                   <HeartIcon />
                 </div>
                 <div className="stat-title">Solution Rating</div>
-                <div className="stat-value text-primary">80%</div>
-                <div className="stat-desc">Confident</div>
+                <div className="stat-value text-primary">0%</div>
+                <div className="stat-desc">Unknown</div>
               </div>
               <div className="stat">
                 <div className="stat-figure text-primary">
                   <ViewIcon />
                 </div>
                 <div className="stat-title">Amount of Solutions</div>
-                <div className="stat-value text-primary">4</div>
+                <div className="stat-value text-primary">0</div>
                 <div className="stat-desc">0.6 Complexity</div>
               </div>
             </div>

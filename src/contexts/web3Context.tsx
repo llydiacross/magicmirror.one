@@ -70,7 +70,7 @@ const Web3ContextProvider = ({ children }) => {
         <>{children}</>
       ) : (
         <Header
-          theme="dark"
+          theme="acid"
           initialText="Initializing Web3 Connection..."
           showFinder={false}
         />

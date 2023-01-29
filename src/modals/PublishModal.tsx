@@ -11,7 +11,7 @@ import ViewIcon from "../components/Icons/ViewIcon";
 function PublishModal({ hidden, onHide, savedData = {} }) {
   const defaultThemeRef = useRef(null);
   const context = useContext(Web3Context);
-  const [currentTheme, setCurrentTheme] = useState("luxury");
+  const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 

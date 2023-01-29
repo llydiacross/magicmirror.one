@@ -11,7 +11,7 @@ function SettingsModal({ hidden, onHide }) {
   const ipfsCompanionRef = useRef(null);
   const defaultThemeRef = useRef(null);
   const context = useContext(Web3Context);
-  const [currentTheme, setCurrentTheme] = useState("luxury");
+  const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 
@@ -52,7 +52,7 @@ function SettingsModal({ hidden, onHide }) {
             <b>⚙️</b>
           </div>
           <div className="flex flex-col flex-1 p-3">
-            <p className="mt-4">
+            <p className="mt-4 text-black">
               Here you can specify the storage provider you want to use. You
               must have an account with web3.storage or an IPFS Companion on
               your system.
@@ -155,7 +155,7 @@ function SettingsModal({ hidden, onHide }) {
                   className="select w-full"
                   ref={defaultThemeRef}
                   defaultValue={
-                    storage.getGlobalPreference("default_theme") || "luxury"
+                    storage.getGlobalPreference("default_theme") || "dracula"
                   }
                 >
                   {config.themes.map((theme, index) => {
@@ -168,7 +168,7 @@ function SettingsModal({ hidden, onHide }) {
                 </select>
               </div>
             </div>
-            <p className="mt-4">
+            <p className="mt-4 text-black">
               More information on what this means can{" "}
               <a href="?" className="underline text-yellow-500">
                 be found here
