@@ -1,5 +1,6 @@
 //import tailwind
 import "./index.css";
+import "./resources/infinitymint.css";
 //import infintymint client stuff
 import "infinitymint-client";
 //import react + app

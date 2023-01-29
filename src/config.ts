@@ -1,5 +1,11 @@
 const config = {
   providerUrl: "https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c",
+  chatGPTApiKey: "",
+  chatGPTModel: "",
+  chatGPTMaxTokens: 100,
+  chatGPTTemperature: 0.7,
+  chatGPTTopP: 1,
+  chatGPTendpoint: "/api/gpt/",
   defaultAvatar:
     "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_640.png",
   defaultWeb3Storage:

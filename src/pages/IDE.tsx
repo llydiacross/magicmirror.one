@@ -18,6 +18,7 @@ import WebEvents from "../webEvents";
 import SettingsModal from "../modals/SettingsModal";
 import { useHistory } from "react-router-dom";
 import PublishModal from "../modals/PublishModal";
+import ChatGPTModal from "../modals/ChatGPTModal";
 
 const defaultTabs = {
   html: {
@@ -61,6 +62,7 @@ function IDE({ theme }) {
   const themeRef = useRef(theme || null);
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
+  const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
   const cooldown = useRef(null);
   const savedCode = useRef({});
   const history = useHistory();
@@ -141,6 +143,14 @@ function IDE({ theme }) {
               }}
             >
               🌟
+            </button>
+            <button
+              className="btn rounded-none bg-info animate-pulse text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                setShouldShowChatGPT(!shouldShowPublish);
+              }}
+            >
+              🤖
             </button>
           </div>
           <Editor
@@ -296,6 +306,13 @@ function IDE({ theme }) {
         hideFooter={true}
         hideUserInfo={true}
       />
+      <ChatGPTModal
+        hidden={!shouldShowChatGPT}
+        onHide={() => {
+          setShouldShowChatGPT(false);
+        }}
+      />
+
       <SettingsModal
         hidden={!shouldShowSettings}
         onHide={() => {
