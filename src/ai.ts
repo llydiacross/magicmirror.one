@@ -1,7 +1,8 @@
 import config from "./config";
+import { getChatGPTEndpoint } from "./api";
 
 const fetchPrompt = async (prompt: string, abort: AbortController) => {
-  let result = await fetch(config.chatGPTendpoint + "prompt", {
+  let result = await fetch(getChatGPTEndpoint() + "prompt", {
     signal: abort?.signal,
     method: "POST",
     body: JSON.stringify({ prompt }),
@@ -14,7 +15,7 @@ const fetchPrompt = async (prompt: string, abort: AbortController) => {
 };
 
 const fetchModeration = async (prompt: string, abort: AbortController) => {
-  let result = await fetch(config.chatGPTendpoint + "moderation", {
+  let result = await fetch(getChatGPTEndpoint() + "moderation", {
     signal: abort?.signal,
     method: "POST",
     body: JSON.stringify({ prompt }),
