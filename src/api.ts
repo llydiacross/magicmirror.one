@@ -31,7 +31,6 @@ export const apiFetch = async (
   abortController: AbortController
 ) => {
   requestMethod = requestMethod || "GET";
-  data = data || {};
   let endPoint = "";
   //make a switch statement here
   switch (type) {
@@ -52,6 +51,7 @@ export const apiFetch = async (
 
   let result = await fetch(endPoint + method, {
     method: requestMethod,
+    headers: { "Content-Type": "application/json" },
     signal: abortController?.signal,
     body: JSON.stringify(data),
   });

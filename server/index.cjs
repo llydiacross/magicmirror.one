@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const {Configuration, OpenAIApi} = require('openai');
 const bodyParser = require('body-parser')
 
+
+
 const server = express();
 const port = 9090;
 
@@ -13,7 +15,9 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+
 server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 
 server.use(cors({
   origin: 'http://localhost:3000',
@@ -28,14 +32,13 @@ server.get('/', (_request, response) => {
 });
 
 server.post('/gpt/prompt', async (request, response) => {
+
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
-    prompt: request.body.prompt,
-    temperature: 0,
-    max_tokens: 7,
+    prompt: request.body.prompt || 'Create a basic HTML website',
+    temperature: 0.4,
+    max_tokens: 2048,
   });
-
-  console.log(request.body);
 
   response.send(completion.data);
 });
