@@ -47,6 +47,12 @@ const config = {
     "coffee",
     "winter",
   ],
+  resolvers: [
+    [".vision", ".eth"],
+    [".im", ".eth"],
+    [".infinitymint", ".eth"],
+    [".ethereum", ".eth"],
+  ],
 };
 
 export default config;

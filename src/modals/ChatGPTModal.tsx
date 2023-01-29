@@ -18,6 +18,7 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism-dark.css";
+import { wordlists } from "ethers";
 
 function ChatGPTModal({
   hidden,
@@ -39,6 +40,7 @@ function ChatGPTModal({
   const inputElement = useRef(null);
   const tempElement = useRef(null);
   const nElement = useRef(null);
+  const libraryElement = useRef(null);
   // eslint-disable-next-line no-unused-vars
   const history = useHistory();
 
@@ -134,7 +136,17 @@ function ChatGPTModal({
             )}
             <div className="flex flex-col mt-4">
               <div className="form-control">
-                <div className="input-group">
+                <label className="input-group w-full text-center h-full">
+                  <p className="bg-gray-200 text-black">
+                    <span className="label-text h-full">Using</span>
+                  </p>
+                  <select className="input select" ref={libraryElement}>
+                    <option selected>Tailwind</option>
+                    <option value="jquery">JQuery</option>
+                    <option value="bootstrap4">Bootstrap 4</option>
+                    <option value="bootstrap5">Bootstrap 5</option>
+                    <option value="css3">CSS3</option>
+                  </select>
                   <input
                     type="text"
                     data-loading={loading}
@@ -145,10 +157,9 @@ function ChatGPTModal({
                     onInput={() => {
                       setHasInput(inputElement.current.value.length > 0);
                     }}
-                    placeholder="Ask GPT-3 a question..."
-                    className="input input-bordered w-full "
+                    placeholder="create a simple "
+                    className="input input-bordered w-full"
                   />
-
                   <input
                     type="number"
                     data-loading={loading}
@@ -176,7 +187,7 @@ function ChatGPTModal({
                     max={6}
                     min={1}
                     placeholder="1"
-                    className="input input-bordered w-25"
+                    className="input input-bordered"
                   />
                   <button
                     data-loading={loading}
@@ -192,8 +203,46 @@ function ChatGPTModal({
 
                         if (abortRef.current !== null) abortRef.current.abort();
                         abortRef.current = new AbortController();
+
+                        let prompt = inputElement.current.value;
+                        prompt = prompt.replace(" Tailwind,", "");
+                        prompt = prompt.replace(" css3,", "");
+                        prompt = prompt.replace(" JQuery,", "");
+                        prompt = prompt.replace(" jquery,", "");
+                        prompt = prompt.replace(" bootstrap4,", "");
+                        prompt = prompt.replace(" Bootstrap4,", "");
+                        prompt = prompt.replace(" bootstrap5,", "");
+                        prompt = prompt.replace(" Bootstrap5,", "");
+                        prompt = prompt.replace("Using HTML, ", "");
+
+                        let stub =
+                          "Using HTML, " + libraryElement.current.value + ", ";
+                        let end =
+                          ". Make it just one page. Only return valid HTML. Finish your answer.";
+
+                        prompt = prompt.trim().replace("  ", " ");
+                        prompt = prompt.replace(stub, "");
+                        prompt = prompt.replace(end, "");
+                        prompt = prompt.replace(/[^a-zA-Z ]/g, "");
+
+                        //add create
+                        if (
+                          prompt
+                            .split(" ")
+                            .filter(
+                              (word: string) =>
+                                word.toLowerCase() === "create" ||
+                                word.toLowerCase() === "make"
+                            ).length === 0
+                        )
+                          prompt = "create " + prompt;
+
+                        prompt = stub + prompt + end;
+
+                        inputElement.current.value = prompt;
+                        setPercentage(75);
                         const result = await fetchPrompt(
-                          inputElement.current.value,
+                          prompt,
                           abortRef.current,
                           {
                             n: nElement?.current.value || 1,
@@ -216,7 +265,7 @@ function ChatGPTModal({
                   >
                     Ask
                   </button>
-                </div>
+                </label>
               </div>
             </div>
             {gptResult !== null ? (
@@ -268,6 +317,7 @@ function ChatGPTModal({
               <button
                 className="btn btn-error"
                 onClick={() => {
+                  if (abortRef.current !== null) abortRef.current.abort();
                   if (onHide) onHide();
                 }}
               >

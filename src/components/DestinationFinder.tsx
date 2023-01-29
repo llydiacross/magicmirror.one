@@ -3,6 +3,7 @@ import ErrorIcon from "./Icons/ErrorIcon";
 import WebEvents from "../webEvents";
 import { ENSContext } from "../contexts/ensContext";
 import { useHistory } from "react-router-dom";
+import config from "../config";
 
 export default function DestinationFinder() {
   const inputElement = useRef(null);
@@ -34,14 +35,18 @@ export default function DestinationFinder() {
     destination = destination.trim();
     destination = destination.toLowerCase();
 
-    let isInfinityMint = false;
-    if (
-      destination.indexOf(".im") !== -1 ||
-      destination.indexOf(".infinitymint") !== -1
-    ) {
-      isInfinityMint = true;
-      destination = destination.split(".").slice(0, -1).join(".");
-    }
+    let isResolver = false;
+    let resolverExtension = "";
+    let resolverActualExtension = ".eth";
+
+    config.resolvers.forEach((resolver) => {
+      if (destination.indexOf(resolver[0]) !== -1) {
+        isResolver = true;
+        destination = destination.split(".").slice(0, -1).join(".");
+        resolverExtension = resolver[1] || ".eth";
+        resolverActualExtension = resolver[0];
+      }
+    });
 
     if (destination.indexOf(".eth") !== -1)
       destination = destination.split(".").slice(0, -1).join(".");
@@ -51,13 +56,13 @@ export default function DestinationFinder() {
 
     if (destination.length > 100) throw new Error("Destination is too long!");
 
-    destination = destination + (isInfinityMint ? ".infinitymint" : ".eth");
+    destination = destination + resolverActualExtension;
     WebEvents.emit("gotoDestination", destination);
 
     //gives time for animations to animates\
     await new Promise((resolve) =>
       setTimeout(() => {
-        history.push("/view/" + destination);
+        history.push("/view/" + destination + (isResolver ? "" : ".eth"));
         resolve(true);
       }, 1000)
     );
