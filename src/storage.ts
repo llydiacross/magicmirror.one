@@ -176,7 +176,7 @@ export class StorageController {
 
     if (
       typeof this.values[key] !== 'object' &&
-      !this.values[key] instanceof Array
+      !(this.values[key] instanceof Array)
     ) { return false }
 
     if (Object.entries(this.values[key]).length === 0) return false

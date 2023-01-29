@@ -101,15 +101,9 @@ function ChatGPTModal ({
                   className='stat-desc'
                   hidden={!gptResult?.usage?.prompt_tokens}
                 >
-<<<<<<< Updated upstream
                   {parseInt(gptResult?.usage?.prompt_tokens || 0) < 64
                     ? "Acceptable"
                     : "Unacceptable"}
-=======
-                  {parseInt(gptResult?.usage?.prompt_tokens || 0) < 36
-                    ? 'Acceptable'
-                    : 'Unacceptable'}
->>>>>>> Stashed changes
                 </div>
               </div>
               <div className='stat'>
@@ -151,16 +145,12 @@ function ChatGPTModal ({
                   <p className='bg-gray-200 text-black hidden md:block lg:block'>
                     <span className='label-text h-full'>Using</span>
                   </p>
-<<<<<<< Updated upstream
                   <select
                     className="input select"
                     disabled={loading}
                     data-loading={loading}
                     ref={libraryElement}
                   >
-=======
-                  <select className='input select' ref={libraryElement}>
->>>>>>> Stashed changes
                     <option selected>Tailwind</option>
                     <option value='jquery'>JQuery</option>
                     <option value='bootstrap4'>Bootstrap 4</option>
@@ -248,17 +238,10 @@ function ChatGPTModal ({
                         prompt = prompt.replace(' Bootstrap 5,', '')
                         prompt = prompt.replace('Using HTML, ', '')
 
-<<<<<<< Updated upstream
-                        let stub =
-                          "Using HTML, " + libraryElement.current.value + ", ";
-                        let end =
-                          ". Don't reference any local files. Use placekitten for placeholder images. Use placeholder image for all local images. Don't include HTML tags.";
-=======
                         const stub =
                           'Using HTML, ' + libraryElement.current.value + ', '
                         const end =
                           ". Don't reference any local files. Make it responsive. Use placeholder images for any local images. Don't return HTML tags."
->>>>>>> Stashed changes
 
                         prompt = prompt.trim().replace('  ', ' ')
                         prompt = prompt.replace(stub, '')

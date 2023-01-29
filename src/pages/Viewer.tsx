@@ -35,7 +35,7 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
     )[0]
     const partialXens = partialFiles.filter((file) => file.name === '.xens')[0]
 
-    const struct = {}
+    const struct: any = {}
     if (partialHtml !== undefined) {
       struct.html = new TextDecoder().decode(
         (await partialHtml.stream().getReader().read()).value

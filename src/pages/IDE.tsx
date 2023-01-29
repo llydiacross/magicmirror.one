@@ -61,7 +61,7 @@ function IDE ({ theme }) {
   const [shouldShowPublish, setShouldShowPublish] = useState(false)
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false)
   const cooldown = useRef(null)
-  const savedCode = useRef({})
+  const savedCode = useRef({} as any)
   const eventEmitterCallbackRef = useRef(null)
   const themeRef = useRef(theme || null)
   const history = useHistory()
