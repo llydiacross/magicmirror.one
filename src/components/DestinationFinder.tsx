@@ -62,7 +62,9 @@ export default function DestinationFinder() {
     //gives time for animations to animates\
     await new Promise((resolve) =>
       setTimeout(() => {
-        history.push("/view/" + destination + (isResolver ? "" : ".eth"));
+        history.push(
+          "/view/" + destination + (isResolver ? resolverExtension : ".eth")
+        );
         resolve(true);
       }, 1000)
     );

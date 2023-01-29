@@ -48,7 +48,7 @@ const config = {
     "winter",
   ],
   resolvers: [
-    [".vision", ".eth"],
+    [".vision", ""],
     [".im", ".eth"],
     [".infinitymint", ".eth"],
     [".ethereum", ".eth"],
