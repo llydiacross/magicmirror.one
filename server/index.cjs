@@ -49,7 +49,7 @@ server.post('/gpt/prompt', async (request, response) => {
     max_tokens: 1026
   })
 
-  response.send(completion.data);
+  response.status(200).send(completion.data)
 })
 
 server.listen(port, () => {
