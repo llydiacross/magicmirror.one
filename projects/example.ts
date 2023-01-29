@@ -1,47 +1,47 @@
-import { InfinityMintProject } from "@app/interfaces";
+import { InfinityMintProject } from '@app/interfaces'
 
 const example: InfinityMintProject = {
-  name: "example",
-  price: "$1",
+  name: 'example',
+  price: '$1',
   modules: {
-    random: "SeededRandom",
-    assets: "SimpleSVG",
-    minter: "DefaultMinter",
-    royalty: "DefaultRoyalty",
+    random: 'SeededRandom',
+    assets: 'SimpleSVG',
+    minter: 'DefaultMinter',
+    royalty: 'DefaultRoyalty'
   },
   information: {
-    tokenSymbol: "†",
-    tokenSingular: "Example",
+    tokenSymbol: '†',
+    tokenSingular: 'Example'
   },
   permissions: {
-    all: [],
+    all: []
   },
   assets: [
     {
-      name: "Example Asset",
-      fileName: "/imports/example-asset.svg",
-      settings: true,
-    },
+      name: 'Example Asset',
+      fileName: '/imports/example-asset.svg',
+      settings: true
+    }
   ],
   paths: [
     {
-      name: "Example Token",
-      fileName: "/imports/example.svg",
-      settings: true,
-    },
+      name: 'Example Token',
+      fileName: '/imports/example.svg',
+      settings: true
+    }
   ],
   events: {
-    async initialized({ log, eventEmitter }) {
-      log("project initialized");
+    async initialized ({ log, eventEmitter }) {
+      log('project initialized')
     },
-    async failure({ log, event: error }) {
-      log("failed to launch successfully");
-      console.error(error);
+    async failure ({ log, event: error }) {
+      log('failed to launch successfully')
+      console.error(error)
     },
-    async success({ log }) {
-      log("successfully launched example project");
-    },
-  },
-};
+    async success ({ log }) {
+      log('successfully launched example project')
+    }
+  }
+}
 
-export default example;
+export default example

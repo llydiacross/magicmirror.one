@@ -1,31 +1,31 @@
-//import react and prop-types
-import React from "react";
-import PropTypes from "prop-types";
+// import react and prop-types
+import React from 'react'
+import PropTypes from 'prop-types'
 
-//create a react component that takes html code as a string and renders it
-function HTMLRenderer({
+// create a react component that takes html code as a string and renders it
+function HTMLRenderer ({
   style,
   code = {} as any,
   implicit,
   currentFile,
   stylesheets = [],
   scripts = [],
-  meta = [],
+  meta = []
 }) {
-  let safeCSS = code.css || "";
-  //remove html tags from savejs code
-  safeCSS = safeCSS.replace(/<[^>]*>?/gm, "");
+  let safeCSS = code.css || ''
+  // remove html tags from savejs code
+  safeCSS = safeCSS.replace(/<[^>]*>?/gm, '')
 
-  let head = `
+  const head = `
       <head>
         <!--Web.eth Site Builder by Llydia Cross (0x0zAgency) @lydsmas-->
         ${stylesheets.map((sheet) => {
-          return `<link href="${sheet}" rel="stylesheet" type="text/css" />`;
+          return `<link href="${sheet}" rel="stylesheet" type="text/css" />`
         })}
         ${meta.map((meta) => {
-          return `<${meta.tag} ${meta.properties || ""}>${meta.children}</${
+          return `<${meta.tag} ${meta.properties || ''}>${meta.children}</${
             meta.tag
-          }>`;
+          }>`
         })}
         <style>
           ::-webkit-scrollbar{
@@ -57,16 +57,16 @@ function HTMLRenderer({
           ${safeCSS}
         </style>
         ${scripts.map((script) => {
-          return `<script src="${script}"></script>`;
+          return `<script src="${script}"></script>`
         })}
       </head>
-  `;
+  `
 
-  let safeJS = code.js || "";
-  //remove script tags from savejs code
-  safeJS = safeJS.replace(/<\//g, "");
+  let safeJS = code.js || ''
+  // remove script tags from savejs code
+  safeJS = safeJS.replace(/<\//g, '')
 
-  let _html = `
+  const _html = `
     <html>
       ${head}
       <body>
@@ -94,7 +94,7 @@ function HTMLRenderer({
       </body>
       <script>
         document.body.innerHTML = document.body.innerHTML + \`${
-          code.html || ""
+          code.html || ''
         }\`;
       
         //remove all href tags from all links in the body
@@ -118,24 +118,24 @@ function HTMLRenderer({
       <script>
         ${safeJS}
       </script>
-    </html>`;
+    </html>`
 
   return (
     <iframe
       style={style}
       srcDoc={implicit || _html}
       seamless
-      title="preview"
-      sandbox="allow-scripts"
-      className="w-full h-full block border-l-1 border-black overflow-scroll"
-    ></iframe>
-  );
+      title='preview'
+      sandbox='allow-scripts'
+      className='w-full h-full block border-l-1 border-black overflow-scroll'
+    />
+  )
 }
 
 HTMLRenderer.propTypes = {
   style: PropTypes.object,
   implicit: PropTypes.string,
-  code: PropTypes.any,
-};
+  code: PropTypes.any
+}
 
-export default HTMLRenderer;
+export default HTMLRenderer

@@ -1,18 +1,18 @@
-import React, { createContext } from "react";
-import Header from "../components/Header";
-import useENSContext from "../effects/useENSContext";
+import React, { createContext } from 'react'
+import Header from '../components/Header'
+import useENSContext from '../effects/useENSContext'
 
 export const ENSContext = createContext({
   resolver: null,
   loaded: false,
-  email: "",
-  contentHash: "",
-  avatar: "",
-  owner: "",
+  email: '',
+  contentHash: '',
+  avatar: '',
+  owner: '',
   currentEnsAddress: null,
   setCurrentEnsAddress: null,
-  ensError: null,
-});
+  ensError: null
+})
 
 const ENSContextProvider = ({ children, ensAddress = null }) => {
   const {
@@ -24,10 +24,10 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
     owner,
     ensError,
     currentEnsAddress,
-    setCurrentEnsAddress,
+    setCurrentEnsAddress
   } = useENSContext({
-    ensAddress: ensAddress,
-  });
+    ensAddress: ensAddress
+  })
 
   return (
     <ENSContext.Provider
@@ -40,19 +40,21 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         currentEnsAddress,
         setCurrentEnsAddress,
         avatar,
-        ensError,
+        ensError
       }}
     >
-      {loaded || (!loaded && ensError !== null) ? (
-        <>{children}</>
-      ) : (
-        <Header
-          theme="acid"
-          initialText="Estabilishing ENS Link..."
-          showFinder={false}
-        />
-      )}
+      {loaded || (!loaded && ensError !== null)
+        ? (
+          <>{children}</>
+          )
+        : (
+          <Header
+            theme='acid'
+            initialText='Estabilishing ENS Link...'
+            showFinder={false}
+          />
+          )}
     </ENSContext.Provider>
-  );
-};
-export default ENSContextProvider;
+  )
+}
+export default ENSContextProvider
