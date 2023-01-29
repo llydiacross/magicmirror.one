@@ -37,6 +37,7 @@ server.post('/gpt/prompt', async (request, response) => {
     model: 'text-davinci-003',
     prompt: request.body.prompt || 'Create a basic HTML website',
     temperature: 0.4,
+    n: 6,
     max_tokens: 2048,
   });
 
