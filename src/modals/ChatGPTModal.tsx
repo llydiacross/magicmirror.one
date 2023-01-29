@@ -232,7 +232,7 @@ function ChatGPTModal({
                         let stub =
                           "Using HTML, " + libraryElement.current.value + ", ";
                         let end =
-                          ". Don't reference any local files. Use placeholder images for any local images. Don't return HTML tags.";
+                          ". Don't reference any local files. Make it responsive. Use placeholder images for any local images. Don't return HTML tags.";
 
                         prompt = prompt.trim().replace("  ", " ");
                         prompt = prompt.replace(stub, "");

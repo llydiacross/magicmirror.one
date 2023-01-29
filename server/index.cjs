@@ -6,10 +6,12 @@ const bodyParser = require('body-parser')
 
 const server = express()
 const port = 9090
+require('dotenv').config()
+
 
 // Configure OpenAI
 const configuration = new Configuration({
-  apiKey: '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'
+  apiKey: process.env.OPENAI_KEY || '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'
 })
 const openai = new OpenAIApi(configuration)
 
