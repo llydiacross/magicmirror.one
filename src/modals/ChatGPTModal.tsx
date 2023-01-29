@@ -78,7 +78,7 @@ function ChatGPTModal({
       className="mx-auto sm:w-full md:w-full lg:w-5/6 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
       hidden={hidden}
     >
-      <div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow shadow-lg border-2">
+      <div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow-lg border-2">
         <div className="flex flex-col w-full">
           <div className="bg-info p-2 text-black text-3xl">
             <b>🤖</b>
