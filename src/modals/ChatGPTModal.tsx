@@ -119,7 +119,7 @@ function ChatGPTModal({
             )}
 
             {gptError !== null ? (
-              <div className="alert alert-danger m-2 w-full">
+              <div className="alert alert-error mt-4 w-full">
                 {gptError?.message}
               </div>
             ) : (
@@ -183,7 +183,7 @@ function ChatGPTModal({
                   return (
                     <div
                       key={index}
-                      className="flex flex-col md:flex-row lg:flex-row gap-2"
+                      className="flex flex-col md:flex-row lg:flex-row gap-2 w-full"
                     >
                       <div className="w-full">
                         <p className="text-2xl bg-warning text-white p-2">
