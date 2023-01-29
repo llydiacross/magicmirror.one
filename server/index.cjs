@@ -27,7 +27,7 @@ server.get('/', (_request, response) => {
   response.send('Hello World!')
 });
 
-server.post('/api/gpt/prompt', async (request, response) => {
+server.post('/gpt/prompt', async (request, response) => {
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: request.body,
