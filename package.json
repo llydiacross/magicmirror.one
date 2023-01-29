@@ -21,7 +21,16 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "quotes": [
+        2,
+        "double",
+        {
+          "avoidEscape": true
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -140,6 +149,7 @@
     "jsx-to-string": "^1.4.0",
     "mini-css-extract-plugin": "^2.7.2",
     "module-alias": "^2.2.2",
+    "morgan": "^1.10.0",
     "openai": "^3.1.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",

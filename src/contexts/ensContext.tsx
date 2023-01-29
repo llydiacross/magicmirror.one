@@ -1,6 +1,6 @@
-import React, { createContext } from "react";
-import Header from "../components/Header";
-import useENSContext from "../effects/useENSContext";
+import React, { createContext } from "react"
+import Header from "../components/Header"
+import useENSContext from "../effects/useENSContext"
 
 export const ENSContext = createContext({
   resolver: null,
@@ -11,9 +11,10 @@ export const ENSContext = createContext({
   owner: "",
   currentEnsAddress: null,
   setCurrentEnsAddress: null,
-  ensError: null,
-});
+  ensError: null
+})
 
+// eslint-disable-next-line react/prop-types
 const ENSContextProvider = ({ children, ensAddress = null }) => {
   const {
     resolver,
@@ -24,10 +25,10 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
     owner,
     ensError,
     currentEnsAddress,
-    setCurrentEnsAddress,
+    setCurrentEnsAddress
   } = useENSContext({
-    ensAddress: ensAddress,
-  });
+    ensAddress
+  })
 
   return (
     <ENSContext.Provider
@@ -40,19 +41,21 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         currentEnsAddress,
         setCurrentEnsAddress,
         avatar,
-        ensError,
+        ensError
       }}
     >
-      {loaded || (!loaded && ensError !== null) ? (
-        <>{children}</>
-      ) : (
-        <Header
-          theme="acid"
-          initialText="Estabilishing ENS Link..."
-          showFinder={false}
-        />
-      )}
+      {loaded || (!loaded && ensError !== null)
+        ? (
+          <>{children}</>
+          )
+        : (
+          <Header
+            theme='acid'
+            initialText='Estabilishing ENS Link...'
+            showFinder={false}
+          />
+          )}
     </ENSContext.Provider>
-  );
-};
-export default ENSContextProvider;
+  )
+}
+export default ENSContextProvider

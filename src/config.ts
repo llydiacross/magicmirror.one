@@ -45,14 +45,14 @@ const config = {
     "lemonade",
     "night",
     "coffee",
-    "winter",
+    "winter"
   ],
   resolvers: [
     [".vision", ""],
     [".im", ""],
     [".infinitymint", ".eth"],
-    [".ethereum", ".eth"],
-  ],
-};
+    [".ethereum", ".eth"]
+  ]
+}
 
-export default config;
+export default config

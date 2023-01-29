@@ -1,8 +1,9 @@
-//import react and prop-types
+/* eslint-disable react/prop-types */
+// Import react and prop-types
 import React from "react";
 import PropTypes from "prop-types";
 
-//create a react component that takes html code as a string and renders it
+// Create a react component that takes html code as a string and renders it
 function HTMLRenderer({
   style,
   code = {} as any,
@@ -13,10 +14,10 @@ function HTMLRenderer({
   meta = [],
 }) {
   let safeCSS = code.css || "";
-  //remove html tags from savejs code
+  // Remove html tags from savejs code
   safeCSS = safeCSS.replace(/<[^>]*>?/gm, "");
 
-  let head = `
+  const head = `
       <head>
         <!--Web.eth Site Builder by Llydia Cross (0x0zAgency) @lydsmas-->
         ${stylesheets.map((sheet) => {
@@ -63,10 +64,10 @@ function HTMLRenderer({
   `;
 
   let safeJS = code.js || "";
-  //remove script tags from savejs code
+  // Remove script tags from savejs code
   safeJS = safeJS.replace(/<\//g, "");
 
-  let _html = `
+  const _html = `
     <html>
       ${head}
       <body>

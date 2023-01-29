@@ -1,5 +1,5 @@
 {
-  description = "XXX.eth Nix Flake";
+  description = "www.eth Nix Flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -16,7 +16,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
       yarn2nix = import inputs.yarn2nix {inherit pkgs;};
       builtProject = yarn2nix.mkYarnPackage {
-        name = "xxx-eth_infinitymint";
+        name = "www-eth_infinitymint";
         src = ./.;
         packageJSON = ./package.json;
         yarnLock = ./yarn.lock;
@@ -24,7 +24,7 @@
         # yarnNix = ./yarn.nix;
       };
       reactFrontend = yarn2nix.mkYarnPackage {
-        name = "xxx-eth_react_build";
+        name = "www-eth_react_build";
         src = ./.;
         yarnLock = ./yarn.lock;
         packageJSON = ./package.json;
@@ -40,7 +40,7 @@
         # <https://github.com/stephank/yarn-plugin-nixify>
         # This is a temporary workaround until nixpkgs ship v2 by default.
         shellHook = ''
-          export PATH="$PWD/node_modules/.bin/:$PATH"
+          export PATH=$PWD/node_modules/.bin/:$PATH
           alias scripts='jq ".scripts" package.json'
       		alias run='npm run'
           alias g='git' \
@@ -57,11 +57,11 @@
       installHook = ''
         yarn set version berry
         yarn
-      ''
+      '';
 
-      packages.xxx_eth = builtProject;
+      packages.www_eth = builtProject;
       packages.reactFrontend = reactFrontend;
-      packages.default = self.packages.${system}.xxx_eth;
+      packages.default = self.packages.${system}.www_eth;
     }
   );
 }

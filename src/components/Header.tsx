@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
-import DestinationFinder from "./DestinationFinder";
-import WebEvents from "../webEvents";
-import storage from "../storage";
+import React, { useEffect, useRef, useState } from "react"
+import PropTypes from "prop-types"
+import DestinationFinder from "./DestinationFinder"
+import WebEvents from "../webEvents"
+import storage from "../storage"
 
 /**
  * Might move these to a config file...
@@ -136,146 +136,139 @@ const destinations = [
   "jimmy-dorsey.eth",
   "jimmy-ma.eth",
   "jimmy-graham.eth",
-  "jimmy-omar.eth",
-];
+  "jimmy-omar.eth"
+]
 
-//handle for the typeWriter animation
-function Header({
+// Handle for the typeWriter animation
+function Header ({
   theme,
   title,
   typeWriterSpeed = 50,
   initialText = "Where will you go today?",
-  showFinder = true,
+  showFinder = true
 }) {
-  const pickDestinationHandle = useRef(null);
-  const typeWriterHandle = useRef(null);
-  //to allow more than one header
+  const pickDestinationHandle = useRef(null)
+  const typeWriterHandle = useRef(null)
+  // To allow more than one header
   const typeWriterElement = useRef(
     `#${btoa(Math.floor(Math.random() * 100000).toString())}`
-  );
-  const [currentTheme, setCurrentTheme] = useState(theme || null);
-  const speedRef = useRef(typeWriterSpeed);
-  const textRef = useRef(initialText);
-  const callbackRef = useRef(null);
-  const writeTextRef = useRef(null);
-  const eventEmitterCallbackRef = useRef(null);
-  const themeRef = useRef(theme || null);
+  )
+  const [currentTheme, setCurrentTheme] = useState(theme || null)
+  const speedRef = useRef(typeWriterSpeed)
+  const textRef = useRef(initialText)
+  const callbackRef = useRef(null)
+  const writeTextRef = useRef(null)
+  const eventEmitterCallbackRef = useRef(null)
+  const themeRef = useRef(theme || null)
 
-  //code for the h1 text animation is in the animation.ts file
+  // Code for the h1 text animation is in the animation.ts file
   useEffect(() => {
     if (
       themeRef.current === null &&
       storage.getGlobalPreference("default_theme")
-    )
-      setCurrentTheme(storage.getGlobalPreference("default_theme"));
+    ) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
         if (
           themeRef.current === null &&
           storage.getGlobalPreference("default_theme")
-        )
-          setCurrentTheme(storage.getGlobalPreference("default_theme"));
-      };
+        ) { setCurrentTheme(storage.getGlobalPreference("default_theme")) }
+      }
     }
 
-    WebEvents.off("reload", eventEmitterCallbackRef.current);
-    WebEvents.on("reload", eventEmitterCallbackRef.current);
+    WebEvents.off("reload", eventEmitterCallbackRef.current)
+    WebEvents.on("reload", eventEmitterCallbackRef.current)
 
-    //cb for the typeWriter animation
+    // Cb for the typeWriter animation
     callbackRef.current = (destination: string) => {
-      if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
-      if (pickDestinationHandle.current)
-        clearTimeout(pickDestinationHandle.current);
+      if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current)
+      if (pickDestinationHandle.current) { clearTimeout(pickDestinationHandle.current) }
 
-      text.innerHTML = "";
-      buffer = "";
-      i = 0;
-      txt = destination;
-      writeTextRef.current();
-    };
+      text.innerHTML = ""
+      buffer = ""
+      i = 0
+      txt = destination
+      writeTextRef.current()
+    }
 
-    WebEvents.off("gotoDestination", callbackRef.current);
-    WebEvents.on("gotoDestination", callbackRef.current);
+    WebEvents.off("gotoDestination", callbackRef.current)
+    WebEvents.on("gotoDestination", callbackRef.current)
 
-    if (!document.getElementById(typeWriterElement.current))
-      throw new Error(`no element with id ${typeWriterElement.current} found`);
+    if (!document.getElementById(typeWriterElement.current)) { throw new Error(`no element with id ${typeWriterElement.current} found`) }
 
-    //fixes reloading
-    if (pickDestinationHandle.current)
-      clearTimeout(pickDestinationHandle.current);
+    // Fixes reloading
+    if (pickDestinationHandle.current) { clearTimeout(pickDestinationHandle.current) }
 
-    let text = document.getElementById(typeWriterElement.current);
-    // make the text animate like a typewriter
-    let i = 0;
-    let txt = textRef.current;
-    let buffer = "";
+    const text = document.getElementById(typeWriterElement.current)
+    // Make the text animate like a typewriter
+    let i = 0
+    let txt = textRef.current
+    let buffer = ""
 
     writeTextRef.current = (doRandomName?: boolean) => {
       if (i < txt.length) {
-        buffer += txt.charAt(i);
-        text.innerHTML = buffer;
-        i++;
+        buffer += txt.charAt(i)
+        text.innerHTML = buffer
+        i++
         typeWriterHandle.current = setTimeout(
           () => writeTextRef.current(doRandomName),
           speedRef.current
-        );
+        )
       } else {
-        text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
+        text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>"
 
-        if (doRandomName)
+        if (doRandomName) {
           pickDestinationHandle.current = setTimeout(() => {
-            randomNames();
-          }, 1000 * Math.floor(Math.random() * 10) + 6000);
-        else {
-          if (pickDestinationHandle.current)
-            clearTimeout(pickDestinationHandle.current);
-          if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
+            randomNames()
+          }, 1000 * Math.floor(Math.random() * 10) + 6000)
+        } else {
+          if (pickDestinationHandle.current) { clearTimeout(pickDestinationHandle.current) }
+          if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current)
         }
       }
-    };
+    }
 
-    let randomNames = () => {
-      text.innerHTML = "";
-      buffer = "";
-      i = 0;
-      let randomIndex = Math.floor(Math.random() * destinations.length);
-      txt = `${destinations[randomIndex]}`;
-      writeTextRef.current(true);
-    };
+    const randomNames = () => {
+      text.innerHTML = ""
+      buffer = ""
+      i = 0
+      const randomIndex = Math.floor(Math.random() * destinations.length)
+      txt = `${destinations[randomIndex]}`
+      writeTextRef.current(true)
+    }
 
-    buffer = "";
-    text.innerHTML = "";
+    buffer = ""
+    text.innerHTML = ""
 
-    if (!typeWriterHandle.current && writeTextRef.current !== null)
-      writeTextRef.current(true);
+    if (!typeWriterHandle.current && writeTextRef.current !== null) { writeTextRef.current(true) }
 
     return () => {
-      WebEvents.off("gotoDestination", callbackRef.current);
-      WebEvents.off("reload", eventEmitterCallbackRef.current);
-    };
-  }, []);
+      WebEvents.off("gotoDestination", callbackRef.current)
+      WebEvents.off("reload", eventEmitterCallbackRef.current)
+    }
+  }, [])
 
   return (
     <div
-      className="hero min-h-screen max-w-screen bg-base-200"
+      className='hero min-h-screen max-w-screen bg-base-200'
       data-theme={currentTheme}
     >
-      <div className="hero-content text-center w-[100%] md:w-[80%] lg:w-[80%] lg:max-w-[80vw] md:max-w-[80vw] max-w-[95vw]">
-        <div className="flex flex-col gap-4 lg:gap-3 w-full">
-          {/** mobile title */}
-          <div className="max-w-screen mb-2">
-            <h1 className="text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title truncate max-w-screen">
+      <div className='hero-content text-center w-[100%] md:w-[80%] lg:w-[80%] lg:max-w-[80vw] md:max-w-[80vw] max-w-[95vw]'>
+        <div className='flex flex-col gap-4 lg:gap-3 w-full'>
+          {/** Mobile title */}
+          <div className='max-w-screen mb-2'>
+            <h1 className='text-8xl md:hidden lg:hidden font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-400 title truncate max-w-screen'>
               {!title || title.length === 0 ? "web.eth" : title}
             </h1>
-            {/** tablet/desktop title */}
-            <h1 className="text-15xl lg:text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 w-full to-yellow-400 title truncate max-w-screen">
+            {/** Tablet/desktop title */}
+            <h1 className='text-15xl lg:text-giant hidden md:block lg:block font-apocalypse text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 w-full to-yellow-400 title truncate max-w-screen'>
               {!title || title.length === 0 ? "web.eth" : title}
             </h1>
           </div>
-          <div className="mt-2 max-w-screen w-full">
+          <div className='mt-2 max-w-screen w-full'>
             <h1
-              className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 mb-4 max-w-screen truncate"
+              className='text-2xl bg-warning text-black lg:text-5xl font-bold p-2 mb-4 max-w-screen truncate'
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}
@@ -285,7 +278,7 @@ function Header({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 Header.propTypes = {
@@ -293,7 +286,7 @@ Header.propTypes = {
   title: PropTypes.string,
   initialText: PropTypes.string,
   showFinder: PropTypes.bool,
-  typeWriterSpeed: PropTypes.number,
-};
+  typeWriterSpeed: PropTypes.number
+}
 
-export default Header;
+export default Header
