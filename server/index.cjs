@@ -30,14 +30,14 @@ server.get('/', (_request, response) => {
 server.post('/gpt/prompt', async (request, response) => {
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
-    prompt: request.body,
+    prompt: request.body.prompt,
     temperature: 0,
     max_tokens: 7,
   });
 
   console.log(request.body);
 
-  // response.send(completion.data.choices[0].text);
+  response.send(completion.data);
 });
 
 server.listen(port, () => {
