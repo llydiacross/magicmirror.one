@@ -33,12 +33,21 @@ server.get('/', (_request, response) => {
 
 server.post('/gpt/prompt', async (request, response) => {
 
+
+  let temp = parseFloat(request.body.temp) || 0.6;
+  if (isNaN(temp))
+    temp = 0.6;
+  
+  let n = parseInt(request.body.n) || 2;
+  if (isNaN(n))
+    n = 2;
+  
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     prompt: request.body.prompt || 'Create a basic HTML website',
-    temperature: 0.4,
-    n: 6,
-    max_tokens: 2048,
+    temperature: temp,
+    n: n,
+    max_tokens: 1026,
   });
 
   response.send(completion.data);
