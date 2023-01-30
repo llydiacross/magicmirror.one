@@ -21,7 +21,7 @@ server.use(bodyParser.urlencoded({ extended: true }))
 server.use(morgan("dev"))
 
 server.use(cors({
-  origin: "http://localhost:3000"
+  origin: ["http://localhost:3000", "https://web.infinitymint.app","https://webx.infinitymint.app"]
 }))
 
 server.use(helmet({
@@ -34,10 +34,11 @@ server.use((err, _request, response, _next) => {
 })
 
 server.get("/", (_request, response) => {
-  response.status(200).send("Hello World!")
+  response.status(200).json({ok: true})
 })
 
 server.post("/gpt/prompt", async (request, response) => {
+  
   let temperature = parseFloat(request.body.temp) || 0.6
   if (isNaN(temperature)) temperature = 0.6
 
@@ -48,20 +49,23 @@ server.post("/gpt/prompt", async (request, response) => {
 
   if (n > 6) n = 6
 
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: request.body.prompt || "Create a basic HTML website",
-    temperature,
-    n,
-    max_tokens: 2048,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0
-  })
-
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: request.body.prompt || "Create a basic HTML website",
+      temperature,
+      n,
+      max_tokens: 2048,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0
+    })
   response.status(200).send(completion.data)
+  } catch (error) {
+    throw new Error("Something went horribly wrong!", error.status)
+  }
 })
 
 server.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`web3.eth listening on port ${port}`)
 })
