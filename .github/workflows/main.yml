@@ -23,8 +23,8 @@ jobs:
 
       - name: Build application
         uses: borales/actions-yarn@v4
-          with:
-            cmd: build
+        with:
+          cmd: build
       
       - name: Serve react
         run: cp build /var/www/html/
