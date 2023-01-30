@@ -16,15 +16,11 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-//function like an api
-server.use(function (req, res, next) {
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
+server.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 server.use(
   cors({
     origin: [
@@ -42,11 +38,6 @@ server.use(bodyParser.urlencoded({ extended: true }));
 //for dev
 server.use(morgan("dev"));
 
-server.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
 
 // An error handling middleware
 server.use((err, _request, response, _next) => {
