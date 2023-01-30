@@ -17,10 +17,14 @@ jobs:
           node-version: '18.x'
 
       - name: Install dependencies
-        run: npm i
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
 
       - name: Build application
-        run: npm run build
+        uses: borales/actions-yarn@v4
+          with:
+            cmd: build
       
       - name: Serve react
         run: cp build /var/www/html/
