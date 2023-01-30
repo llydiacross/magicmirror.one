@@ -18,16 +18,8 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-json";
 import "prismjs/themes/prism-dark.css";
-import { wordlists } from "ethers";
 
-function ChatGPTModal({
-  hidden,
-  onHide,
-  savedData = {},
-  onSetHTML = (code) => {},
-}) {
-  // eslint-disable-next-line no-unused-vars
-  const context = useContext(Web3Context);
+function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("dracula");
   const eventEmitterCallbackRef = useRef(null);
