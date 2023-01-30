@@ -1,22 +1,27 @@
-name: Build & Deploy
+name: Continuous Integration
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  merge_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy Node.JS app
-      uses: appleboy/ssh/action@v0.1.2
-      with:
-        host: ${{secrets.SSH_HOST}}
-        key: ${{secrets.SSH_KEY}}
-        username: ${{secrets.SSH_USERNAME}}
+      - name: Checkout main branch
+        uses: actions/checkout@v2
 
-        script: |
-          mkdir test
-          cd test
-          git clone git@github.com:0x0zAgency/www-eth
-          echo 'Deployment Successful to Digital Ocean!'
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test application
+        run: npm test
+
+      - name: Build application
+        run: npm run build
