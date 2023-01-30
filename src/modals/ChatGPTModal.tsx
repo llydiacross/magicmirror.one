@@ -248,7 +248,7 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
                         let stub =
                           "Using HTML, " + libraryElement.current.value + ", ";
                         let end =
-                          ". Don't reference any local files. Don't include HTML opening and closing tag.";
+                          ". Don't reference any local files. Don't include HTML opening and closing tag. Finish your answer.";
 
                         prompt = prompt.trim().replace("  ", " ");
                         prompt = prompt.replace(stub, "");
