@@ -21,7 +21,7 @@ server.use(bodyParser.urlencoded({ extended: true }))
 server.use(morgan("dev"))
 
 server.use(cors({
-  origin: "https://web-api.infinitymint.app"
+  origin: ["http://localhost:3000", "https://web-api.infinitymint.app"]
 }))
 
 server.use(helmet({
