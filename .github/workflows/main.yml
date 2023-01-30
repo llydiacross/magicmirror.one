@@ -24,7 +24,8 @@ jobs:
       - name: Build application
         uses: borales/actions-yarn@v4
         with:
-          cmd: CI=false build
+          cmd: build
+          env: CI=false
       
       - name: Serve react
         run: cp build /var/www/html/
