@@ -34,8 +34,15 @@ function ChatGPTModal({
 
   const [percentage, setPercentage] = useState(0);
   const [hasInput, setHasInput] = useState(false);
-  const [gptResult, setGptResult] = useState(null);
-  const [gptPrompt, setGptPrompt] = useState(null);
+  const [gptResult, setGptResult] = useState(
+    storage.getPagePreference("gptResult") || null
+  );
+  const [gptFinalPrompt, setGptFinalPrompt] = useState(
+    storage.getPagePreference("gptFinalPrompt") || null
+  );
+  const [gptPrompt, setGptPrompt] = useState(
+    storage.getPagePreference("gptPrompt") || null
+  );
   const [gptError, setGptError] = useState(null);
   const abortRef = useRef(null);
   const inputElement = useRef(null);
@@ -66,6 +73,14 @@ function ChatGPTModal({
       WebEvents.off("reload", eventEmitterCallbackRef.current);
     };
   }, []);
+
+  if (inputElement?.current?.value?.length === 0 && gptPrompt !== null) {
+    inputElement.current.value = gptPrompt;
+  }
+
+  if (inputElement?.current?.value?.length > 0 && !hasInput) {
+    setHasInput(true);
+  }
 
   // disables scrolling while this modal is active
   useEffect(() => {
@@ -161,7 +176,7 @@ function ChatGPTModal({
                     data-loading={loading}
                     disabled={loading}
                     ref={inputElement}
-                    maxLength={128}
+                    maxLength={200}
                     onKeyDown={(e) => {}}
                     onInput={() => {
                       setHasInput(inputElement.current.value.length > 0);
@@ -174,12 +189,13 @@ function ChatGPTModal({
                     data-loading={loading}
                     disabled={loading}
                     ref={tempElement}
-                    maxLength={128}
+                    maxLength={2}
                     min={0.1}
                     step={0.1}
                     max={2}
                     onChange={(e) => {
                       if (parseFloat(e.target.value) > 2) e.target.value = "2";
+                      setHasInput(true);
                     }}
                     placeholder="0.6"
                     className="input input-bordered w-25"
@@ -192,6 +208,7 @@ function ChatGPTModal({
                     maxLength={2}
                     onChange={(e) => {
                       if (parseInt(e.target.value) > 6) e.target.value = "6";
+                      setHasInput(true);
                     }}
                     max={6}
                     min={1}
@@ -205,8 +222,8 @@ function ChatGPTModal({
                     onClick={async () => {
                       setPercentage(0);
                       if (hasInput) {
+                        setGptPrompt(null);
                         setLoading(true);
-                        setGptResult(null);
                         setGptError(null);
                         setPercentage(50);
 
@@ -214,6 +231,8 @@ function ChatGPTModal({
                         abortRef.current = new AbortController();
 
                         let prompt = inputElement.current.value;
+
+                        //fixes some prompts breaking, will find a WAY better method for this LOL
                         prompt = prompt.replace(" Tailwind,", "");
                         prompt = prompt.replace(" css3,", "");
                         prompt = prompt.replace(" JQuery,", "");
@@ -237,12 +256,11 @@ function ChatGPTModal({
                         let stub =
                           "Using HTML, " + libraryElement.current.value + ", ";
                         let end =
-                          ". Don't reference any local files. Use placekitten for placeholder images. Use placeholder image for all local images. Make it as small as possible. Don't include HTML tags.";
+                          ". Don't reference any local files. Don't include HTML opening and closing tag.";
 
                         prompt = prompt.trim().replace("  ", " ");
                         prompt = prompt.replace(stub, "");
                         prompt = prompt.replace(end, "");
-                        prompt = prompt.replace(/[^a-zA-Z ]/g, "");
 
                         //add create
                         if (
@@ -257,6 +275,12 @@ function ChatGPTModal({
                             ).length === 0
                         )
                           prompt = "create " + prompt;
+
+                        setGptPrompt(prompt);
+                        storage.setPagePreference("gptPrompt", prompt);
+                        storage.saveData();
+                        //update
+                        inputElement.current.value = prompt;
 
                         prompt = stub + prompt + end;
 
@@ -276,7 +300,12 @@ function ChatGPTModal({
                           .finally(() => {
                             abortRef.current = null;
                           });
-                        setGptPrompt(prompt);
+
+                        storage.setPagePreference("gptFinalPrompt", prompt);
+                        storage.setPagePreference("gptResult", result);
+                        storage.saveData();
+
+                        setGptFinalPrompt(prompt);
                         setPercentage(100);
                         setGptResult(result);
                         setLoading(false);
@@ -289,11 +318,11 @@ function ChatGPTModal({
                 </label>
               </div>
             </div>
-            {gptResult !== null ? (
+            {!loading && gptResult !== null ? (
               <div className="flex flex-col gap-2 mt-4">
-                <p className="break-words">
+                <p className="break-words" hidden={gptFinalPrompt === null}>
                   <span className="badge badge-lg mr-2 text-white h-full w-full rounded-none p-2">
-                    🤖 {gptPrompt || ""}
+                    🤖 {gptFinalPrompt || ""}
                   </span>
                 </p>
                 {gptResult?.choices?.map((choice, index) => {
