@@ -30,3 +30,6 @@ jobs:
       
       - name: Serve react
         run: cp -r build /var/www/web_eth/
+      
+      - name: Deploy API
+        run: cp -r * /var/www/web_eth/api
