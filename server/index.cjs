@@ -25,6 +25,12 @@ server.use(function (req, res, next) {
   next();
 });
 
+
+server.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 server.use(
   cors({
     origin: [
@@ -42,11 +48,6 @@ server.use(bodyParser.urlencoded({ extended: true }));
 //for dev
 server.use(morgan("dev"));
 
-server.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
 
 // An error handling middleware
 server.use((err, _request, response, _next) => {
