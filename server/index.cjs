@@ -25,19 +25,16 @@ server.use(function (req, res, next) {
   next();
 });
 
-// whitelist for CORS
-var whitelist = ["http://localhost", "https://webx.infinitymint.app", "https://web.infinitymint.app"];
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-server.use(cors(corsOptions));
-
+server.use(
+  cors({
+    origin: [
+      "https://localhost:3000",
+      "https://webx.infinitymint.app",
+      "https://infinitymint.app",
+      "https://web.infinitymint.app",
+    ],
+  })
+);
 //the json body parser
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
