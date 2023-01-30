@@ -63,5 +63,5 @@ server.post("/gpt/prompt", async (request, response) => {
 })
 
 server.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`web3.eth listening on port ${port}`)
 })
