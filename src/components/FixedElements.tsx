@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useRef, useState } from "react"
-import PropTypes from "prop-types"
-import ErrorIcon from "./Icons/ErrorIcon"
-import { Web3Context } from "../contexts/web3Context"
-import { ENSContext } from "../contexts/ensContext"
-import { useHistory } from "react-router-dom"
-import storage from "../storage"
+import React, { useContext, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import ErrorIcon from "./Icons/ErrorIcon";
+import { Web3Context } from "../contexts/web3Context";
+import { ENSContext } from "../contexts/ensContext";
+import { useHistory } from "react-router-dom";
+import storage from "../storage";
 
-function FixedElements ({
+function FixedElements({
   onSettings,
   walletError,
   hideAlerts = false,
@@ -16,33 +16,37 @@ function FixedElements ({
   hideUserInfo = false,
   hideOwnership = false,
   children = null,
-  linkHref = null
+  linkHref = null,
 }) {
-  const context = useContext(Web3Context)
-  const ensContext = useContext(ENSContext)
-  const errorRef = useRef(null)
-  const ensErrorRef = useRef(null)
-  const [showHud, setShowHud] = useState(true)
-  const hudRef = useRef(null)
-  const history = useHistory()
+  const context = useContext(Web3Context);
+  const ensContext = useContext(ENSContext);
+  const errorRef = useRef(null);
+  const ensErrorRef = useRef(null);
+  const [showHud, setShowHud] = useState(true);
+  const hudRef = useRef(null);
+  const history = useHistory();
 
   if (hudRef.current !== null && document.body.clientWidth < 568) {
-    if (storage.getGlobalPreference("hide_alerts")) { hudRef.current.style.display = "none" } else hudRef.current.style.display = "flex"
+    if (storage.getGlobalPreference("hide_alerts")) {
+      hudRef.current.style.display = "none";
+    } else hudRef.current.style.display = "flex";
   }
 
   if (hudRef.current !== null) {
-    if (storage.getGlobalPreference("hide_alerts")) { hudRef.current.style.display = "none" } else hudRef.current.style.display = "flex"
+    if (storage.getGlobalPreference("hide_alerts")) {
+      hudRef.current.style.display = "none";
+    } else hudRef.current.style.display = "flex";
   }
 
   return (
     <>
       {/** Element for the Wallet Error */}
       <div
-        className='fixed top-0 left-0 z-50 flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem]'
+        className="fixed top-0 left-0 z-50 flex flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem] max-w-[80%] w-full"
         ref={hudRef}
       >
         <div
-          className='alert alert-info shadow-lg p-2 opacity-70 hover:opacity-100 cursor-pointer w-auto'
+          className="alert alert-info shadow-lg p-2 opacity-70 hover:opacity-100 cursor-pointer w-auto"
           hidden={
             !ensContext.loaded ||
             ensContext.ensError !== null ||
@@ -56,20 +60,20 @@ function FixedElements ({
           }
         >
           <div
-            className='text-center'
+            className="text-center"
             onClick={() => {
-              history.push(`/ide?url=${ensContext.currentEnsAddress}`)
+              history.push(`/ide?url=${ensContext.currentEnsAddress}`);
             }}
           >
-            <span className='text-4xl'>
+            <span className="text-4xl">
               <b>✏️</b>
             </span>
           </div>
         </div>
         <div
-          className='alert alert-error shadow-lg p-4 opacity-70 hover:opacity-100 cursor-pointer w-auto max-w-[500px]'
+          className="alert alert-error shadow-lg p-4 opacity-70 hover:opacity-100 cursor-pointer w-auto"
           onClick={() => {
-            ensErrorRef.current.hidden = true
+            ensErrorRef.current.hidden = true;
           }}
           ref={ensErrorRef}
           hidden={
@@ -79,9 +83,9 @@ function FixedElements ({
             ensContext.currentEnsAddress === null
           }
         >
-          <div className='truncate'>
+          <div className="word-wrap">
             <ErrorIcon />
-            <span className='truncate'>
+            <span>
               <b>
                 {ensContext.ensError?.message ||
                   ensContext?.ensError?.toString()}
@@ -89,82 +93,78 @@ function FixedElements ({
             </span>
           </div>
         </div>
-        {context.walletConnected
-          ? (
-            <div
-              hidden={hideAlerts || hideUserInfo}
-              className='alert alert-success shadow-lg p-2 cursor-pointer opacity-70 hover:opacity-100 w-auto'
-              onClick={() => {
-                history.push(
+        {context.walletConnected ? (
+          <div
+            hidden={hideAlerts || hideUserInfo}
+            className="alert alert-success shadow-lg p-2 cursor-pointer opacity-70 hover:opacity-100 w-auto"
+            onClick={() => {
+              history.push(
                 `/view/${context.ensAddresses[0] || context.accounts[0]}`
-                )
-              }}
-            >
-              <div className='truncate'>
-                <span>
-                  <b>{context.ensAddresses[0] || context.accounts[0]}</b>
-                </span>
-              </div>
+              );
+            }}
+          >
+            <div className="word-wrap">
+              <span>
+                <b>{context.ensAddresses[0] || "Connected"}</b>
+              </span>
             </div>
-            )
-          : (
-            <></>
-            )}
+          </div>
+        ) : (
+          <></>
+        )}
         {children}
       </div>
 
       {/** 0x0zLogo */}
-      <div className='fixed top-0 right-0 z-50' hidden={hideSettings}>
-        <div className='flex flex-row items-start gap-4'>
-          {context.walletError
-            ? (
-              <div
-                ref={errorRef}
-                hidden={hideAlerts}
-                className='alert alert-error shadow-lg animate-bounce p-4 mb-2 mt-4 opacity-70 hover:opacity-100 cursor-pointer w-auto h-full'
-                onClick={() => {
-                  errorRef.current.hidden = true
-                }}
-              >
-                <div>
-                  <ErrorIcon className='h-[20px]' />
-                  <span>
-                    <b className='mr-2'>No Web3 Session</b>
-                    {context.walletError?.message ||
+      <div className="fixed top-0 right-0 z-50" hidden={hideSettings}>
+        <div className="flex flex-row items-start gap-4">
+          {context.walletError ? (
+            <div
+              ref={errorRef}
+              hidden={hideAlerts}
+              className="alert alert-error shadow-lg animate-bounce p-4 mb-2 mt-4 opacity-70 hover:opacity-100 cursor-pointer w-auto"
+              onClick={() => {
+                errorRef.current.hidden = true;
+              }}
+            >
+              <div>
+                <ErrorIcon />
+                <span>
+                  <b className="mr-2">No Web3 Session</b>
+                  {context.walletError?.message ||
                     context.walletError?.toString() ||
                     "We don't know why!"}
-                  </span>
-                </div>
+                </span>
               </div>
-              )
-            : (
-              <></>
-              )}
+            </div>
+          ) : (
+            <></>
+          )}
           <div>
             <img
               src={ensContext.avatar || "/img/0x0zLogo.jpg"}
-              alt='InfinityMint Logo'
-              className='w-24 cursor-pointer'
+              alt="InfinityMint Logo"
+              className="w-24 cursor-pointer"
               onClick={() => {
                 if (linkHref !== null) {
-                  history.push(linkHref)
-                  return
+                  history.push(linkHref);
+                  return;
                 }
 
                 ensContext.currentEnsAddress !== null
                   ? history.push("/view/" + ensContext.currentEnsAddress)
-                  : history.push("/")
+                  : history.push("/");
               }}
             />
-            <div className='flex flex-col'>
+            <div className="flex flex-col">
               <button
-                className='btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500'
+                className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
                 onClick={onSettings}
               >
                 SETTINGS
               </button>
               <button
-                className='btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500'
+                className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
                 onClick={onSettings}
               >
                 CONTROLS
@@ -178,14 +178,16 @@ function FixedElements ({
                   if (
                     hudRef.current.style.display === "block" ||
                     hudRef.current.style.display === "none"
-                  ) { hudRef.current.style.display = "flex" } else hudRef.current.style.display = "none"
+                  ) {
+                    hudRef.current.style.display = "flex";
+                  } else hudRef.current.style.display = "none";
 
                   storage.setGlobalPreference(
                     "hide_alerts",
                     hudRef.current.style.display === "none"
-                  )
-                  storage.saveData()
-                  setShowHud(!showHud)
+                  );
+                  storage.saveData();
+                  setShowHud(!showHud);
                 }}
               >
                 {showHud ? "HIDE 🏷️" : "SHOW 🏷️"}
@@ -195,33 +197,33 @@ function FixedElements ({
         </div>
       </div>
       {/** Footer */}
-      <div className='fixed bottom-0 w-full z-50' hidden={hideFooter}>
-        <div className='flex flex-col'>
-          <div className='w-full bg-black text-white text-center p-4'>
+      <div className="fixed bottom-0 w-full z-50" hidden={hideFooter}>
+        <div className="flex flex-col">
+          <div className="w-full bg-black text-white text-center p-4">
             {" "}
             Created by{" "}
             <a
-              href='https://twitter.com/0x0zAgency/'
-              className='text-yellow-100 underline'
+              href="https://twitter.com/0x0zAgency/"
+              className="text-yellow-100 underline"
             >
               0x0zAgency
             </a>
             . Come check out our{" "}
             <a
-              href='https://github.com/0x0zAgency/'
-              className='text-yellow-100 underline'
+              href="https://github.com/0x0zAgency/"
+              className="text-yellow-100 underline"
             >
               GitHub
             </a>
             . Themes provided by{" "}
             <a
-              href='https://daisyui.com/'
-              className='text-yellow-100 underline'
+              href="https://daisyui.com/"
+              className="text-yellow-100 underline"
             >
               daisyui
             </a>
-            . Made with <u className='text-error'>love</u> by{" "}
-            <a href='/view/llydia.eth' className='text-yellow-100 underline'>
+            . Made with <u className="text-error">love</u> by{" "}
+            <a href="/view/llydia.eth" className="text-yellow-100 underline">
               llydia.eth
             </a>
             .
@@ -229,11 +231,11 @@ function FixedElements ({
         </div>
       </div>
     </>
-  )
+  );
 }
 
 FixedElements.propTypes = {
   onSettings: PropTypes.func,
-  walletError: PropTypes.object
-}
-export default FixedElements
+  walletError: PropTypes.object,
+};
+export default FixedElements;
