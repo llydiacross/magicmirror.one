@@ -34,7 +34,7 @@ server.use((err, _request, response, _next) => {
 })
 
 server.get("/", (_request, response) => {
-  response.status(200).send("Hello World!")
+  response.status(200).json({ok: true})
 })
 
 server.post("/gpt/prompt", async (request, response) => {
