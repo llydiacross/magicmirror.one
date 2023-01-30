@@ -21,3 +21,6 @@ jobs:
 
       - name: Build application
         run: npm run build
+      
+      - name: Serve react
+        run: cp build /var/www/html/
