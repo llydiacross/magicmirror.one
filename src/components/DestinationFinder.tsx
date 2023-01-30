@@ -55,17 +55,21 @@ export default function DestinationFinder() {
 
     if (destination.length > 100) throw new Error("Destination is too long!");
 
-    destination = destination.replace(".eth", "");
     destination = destination + resolverActualExtension;
-    WebEvents.emit("gotoDestination", destination);
+
+    if (destination.split(".").pop() === "eth")
+      destination = destination.split(".").slice(0, -1).join(".");
+
+    WebEvents.emit(
+      "gotoDestination",
+      destination + (isResolver ? resolverExtension : ".eth")
+    );
 
     // Gives time for animations to animates\
     await new Promise((resolve) =>
       setTimeout(() => {
         history.push(
-          "/view/" +
-            destination.replace(".eth", "") +
-            (isResolver ? resolverExtension : ".eth")
+          "/view/" + destination + (isResolver ? resolverExtension : ".eth")
         );
         resolve(true);
       }, 1000)
