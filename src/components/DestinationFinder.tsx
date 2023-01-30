@@ -55,6 +55,7 @@ export default function DestinationFinder() {
 
     if (destination.length > 100) throw new Error("Destination is too long!");
 
+    destination = destination.replace(".eth", "");
     destination = destination + resolverActualExtension;
 
     if (destination.split(".").pop() === "eth")
