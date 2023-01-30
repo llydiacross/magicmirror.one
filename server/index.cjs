@@ -23,6 +23,7 @@ server.use(
       "https://webx.infinitymint.app",
       "https://infinitymint.app",
       "https://web.infinitymint.app",
+      "https://web-api.infinitymint.app",
     ],
   })
 );
