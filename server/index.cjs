@@ -27,6 +27,12 @@ server.use(
     ],
   })
 );
+//function like an API
+server.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 //the json body parser
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
