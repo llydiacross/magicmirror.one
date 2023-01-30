@@ -61,11 +61,9 @@ server.post("/gpt/prompt", async (request, response) => {
       presence_penalty: 0
     })
   response.status(200).send(completion.data)
-
   } catch (error) {
     throw new Error("Something went horribly wrong!", error.status)
   }
-
 })
 
 server.listen(port, () => {
