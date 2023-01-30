@@ -7,7 +7,7 @@ const config = {
   chatGPTTopP: 1,
   useLocalApi: true,
   localApiEndpoint: "http://localhost:9090/",
-  apiEndpoint: "https://api.web.app/",
+  apiEndpoint: "https://web-api.infinitymint.app/",
   chatGPTendpoint: "gpt/",
   searchEndpoint: "search/",
   nftEndpoint: "nft/",
@@ -45,14 +45,14 @@ const config = {
     "lemonade",
     "night",
     "coffee",
-    "winter"
+    "winter",
   ],
   resolvers: [
     [".vision", ""],
     [".im", ""],
     [".infinitymint", ".eth"],
-    [".ethereum", ".eth"]
-  ]
-}
+    [".ethereum", ".eth"],
+  ],
+};
 
-export default config
+export default config;
