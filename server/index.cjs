@@ -17,11 +17,6 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 server.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
-server.use(
   cors({
     origin: [
       "https://localhost:3000",
