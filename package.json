@@ -34,9 +34,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",
@@ -122,6 +124,7 @@
     "buffer": "^6.0.3",
     "camelcase": "^6.2.1",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "chai": "^4.3.7",
     "constants-browserify": "^1.0.0",
     "cors": "^2.8.5",
     "crypto-browserify": "^3.12.0",
@@ -139,7 +142,7 @@
     "http-browserify": "^1.7.0",
     "https-browserify": "^1.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "infinitymint": "latest",
+    "infinitymint": "^1.2.1",
     "infinitymint-client": "^1.1.4",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",

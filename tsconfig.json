@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "module": "NodeNext",
+    "module": "es2015",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -9,21 +9,11 @@
     "strict": false,
     "allowJs": true,
     "esModuleInterop": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "rootDirs": [
-      "./src"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "rootDirs": ["./src"],
     "paths": {
-      "@app/*": [
-        "./node_modules/infinitymint/dist/app/*"
-      ],
-      "@client/*": [
-        "./node_modules/infinitymint-client/dist/src/*"
-      ]
+      "@app/*": ["./node_modules/infinitymint/dist/app/*"],
+      "@client/*": ["./node_modules/infinitymint-client/dist/src/*"]
     },
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -34,13 +24,7 @@
     "isolatedModules": false,
     "jsx": "react-jsx"
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "gems/__",
-    "gems/__cache",
-    "gems/@"
-  ],
+  "exclude": ["dist", "node_modules", "gems/__", "gems/__cache", "gems/@"],
   "include": [
     "./projects",
     "./src",
@@ -49,8 +33,5 @@
     "./deploy",
     "./imports"
   ],
-  "files": [
-    "./hardhat.config.ts",
-    "./index.ts"
-  ]
+  "files": ["./hardhat.config.ts", "./index.ts"]
 }
