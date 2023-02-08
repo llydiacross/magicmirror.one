@@ -12749,6 +12749,13 @@
   "resolved" "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz"
   "version" "0.5.0"
 
+"jsglue@^1.0.0":
+  "integrity" "sha512-n4L/EMJFhFLUZ8rGQTDcxG/fgd24zNbZLaim5mPo5TSL2fqIY3tEIN/sLEqzFUaa9JfWDQvu5CdmcK+N2s4jkg=="
+  "resolved" "https://registry.npmjs.org/jsglue/-/jsglue-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "dotenv" "^16.0.3"
+
 "json-parse-better-errors@^1.0.1":
   "integrity" "sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw=="
   "resolved" "https://registry.npmjs.org/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz"

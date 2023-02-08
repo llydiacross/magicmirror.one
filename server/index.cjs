@@ -4,15 +4,23 @@ const helmet = require('helmet');
 const { Configuration, OpenAIApi } = require('openai');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const glue = require('jsglue');
 const server = express();
 const port = 9090;
 
-let ipfs;
-let injectIPFS = async () => {
-  //A hack to get MJS files and in extension ipfsCore to cooperate with CJS
-  ipfs = await import('./utils/wrapper.mjs');
-};
-injectIPFS();
+/**
+ * @type {import('ipfs-core').IPFS}
+ */
+let node;
+(async () => {
+  let wrapper = await glue.load();  
+  /**
+   * @type {import('ipfs-core')}
+   */
+  let ipfs = wrapper.getSync('ipfs-core');
+  node = await ipfs.create();
+  console.log('IPFS node ready');
+})();
 
 require('dotenv').config();
 // Configure OpenAI
@@ -61,15 +69,14 @@ server.get('/', (_request, response) => {
   response.status(200).json({ ok: true });
 });
 
-let node;
+
 server.post('/ipns/resolve', async (request, response) => {
   let ipnsCid = request.body.ipns;
 
   if (!ipnsCid) {
     response.status(400).send('No IPNS CID provided');
   } else {
-    //our IPFS node
-    if (!node) node = await ipfs.create();
+
     const ipfsCid = node.name.resolve(ipnsCid);
     response.status(200).send(ipfsCid);
   }
