@@ -1,7 +1,7 @@
-import { ethers } from "ethers";
-import { useState, useEffect, useRef } from "react";
-import config from "../config";
-import WebEvents from "../webEvents";
+import { ethers } from 'ethers';
+import { useState, useEffect, useRef } from 'react';
+import config from '../config';
+import WebEvents from '../webEvents';
 
 const useWeb3Context = () => {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -19,12 +19,13 @@ const useWeb3Context = () => {
   const [balance, setBalance] = useState(null);
 
   const refreshRef = useRef(null);
+  const walletChangedRef = useRef(null);
 
   const requestAccounts = async () => {
     if ((window as any).ethereum === undefined) return [];
 
     const result = await (window as any).ethereum.request({
-      method: "eth_accounts",
+      method: 'eth_accounts',
     });
 
     return result;
@@ -35,7 +36,7 @@ const useWeb3Context = () => {
 
     try {
       const result = await (window as any).ethereum.request({
-        method: "eth_accounts",
+        method: 'eth_accounts',
       });
       return result && result.length !== 0;
     } catch (error) {
@@ -72,24 +73,24 @@ const useWeb3Context = () => {
       try {
         /* Empty */
       } catch (walletError) {
-        WebEvents.emit("walletError", walletError);
+        WebEvents.emit('walletError', walletError);
         console.error(walletError);
         setWalletError(walletError);
       }
 
       setWalletInstalled(
         (window as any).ethereum !== undefined &&
-          typeof (window as any).ethereum === "object"
+          typeof (window as any).ethereum === 'object'
       );
 
       const connected = await checkWalletConnected();
       console.log(
-        "wallet: " + (connected ? "connected" : "unconnected"),
-        "web3"
+        'wallet: ' + (connected ? 'connected' : 'unconnected'),
+        'web3'
       );
       setWalletConnected(connected);
 
-      if (!connected) setWalletError(new Error("Wallet not connected"));
+      if (!connected) setWalletError(new Error('Wallet not connected'));
       let provider:
         | ethers.providers.Web3Provider
         | ethers.providers.JsonRpcProvider;
@@ -105,7 +106,7 @@ const useWeb3Context = () => {
       } catch (error) {
         console.error(error);
         setWalletError(
-          new Error("There is something wrong with your provider")
+          new Error('There is something wrong with your provider')
         );
       }
 
@@ -124,7 +125,7 @@ const useWeb3Context = () => {
           try {
             ensAddresses[i] = await provider.lookupAddress(accounts[i]);
           } catch (error) {
-            console.log("bad or no ens for: " + accounts[i]);
+            console.log('bad or no ens for: ' + accounts[i]);
             ensAddresses[i] = false;
           }
         }
@@ -135,17 +136,29 @@ const useWeb3Context = () => {
       setWeb3Provider(provider);
       setLoaded(true);
     };
-    main();
 
-    if (refreshRef.current === null) refreshRef.current = main();
+    const accountsChanged = (accounts) => {
+      if (loaded && accounts[0].toLowerCase() === walletAddress.toLowerCase())
+        return;
 
-    WebEvents.on("reload", () => {
-      refreshRef.current = main();
+      setLoaded(false);
+      main();
+    };
+
+    if (refreshRef.current === null) refreshRef.current = main;
+    if (walletChangedRef.current === null)
+      walletChangedRef.current = accountsChanged;
+
+    if ((window as any).ethereum !== undefined) {
+      (window as any).ethereum.on('accountsChanged', walletChangedRef.current);
+      (window as any).ethereum.on('chainChanged', walletChangedRef.current);
+    }
+
+    WebEvents.on('reload', () => {
+      main();
     });
 
-    return () => {
-      WebEvents.off("reload", refreshRef.current);
-    };
+    main();
   }, [loaded]);
 
   return {
@@ -158,6 +171,8 @@ const useWeb3Context = () => {
     loaded,
     signer,
     balance,
+    refreshRef,
+    walletChangedRef,
     walletError,
     ensAddresses,
   };

@@ -1,3 +1,3 @@
 // Simply require InfinityMint
-const infinitymint = require("infinitymint")
+import 'infinitymint';
 // And enjoy building web3!
