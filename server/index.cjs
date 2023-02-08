@@ -8,6 +8,9 @@ const glue = require('jsglue');
 const server = express();
 const port = 9090;
 
+//dot env stuff
+require('dotenv').config();
+
 /**
  * @type {import('ipfs-core').IPFS}
  */
@@ -19,16 +22,19 @@ let node;
    */
   let ipfs = wrapper.getSync('ipfs-core');
   node = await ipfs.create();
-  console.log('IPFS node ready');
+  console.log('\n✅ IPFS node ready');
 })();
 
-require('dotenv').config();
+
 // Configure OpenAI
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
+
+//helmet
+server.use(helmet());
 
 server.use(
   cors({
