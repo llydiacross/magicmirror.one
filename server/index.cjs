@@ -1,14 +1,20 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const { Configuration, OpenAIApi } = require("openai");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const { Configuration, OpenAIApi } = require('openai');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const server = express();
 const port = 9090;
-require("dotenv").config();
 
+let ipfs;
+let injectIPFS = async () => {
+  //A hack to get MJS files to cooperate with CJS
+  ipfs = await import('../server/hack.mjs');
+};
+injectIPFS();
+
+require('dotenv').config();
 // Configure OpenAI
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_KEY,
@@ -19,21 +25,24 @@ const openai = new OpenAIApi(configuration);
 server.use(
   cors({
     origin: [
-      "https://localhost:3000",
-      "https://localhost:9090",
-      "http://localhost:3000",
-      "http://localhost:9090",
-      "https://webx.infinitymint.app",
-      "https://infinitymint.app",
-      "https://web.infinitymint.app",
-      "https://web-api.infinitymint.app",
+      'https://localhost:3000',
+      'https://localhost:9090',
+      'http://localhost:3000',
+      'http://localhost:9090',
+      'https://webx.infinitymint.app',
+      'https://infinitymint.app',
+      'https://web.infinitymint.app',
+      'https://web-api.infinitymint.app',
     ],
   })
 );
 //function like an API
 server.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
 });
 
 //the json body parser
@@ -41,19 +50,32 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
 //for dev
-server.use(morgan("dev"));
-
+server.use(morgan('dev'));
 
 // An error handling middleware
 server.use((err, _request, response, _next) => {
-  response.status(500).send("Oops, something went wrong.\n", err);
+  response.status(500).send('Oops, something went wrong.\n', err);
 });
 
-server.get("/", (_request, response) => {
+server.get('/', (_request, response) => {
   response.status(200).json({ ok: true });
 });
 
-server.post("/gpt/prompt", async (request, response) => {
+let node;
+server.post('/ipns/resolve', async (request, response) => {
+  let ipnsCid = request.body.ipns;
+
+  if (!ipnsCid) {
+    response.status(400).send('No IPNS CID provided');
+  } else {
+    //our IPFS node
+    if (!node) node = await ipfs.create();
+    const ipfsCid = node.name.resolve(ipnsCid);
+    response.status(200).send(ipfsCid);
+  }
+});
+
+server.post('/gpt/prompt', async (request, response) => {
   let temperature = parseFloat(request.body.temp) || 0.6;
   if (isNaN(temperature)) temperature = 0.6;
 
@@ -66,8 +88,8 @@ server.post("/gpt/prompt", async (request, response) => {
 
   try {
     const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: request.body.prompt || "Create a basic HTML website",
+      model: 'text-davinci-003',
+      prompt: request.body.prompt || 'Create a basic HTML website',
       temperature,
       n,
       max_tokens: 2048,
@@ -77,8 +99,8 @@ server.post("/gpt/prompt", async (request, response) => {
     });
     response.status(200).send(completion.data);
   } catch (error) {
-    console.error(error)
-    throw new Error("Something went horribly wrong!", error.status);
+    console.error(error);
+    throw new Error('Something went horribly wrong!', error.status);
   }
 });
 

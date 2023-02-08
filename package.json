@@ -144,6 +144,7 @@
     "identity-obj-proxy": "^3.0.0",
     "infinitymint": "^1.2.1",
     "infinitymint-client": "^1.1.4",
+    "ipfs-core": "^0.18.0",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",

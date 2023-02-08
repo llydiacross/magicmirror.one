@@ -1,13 +1,13 @@
 // Works with local storage to save and load data we will use in the react application
 export class StorageController {
-  public values: any
-  public pagePreferences: any
+  public values: any;
+  public pagePreferences: any;
   // Private
-  private readonly fields: any
+  private readonly fields: any;
   /**
    * Constructor
    */
-  constructor () {
+  constructor() {
     // Define new keys here
     this.fields = {
       transactions: {}, // All of your transactions
@@ -24,10 +24,10 @@ export class StorageController {
       transfers: {},
       redemptionRequests: {},
       awaitingCollection: {},
-      pagePrefrences: {}
-    }
-    this.values = {}
-    this.pagePreferences = {}
+      pagePrefrences: {},
+    };
+    this.values = {};
+    this.pagePreferences = {};
   }
 
   /**
@@ -35,11 +35,11 @@ export class StorageController {
    * @param {string|number} key
    * @param {*} value
    */
-  setGlobalPreference (key, value) {
-    const pref = { ...this.getGlobalPreferences() }
-    pref[key] = value
-    this.values.pagePrefrences.global = pref
-    this.saveData()
+  setGlobalPreference(key, value) {
+    const pref = { ...this.getGlobalPreferences() };
+    pref[key] = value;
+    this.values.pagePrefrences.global = pref;
+    this.saveData();
   }
 
   /**
@@ -47,9 +47,9 @@ export class StorageController {
    * @param {string|number} key
    * @returns
    */
-  getGlobalPreference (key) {
-    if (!this.values.pagePrefrences) return null
-    return this.getGlobalPreferences()[key]
+  getGlobalPreference(key) {
+    if (!this.values.pagePrefrences) return null;
+    return this.getGlobalPreferences()[key];
   }
 
   /**
@@ -57,36 +57,36 @@ export class StorageController {
    * @param {string|number} key
    * @returns
    */
-  isGlobalPreference (key) {
-    if (!this.values.pagePrefrences) return false
+  isGlobalPreference(key) {
+    if (!this.values.pagePrefrences) return false;
 
-    return this.getGlobalPreferences()[key] === true
+    return this.getGlobalPreferences()[key] === true;
   }
 
   /**
    *
    * @returns
    */
-  getGlobalPreferences () {
-    if (!this.values.pagePrefrences) return
+  getGlobalPreferences() {
+    if (!this.values.pagePrefrences) return;
 
-    return this.values.pagePrefrences.global || {}
+    return this.values.pagePrefrences.global || {};
   }
 
   /**
    * Removes ? and # tags from a url so we just get the folder/page
    * @returns
    */
-  getLocationHref () {
-    let location = window.location.href
-    let split = location.split("?") // No get
-    if (split[1] !== undefined) location = split[0]
-    split = location.split("#") // No href
-    if (split[1] !== undefined) location = split[0]
+  getLocationHref() {
+    let location = window.location.href;
+    let split = location.split('?'); // No get
+    if (split[1] !== undefined) location = split[0];
+    split = location.split('#'); // No href
+    if (split[1] !== undefined) location = split[0];
 
-    if (location.at(-1) !== "/") return location + "/"
+    if (location.at(-1) !== '/') return location + '/';
 
-    return location
+    return location;
   }
 
   /**
@@ -95,24 +95,30 @@ export class StorageController {
    * @param {*} value
    * @param {*} id
    */
-  setPagePreference (key, value, id = null) {
-    if (id !== null && typeof id !== "string") { id = id.id || id.name || "default" } else if (
+  setPagePreference(key, value, id = null) {
+    if (id !== null && typeof id !== 'string') {
+      id = id.id || id.name || 'default';
+    } else if (
       id === null ||
-      (typeof id === "string" && id.toLowerCase() === "global")
-    ) { id = this.getLocationHref() }
+      (typeof id === 'string' && id.toLowerCase() === 'global')
+    ) {
+      id = this.getLocationHref();
+    }
 
     console.log(
       "Saving page prefrence for page id '" +
-        (id === null ? "global" : id) +
+        (id === null ? 'global' : id) +
         "' key of: " +
         key,
-      "storage"
-    )
+      'storage'
+    );
 
-    if (this.values.pagePrefrences[id] === undefined) { this.values.pagePrefrences[id] = {} }
+    if (this.values.pagePrefrences[id] === undefined) {
+      this.values.pagePrefrences[id] = {};
+    }
 
-    this.values.pagePrefrences[id][key] = value
-    this.saveData()
+    this.values.pagePrefrences[id][key] = value;
+    this.saveData();
   }
 
   /**
@@ -121,25 +127,29 @@ export class StorageController {
    * @param {string} id
    * @returns
    */
-  getPagePreference (key, id = null, log = true) {
-    if (id !== null && typeof id !== "string") { id = id.id || id.name || "default" } else if (
+  getPagePreference(key, id = null, log = true) {
+    if (id !== null && typeof id !== 'string') {
+      id = id.id || id.name || 'default';
+    } else if (
       id === null ||
-      (typeof id === "string" && id.toLowerCase() === "global")
-    ) { id = this.getLocationHref() }
+      (typeof id === 'string' && id.toLowerCase() === 'global')
+    ) {
+      id = this.getLocationHref();
+    }
 
     if (log) {
       console.log(
         "Reading page prefrence for page id '" +
-          (id === null ? "global" : id) +
+          (id === null ? 'global' : id) +
           "' key of: " +
           key,
-        "storage"
-      )
+        'storage'
+      );
     }
 
-    if (this.values.pagePrefrences[id] === undefined) return undefined
+    if (this.values.pagePrefrences[id] === undefined) return undefined;
 
-    return this.values.pagePrefrences[id][key]
+    return this.values.pagePrefrences[id][key];
   }
 
   /**
@@ -148,8 +158,8 @@ export class StorageController {
    * @param {string} id
    * @returns
    */
-  isPageReference (key, id = null) {
-    return this.getPagePreference(key, id) === true
+  isPageReference(key, id = null) {
+    return this.getPagePreference(key, id) === true;
   }
 
   /**
@@ -158,11 +168,11 @@ export class StorageController {
    * @param {bool} nullCheck
    * @returns
    */
-  exists (key, nullCheck = true) {
+  exists(key, nullCheck = true) {
     return (
       this.values[key] !== undefined &&
       (!nullCheck ? true : this.values[key] !== undefined)
-    )
+    );
   }
 
   /**
@@ -171,46 +181,48 @@ export class StorageController {
    * @param {string} key
    * @returns
    */
-  existsAndNotEmpty (key) {
-    if (!this.exists(key)) return false
+  existsAndNotEmpty(key) {
+    if (!this.exists(key)) return false;
 
     if (
-      typeof this.values[key] !== "object" &&
+      typeof this.values[key] !== 'object' &&
       !(this.values[key] instanceof Array)
-    ) { return false }
+    ) {
+      return false;
+    }
 
-    if (Object.entries(this.values[key]).length === 0) return false
+    if (Object.entries(this.values[key]).length === 0) return false;
 
-    return true
+    return true;
   }
 
   /**
    * Must be called before Controller.load()
    */
-  loadSavedData () {
-    console.log("Loading storaged data from local storage", "storage")
+  loadSavedData() {
+    console.log('Loading storaged data from local storage', 'storage');
     for (const [key, val] of Object.entries(this.fields)) {
-      this.values[key] = null
-      const item = localStorage.getItem(key)
+      this.values[key] = null;
+      const item = localStorage.getItem(key);
 
-      if (item === null && typeof val !== "object") continue
-      else if (item === null && typeof val === "object") {
-        this.values[key] = {}
-        continue
+      if (item === null && typeof val !== 'object') continue;
+      else if (item === null && typeof val === 'object') {
+        this.values[key] = {};
+        continue;
       }
 
       switch (typeof val) {
-        case "object":
-          this.values[key] = JSON.parse(item)
-          break
-        case "boolean":
-          this.values[key] = item === "false" ? false : Boolean(item)
-          break
-        case "number":
-          this.values[key] = parseInt(item)
-          break
+        case 'object':
+          this.values[key] = JSON.parse(item);
+          break;
+        case 'boolean':
+          this.values[key] = item === 'false' ? false : Boolean(item);
+          break;
+        case 'number':
+          this.values[key] = parseInt(item);
+          break;
         default:
-          this.values[key] = item
+          this.values[key] = item;
       }
     }
   }
@@ -218,10 +230,10 @@ export class StorageController {
   /**
    * Wipes the storage clean. Does not save.
    */
-  wipe () {
-    console.log("Wiping storage", "storage")
+  wipe() {
+    console.log('Wiping storage', 'storage');
     for (const [key] of Object.entries(this.fields)) {
-      this.values[key] = {}
+      this.values[key] = {};
     }
   }
 
@@ -230,32 +242,34 @@ export class StorageController {
    * @param {string} key
    * @param {*} value
    */
-  set (key, value) {
-    console.log("Setting " + key, "storage")
-    if (this.values[key] === undefined) { throw new Error("trying to set an undefined value") }
+  set(key, value) {
+    console.log('Setting ' + key, 'storage');
+    if (this.values[key] === undefined) {
+      throw new Error('trying to set an undefined value');
+    }
 
-    this.values[key] = value
-    this.saveData()
+    this.values[key] = value;
+    this.saveData();
   }
 
   /**
    * Saves all the data inside of fields to local storage and packs objects accordingly
    */
-  saveData () {
-    console.log("Saving storage data", "storage")
+  saveData() {
+    console.log('Saving storage data', 'storage');
     for (const [key, val] of Object.entries(this.fields)) {
-      let item = this.values[key]
-      if (typeof val === "object") {
-        if (item === null) item = {}
+      let item = this.values[key];
+      if (typeof val === 'object') {
+        if (item === null) item = {};
 
-        item = JSON.stringify(item)
+        item = JSON.stringify(item);
       }
 
       // Save
-      localStorage.setItem(key, item)
+      localStorage.setItem(key, item);
     }
   }
 }
 
-const storage = new StorageController()
-export default storage
+const storage = new StorageController();
+export default storage;

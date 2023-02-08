@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState, useContext } from "react";
-import ErrorIcon from "./Icons/ErrorIcon";
-import WebEvents from "../webEvents";
-import { ENSContext } from "../contexts/ensContext";
-import { useHistory } from "react-router-dom";
-import config from "../config";
+import React, { useRef, useState, useContext } from 'react';
+import ErrorIcon from './Icons/ErrorIcon';
+import WebEvents from '../webEvents';
+import { ENSContext } from '../contexts/ensContext';
+import { useHistory } from 'react-router-dom';
+import config from '../config';
 
 export default function DestinationFinder() {
   const inputElement = useRef(null);
@@ -19,58 +19,58 @@ export default function DestinationFinder() {
     destination = destination.toString();
     destination = destination.trim();
     // Remove leading and trailing dots
-    destination = destination.replace(/^\.+|\.+$/g, "");
+    destination = destination.replace(/^\.+|\.+$/g, '');
     // Remove http:// or https:// from the destination
-    if (destination.includes("http://")) {
-      destination = destination.replace("http://", "");
+    if (destination.includes('http://')) {
+      destination = destination.replace('http://', '');
     }
-    if (destination.includes("https://")) {
-      destination = destination.replace("https://", "");
+    if (destination.includes('https://')) {
+      destination = destination.replace('https://', '');
     }
     // Remove html tags from the destination
-    destination = destination.replace(/<[^>]*>/g, "");
+    destination = destination.replace(/<[^>]*>/g, '');
     // Remove any colons and stuff
-    destination = destination.replace(/:|;|\?|\|\*|#/g, "");
-    destination = destination.replace(/ /g, "-");
+    destination = destination.replace(/:|;|\?|\|\*|#/g, '');
+    destination = destination.replace(/ /g, '-');
     // Remove leading and trailing spaces
     destination = destination.trim();
     destination = destination.toLowerCase();
 
     let isResolver = false;
-    let resolverExtension = "";
-    let resolverActualExtension = ".eth";
+    let resolverExtension = '';
+    let resolverActualExtension = '.eth';
 
     config.resolvers.forEach((resolver) => {
       if (destination.includes(resolver[0])) {
         isResolver = true;
-        destination = destination.split(".").slice(0, -1).join(".");
-        resolverExtension = resolver[1] || "";
+        destination = destination.split('.').slice(0, -1).join('.');
+        resolverExtension = resolver[1] || '';
         resolverActualExtension = resolver[0];
       }
     });
 
     if (destination.length === 0) {
-      throw new Error("Please enter a destination to visit!");
+      throw new Error('Please enter a destination to visit!');
     }
 
-    if (destination.length > 100) throw new Error("Destination is too long!");
+    if (destination.length > 100) throw new Error('Destination is too long!');
 
-    destination = destination.replace(".eth", "");
+    destination = destination.replace('.eth', '');
     destination = destination + resolverActualExtension;
 
-    if (destination.split(".").pop() === "eth")
-      destination = destination.split(".").slice(0, -1).join(".");
+    if (destination.split('.').pop() === 'eth')
+      destination = destination.split('.').slice(0, -1).join('.');
 
     WebEvents.emit(
-      "gotoDestination",
-      destination + (isResolver ? resolverExtension : ".eth")
+      'gotoDestination',
+      destination + (isResolver ? resolverExtension : '.eth')
     );
 
     // Gives time for animations to animates\
     await new Promise((resolve) =>
       setTimeout(() => {
         history.push(
-          "/view/" + destination + (isResolver ? resolverExtension : ".eth")
+          '/view/' + destination + (isResolver ? resolverExtension : '.eth')
         );
         resolve(true);
       }, 1000)
@@ -100,7 +100,7 @@ export default function DestinationFinder() {
   // Pick random tokenId from ENS and try and got to it...
   const handleTakeMeAnywhere = () => {
     setLoading(true);
-    gotoAddress("xxx.eth")
+    gotoAddress('xxx.eth')
       .catch(errorHandler)
       .finally(() => {
         setLoading(false);
@@ -128,7 +128,7 @@ export default function DestinationFinder() {
               ref={inputElement}
               maxLength={52}
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleVisit();
+                if (e.key === 'Enter') handleVisit();
               }}
               onInput={() => {
                 setHasInput(inputElement.current.value.length > 0);
@@ -156,7 +156,7 @@ export default function DestinationFinder() {
           data-loading={loading}
           disabled={loading}
           onClick={() => {
-            history.push("/ide");
+            history.push('/ide');
           }}
         >
           🎨 WEB.ETH STUDIO 🎨

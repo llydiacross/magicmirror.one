@@ -1,4 +1,4 @@
-import { apiFetch } from "./api"
+import { apiFetch } from './api';
 
 // Fetches a prompt response from chat gpt3, make sure to run prompt through the moderation function first to avoid abuse
 export const fetchPrompt = async (
@@ -7,13 +7,13 @@ export const fetchPrompt = async (
   options?: any
 ) => {
   return await apiFetch(
-    "gpt3",
-    "prompt",
+    'gpt3',
+    'prompt',
     { prompt, ...(options || {}) },
-    "POST",
+    'POST',
     abort
-  )
-}
+  );
+};
 
 // Fetches a moderation response from chat gpt3
 export const fetchModeration = async (
@@ -22,10 +22,10 @@ export const fetchModeration = async (
   options?: any
 ) => {
   return await apiFetch(
-    "gpt3",
-    "moderation",
+    'gpt3',
+    'moderation',
     { prompt, ...(options || {}) },
-    "POST",
+    'POST',
     abort
-  )
-}
+  );
+};

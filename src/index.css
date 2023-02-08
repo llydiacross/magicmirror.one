@@ -1,14 +1,14 @@
 /* TODO: Link these manually & dont rely on font servers. */
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap");
-@import url("https://use.typekit.net/ttg4ufb.css");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap');
+@import url('https://use.typekit.net/ttg4ufb.css');
 
 @font-face {
-  font-family: "Apocalypse Grunge";
-  src: url("./resources/Apocalypse Grunge.ttf");
+  font-family: 'Apocalypse Grunge';
+  src: url('./resources/Apocalypse Grunge.ttf');
 }
 @font-face {
-  font-family: "TheNextFont";
-  src: url("./resources/TheNextFont.ttf");
+  font-family: 'TheNextFont';
+  src: url('./resources/TheNextFont.ttf');
 }
 
 @tailwind base;
@@ -34,31 +34,31 @@ div[hidden] {
   @apply hidden;
 }
 
-.alert[hidden="false"] {
+.alert[hidden='false'] {
   @apply animate-pulse;
 }
 
-div[data-theme="cyberpunk"] .title {
+div[data-theme='cyberpunk'] .title {
   --tw-gradient-from: black !important;
   --tw-gradient-to: black !important;
 }
 
-div[data-theme="light"] .title {
+div[data-theme='light'] .title {
   --tw-gradient-from: black !important;
   --tw-gradient-to: black !important;
 }
 
-div[data-theme="emerald"] .title {
+div[data-theme='emerald'] .title {
   --tw-gradient-from: black !important;
   --tw-gradient-to: black !important;
 }
 
-div[data-theme="lemonade"] .title {
+div[data-theme='lemonade'] .title {
   --tw-gradient-from: black !important;
   --tw-gradient-to: black !important;
 }
 
-div[data-theme="corporate"] .title {
+div[data-theme='corporate'] .title {
   --tw-gradient-from: black !important;
   --tw-gradient-to: black !important;
 }
@@ -67,15 +67,15 @@ input[disabled]:hover {
   @apply input-warning text-gray-500 border-gray-500;
 }
 
-input[data-loading="true"] {
+input[data-loading='true'] {
   @apply text-gray-500;
 }
 
-button[data-loading="true"] {
+button[data-loading='true'] {
   @apply loading bg-gray-500;
 }
 
-button[data-selected="true"] {
+button[data-selected='true'] {
   @apply bg-success;
 }
 .blink-text {

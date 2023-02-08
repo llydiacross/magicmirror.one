@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useRef, useState } from "react";
-import PropTypes from "prop-types";
-import ErrorIcon from "./Icons/ErrorIcon";
-import { Web3Context } from "../contexts/web3Context";
-import { ENSContext } from "../contexts/ensContext";
-import { useHistory } from "react-router-dom";
-import storage from "../storage";
+import React, { useContext, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import ErrorIcon from './Icons/ErrorIcon';
+import { Web3Context } from '../contexts/web3Context';
+import { ENSContext } from '../contexts/ensContext';
+import { useHistory } from 'react-router-dom';
+import storage from '../storage';
 
 function FixedElements({
   onSettings,
@@ -27,15 +27,15 @@ function FixedElements({
   const history = useHistory();
 
   if (hudRef.current !== null && document.body.clientWidth < 568) {
-    if (storage.getGlobalPreference("hide_alerts")) {
-      hudRef.current.style.display = "none";
-    } else hudRef.current.style.display = "flex";
+    if (storage.getGlobalPreference('hide_alerts')) {
+      hudRef.current.style.display = 'none';
+    } else hudRef.current.style.display = 'flex';
   }
 
   if (hudRef.current !== null) {
-    if (storage.getGlobalPreference("hide_alerts")) {
-      hudRef.current.style.display = "none";
-    } else hudRef.current.style.display = "flex";
+    if (storage.getGlobalPreference('hide_alerts')) {
+      hudRef.current.style.display = 'none';
+    } else hudRef.current.style.display = 'flex';
   }
 
   return (
@@ -105,7 +105,7 @@ function FixedElements({
           >
             <div className="word-wrap">
               <span>
-                <b>{context.ensAddresses[0] || "Connected"}</b>
+                <b>{context.ensAddresses[0] || 'Connected'}</b>
               </span>
             </div>
           </div>
@@ -142,7 +142,7 @@ function FixedElements({
           )}
           <div>
             <img
-              src={ensContext.avatar || "/img/0x0zLogo.jpg"}
+              src={ensContext.avatar || '/img/0x0zLogo.jpg'}
               alt="InfinityMint Logo"
               className="w-24 cursor-pointer"
               onClick={() => {
@@ -152,8 +152,8 @@ function FixedElements({
                 }
 
                 ensContext.currentEnsAddress !== null
-                  ? history.push("/view/" + ensContext.currentEnsAddress)
-                  : history.push("/");
+                  ? history.push('/view/' + ensContext.currentEnsAddress)
+                  : history.push('/');
               }}
             />
             <div className="flex flex-col">
@@ -171,26 +171,26 @@ function FixedElements({
               </button>
               <button
                 className={
-                  "btn btn-square rounded-none border-none text-white w-full hover:text-white hover:bg-pink-500 " +
-                  (!showHud ? "bg-pink-500" : "bg-black")
+                  'btn btn-square rounded-none border-none text-white w-full hover:text-white hover:bg-pink-500 ' +
+                  (!showHud ? 'bg-pink-500' : 'bg-black')
                 }
                 onClick={() => {
                   if (
-                    hudRef.current.style.display === "block" ||
-                    hudRef.current.style.display === "none"
+                    hudRef.current.style.display === 'block' ||
+                    hudRef.current.style.display === 'none'
                   ) {
-                    hudRef.current.style.display = "flex";
-                  } else hudRef.current.style.display = "none";
+                    hudRef.current.style.display = 'flex';
+                  } else hudRef.current.style.display = 'none';
 
                   storage.setGlobalPreference(
-                    "hide_alerts",
-                    hudRef.current.style.display === "none"
+                    'hide_alerts',
+                    hudRef.current.style.display === 'none'
                   );
                   storage.saveData();
                   setShowHud(!showHud);
                 }}
               >
-                {showHud ? "HIDE 🏷️" : "SHOW 🏷️"}
+                {showHud ? 'HIDE 🏷️' : 'SHOW 🏷️'}
               </button>
             </div>
           </div>
@@ -200,29 +200,29 @@ function FixedElements({
       <div className="fixed bottom-0 w-full z-50" hidden={hideFooter}>
         <div className="flex flex-col">
           <div className="w-full bg-black text-white text-center p-4">
-            {" "}
-            Created by{" "}
+            {' '}
+            Created by{' '}
             <a
               href="https://twitter.com/0x0zAgency/"
               className="text-yellow-100 underline"
             >
               0x0zAgency
             </a>
-            . Come check out our{" "}
+            . Come check out our{' '}
             <a
               href="https://github.com/0x0zAgency/"
               className="text-yellow-100 underline"
             >
               GitHub
             </a>
-            . Themes provided by{" "}
+            . Themes provided by{' '}
             <a
               href="https://daisyui.com/"
               className="text-yellow-100 underline"
             >
               daisyui
             </a>
-            . Made with <u className="text-error">love</u> by{" "}
+            . Made with <u className="text-error">love</u> by{' '}
             <a href="/view/llydia.eth" className="text-yellow-100 underline">
               llydia.eth
             </a>
