@@ -18,8 +18,8 @@ export interface Web3ContextType {
   walletError: Error;
   chainId: 0;
   loaded: false;
-  refreshRef: null;
-  walletChangedRef: null;
+  refreshRef: Function;
+  walletChangedRef: Function;
   signer: ethers.Signer;
 }
 
@@ -56,9 +56,14 @@ function Web3ContextProvider({ children }) {
     walletChangedRef,
   } = useWeb3Context();
 
-  //in order to avoid the events being deleted on every update to the context, we need to use a cleanup function here not in the context
+  //in order to avoid the events being deleted on every update to the context, we need to use a cleanup function and define events here here not in the context
   useEffect(() => {
     if (!loaded) return;
+
+    if ((window as any).ethereum !== undefined) {
+      (window as any).ethereum.on('accountsChanged', walletChangedRef.current);
+      (window as any).ethereum.on('chainChanged', walletChangedRef.current);
+    }
 
     return () => {
       WebEvents.off('reload', refreshRef.current);
@@ -90,6 +95,7 @@ function Web3ContextProvider({ children }) {
           signer,
           walletError,
           balance,
+          refreshRef: refreshRef.current,
         } as Web3ContextType
       }
     >

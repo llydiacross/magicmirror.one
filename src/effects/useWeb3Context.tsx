@@ -149,16 +149,12 @@ const useWeb3Context = () => {
     if (walletChangedRef.current === null)
       walletChangedRef.current = accountsChanged;
 
-    if ((window as any).ethereum !== undefined) {
-      (window as any).ethereum.on('accountsChanged', walletChangedRef.current);
-      (window as any).ethereum.on('chainChanged', walletChangedRef.current);
-    }
-
-    WebEvents.on('reload', () => {
-      main();
-    });
-
+    WebEvents.on('reload', main);
     main();
+
+    return () => {
+      WebEvents.off('reload', main);
+    };
   }, [loaded]);
 
   return {
