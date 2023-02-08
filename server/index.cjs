@@ -20,6 +20,9 @@ server.use(
   cors({
     origin: [
       "https://localhost:3000",
+      "https://localhost:9090",
+      "http://localhost:3000",
+      "http://localhost:9090",
       "https://webx.infinitymint.app",
       "https://infinitymint.app",
       "https://web.infinitymint.app",
@@ -74,6 +77,7 @@ server.post("/gpt/prompt", async (request, response) => {
     });
     response.status(200).send(completion.data);
   } catch (error) {
+    console.error(error)
     throw new Error("Something went horribly wrong!", error.status);
   }
 });
