@@ -9,8 +9,8 @@ const port = 9090;
 
 let ipfs;
 let injectIPFS = async () => {
-  //A hack to get MJS files to cooperate with CJS
-  ipfs = await import('../server/hack.mjs');
+  //A hack to get MJS files and in extension ipfsCore to cooperate with CJS
+  ipfs = await import('./wrapper.mjs');
 };
 injectIPFS();
 
