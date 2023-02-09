@@ -14,8 +14,9 @@
     "react": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
-    "server": "node server/index.cjs",
-    "server:dev": "nodemon server/index.cjs"
+    "server": "pm2 start server/index.cjs",
+    "server:dev": "nodemon server/index.cjs",
+    "postinstall": "brew install pm2"
   },
   "glue": {
     "ipfs-core": true
