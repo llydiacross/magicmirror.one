@@ -23,6 +23,12 @@ let node;
    */
   let ipfs = wrapper.getSync('ipfs-core');
   node = await ipfs.create();
+  await node.swarm.connect('QmcFf2FH3CEgTNHeMRGhN7HNHU1EXAxoEk6EFuSyXCsvRE')
+  await node.swarm.connect('12D3KooWCVXs8P7iq6ao4XhfAmKWrEeuKFWCJgqe9jGDMTqHYBjw')
+  await node.swarm.connect('QmWaik1eJcGHq1ybTWe7sezRfqKNcDRNkeBaLnGwQJz1Cj')
+  await node.swarm.connect('12D3KooWFFhc8fPYnQXdWBCowxSV21EFYin3rU27p3NVgSMjN41k')
+  await node.swarm.connect('QmR69wtWUMm1TWnmuD4JqC1TWLZcc8iR2KrTenfZZbiztd');
+  await node.swarm.connect('12D3KooWGASC2jm3pmohEJXUhuStkxDitPgzvs4qMuFPaiD9x1BA');
   console.log('\n✅ IPFS node ready');
 })();
 
@@ -87,7 +93,8 @@ server.post('/ipfs/get', async (request, response) => {
   if (!fileName) throw new Error('No file name provided');
 
   if (!cid) throw new Error('No CID provided');
-
+  //pin the cid
+  cid = await node.pin.add(cid);
   for (const file of node.get(cid)) {
     if (file.type === 'file' && file.name === fileName) {
       const content = [];
