@@ -33,6 +33,7 @@
       devShell = pkgs.mkShell rec {
         buildInputs = with pkgs; [
           nodejs-18_x
+          pm2
           yarn
           jq
         ];
