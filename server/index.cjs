@@ -125,7 +125,6 @@ server.post('/ipns/resolve', async (request, response) => {
     });
   } catch (error) {
     console.error(error)
-    throw new Error('bad IPNS CID provided');
   }
 });
 
