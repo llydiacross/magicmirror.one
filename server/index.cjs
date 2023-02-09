@@ -16,8 +16,8 @@ require('dotenv').config();
  */
 let node;
 (async () => {
-  let wrapper = await glue.load();  
-  
+  let wrapper = await glue.load();
+
   /**
    * @type {import('ipfs-core')}
    */
@@ -25,7 +25,6 @@ let node;
   node = await ipfs.create();
   console.log('\n✅ IPFS node ready');
 })();
-
 
 // Configure OpenAI
 const configuration = new Configuration({
@@ -73,6 +72,7 @@ server.use((err, _request, response, _next) => {
     status: 500,
     message: err.message,
   });
+  _next();
 });
 
 //the index
@@ -80,20 +80,53 @@ server.get('/', (_request, response) => {
   response.status(200).json({ ok: true });
 });
 
+server.post('/ipfs/get', async (request, response) => {
+  let cid = request.body.cid;
+  let fileName = request.body.fileName;
+
+  if (!fileName) throw new Error('No file name provided');
+
+  if (!cid) throw new Error('No CID provided');
+
+  for (const file of node.get(cid)) {
+    if (file.type === 'file' && file.name === fileName) {
+      const content = [];
+      for await (const chunk of file.content) {
+        content.push(chunk);
+      }
+      response.status(200).send({
+        cid: cid,
+        data: content,
+      });
+      return;
+    }
+  }
+
+  response.status(500).send({
+    cid: cid,
+    message: 'File not found',
+    status: 500,
+  });
+});
+
 server.post('/ipns/resolve', async (request, response) => {
   let ipnsCid = request.body.path;
 
-  if (!ipnsCid)
-    throw new Error('No IPNS CID provided');
-  
-  let ipfsCid;
-  for await (const name of node.name.resolve(ipnsCid)) {
-    ipfsCid = name;
-  }
+  if (!ipnsCid) throw new Error('No IPNS CID provided');
 
-  response.status(200).send({
-    cid: ipfsCid,
-  });
+  try {
+    let ipfsCid;
+    for await (const name of node.name.resolve(ipnsCid)) {
+      ipfsCid = name;
+    }
+
+    response.status(200).send({
+      cid: ipfsCid,
+    });
+  } catch (error) {
+    console.error(error)
+    throw new Error('bad IPNS CID provided');
+  }
 });
 
 server.post('/gpt/prompt', async (request, response) => {

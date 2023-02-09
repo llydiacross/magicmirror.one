@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { useState, useEffect, useContext, useRef } from 'react';
 import config from '../config';
 import { Web3Context } from '../contexts/web3Context';
-import { resolveDirectory, resolveFile } from '../ipfs';
+import { resolveDirectory, resolveFile, resolveIPNS } from '../ipfs';
 import { Buffer } from 'buffer';
 
 const prepareAvatar = async (
@@ -12,10 +12,28 @@ const prepareAvatar = async (
   fetchMetadataRef
 ) => {
   try {
-    const potentialAvatar = await resolver.getText('avatar');
+    let potentialAvatar = await resolver.getText('avatar');
 
     if (potentialAvatar === null) {
       throw new Error('no avatar');
+    }
+
+    //resolve ipns
+    if (
+      potentialAvatar.indexOf('ipns://') !== -1 ||
+      potentialAvatar.indexOf('ipns/') !== -1
+    ) {
+      if (potentialAvatar.indexOf('ipns/') !== -1)
+        potentialAvatar = potentialAvatar.split('ipns/')[1];
+
+      potentialAvatar = (
+        await resolveIPNS(
+          potentialAvatar.replace('ipns://', ''),
+          fetchImageRef.current
+        )
+      )
+        .replace('ipfs/', 'ipfs://')
+        .replace('/ipfs/', 'ipfs://');
     }
 
     if (
@@ -46,7 +64,24 @@ const prepareAvatar = async (
 
         try {
           const json = JSON.parse(decoded);
-          const image = json.image;
+          let image = json.image;
+
+          //resolve ipns
+          if (
+            image.indexOf('ipns://') !== -1 ||
+            image.indexOf('ipns/') !== -1
+          ) {
+            if (image.indexOf('ipns/') !== -1) image = image.split('ipns/')[1];
+
+            image = (
+              await resolveIPNS(
+                image.replace('ipns://', ''),
+                fetchImageRef.current
+              )
+            )
+              .replace('ipfs/', 'ipfs://')
+              .replace('/ipfs/', 'ipfs://');
+          }
 
           if (image.indexOf('ipfs://') !== -1) {
             const decodedImage = await resolveFile(

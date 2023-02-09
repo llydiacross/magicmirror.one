@@ -210,6 +210,24 @@ export const resolveFile = async (
   return files.filter((file) => file.name === fileName)[0];
 };
 
+export const resolvePotentialCID = async (
+  potentialCID: string,
+  abortController?: AbortController
+) => {
+  if (potentialCID.includes('ipfs://'))
+    potentialCID = potentialCID.split('ipfs://')[1];
+  else if (potentialCID.includes('ipns://')) {
+    potentialCID = potentialCID.split('ipns://')[1];
+    potentialCID = await resolveIPNS(potentialCID, abortController);
+  }
+
+  if (potentialCID.includes('ipfs/'))
+    potentialCID = potentialCID.split('ipfs/')[1];
+
+  potentialCID = potentialCID.split('/')[0];
+  return potentialCID;
+};
+
 /**
  *
  * @param potentialCID
@@ -222,19 +240,11 @@ export const resolveDirectory = async (
   provider?: IPFSProvider
 ): Promise<Web3Response> => {
   provider = provider || getReadOnlyProvider('web3-storage');
-
-  if (potentialCID.includes('ipfs://'))
-    potentialCID = potentialCID.split('ipfs://')[1];
-  else if (potentialCID.includes('ipns://')) {
-    potentialCID = potentialCID.split('ipns://')[1];
-    potentialCID = await resolveIPNS(potentialCID, abortController);
-  }
-
-  if (potentialCID.includes('ipfs/'))
-    potentialCID = potentialCID.split('ipfs/')[1];
-
-  potentialCID = potentialCID.split('/')[0];
-  return provider.getDirectory(potentialCID, abortController);
+  potentialCID = await resolvePotentialCID(potentialCID, abortController);
+  let response = provider.getDirectory(potentialCID, abortController);
+  response.cid = potentialCID;
+  console.log('resolved ' + potentialCID);
+  return response;
 };
 
 let _IPFSCompanionProvider: IPFSCompanionProvider;

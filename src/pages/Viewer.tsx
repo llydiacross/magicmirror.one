@@ -5,10 +5,14 @@ import FixedElements from '../components/FixedElements';
 import SettingsModal from '../modals/SettingsModal';
 import { ENSContext } from '../contexts/ensContext';
 import { withRouter, useHistory } from 'react-router-dom';
-import { Web3File } from 'web3.storage';
+import { Web3File, Web3Response } from 'web3.storage';
 import HTMLRenderer from '../components/HTMLRenderer';
 import { getIPFSProvider } from '../helpers';
-import { resolveDirectory, Web3StorageProvider } from '../ipfs';
+import {
+  resolveDirectory,
+  resolvePotentialCID,
+  Web3StorageProvider,
+} from '../ipfs';
 import HeartIcon from '../components/Icons/HeartIcon';
 
 const parseCDI = async (files: Web3File[], setPercentage: Function) => {
@@ -146,7 +150,7 @@ function Viewer({ match }) {
           const abortController = new AbortController();
           abortRef.current = abortController;
           setPercentage(20);
-          let directory;
+          let directory: Web3Response;
           try {
             directory = await resolveDirectory(
               ensContext.contentHash,
@@ -161,18 +165,39 @@ function Viewer({ match }) {
           }
 
           setPercentage(30);
-          const files = await directory.files();
 
-          setPercentage(50);
-          if (files.length === 0) {
-            isEmpty = true;
-          } else {
-            const parsed = await parseCDI(files, setPercentage);
-            setDir(files);
-            if (parsed.valid) {
-              setDirect(parsed.direct);
-              setBuffer(parsed.source);
-            } else isEmpty = true;
+          let files: Web3File[];
+          try {
+            files = await directory.files();
+            setPercentage(50);
+            if (files.length === 0) {
+              isEmpty = true;
+            } else {
+              const parsed = await parseCDI(files, setPercentage);
+              setDir(files);
+              if (parsed.valid) {
+                setDirect(parsed.direct);
+
+                if (!parsed.direct) setBuffer(parsed.source);
+                else
+                  setBuffer(
+                    'https://dweb.link/ipfs/' +
+                      (await resolvePotentialCID(ensContext.contentHash))
+                  );
+              } else isEmpty = true;
+            }
+          } catch (error) {
+            if (error.name === 'AbortError') return;
+
+            console.error(error);
+            if (error.message.indexOf('block with cid') !== -1) {
+              setDirect(true);
+              setBuffer(
+                'https://dweb.link/ipfs/' +
+                  (await resolvePotentialCID(ensContext.contentHash))
+              );
+              isEmpty = false;
+            } else files = [];
           }
         }
 
@@ -252,12 +277,7 @@ function Viewer({ match }) {
               <iframe
                 title={ensContext.currentEnsAddress}
                 style={{ width: '100%', height: '100%' }}
-                src={
-                  'https://dweb.link/ipfs/' +
-                  ensContext.contentHash
-                    .replace('ipfs://', '')
-                    .replace('ipns://', '')
-                }
+                src={buffer}
               />
             ) : (
               <HTMLRenderer
