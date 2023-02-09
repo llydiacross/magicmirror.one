@@ -17,6 +17,7 @@ require('dotenv').config();
 let node;
 (async () => {
   let wrapper = await glue.load();  
+  
   /**
    * @type {import('ipfs-core')}
    */
@@ -68,24 +69,31 @@ server.use(morgan('dev'));
 
 // An error handling middleware
 server.use((err, _request, response, _next) => {
-  response.status(500).send('Oops, something went wrong.\n', err);
+  response.status(500).send({
+    status: 500,
+    message: err.message,
+  });
 });
 
+//the index
 server.get('/', (_request, response) => {
   response.status(200).json({ ok: true });
 });
 
-
 server.post('/ipns/resolve', async (request, response) => {
-  let ipnsCid = request.body.ipns;
+  let ipnsCid = request.body.path;
 
-  if (!ipnsCid) {
-    response.status(400).send('No IPNS CID provided');
-  } else {
-
-    const ipfsCid = node.name.resolve(ipnsCid);
-    response.status(200).send(ipfsCid);
+  if (!ipnsCid)
+    throw new Error('No IPNS CID provided');
+  
+  let ipfsCid;
+  for await (const name of node.name.resolve(ipnsCid)) {
+    ipfsCid = name;
   }
+
+  response.status(200).send({
+    cid: ipfsCid,
+  });
 });
 
 server.post('/gpt/prompt', async (request, response) => {
@@ -99,22 +107,17 @@ server.post('/gpt/prompt', async (request, response) => {
 
   if (n > 6) n = 6;
 
-  try {
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt: request.body.prompt || 'Create a basic HTML website',
-      temperature,
-      n,
-      max_tokens: 2048,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-    response.status(200).send(completion.data);
-  } catch (error) {
-    console.error(error);
-    throw new Error('Something went horribly wrong!', error.status);
-  }
+  const completion = await openai.createCompletion({
+    model: 'text-davinci-003',
+    prompt: request.body.prompt || 'Create a basic HTML website',
+    temperature,
+    n,
+    max_tokens: 2048,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  });
+  response.status(200).send(completion.data);
 });
 
 server.listen(port, () => {

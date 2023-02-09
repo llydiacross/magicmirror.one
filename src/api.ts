@@ -22,12 +22,16 @@ export const getIPFSEndpoint = () => {
   return getEndpointHref() + config.ipfsEndpoint;
 };
 
+export const getIPNSEndpoint = () => {
+  return getEndpointHref() + config.ipnsEndpoint;
+};
+
 export const apiFetch = async (
-  type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs',
+  type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns',
   method: string,
   data: any,
   requestMethod: 'GET' | 'POST',
-  abortController: AbortController
+  abortController?: AbortController
 ) => {
   requestMethod = requestMethod || 'GET';
   let endPoint = '';
@@ -39,6 +43,9 @@ export const apiFetch = async (
       break;
     case 'search':
       endPoint = getSearchEndpoint();
+      break;
+    case 'ipns':
+      endPoint = getIPNSEndpoint();
       break;
     case 'nft':
       endPoint = getNFTEndpoint();

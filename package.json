@@ -151,7 +151,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
-    "jsglue": "^1.0.0",
+    "jsglue": "^1.2.1",
     "jsx-to-string": "^1.4.0",
     "mini-css-extract-plugin": "^2.7.2",
     "module-alias": "^2.2.2",

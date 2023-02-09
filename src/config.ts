@@ -10,6 +10,7 @@ const config = {
   apiEndpoint: 'https://web-api.infinitymint.app/',
   chatGPTendpoint: 'gpt/',
   searchEndpoint: 'search/',
+  ipnsEndpoint: 'ipns/',
   nftEndpoint: 'nft/',
   ipfsEndpoint: 'ipfs/',
   defaultAvatar:

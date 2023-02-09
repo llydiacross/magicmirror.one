@@ -1,4 +1,5 @@
 import { Web3Storage, File, Web3Response, Web3File } from 'web3.storage';
+import { apiFetch } from './api';
 import config from './config';
 import storage from './storage';
 
@@ -166,6 +167,25 @@ export const getReadOnlyProvider = (
   }
 };
 
+export const resolveIPNS = async (
+  ipnsHash: string,
+  abortController?: AbortController
+) => {
+  let result = await apiFetch(
+    'ipns',
+    'resolve',
+    {
+      path: ipnsHash,
+    },
+    'POST',
+    abortController
+  );
+
+  console.log(result);
+
+  return result.cid;
+};
+
 /**
  *
  * @param potentialCID
@@ -205,9 +225,10 @@ export const resolveDirectory = async (
 
   if (potentialCID.includes('ipfs://'))
     potentialCID = potentialCID.split('ipfs://')[1];
-
-  if (potentialCID.includes('ipns://'))
+  else if (potentialCID.includes('ipns://')) {
     potentialCID = potentialCID.split('ipns://')[1];
+    potentialCID = await resolveIPNS(potentialCID, abortController);
+  }
 
   if (potentialCID.includes('ipfs/'))
     potentialCID = potentialCID.split('ipfs/')[1];

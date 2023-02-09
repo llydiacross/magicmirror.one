@@ -12749,10 +12749,10 @@
   "resolved" "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz"
   "version" "0.5.0"
 
-"jsglue@^1.0.0":
-  "integrity" "sha512-n4L/EMJFhFLUZ8rGQTDcxG/fgd24zNbZLaim5mPo5TSL2fqIY3tEIN/sLEqzFUaa9JfWDQvu5CdmcK+N2s4jkg=="
-  "resolved" "https://registry.npmjs.org/jsglue/-/jsglue-1.0.0.tgz"
-  "version" "1.0.0"
+"jsglue@^1.2.1":
+  "integrity" "sha512-IxCpMRRjGcgxOuMt82bnh1ugSo2bPAw+vJ9l2gySp3xMNTNm2GQ32oom37ROJ72re/QO999i32LaKp1gr1sF6g=="
+  "resolved" "https://registry.npmjs.org/jsglue/-/jsglue-1.2.1.tgz"
+  "version" "1.2.1"
   dependencies:
     "dotenv" "^16.0.3"
 
