@@ -124,6 +124,10 @@ server.post('/ipns/resolve', async (request, response) => {
       cid: ipfsCid,
     });
   } catch (error) {
+    response.status(500).send({
+      message: 'IPNS CID not found',
+      status: 500,
+    });
     console.error(error)
   }
 });
