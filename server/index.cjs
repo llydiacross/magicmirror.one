@@ -22,7 +22,23 @@ let node;
    * @type {import('ipfs-core')}
    */
   let ipfs = wrapper.getSync('ipfs-core');
-  node = await ipfs.create({type: 'proc', ipfsBin: '/usr/local/bin/ipfs'});
+  node = await ipfs.create({
+    type: 'proc', ipfsBin: '/usr/local/bin/ipfs', config: {
+      Discovery: {
+        MDNS: {
+          Enabled: true,
+          Interval: 10
+        }
+      },  
+      Pubsub: {
+        Router: 'gossipsub',
+        Enabled: true,
+      },
+      Profiles: {
+        server: true,
+      },
+    }
+  });
 
   console.log('\n✅ IPFS node ready');
 })();
