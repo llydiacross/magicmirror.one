@@ -9,12 +9,12 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "concurrently \"npm run react\" \"npm run server\"",
-    "dev": "concurrently \"npm run react\" \"npm run server:dev\"",
+    "serve": "npm run build && concurrently \"serve -s build\" \"npm run server\"",
+    "start": "concurrently \"npm run react\" \"npm run server:dev\"",
     "react": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
-    "server": "pm2 start server/index.cjs",
+    "server": "npx pm2 start server/index.cjs",
     "server:dev": "nodemon server/index.cjs",
     "postinstall": "brew install pm2"
   },
@@ -160,6 +160,7 @@
     "openai": "^3.1.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
+    "pm2": "^5.2.2",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-normalize": "^10.0.1",
     "prismjs": "^1.29.0",
