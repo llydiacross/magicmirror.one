@@ -14,8 +14,8 @@
     "react": "node react/start.js",
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
-    "server": "npx pm2 start server/index.cjs",
-    "server:dev": "nodemon server/index.cjs",
+    "server": "npx pm2 start server/server.mjs",
+    "server:dev": "nodemon server/server.mjs",
     "postinstall": "brew install pm2"
   },
   "glue": {
@@ -141,6 +141,7 @@
     "express": "^4.18.2",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
+    "glob": "^8.1.0",
     "helmet": "^6.0.1",
     "html-webpack-plugin": "^5.5.0",
     "http-browserify": "^1.7.0",

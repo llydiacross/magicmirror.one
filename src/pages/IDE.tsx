@@ -24,25 +24,25 @@ const defaultTabs = {
     name: '📃',
     icon: 'code',
     language: 'html',
-    code: "<h1 class='text-6xl text-center mt-4'>Welcome to Web.eth</h1>",
+    code: '',
   },
   css: {
     name: '🖌️',
     icon: 'code',
     language: 'css',
-    code: 'body, html { padding: 0; margin: 0; }',
+    code: '',
   },
   js: {
     name: '🧩',
     icon: 'code',
     language: 'javascript',
-    code: 'console.log("Hello World")',
+    code: '',
   },
   '.xens': {
     name: '📜',
     icon: 'code',
     language: 'json',
-    code: '{"name": "Web.eth"}',
+    code: '',
   },
 };
 
@@ -67,7 +67,6 @@ function IDE({ theme }) {
   const themeRef = useRef(theme || null);
   const history = useHistory();
 
-  // Code for the h1 text animation is in the animation.ts file
   useEffect(() => {
     if (
       themeRef.current === null &&

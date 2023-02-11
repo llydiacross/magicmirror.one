@@ -1,15 +1,19 @@
 import { ethers } from 'ethers';
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef, Ref } from 'react';
 import config from '../config';
-import { Web3Context } from '../contexts/web3Context';
+import { Web3Context, Web3ContextType } from '../contexts/web3Context';
 import { resolveDirectory, resolveFile, resolveIPNS } from '../ipfs';
 import { Buffer } from 'buffer';
 
 const prepareAvatar = async (
-  resolver,
-  context,
-  fetchImageRef,
-  fetchMetadataRef
+  resolver: ethers.providers.Resolver,
+  context: Web3ContextType,
+  imageAbortController: {
+    current: AbortController | null;
+  },
+  metadataAbortController: {
+    current: AbortController | null;
+  }
 ) => {
   try {
     let potentialAvatar = await resolver.getText('avatar');
@@ -29,7 +33,7 @@ const prepareAvatar = async (
       potentialAvatar = (
         await resolveIPNS(
           potentialAvatar.replace('ipns://', ''),
-          fetchImageRef.current
+          imageAbortController.current
         )
       )
         .replace('ipfs/', 'ipfs://')
@@ -56,8 +60,11 @@ const prepareAvatar = async (
       try {
         const result = await instance.uri(tokenId);
 
-        const directory = await resolveDirectory(result, fetchImageRef.current);
-        fetchImageRef.current = null;
+        const directory = await resolveDirectory(
+          result,
+          imageAbortController.current
+        );
+        imageAbortController.current = null;
         const files = await directory.files();
         const stream = await files[0].stream().getReader().read();
         decoded = new TextDecoder().decode(stream.value);
@@ -76,7 +83,7 @@ const prepareAvatar = async (
             image = (
               await resolveIPNS(
                 image.replace('ipns://', ''),
-                fetchImageRef.current
+                imageAbortController.current
               )
             )
               .replace('ipfs/', 'ipfs://')
@@ -87,9 +94,9 @@ const prepareAvatar = async (
             const decodedImage = await resolveFile(
               json.image,
               undefined,
-              fetchMetadataRef.current
+              metadataAbortController.current
             );
-            fetchMetadataRef.current = null;
+            metadataAbortController.current = null;
             return (
               `data:image/${decodedImage.name.split('.').pop()};base64,` +
               Buffer.from(
@@ -133,8 +140,10 @@ const useENSContext = ({ ensAddress }) => {
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
-  const fetchMetadataRef = useRef(null);
-  const fetchImageRef = useRef(null);
+
+  // Abort controllers
+  const fetchMetadataAbortController = useRef(null);
+  const fetchImageAbortController = useRef(null);
 
   useEffect(() => {
     if (!context.loaded) return;
@@ -158,14 +167,21 @@ const useENSContext = ({ ensAddress }) => {
       setResolver(resolver);
 
       // Will kill and make new abort controllers
-      if (fetchImageRef.current !== null) fetchImageRef.current.abort();
-      fetchImageRef.current = new AbortController();
+      if (fetchImageAbortController.current !== null)
+        fetchImageAbortController.current.abort();
+      fetchImageAbortController.current = new AbortController();
 
-      if (fetchMetadataRef.current !== null) fetchMetadataRef.current.abort();
-      fetchMetadataRef.current = new AbortController();
+      if (fetchMetadataAbortController.current !== null)
+        fetchMetadataAbortController.current.abort();
+      fetchMetadataAbortController.current = new AbortController();
 
       setAvatar(
-        await prepareAvatar(resolver, context, fetchImageRef, fetchMetadataRef)
+        await prepareAvatar(
+          resolver,
+          context,
+          fetchImageAbortController,
+          fetchMetadataAbortController
+        )
       );
 
       try {
@@ -198,8 +214,10 @@ const useENSContext = ({ ensAddress }) => {
     });
 
     return () => {
-      if (fetchImageRef.current !== null) fetchImageRef.current.abort();
-      if (fetchMetadataRef.current !== null) fetchMetadataRef.current.abort();
+      if (fetchImageAbortController.current !== null)
+        fetchImageAbortController.current.abort();
+      if (fetchMetadataAbortController.current !== null)
+        fetchMetadataAbortController.current.abort();
     };
   }, [currentEnsAddress, context]);
 

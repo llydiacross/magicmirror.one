@@ -6,20 +6,24 @@ import PropTypes from 'prop-types';
 import WebEvents from '../webEvents';
 
 export interface Web3ContextType {
-  balance: null;
+  balance: number;
   accounts: string[];
   ensAddresses: string[];
-  walletInstalled: false;
-  walletConnected: false;
-  walletAddress: '0x0';
+  walletInstalled: boolean;
+  walletConnected: boolean;
+  walletAddress: string;
   web3Provider:
     | ethers.providers.Web3Provider
     | ethers.providers.JsonRpcProvider;
   walletError: Error;
-  chainId: 0;
-  loaded: false;
-  refreshRef: Function;
-  walletChangedRef: Function;
+  chainId: number;
+  loaded: boolean;
+  refreshEvent: {
+    current: Function;
+  };
+  walletChangedEvent: {
+    current: Function;
+  };
   signer: ethers.Signer;
 }
 
@@ -30,14 +34,14 @@ export const Web3Context = createContext({
   signer: null,
   walletInstalled: false,
   walletConnected: false,
-  walletAddress: '0x0',
+  walletAddress: null,
   web3Provider: null,
   walletError: null,
-  chainId: 0,
-  refreshRef: null,
+  chainId: -1,
+  refreshEvent: null,
   loaded: false,
-  walletChangedRef: null,
-} as Web3ContextType);
+  walletChangedEvent: null,
+});
 
 function Web3ContextProvider({ children }) {
   const {
@@ -52,8 +56,8 @@ function Web3ContextProvider({ children }) {
     walletError,
     ensAddresses,
     balance,
-    refreshRef,
-    walletChangedRef,
+    refreshEvent,
+    walletChangedEvent,
   } = useWeb3Context();
 
   //in order to avoid the events being deleted on every update to the context, we need to use a cleanup function and define events here here not in the context
@@ -61,20 +65,26 @@ function Web3ContextProvider({ children }) {
     if (!loaded) return;
 
     if ((window as any).ethereum !== undefined) {
-      (window as any).ethereum.on('accountsChanged', walletChangedRef.current);
-      (window as any).ethereum.on('chainChanged', walletChangedRef.current);
+      (window as any).ethereum.on(
+        'accountsChanged',
+        walletChangedEvent.current
+      );
+      (window as any).ethereum.on('chainChanged', walletChangedEvent.current);
     }
 
+    //do the reload event
+    WebEvents.on('reload', refreshEvent.current);
+
     return () => {
-      WebEvents.off('reload', refreshRef.current);
+      WebEvents.off('reload', refreshEvent.current);
       if ((window as any).ethereum !== undefined) {
         (window as any).ethereum.removeListener(
           'accountsChanged',
-          walletChangedRef.current
+          walletChangedEvent.current
         );
         (window as any).ethereum.removeListener(
           'chainChanged',
-          walletChangedRef.current
+          walletChangedEvent.current
         );
       }
     };
@@ -95,7 +105,8 @@ function Web3ContextProvider({ children }) {
           signer,
           walletError,
           balance,
-          refreshRef: refreshRef.current,
+          refreshEvent,
+          walletChangedEvent,
         } as Web3ContextType
       }
     >

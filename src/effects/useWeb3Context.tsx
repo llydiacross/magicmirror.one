@@ -18,8 +18,8 @@ const useWeb3Context = () => {
   const [walletError, setWalletError] = useState(null);
   const [balance, setBalance] = useState(null);
 
-  const refreshRef = useRef(null);
-  const walletChangedRef = useRef(null);
+  const refreshEvent = useRef(null);
+  const walletChangedEvent = useRef(null);
 
   const requestAccounts = async () => {
     if ((window as any).ethereum === undefined) return [];
@@ -145,14 +145,17 @@ const useWeb3Context = () => {
       main();
     };
 
-    if (refreshRef.current === null) refreshRef.current = main;
-    if (walletChangedRef.current === null)
-      walletChangedRef.current = accountsChanged;
+    if (refreshEvent.current === null) refreshEvent.current = main;
+    if (walletChangedEvent.current === null)
+      walletChangedEvent.current = accountsChanged;
 
+    //set the reload web event to redo main
     WebEvents.on('reload', main);
+    //run main
     main();
 
     return () => {
+      //undo main
       WebEvents.off('reload', main);
     };
   }, [loaded]);
@@ -167,8 +170,8 @@ const useWeb3Context = () => {
     loaded,
     signer,
     balance,
-    refreshRef,
-    walletChangedRef,
+    refreshEvent,
+    walletChangedEvent,
     walletError,
     ensAddresses,
   };

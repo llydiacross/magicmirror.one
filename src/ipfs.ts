@@ -3,6 +3,15 @@ import { apiFetch } from './api';
 import config from './config';
 import storage from './storage';
 
+interface IPFSFile {
+  cid: string;
+  name: string;
+  type: string;
+  size: number;
+  path: string;
+  content: Promise<any>;
+}
+
 /**
  * IPFS Provider abstract class defining the methods that need to be implemented
  */
