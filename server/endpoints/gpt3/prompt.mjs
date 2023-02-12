@@ -1,6 +1,7 @@
 import { OpenAIApi, Configuration } from 'openai';
 import server from '../../server.mjs';
 import { Request, Response } from 'express';
+import { success, userError } from '../../utils/helpers.mjs';
 
 // Configure OpenAI
 const configuration = new Configuration(
@@ -14,40 +15,47 @@ const configuration = new Configuration(
 const openai = new OpenAIApi(configuration);
 
 /**
- * 
- * @param {Request} req 
- * @param {Response} res 
+ *
+ * @param {Request} req
+ * @param {Response} res
  */
 export const post = async (req, res) => {
   let temperature = parseFloat(req.body.temp) || 0.6;
   if (isNaN(temperature)) temperature = 0.6;
 
   if (temperature > 3) temperature = 3;
+  if (req.body.prompt === undefined)
+    return userError(res, 'No prompt provided');
 
   let n = parseInt(req.body.n) || 2;
   if (isNaN(n)) n = 2;
 
   if (n > 6) n = 6;
 
-  const completion = await openai.createCompletion({
-    model: 'text-davinci-003',
-    prompt: req.body.prompt || 'Create a basic HTML website',
-    temperature,
-    n,
-    max_tokens: 2048,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-  });
-  response.status(200).send(completion.data);
+  try {
+    let completion = await openai.createCompletion({
+      model: 'text-davinci-003',
+      prompt: req.body.prompt,
+      temperature,
+      n,
+      max_tokens: 2048,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+    success(res, completion.data);
+  } catch (error) {
+    console.log('OpenAI Error', error)
+    return userError(res, 'Sorry, OpenAI is not responding right now. Please try again later.');
+  }
 };
 
 /**
- * 
- * @param {Request} req 
- * @param {Response} res 
+ *
+ * @param {Request} req
+ * @param {Response} res
  */
-export const get = async (req, res) => { };
+export const get = async (req, res) => {};
 
 /**
  * Uncomment to specify path

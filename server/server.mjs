@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import { create } from 'ipfs-http-client';
 
 //load our .env
 dotenv.config({
@@ -28,6 +29,10 @@ class Server {
    * @type {import('ipfs-core').IPFS}
    */
   node = null;
+  /**
+   * @type {import('ipfs-http-client').IPFSHTTPClient}
+   */
+  ipfs = null;
   /**
    * @type {Array}
    */
@@ -71,6 +76,9 @@ class Server {
 
     this.config = config;
     this.node = await ipfs.create(config.ipfs || {});
+    this.ipfs = create({
+      url: config.ipfsEndpoint || 'https://dweb.link/api/v0',
+    });
 
     //set CORS after config has been loaded
     this.app.use(
@@ -105,14 +113,34 @@ class Server {
             .replace('.js', '')
             .replace(process.cwd(), '');
 
-        if(path[0] !== '/') path = '/' + path;
-          
+        if (path[0] !== '/') path = '/' + path;
+
         console.log('New route: ' + path);
-        if (route.post) app.post(route.path, route.post);
+        if (route.post)
+          this.app.post(route.path, async (req, res) => {
+            try {
+              await route.post(req, res);
+            } catch (error) {
+              console.log('Error in post route: ' + route.path);
+              console.error(error);
+            }
+          });
         else console.log('no post export for ' + route.path);
-        if (route.get) app.get(route.path, route.get);
+        if (route.get)
+          this.app.get(route.path, async (req, res) => {
+            try {
+              await route.get(req, res);
+            } catch (error) {
+              console.log('Error in get route: ' + route.path);
+              console.error(error);
+              res.statusCode(500).send({
+                ok: false,
+                error: error.message,
+              });
+            }
+          });
         else console.log('no get export for ' + route.path);
-        if (route.default) app.use(route.default);
+        if (route.default) this.app.use(route.default);
         this.routes.push(route);
       })
     );
