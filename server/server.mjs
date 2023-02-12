@@ -1,7 +1,6 @@
 import express from 'express';
 import glue from 'jsglue';
-import glob from 'glob';
-import { getConfig } from './utils/helpers.mjs';
+import { findEndpoints, getConfig, getEndpointPath } from './utils/helpers.mjs';
 import cors from 'cors';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -41,11 +40,12 @@ class Server {
 
   constructor(port = 9090) {
     this.app = express();
-    this.port = port;
+    // this.port = port;
     //helmet
     this.app.use(helmet());
+
     //allows CORS headers to work
-    this.app.use((req, res, next) => {
+    this.app.use((_, res, next) => {
       res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
@@ -79,21 +79,35 @@ class Server {
       })
     );
 
-    //find endpoints
-    let files = await new Promise(async (resolve, reject) => {
-      glob('./endpoints/**/*.mjs', (err, files) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(files);
-      });
-    });
+    //load all the endpoints
+    await this.loadEndpoints();
 
+    this.app.listen(this.port, () => {
+      console.log(`Server listening on port ${this.port}`);
+    });
+  }
+
+  /**
+   * Loads all the endpoints from the endpoints folder and adds them to the server
+   */
+  async loadEndpoints() {
+    let files = await findEndpoints();
     //load all the endpoints
     await Promise.all(
       files.map(async (file) => {
-        const route = await import(file);
-        if (!route.path) throw new Error('no path export for ' + file);
+        let route = await import(file);
+        let endpointPath = await getEndpointPath();
+        let path =
+          route.path ||
+          file
+            .replace(endpointPath, '')
+            .replace('.mjs', '')
+            .replace('.js', '')
+            .replace(process.cwd(), '');
+
+        if(path[0] !== '/') path = '/' + path;
+          
+        console.log('New route: ' + path);
         if (route.post) app.post(route.path, route.post);
         else console.log('no post export for ' + route.path);
         if (route.get) app.get(route.path, route.get);
@@ -102,10 +116,6 @@ class Server {
         this.routes.push(route);
       })
     );
-
-    this.app.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}`);
-    });
   }
 }
 
