@@ -59,16 +59,24 @@ const prepareAvatar = async (
       let decoded;
       try {
         const result = await instance.uri(tokenId);
-
+        //resolve this directory using our provider
         const directory = await resolveDirectory(
           result,
           imageAbortController.current
         );
         imageAbortController.current = null;
-        const files = await directory.files();
-        const stream = await files[0].stream().getReader().read();
-        decoded = new TextDecoder().decode(stream.value);
+        //if we have a directory, for now we will simply treat the first file as the image
 
+        if (directory.files.length === 0)
+          throw new Error('no files in directory');
+
+        if (!directory.files[0].name.toLowerCase().endsWith('.json'))
+          throw new Error(
+            'no json file in directory or dir has multiple files and is considered unsafe'
+          );
+
+        const stream = await directory.files[0].content.getReader().read();
+        decoded = new TextDecoder().decode(stream.value);
         try {
           const json = JSON.parse(decoded);
           let image = json.image;
@@ -91,6 +99,7 @@ const prepareAvatar = async (
           }
 
           if (image.indexOf('ipfs://') !== -1) {
+            //resolve this file using our IPFS provider
             const decodedImage = await resolveFile(
               json.image,
               undefined,
@@ -100,7 +109,7 @@ const prepareAvatar = async (
             return (
               `data:image/${decodedImage.name.split('.').pop()};base64,` +
               Buffer.from(
-                (await decodedImage.stream().getReader().read()).value
+                (await decodedImage.content.getReader().read()).value
               ).toString('base64')
             );
           } else return json.image;
