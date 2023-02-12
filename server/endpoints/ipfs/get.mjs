@@ -9,6 +9,9 @@ import server from '../../server.mjs';
 export const post = async (req, res) => {
   let cid = req.body.cid;
   let fileName = req.body.fileName;
+  let returnDirectory = req.body.returnDirectory || false;
+  if (returnDirectory === 'true') returnDirectory = true;
+  else returnDirectory = false;
 
   let result = [];
   for await (const file of server.ipfs.get(cid)) {
