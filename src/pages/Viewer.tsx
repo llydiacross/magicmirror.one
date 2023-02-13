@@ -5,21 +5,24 @@ import FixedElements from '../components/FixedElements';
 import SettingsModal from '../modals/SettingsModal';
 import { ENSContext } from '../contexts/ensContext';
 import { withRouter, useHistory } from 'react-router-dom';
-import { Web3File, Web3Response } from 'web3.storage';
 import HTMLRenderer from '../components/HTMLRenderer';
-import { getIPFSProvider } from '../helpers';
 import {
+  getProvider,
+  IPFSDirectory,
+  IPFSFile,
+  IPFSProvider,
   resolveDirectory,
   resolvePotentialCID,
-  Web3StorageProvider,
 } from '../ipfs';
 import HeartIcon from '../components/Icons/HeartIcon';
+import storage from '../storage';
+import config from '../config';
 
-const parseCDI = async (files: Web3File[], setPercentage: Function) => {
+const parseDirectory = async (files: IPFSFile[]) => {
   const partialFiles = files.filter((file) => file.name.includes('.partial'));
   const indexFiles = files.filter((file) => file.name === 'index.html');
 
-  let html;
+  let html: any;
   if (indexFiles.length === 0 && partialFiles.length === 0) {
     // No index.html found
     return {
@@ -41,24 +44,24 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
     const struct: any = {};
     if (partialHtml !== undefined) {
       struct.html = new TextDecoder().decode(
-        (await partialHtml.stream().getReader().read()).value
+        (await partialHtml.content.getReader().read()).value
       );
     }
 
     if (partialCss !== undefined) {
       struct.css = new TextDecoder().decode(
-        (await partialCss.stream().getReader().read()).value
+        (await partialCss.content.getReader().read()).value
       );
     }
     if (partialJS !== undefined) {
       struct.js = new TextDecoder().decode(
-        (await partialJS.stream().getReader().read()).value
+        (await partialJS.content.getReader().read()).value
       );
     }
 
     if (partialXens !== undefined) {
       struct['.xens'] = new TextDecoder().decode(
-        (await partialXens.stream().getReader().read()).value
+        (await partialXens.content.getReader().read()).value
       );
     }
 
@@ -70,8 +73,7 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   } else if (indexFiles.length > 0) {
     // Just use the index.html and draw render it to an iframe
     const potentialHTML = indexFiles[0];
-    setPercentage(65);
-    html = await potentialHTML.stream().getReader().read();
+    html = await potentialHTML.content.getReader().read();
     html = new TextDecoder().decode(html.value);
     return {
       valid: true,
@@ -85,11 +87,10 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
   };
 };
 
-const prepareDefaultContent = async (setPercentage: Function) => {
+const prepareDefaultContent = async () => {
   // Get the default content
   const defaultContent = await fetch('/audio.html');
   const html = await defaultContent.text();
-  setPercentage(100);
   return html;
 };
 
@@ -103,22 +104,33 @@ function Viewer({ match }) {
   const [empty, setEmpty] = useState(false);
   const [defaultResponse, setDefaultResponse] = useState(false);
   const [direct, setDirect] = useState(false);
-  const [dir, setDir] = useState(null);
+  const [dir, setDir] = useState<IPFSDirectory>(null);
   const [buffer, setBuffer] = useState(null);
   const [aborted, setAborted] = useState(false);
   const [percentage, setPercentage] = useState(0);
 
   const abortRef = useRef(null);
   const matchRef = useRef(null);
-  const ipfsProvider = useRef<Web3StorageProvider>(null);
+  const ipfsProvider = useRef<IPFSProvider>(null);
   const defaultResponseElement = useRef(null);
 
+  //set the current IPFS provider for this component to be either web3-storage if they are using that or IPFS HTTP provider
   if (ipfsProvider.current === null) {
-    ipfsProvider.current = getIPFSProvider(
-      'web3-storage'
-    ) as Web3StorageProvider;
+    if (storage.getGlobalPreference('useCustomProvider')) {
+      if (storage.getGlobalPreference('customProvider') === 'web3-storage')
+        ipfsProvider.current = getProvider('web3-storage', {
+          apiKey: storage.getGlobalPreference('web3StorageApiKey'),
+        });
+      else
+        ipfsProvider.current = getProvider('ipfs-http', {
+          url:
+            storage.getGlobalPreference('customProviderUrl') ||
+            config.ipfsProviderURL,
+        });
+    }
   }
 
+  // If the current ens address is not the same as the one in the url, update it
   useEffect(() => {
     matchRef.current = match.params.token;
     if (
@@ -139,23 +151,28 @@ function Viewer({ match }) {
       try {
         let isEmpty = false;
 
-        setPercentage(10);
+        //if there is no contentHash and it is completly empty then isEmpty is true
         if (
           ensContext.contentHash === null ||
           ensContext.contentHash.trim().length === 0
         ) {
           isEmpty = true;
         } else {
+          //start the loading animation
+          setPercentage(10);
           if (abortRef.current !== null) abortRef.current.abort();
           const abortController = new AbortController();
           abortRef.current = abortController;
+
+          // Resolve the directory
           setPercentage(20);
-          let directory: Web3Response;
+          let directory: IPFSDirectory;
           try {
             directory = await resolveDirectory(
               ensContext.contentHash,
               abortController
             );
+            abortRef.current = null;
           } catch (error) {
             if (error.name === 'AbortError') {
               setAborted(true);
@@ -164,24 +181,24 @@ function Viewer({ match }) {
             throw error;
           }
 
+          //once we have a directory, parse it and try and find the index.html or .partial files
           setPercentage(30);
 
-          let files: Web3File[];
+          //try it
           try {
-            files = await directory.files();
-            setPercentage(50);
-            if (files.length === 0) {
+            if (directory.files.length === 0) {
               isEmpty = true;
             } else {
-              const parsed = await parseCDI(files, setPercentage);
-              setDir(files);
+              const parsed = await parseDirectory(directory.files);
+              setPercentage(65);
+              setDir(directory);
+
               if (parsed.valid) {
                 setDirect(parsed.direct);
-
                 if (!parsed.direct) setBuffer(parsed.source);
                 else
                   setBuffer(
-                    'https://dweb.link/ipfs/' +
+                    config.ipfsWebProvider +
                       (await resolvePotentialCID(ensContext.contentHash))
                   );
               } else isEmpty = true;
@@ -190,36 +207,42 @@ function Viewer({ match }) {
             if (error.name === 'AbortError') return;
 
             console.error(error);
+
+            //if it's a block with cid error, then we can still render it if we use a direct link
+            //TODO: Find a better way to do this
             if (error.message.indexOf('block with cid') !== -1) {
               setDirect(true);
               setBuffer(
-                'https://dweb.link/ipfs/' +
+                config.ipfsWebProvider +
                   (await resolvePotentialCID(ensContext.contentHash))
               );
               isEmpty = false;
-            } else files = [];
+            }
           }
         }
 
-        setPercentage(80);
+        //if we are empty then we want the AI to take control and try and generate some content
         if (isEmpty) {
-          const defaultContent = await prepareDefaultContent(setPercentage);
+          setPercentage(90);
+          const defaultContent = await prepareDefaultContent();
           setDefaultResponse(defaultContent !== null);
           setBuffer(defaultContent);
           isEmpty = defaultContent === null;
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setPercentage(90);
+        setPercentage(100);
         setEmpty(isEmpty);
         setAborted(false);
         setLoaded(true);
       } catch (error) {
+        //log it
         console.log(error);
         setError(error);
         setLoaded(true);
       }
     };
+
+    //if there is an ENS error already
     if (ensContext.ensError !== null) {
       setLoaded(true);
       return;
@@ -228,7 +251,6 @@ function Viewer({ match }) {
     main();
   }, [ensContext, loaded]);
 
-  useEffect(() => {}, []);
   return (
     <div>
       <div className="hero min-h-screen" hidden={loaded}>

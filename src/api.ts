@@ -6,24 +6,13 @@ export const getEndpointHref = () => {
   else return config.apiEndpoint;
 };
 
-export const getChatGPTEndpoint = () => {
-  return getEndpointHref() + config.chatGPTendpoint;
-};
+export const getEndpoint = (
+  type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns'
+) => {
+  if (config.routes[type] === undefined)
+    throw new Error('invalid api type: ' + type);
 
-export const getSearchEndpoint = () => {
-  return getEndpointHref() + config.searchEndpoint;
-};
-
-export const getNFTEndpoint = () => {
-  return getEndpointHref() + config.nftEndpoint;
-};
-
-export const getIPFSEndpoint = () => {
-  return getEndpointHref() + config.ipfsEndpoint;
-};
-
-export const getIPNSEndpoint = () => {
-  return getEndpointHref() + config.ipnsEndpoint;
+  return getEndpointHref() + config.routes[type];
 };
 
 export const apiFetch = async (
@@ -33,27 +22,8 @@ export const apiFetch = async (
   requestMethod: 'GET' | 'POST',
   abortController?: AbortController
 ) => {
+  let endPoint = getEndpoint(type);
   requestMethod = requestMethod || 'GET';
-  let endPoint = '';
-  // Make a switch statement here
-  switch (type) {
-    case 'chat':
-    case 'gpt3':
-      endPoint = getChatGPTEndpoint();
-      break;
-    case 'search':
-      endPoint = getSearchEndpoint();
-      break;
-    case 'ipns':
-      endPoint = getIPNSEndpoint();
-      break;
-    case 'nft':
-      endPoint = getNFTEndpoint();
-      break;
-    case 'ipfs':
-      endPoint = getIPFSEndpoint();
-      break;
-  }
 
   const result = await fetch(endPoint + method, {
     method: requestMethod,

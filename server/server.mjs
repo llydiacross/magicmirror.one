@@ -44,7 +44,9 @@ class Server {
   config;
 
   constructor(port = 9090) {
-    this.app = express();
+      this.app = express();
+      this.port = port;
+      
     // this.port = port;
     //helmet
     this.app.use(helmet());

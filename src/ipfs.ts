@@ -1,46 +1,56 @@
-import { Web3Storage, File, Web3Response, Web3File } from 'web3.storage';
+import { Web3Storage, File, Web3File } from 'web3.storage';
 import { apiFetch } from './api';
 import config from './config';
 import storage from './storage';
 
-interface IPFSFile {
+/**
+ * IPFS File interface
+ */
+export interface IPFSFile {
   cid: string;
   name: string;
   type: string;
   size: number;
   path: string;
-  content: Promise<any>;
+  content: ReadableStream<Uint8Array>;
+}
+
+/**
+ * IPFS Directory interface
+ */
+export interface IPFSDirectory {
+  cid: string;
+  files: IPFSFile[];
 }
 
 /**
  * IPFS Provider abstract class defining the methods that need to be implemented
  */
-abstract class IPFSProvider {
-  protected readOnly: boolean;
-
-  constructor(readOnly?: boolean) {
-    this.readOnly = readOnly === undefined ? false : readOnly;
-  }
-
-  abstract createInstance(apikey: string): void;
-  abstract uploadFile(filename: string, data: any, type?: string): Promise<any>;
+export abstract class IPFSProvider {
+  abstract createInstance(options: any): void;
+  abstract uploadFile(
+    filename: string,
+    data: any,
+    type?: string
+  ): Promise<string>;
   abstract getFile(cid: string, fileName: string): Promise<any>;
   abstract getContentType(type: string): string;
   abstract getContentExtension(type: string): string;
   abstract getDirectory(cid: string, abortController: AbortController): any;
+  destroy() {
+    //
+  }
 }
 
 /**
  * IPFS Companion provider
  */
-class IPFSCompanionProvider extends IPFSProvider {
-  createInstance(apikey: string) {
+export class IPFSWebProvider extends IPFSProvider {
+  createInstance(options: any) {
     throw new Error('Method not implemented.');
   }
 
   async uploadFile(filename: string, data: any, type?: string): Promise<any> {
-    if (this.readOnly) throw new Error('IPFS Provider is read only');
-
     throw new Error('Method not implemented.');
   }
 
@@ -67,15 +77,20 @@ class IPFSCompanionProvider extends IPFSProvider {
 class Web3StorageProvider extends IPFSProvider {
   private instance: Web3Storage;
 
-  createInstance(apikey: string) {
-    if (this.instance) return;
+  createInstance(options: any) {
     this.instance = new Web3Storage({
       token:
-        storage.getGlobalPreference('web3_storage_token') ||
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZjZWYwNjFCYTkxNGZhYTdFNjU3NEI2N0E0NjU4YjIyNzgwMTYxQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTA0MTM0MTMzMjgsIm5hbWUiOiJpbmZpbml0eS1taW50In0.se1kP3g-ssSs0G8DjIrd2pbUeq1b_OzuCqFoxzepZVA',
+        options?.apiKey || storage.getGlobalPreference('web3StorageApiKey'),
     });
   }
 
+  /**
+   * Returns the CID of the newly uploaded file
+   * @param filename
+   * @param data
+   * @param type
+   * @returns
+   */
   async uploadFile(filename: string, data: any, type = 'image/png') {
     if (this.instance === undefined || this.instance === null) {
       throw new Error('create instance needs to be ran first');
@@ -91,24 +106,43 @@ class Web3StorageProvider extends IPFSProvider {
     return await this.instance.put([file]);
   }
 
-  async getDirectory(cid: string, abort?: any): Promise<Web3Response> {
+  async getDirectory(cid: string, abort?: any): Promise<IPFSDirectory> {
     if (this.instance === undefined || this.instance === null) {
       throw new Error('create instance needs to be ran first');
     }
 
-    const result = await this.instance.get(cid.replace('ipfs://', ''), {
+    let result = await this.instance.get(cid.replace('ipfs://', ''), {
       signal: abort?.signal,
     });
     if (!result.ok) {
       throw new Error('bad IPFS CID "' + cid + '" : ' + result.status);
     }
 
-    return result;
+    let files = await result.files();
+    let response: IPFSDirectory = {
+      cid: cid,
+      files: files.map((file: Web3File) => {
+        return {
+          cid: cid,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          path: file.cid + '/' + file.name,
+          content: file.stream(),
+        };
+      }),
+    };
+
+    return response;
   }
 
-  async getFile(cid: string, fileName: string): Promise<any> {
-    const files = await (await this.getDirectory(cid)).files();
-    return files.filter((file) => file.name === fileName)[0];
+  async getFile(cid: string, fileName: string): Promise<IPFSFile> {
+    let result = await this.getDirectory(cid);
+    let file = result.files.find((file) => file.name === fileName);
+    if (!file) {
+      throw new Error('File not found');
+    }
+    return file;
   }
 
   getContentType(type: string) {
@@ -153,27 +187,10 @@ class Web3StorageProvider extends IPFSProvider {
   }
 }
 
-export { IPFSProvider as Provider, IPFSCompanionProvider, Web3StorageProvider };
-
-let _IPFSCompanionProviderReadOnly: IPFSCompanionProvider;
-let _Web3StorageProviderReadOnly: Web3StorageProvider;
-export const getReadOnlyProvider = (
-  provider?: 'web3-storage' | 'ipfs-companion'
-) => {
-  provider = provider || 'web3-storage';
-  switch (provider) {
-    case 'ipfs-companion':
-      if (_IPFSCompanionProviderReadOnly) return _IPFSCompanionProviderReadOnly;
-      _IPFSCompanionProviderReadOnly = new IPFSCompanionProvider(true);
-      return _IPFSCompanionProviderReadOnly;
-    case 'web3-storage':
-      if (_Web3StorageProviderReadOnly) return _Web3StorageProviderReadOnly;
-      _Web3StorageProviderReadOnly = new Web3StorageProvider(true);
-      _Web3StorageProviderReadOnly.createInstance(config.defaultWeb3Storage);
-      return _Web3StorageProviderReadOnly;
-    default:
-      throw new Error('invalid provider');
-  }
+export {
+  IPFSProvider as Provider,
+  IPFSWebProvider as IPFSCompanionProvider,
+  Web3StorageProvider,
 };
 
 export const resolveIPNS = async (
@@ -190,8 +207,6 @@ export const resolveIPNS = async (
     abortController
   );
 
-  console.log(result);
-
   return result.cid;
 };
 
@@ -207,16 +222,11 @@ export const resolveFile = async (
   fileName?: string,
   abortController: AbortController = null,
   provider?: IPFSProvider
-): Promise<Web3File> => {
+): Promise<IPFSFile> => {
   fileName = fileName || potentialCID.split('/').pop();
   console.log('resolving ' + potentialCID);
-  const result = await resolveDirectory(
-    potentialCID,
-    abortController,
-    provider
-  );
-  const files = await result.files();
-  return files.filter((file) => file.name === fileName)[0];
+  let result = await resolveDirectory(potentialCID, abortController, provider);
+  return result.files.filter((file) => file.name === fileName)[0];
 };
 
 export const resolvePotentialCID = async (
@@ -247,27 +257,81 @@ export const resolveDirectory = async (
   potentialCID: string,
   abortController: AbortController = null,
   provider?: IPFSProvider
-): Promise<Web3Response> => {
-  provider = provider || getReadOnlyProvider('web3-storage');
+): Promise<IPFSDirectory> => {
+  provider = provider || getDefaultProvider();
   potentialCID = await resolvePotentialCID(potentialCID, abortController);
   let response = provider.getDirectory(potentialCID, abortController);
-  response.cid = potentialCID;
-  console.log('resolved ' + potentialCID);
   return response;
 };
 
-let _IPFSCompanionProvider: IPFSCompanionProvider;
+let _IPFSProvider: IPFSProvider;
+export const getDefaultProvider = () => {
+  if (_IPFSProvider) return _IPFSProvider;
+  else {
+    _IPFSProvider = new IPFSWebProvider();
+    _IPFSProvider.createInstance({
+      url: config.ipfsProviderURL || 'https://dweb.link/api/v0',
+    });
+    return _IPFSProvider;
+  }
+};
+
+let _IPFSCustomProvider: IPFSWebProvider;
+let _IPFSApiProvider: IPFSWebProvider;
 let _Web3StorageProvider: Web3StorageProvider;
-export const getProvider = (provider?: 'web3-storage' | 'ipfs-companion') => {
+export const getProvider = (
+  provider?: 'web3-storage' | 'ipfs-http' | 'ipfs-api',
+  options?: {
+    apiKey?: string;
+    url?: string;
+  }
+) => {
   provider = provider || 'web3-storage';
   switch (provider) {
-    case 'ipfs-companion':
-      if (_IPFSCompanionProvider) return _IPFSCompanionProvider;
-      _IPFSCompanionProvider = new IPFSCompanionProvider();
-      return _IPFSCompanionProvider;
+    case 'ipfs-http':
+      if (_IPFSCustomProvider) return _IPFSCustomProvider;
+      else {
+        _IPFSCustomProvider = new IPFSWebProvider();
+        _IPFSCustomProvider.createInstance(options);
+      }
+
+      return _IPFSCustomProvider;
+    case 'ipfs-api':
+      if (_IPFSApiProvider) return _IPFSApiProvider;
+      else {
+        _IPFSApiProvider = new IPFSWebProvider();
+        _IPFSApiProvider.createInstance(options);
+      }
+      return _IPFSApiProvider;
     case 'web3-storage':
       if (_Web3StorageProvider) return _Web3StorageProvider;
+      else {
+        _Web3StorageProvider = new Web3StorageProvider();
+        _Web3StorageProvider.createInstance(options);
+      }
+      return _Web3StorageProvider;
+    default:
+      throw new Error('invalid provider');
+  }
+};
+
+export const recreateProvider = (
+  provider?: 'web3-storage' | 'ipfs-http',
+  options?: {
+    apiKey: string;
+  }
+) => {
+  provider = provider || 'web3-storage';
+  switch (provider) {
+    case 'ipfs-http':
+      if (_IPFSCustomProvider) _IPFSCustomProvider.destroy();
+      _IPFSCustomProvider = new IPFSWebProvider();
+      _IPFSCustomProvider.createInstance(options);
+      return _IPFSCustomProvider;
+    case 'web3-storage':
+      if (_Web3StorageProvider) _Web3StorageProvider.destroy();
       _Web3StorageProvider = new Web3StorageProvider();
+      _Web3StorageProvider.createInstance(options);
       return _Web3StorageProvider;
     default:
       throw new Error('invalid provider');

@@ -12,7 +12,6 @@ export const post = async (req, res) => {
   for await (const link of server.ipfs.ls(cid)) {
     links.push(link);
   }
-
   success(res, {
     cid,
     files: links,

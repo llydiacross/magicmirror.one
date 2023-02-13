@@ -70,18 +70,18 @@ function IDE({ theme }) {
   useEffect(() => {
     if (
       themeRef.current === null &&
-      storage.getGlobalPreference('default_theme')
+      storage.getGlobalPreference('defaultTheme')
     ) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'));
+      setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
         if (
           themeRef.current === null &&
-          storage.getGlobalPreference('default_theme')
+          storage.getGlobalPreference('defaultTheme')
         ) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'));
+          setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
         }
       };
     }
@@ -132,6 +132,12 @@ function IDE({ theme }) {
                 </button>
               );
             })}
+            <button
+              className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black"
+              onClick={() => {}}
+            >
+              ➕
+            </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               📦
             </button>

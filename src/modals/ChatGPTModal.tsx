@@ -1,7 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import storage from '../storage';
-import { Web3Context } from '../contexts/web3Context';
 import WebEvents from '../webEvents';
 import ChatGPTHeader from '../components/ChatGPTHeader';
 import { useHistory } from 'react-router-dom';
@@ -45,14 +44,14 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'));
+    if (storage.getGlobalPreference('defaultTheme')) {
+      setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'));
+        if (storage.getGlobalPreference('defaultTheme')) {
+          setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
         }
       };
     }
