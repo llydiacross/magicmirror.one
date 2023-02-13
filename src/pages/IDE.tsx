@@ -133,7 +133,7 @@ function IDE({ theme }) {
               );
             })}
             <button
-              className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black"
+              className="btn rounded-none bg-success text-white hover:text-white hover:bg-black"
               onClick={() => {}}
             >
               ➕

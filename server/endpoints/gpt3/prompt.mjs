@@ -1,6 +1,5 @@
 import { OpenAIApi, Configuration } from 'openai';
 import server from '../../server.mjs';
-import { Request, Response } from 'express';
 import { success, userError } from '../../utils/helpers.mjs';
 
 // Configure OpenAI
@@ -16,8 +15,8 @@ const openai = new OpenAIApi(configuration);
 
 /**
  *
- * @param {Request} req
- * @param {Response} res
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
   let temperature = parseFloat(req.body.temp) || 0.6;
@@ -52,8 +51,8 @@ export const post = async (req, res) => {
 
 /**
  *
- * @param {Request} req
- * @param {Response} res
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const get = async (req, res) => {};
 

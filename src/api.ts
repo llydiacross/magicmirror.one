@@ -12,7 +12,10 @@ export const getEndpoint = (
   if (config.routes[type] === undefined)
     throw new Error('invalid api type: ' + type);
 
-  return getEndpointHref() + config.routes[type];
+  let route = config.routes[type];
+
+  if (route[route.length - 1] !== '/') route += '/';
+  return getEndpointHref() + route;
 };
 
 export const apiFetch = async (
