@@ -1,18 +1,16 @@
-import { Request, Response } from 'express';
-
 /**
- * 
- * @param {Request} req 
- * @param {Response} res 
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
   
 };
 
 /**
- * 
- * @param {Request} req 
- * @param {Response} res 
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const get = async (req, res) => {};
 

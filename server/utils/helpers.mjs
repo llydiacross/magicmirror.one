@@ -39,9 +39,9 @@ export const userError = (res, message) => {
  */
 export const getEndpointPath = async () => {
   let config = await getConfig();
-  let endpointPath = config.endpointPath || './endpoints';
-  if (endpointPath[endpointPath.length - 1] !== '/') endpointPath += '/';
-  return endpointPath;
+  let endpointPath = config.endpointPath || 'server/endpoints';
+    if (endpointPath[endpointPath.length - 1] !== '/') endpointPath += '/';
+  return process.cwd() + '/' + endpointPath;
 };
 
 /**
@@ -51,6 +51,9 @@ export const getEndpointPath = async () => {
 export const findEndpoints = async () => {
   let endpointPath = await getEndpointPath();
   //find endpoints
+    
+    console.log(endpointPath + '**/*.mjs', 'glob')
+    
   return await new Promise(async (resolve, reject) => {
     glob(endpointPath + '**/*.mjs', (err, files) => {
       if (err) {

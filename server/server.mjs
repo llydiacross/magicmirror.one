@@ -44,9 +44,9 @@ class Server {
   config;
 
   constructor(port = 9090) {
-      this.app = express();
-      this.port = port;
-      
+    this.app = express();
+    this.port = port;
+
     // this.port = port;
     //helmet
     this.app.use(helmet());
@@ -118,22 +118,24 @@ class Server {
         if (path[0] !== '/') path = '/' + path;
 
         console.log('New route: ' + path);
-        if (route.post)
-          this.app.post(route.path, async (req, res) => {
+        if (route.post) {
+          console.log('\tPost Registered');
+          this.app.post(path, async (req, res) => {
             try {
               await route.post(req, res);
             } catch (error) {
-              console.log('Error in post route: ' + route.path);
+              console.log('Error in post route: ' + path);
               console.error(error);
             }
           });
-        else console.log('no post export for ' + route.path);
-        if (route.get)
-          this.app.get(route.path, async (req, res) => {
+        } else console.log('no post export for ' + path);
+        if (route.get) {
+          console.log('\tGet Registered');
+          this.app.get(path, async (req, res) => {
             try {
               await route.get(req, res);
             } catch (error) {
-              console.log('Error in get route: ' + route.path);
+              console.log('Error in get route: ' + path);
               console.error(error);
               res.statusCode(500).send({
                 ok: false,
@@ -141,7 +143,7 @@ class Server {
               });
             }
           });
-        else console.log('no get export for ' + route.path);
+        } else console.log('no get export for ' + path);
         if (route.default) this.app.use(route.default);
         this.routes.push(route);
       })
