@@ -132,6 +132,12 @@ function IDE({ theme }) {
                 </button>
               );
             })}
+            <button
+              className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black"
+              onClick={() => {}}
+            >
+              ➕
+            </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               📦
             </button>

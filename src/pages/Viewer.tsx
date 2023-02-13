@@ -9,13 +9,15 @@ import { Web3File, Web3Response } from 'web3.storage';
 import HTMLRenderer from '../components/HTMLRenderer';
 import { getIPFSProvider } from '../helpers';
 import {
+  IPFSDirectory,
+  IPFSFile,
   resolveDirectory,
   resolvePotentialCID,
   Web3StorageProvider,
 } from '../ipfs';
 import HeartIcon from '../components/Icons/HeartIcon';
 
-const parseCDI = async (files: Web3File[], setPercentage: Function) => {
+const parseCDI = async (files: IPFSFile[], setPercentage: Function) => {
   const partialFiles = files.filter((file) => file.name.includes('.partial'));
   const indexFiles = files.filter((file) => file.name === 'index.html');
 
@@ -41,24 +43,24 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
     const struct: any = {};
     if (partialHtml !== undefined) {
       struct.html = new TextDecoder().decode(
-        (await partialHtml.stream().getReader().read()).value
+        (await partialHtml.content.getReader().read()).value
       );
     }
 
     if (partialCss !== undefined) {
       struct.css = new TextDecoder().decode(
-        (await partialCss.stream().getReader().read()).value
+        (await partialCss.content.getReader().read()).value
       );
     }
     if (partialJS !== undefined) {
       struct.js = new TextDecoder().decode(
-        (await partialJS.stream().getReader().read()).value
+        (await partialJS.content.getReader().read()).value
       );
     }
 
     if (partialXens !== undefined) {
       struct['.xens'] = new TextDecoder().decode(
-        (await partialXens.stream().getReader().read()).value
+        (await partialXens.content.getReader().read()).value
       );
     }
 
@@ -71,7 +73,7 @@ const parseCDI = async (files: Web3File[], setPercentage: Function) => {
     // Just use the index.html and draw render it to an iframe
     const potentialHTML = indexFiles[0];
     setPercentage(65);
-    html = await potentialHTML.stream().getReader().read();
+    html = await potentialHTML.content.getReader().read();
     html = new TextDecoder().decode(html.value);
     return {
       valid: true,
@@ -103,7 +105,7 @@ function Viewer({ match }) {
   const [empty, setEmpty] = useState(false);
   const [defaultResponse, setDefaultResponse] = useState(false);
   const [direct, setDirect] = useState(false);
-  const [dir, setDir] = useState(null);
+  const [dir, setDir] = useState<IPFSDirectory>(null);
   const [buffer, setBuffer] = useState(null);
   const [aborted, setAborted] = useState(false);
   const [percentage, setPercentage] = useState(0);
@@ -150,7 +152,7 @@ function Viewer({ match }) {
           const abortController = new AbortController();
           abortRef.current = abortController;
           setPercentage(20);
-          let directory: Web3Response;
+          let directory: IPFSDirectory;
           try {
             directory = await resolveDirectory(
               ensContext.contentHash,
@@ -166,15 +168,13 @@ function Viewer({ match }) {
 
           setPercentage(30);
 
-          let files: Web3File[];
           try {
-            files = await directory.files();
             setPercentage(50);
-            if (files.length === 0) {
+            if (directory.files.length === 0) {
               isEmpty = true;
             } else {
-              const parsed = await parseCDI(files, setPercentage);
-              setDir(files);
+              const parsed = await parseCDI(directory.files, setPercentage);
+              setDir(directory);
               if (parsed.valid) {
                 setDirect(parsed.direct);
 
@@ -197,7 +197,7 @@ function Viewer({ match }) {
                   (await resolvePotentialCID(ensContext.contentHash))
               );
               isEmpty = false;
-            } else files = [];
+            }
           }
         }
 
