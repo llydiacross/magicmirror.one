@@ -26,7 +26,7 @@ export interface IPFSDirectory {
 /**
  * IPFS Provider abstract class defining the methods that need to be implemented
  */
-abstract class IPFSProvider {
+export abstract class IPFSProvider {
   abstract createInstance(options: any): void;
   abstract uploadFile(
     filename: string,
@@ -45,7 +45,7 @@ abstract class IPFSProvider {
 /**
  * IPFS Companion provider
  */
-class IPFSWebProvider extends IPFSProvider {
+export class IPFSWebProvider extends IPFSProvider {
   createInstance(options: any) {
     throw new Error('Method not implemented.');
   }
@@ -277,16 +277,18 @@ export const getDefaultProvider = () => {
 };
 
 let _IPFSCustomProvider: IPFSWebProvider;
+let _IPFSApiProvider: IPFSWebProvider;
 let _Web3StorageProvider: Web3StorageProvider;
 export const getProvider = (
-  provider?: 'web3-storage' | 'ipfs-companion',
+  provider?: 'web3-storage' | 'ipfs-http' | 'ipfs-api',
   options?: {
-    apiKey: string;
+    apiKey?: string;
+    url?: string;
   }
 ) => {
   provider = provider || 'web3-storage';
   switch (provider) {
-    case 'ipfs-companion':
+    case 'ipfs-http':
       if (_IPFSCustomProvider) return _IPFSCustomProvider;
       else {
         _IPFSCustomProvider = new IPFSWebProvider();
@@ -294,6 +296,13 @@ export const getProvider = (
       }
 
       return _IPFSCustomProvider;
+    case 'ipfs-api':
+      if (_IPFSApiProvider) return _IPFSApiProvider;
+      else {
+        _IPFSApiProvider = new IPFSWebProvider();
+        _IPFSApiProvider.createInstance(options);
+      }
+      return _IPFSApiProvider;
     case 'web3-storage':
       if (_Web3StorageProvider) return _Web3StorageProvider;
       else {
@@ -307,14 +316,14 @@ export const getProvider = (
 };
 
 export const recreateProvider = (
-  provider?: 'web3-storage' | 'ipfs-companion',
+  provider?: 'web3-storage' | 'ipfs-http',
   options?: {
     apiKey: string;
   }
 ) => {
   provider = provider || 'web3-storage';
   switch (provider) {
-    case 'ipfs-companion':
+    case 'ipfs-http':
       if (_IPFSCustomProvider) _IPFSCustomProvider.destroy();
       _IPFSCustomProvider = new IPFSWebProvider();
       _IPFSCustomProvider.createInstance(options);
