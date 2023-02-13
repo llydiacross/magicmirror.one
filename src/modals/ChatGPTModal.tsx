@@ -1,7 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import storage from '../storage';
-import { Web3Context } from '../contexts/web3Context';
 import WebEvents from '../webEvents';
 import ChatGPTHeader from '../components/ChatGPTHeader';
 import { useHistory } from 'react-router-dom';
