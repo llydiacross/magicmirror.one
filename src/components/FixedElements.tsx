@@ -197,7 +197,7 @@ function FixedElements({
         </div>
       </div>
       {/** Footer */}
-      <footer className="fixed bottom-0 flex justify-around footer p-4 bg-black text-neutral-content" hidden={hideFooter}>
+      <footer hidden={hideFooter} className="flex justify-around footer z-50 p-4 bg-black text-neutral-content">
         <div className='flex my-auto justify-center items-center'>
           <img width={48} alt="0x0z logo" style={{mixBlendMode: 'exclusion'}} src="/img/0x0zLogoTransparentWhite.png"/>
           <p>Created by 0x0zAgency.<br/>Made with ❤️ by{' '}
