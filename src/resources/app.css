@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: 'Apocalypse Grunge';
-  src: url('./resources/Apocalypse Grunge.ttf');
+  src: url('./Apocalypse Grunge.ttf');
 }
 @font-face {
   font-family: 'TheNextFont';
-  src: url('./resources/TheNextFont.ttf');
+  src: url('./TheNextFont.ttf');
 }
 
 @tailwind base;

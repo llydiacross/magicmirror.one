@@ -128,7 +128,7 @@ class Server {
               console.error(error);
             }
           });
-        } else console.log('no post export for ' + path);
+        }
         if (route.get) {
           console.log('\tGet Registered');
           this.app.get(path, async (req, res) => {
@@ -143,7 +143,8 @@ class Server {
               });
             }
           });
-        } else console.log('no get export for ' + path);
+        }
+          
         if (route.default) this.app.use(route.default);
         this.routes.push(route);
       })
