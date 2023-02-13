@@ -36,7 +36,9 @@ export const apiFetch = async (
   });
 
   if (result.status !== 200) {
-    throw new Error('bad response', (await result.json()) || {});
+    let message = await result.json();
+    if (message.message) message = message.message;
+    throw new Error(message);
   }
 
   return await result.json();

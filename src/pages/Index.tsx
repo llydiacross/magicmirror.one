@@ -87,6 +87,7 @@ export default function Index() {
         hideUserInfo={false}
         hideFooter={true}
         hideOwnership
+        useFixed={false}
         onSettings={() => {
           setShouldShowSettings(!shouldShowSettings);
         }}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import FixedElements from '../components/FixedElements';
 export default function NotFound() {
   const history = useHistory();
   return (
@@ -23,6 +24,13 @@ export default function NotFound() {
           </div>
         </div>
       </div>
+      <FixedElements
+        hideAlerts
+        hideOwnership
+        hideSettings
+        hideUserInfo
+        useFixed={false}
+      ></FixedElements>
     </>
   );
 }

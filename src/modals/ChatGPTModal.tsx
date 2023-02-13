@@ -65,10 +65,6 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
     };
   }, []);
 
-  if (inputElement?.current?.value?.length === 0 && gptPrompt !== null) {
-    inputElement.current.value = gptPrompt;
-  }
-
   if (inputElement?.current?.value?.length > 0 && !hasInput) {
     setHasInput(true);
   }

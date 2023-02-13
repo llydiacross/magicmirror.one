@@ -34,6 +34,14 @@ div[hidden] {
   @apply hidden;
 }
 
+footer[hidden='true'] {
+  @apply hidden;
+}
+
+button[hidden='true'] {
+  @apply hidden;
+}
+
 .alert[hidden='false'] {
   @apply animate-pulse;
 }
