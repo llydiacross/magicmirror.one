@@ -27,13 +27,13 @@ function FixedElements({
   const history = useHistory();
 
   if (hudRef.current !== null && document.body.clientWidth < 568) {
-    if (storage.getGlobalPreference('hide_alerts')) {
+    if (storage.getGlobalPreference('hideAlerts')) {
       hudRef.current.style.display = 'none';
     } else hudRef.current.style.display = 'flex';
   }
 
   if (hudRef.current !== null) {
-    if (storage.getGlobalPreference('hide_alerts')) {
+    if (storage.getGlobalPreference('hideAlerts')) {
       hudRef.current.style.display = 'none';
     } else hudRef.current.style.display = 'flex';
   }
@@ -183,7 +183,7 @@ function FixedElements({
                   } else hudRef.current.style.display = 'none';
 
                   storage.setGlobalPreference(
-                    'hide_alerts',
+                    'hideAlerts',
                     hudRef.current.style.display === 'none'
                   );
                   storage.saveData();

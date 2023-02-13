@@ -17,14 +17,14 @@ function PublishModal({ hidden, onHide, savedData = {} }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'));
+    if (storage.getGlobalPreference('defaultTheme')) {
+      setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'));
+        if (storage.getGlobalPreference('defaultTheme')) {
+          setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
         }
       };
     }

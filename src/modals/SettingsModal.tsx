@@ -16,14 +16,14 @@ function SettingsModal({ hidden, onHide }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (storage.getGlobalPreference('default_theme')) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'));
+    if (storage.getGlobalPreference('defaultTheme')) {
+      setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
-        if (storage.getGlobalPreference('default_theme')) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'));
+        if (storage.getGlobalPreference('defaultTheme')) {
+          setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
         }
       };
     }
@@ -69,7 +69,7 @@ function SettingsModal({ hidden, onHide }) {
                   type="text"
                   ref={web3StorageRef}
                   defaultValue={
-                    storage.getGlobalPreference('web3_storage_key') || ''
+                    storage.getGlobalPreference('web3StorageApiKey') || ''
                   }
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
@@ -90,7 +90,7 @@ function SettingsModal({ hidden, onHide }) {
                 <input
                   type="url"
                   defaultValue={
-                    storage.getGlobalPreference('ipfs_companion_endpoint') ||
+                    storage.getGlobalPreference('ipfsCompanionEndpoint') ||
                     'http://localhost:5001/api/v0'
                   }
                   ref={ipfsCompanionRef}
@@ -157,7 +157,7 @@ function SettingsModal({ hidden, onHide }) {
                   className="select w-full"
                   ref={defaultThemeRef}
                   defaultValue={
-                    storage.getGlobalPreference('default_theme') || 'dracula'
+                    storage.getGlobalPreference('defaultTheme') || 'dracula'
                   }
                 >
                   {config.themes.map((theme, index) => {
@@ -189,7 +189,7 @@ function SettingsModal({ hidden, onHide }) {
                   ipfsCompanionRef.current.value
                 );
                 storage.setGlobalPreference(
-                  'default_theme',
+                  'defaultTheme',
                   defaultThemeRef.current.value
                 );
                 storage.saveData();

@@ -13,18 +13,18 @@ function Hero({ theme, children }) {
   useEffect(() => {
     if (
       themeRef.current === null &&
-      storage.getGlobalPreference('default_theme')
+      storage.getGlobalPreference('defaultTheme')
     ) {
-      setCurrentTheme(storage.getGlobalPreference('default_theme'));
+      setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
     }
 
     if (eventEmitterCallbackRef.current === null) {
       eventEmitterCallbackRef.current = () => {
         if (
           themeRef.current === null &&
-          storage.getGlobalPreference('default_theme')
+          storage.getGlobalPreference('defaultTheme')
         ) {
-          setCurrentTheme(storage.getGlobalPreference('default_theme'));
+          setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
         }
       };
     }
