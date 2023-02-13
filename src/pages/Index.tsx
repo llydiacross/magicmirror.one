@@ -85,6 +85,7 @@ export default function Index() {
       {/** Contains the footer and the 0x0zLogo with the console button */}
       <FixedElements
         hideUserInfo={false}
+        hideFooter={true}
         hideOwnership
         onSettings={() => {
           setShouldShowSettings(!shouldShowSettings);
