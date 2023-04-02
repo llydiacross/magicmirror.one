@@ -28,6 +28,10 @@ dotenv.config({
  */
 class Server {
   /**
+   * @type {import('infinitymint/dist/app/console').InfinityConsole}
+   * */
+  infinityConsole;
+  /**
    * @type {import('express').Express}
    */
   app;
@@ -90,7 +94,14 @@ class Server {
      */
     let infinitymint = wrapper.getSync('infinitymint');
 
-   
+    let infinityConsole = await infinitymint.load({
+      dontDraw: true,
+      scriptMode: true,
+      startExpress: false,
+      test: true //will expose all logs
+    })
+
+    this.infinityConsole = infinityConsole;
     this.config = config;
     this.node = await ipfs.create(config.ipfs || {});
     this.ipfs = create({

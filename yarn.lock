@@ -6981,6 +6981,11 @@
   "resolved" "https://registry.npmjs.org/crypto-random-string/-/crypto-random-string-2.0.0.tgz"
   "version" "2.0.0"
 
+"crypto@^1.0.1":
+  "integrity" "sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig=="
+  "resolved" "https://registry.npmjs.org/crypto/-/crypto-1.0.1.tgz"
+  "version" "1.0.1"
+
 "css-blank-pseudo@^3.0.3":
   "integrity" "sha512-VS90XWtsHGqoM0t4KpH053c4ehxZ2E6HtGI7x68YFV0pTo/QmkV/YFA+NnlvK8guxZVNWGQhVNJGC39Q8XF4OQ=="
   "resolved" "https://registry.npmjs.org/css-blank-pseudo/-/css-blank-pseudo-3.0.3.tgz"
@@ -9086,6 +9091,11 @@
     "jest-matcher-utils" "^27.5.1"
     "jest-message-util" "^27.5.1"
 
+"express-remove-route@^1.0.0":
+  "integrity" "sha512-YZTE6muCe0BPkgbveM0Hm9zJQREsTwsJekRGSqZ6bV3Vjmi5x8dDp1oe74REgJxUOUSmGSfJ9TK94c0IxsV8uA=="
+  "resolved" "https://registry.npmjs.org/express-remove-route/-/express-remove-route-1.0.0.tgz"
+  "version" "1.0.0"
+
 "express@^4.17.3", "express@^4.18.2":
   "integrity" "sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ=="
   "resolved" "https://registry.npmjs.org/express/-/express-4.18.2.tgz"
@@ -10804,10 +10814,10 @@
     "webpack-manifest-plugin" "^4.0.2"
     "workbox-webpack-plugin" "^6.4.1"
 
-"infinitymint@^1.0.23", "infinitymint@^1.4.1", "infinitymint@^1.4.9":
-  "integrity" "sha512-XKcnPnvHLBTKeUdJ0unYHuKasQL6IKVxuDYD9QbiQJwdTqrA1tCYF5LHYzqBxqPvoxiTx18eg0/uu0dR71Ox5g=="
-  "resolved" "https://registry.npmjs.org/infinitymint/-/infinitymint-1.4.9.tgz"
-  "version" "1.4.9"
+"infinitymint@^1.0.23", "infinitymint@^1.7.0", "infinitymint@^1.8.2":
+  "integrity" "sha512-OPxfddq77geNuha5m+aSlA3xLPNlmAB0oa2wqYDPhycwMdNl4IKkfloCpMlPvDE+zIvK/JbiRG89fcJvgYBDdA=="
+  "resolved" "https://registry.npmjs.org/infinitymint/-/infinitymint-1.8.2.tgz"
+  "version" "1.8.2"
   dependencies:
     "@nomicfoundation/hardhat-chai-matchers" "^1.0.5"
     "@nomicfoundation/hardhat-toolbox" "^2.0.0"
@@ -10818,14 +10828,19 @@
     "blessed" "^0.1.81"
     "blessed-contrib" "^4.11.0"
     "chai" "^4.3.7"
+    "cors" "^2.8.5"
+    "crypto" "^1.0.1"
     "dotenv" "^16.0.3"
+    "express" "^4.18.2"
+    "express-remove-route" "^1.0.0"
     "fs-extra" "^11.1.0"
     "ganache" "^7.7.1"
     "glob" "^8.0.3"
     "hardhat" "^2.12.4"
     "hardhat-change-network" "^0.0.7"
     "hardhat-deploy" "^0.11.22"
-    "infinitymint" "^1.4.1"
+    "helmet" "^6.0.1"
+    "infinitymint" "^1.7.0"
     "ipfs-bitswap" "^15.0.0"
     "ipfs-core" "0.14.0"
     "ipfs-core-types" "^0.13.0"
@@ -10840,6 +10855,7 @@
     "sqlite3" "^5.1.4"
     "tcp-ping-port" "^1.0.1"
     "telnet2" "^0.0.1"
+    "underscore" "^1.13.6"
     "uuid" "^9.0.0"
     "web3.storage" "^4.4.0"
     "yargs" "^17.6.2"
@@ -19857,6 +19873,11 @@
   "integrity" "sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA=="
   "resolved" "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz"
   "version" "2.0.5"
+
+"underscore@^1.13.6":
+  "integrity" "sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A=="
+  "resolved" "https://registry.npmjs.org/underscore/-/underscore-1.13.6.tgz"
+  "version" "1.13.6"
 
 "undici@*", "undici@^5.12.0", "undici@^5.14.0":
   "integrity" "sha512-KWBOXNv6VX+oJQhchXieUznEmnJMqgXMbs0xxH2t8q/FUAWSJvOSr/rMaZKnX5RIVq7JDn0JbP4BOnKG2SGXLQ=="

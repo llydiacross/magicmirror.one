@@ -15,7 +15,7 @@
     "build": "node react/build.js",
     "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
     "server": "npx pm2 start server/server.mjs",
-    "server:dev": "nodemon server/server.mjs"
+    "server:dev": "nodemon server/server.mjs --watch /server/"
   },
   "glue": {
     "ipfs-core": true,
@@ -149,7 +149,7 @@
     "http-browserify": "^1.7.0",
     "https-browserify": "^1.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "infinitymint": "^1.4.9",
+    "infinitymint": "^1.8.2",
     "infinitymint-client": "^1.1.4",
     "ipfs-core": "^0.18.0",
     "ipfs-http-client": "^60.0.0",

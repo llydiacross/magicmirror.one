@@ -21,7 +21,6 @@ const config = {
 		},
 	},
 	**/
-  console: true,
   ipfs: true,
   hardhat: {
     solidity: {
@@ -89,7 +88,6 @@ const config = {
       defaultBalance: 69420,
     },
   },
-  roots: ['../infinitymint-buildtools/'],
   settings: {
     networks: {
       hardhat: {
