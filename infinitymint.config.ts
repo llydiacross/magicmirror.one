@@ -1,10 +1,9 @@
-import { InfinityMintConfig } from 'infinitymint/dist/app/interfaces';
-import { debugLog, readSession } from 'infinitymint/dist/app/helpers';
+import { debugLog, readGlobalSession } from 'infinitymint/dist/app/helpers';
 
 //the session
-let session = readSession();
+let session = readGlobalSession();
 //please visit docs.infinitymint.app
-const config: InfinityMintConfig = {
+const config = {
   /** 
 	telnet: {
 		anonymous: true,
@@ -119,9 +118,7 @@ const config: InfinityMintConfig = {
       supportedExtensions: ['.flac'],
     },
     build: {},
-    scripts: {
-      disableJavascriptRequire: ['/infinitymint-buildtools/'],
-    },
+    scripts: {},
     deploy: {},
   },
 };

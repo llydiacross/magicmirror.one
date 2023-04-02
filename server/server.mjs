@@ -7,6 +7,16 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { create } from 'ipfs-http-client';
+//do ts node register
+import tsNode from 'ts-node';
+
+tsNode.register({
+  transpileOnly: true,
+  compilerOptions: {
+    module: 'commonjs',
+  },
+});
+
 
 //load our .env
 dotenv.config({
@@ -75,7 +85,12 @@ class Server {
      * @type {import('ipfs-core')}
      */
     let ipfs = wrapper.getSync('ipfs-core');
+    /**
+     * @type {import('infinitymint')}
+     */
+    let infinitymint = wrapper.getSync('infinitymint');
 
+   
     this.config = config;
     this.node = await ipfs.create(config.ipfs || {});
     this.ipfs = create({
