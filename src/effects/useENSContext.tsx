@@ -67,16 +67,29 @@ const prepareAvatar = async (
         imageAbortController.current = null;
         //if we have a directory, for now we will simply treat the first file as the image
 
-        if (directory.files.length === 0)
-          throw new Error('no files in directory');
+        let files = [...directory.files].filter((file) => {
+          if (!file.name) return;
+          console.log(file);
+          return file.name.toLowerCase().includes('.');
+        });
 
-        if (!directory.files[0].name.toLowerCase().endsWith('.json'))
+        let json = files.find((file) =>
+          file.name?.toLowerCase()?.endsWith('.json')
+        );
+
+        if (!json) {
+          json = directory.files[0];
+        }
+
+        if (!json)
           throw new Error(
             'no json file in directory or dir has multiple files and is considered unsafe'
           );
 
-        const stream = await directory.files[0].content.getReader().read();
+        const stream = await json.content.getReader().read();
         decoded = new TextDecoder().decode(stream.value);
+        console.log(decoded);
+
         try {
           const json = JSON.parse(decoded);
           let image = json.image;
@@ -208,7 +221,21 @@ const useENSContext = ({ ensAddress }) => {
       }
 
       try {
-        setContentHash(await resolver.getContentHash());
+        let hash = await resolver.getContentHash();
+
+        if (!hash) {
+          setContentHash(null);
+        } else {
+          //if hash has IPNS in it, resolve it
+          if (hash.indexOf('ipns://') !== -1) {
+            hash = await resolveIPNS(
+              hash.replace('ipns://', ''),
+              fetchImageAbortController.current
+            );
+          }
+
+          setContentHash(hash);
+        }
       } catch (error) {
         console.log('bad content hash: ' + error.message);
         setContentHash(null);

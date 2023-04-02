@@ -47,27 +47,77 @@ export abstract class IPFSProvider {
  */
 export class IPFSWebProvider extends IPFSProvider {
   createInstance(options: any) {
-    throw new Error('Method not implemented.');
+    //no instance required
   }
 
   async uploadFile(filename: string, data: any, type?: string): Promise<any> {
     throw new Error('Method not implemented.');
   }
 
-  getContentType(type: string): string {
-    throw new Error('Method not implemented.');
+  getContentType(type: string) {
+    type = type.toLowerCase();
+    switch (type) {
+      case 'png':
+      case 'vector':
+        return 'image/png';
+      case 'svg':
+        return 'image/svg+xml';
+      case 'jpeg':
+        return 'image/jpeg';
+      default:
+        return 'text/plain';
+    }
   }
 
-  getContentExtension(type: string): string {
-    throw new Error('Method not implemented.');
+  getContentExtension(type) {
+    type = type.toLowerCase();
+    switch (type) {
+      case 'image/png':
+      case 'png':
+      case 'image':
+        return 'png';
+      case 'image/jpeg':
+      case 'jpeg':
+        return 'jpg';
+      case 'vector':
+      case 'image/svg+xml':
+      case 'svg':
+        return 'svg';
+      case 'tinysvg':
+      case 'image/tinysvg':
+        return 'tinysvg';
+      default:
+        return 'bin';
+    }
   }
 
-  async getFile(cid: string, fileName: string): Promise<any> {
-    throw new Error('Method not implemented.');
+  async getFile(cid: string, fileName: string): Promise<IPFSFile> {
+    let result = await apiFetch('ipfs', 'get', { cid }, 'POST');
+    result.content = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(result.content);
+        controller.close();
+      },
+    });
+    return result;
   }
 
-  getDirectory(cid: string) {
-    throw new Error('Method not implemented.');
+  async getDirectory(cid: string): Promise<IPFSDirectory> {
+    //fetch from our api
+    let result = await apiFetch('ipfs', 'files', { cid }, 'POST');
+
+    result.files.forEach((file) => {
+      //create new readable UINT8 array from content
+      let stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(result.content);
+          controller.close();
+        },
+      });
+      file.content = stream;
+    });
+
+    return result;
   }
 }
 

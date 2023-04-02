@@ -1,5 +1,5 @@
+import { success } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
-
 
 /**
  *
@@ -8,31 +8,20 @@ import server from '../../server.mjs';
  */
 export const post = async (req, res) => {
   let cid = req.body.cid;
-  let fileName = req.body.fileName;
-
-  let result = [];
-  for await (const file of server.ipfs.get(cid)) {
-    console.log(file);
-
-    const content = new BufferList();
-    for await (const chunk of file.content) {
-      content.append(chunk);
+  let file;
+  if (cid) {
+    file = server.ipfs.get(cid);
+      let resp = server.ipfs.cat(cid);
+      let content = [];
+      for await (const chunk of resp) {
+        content = [...content, ...chunk];
+      }
+      file.content = content;
+      
     }
 
-    result.push({
-      ...{ ...file, content: null },
-      content: content.toString(),
-    });
-  }
-
-  let obj = {
+  success(res, {
     cid,
-    files: result,
-  };
-
-  if (fileName) {
-    obj.fileName = fileName;
-    obj.content = result[0].content;
-  }
-  success(res, obj);
+    ...file,
+  });
 };
