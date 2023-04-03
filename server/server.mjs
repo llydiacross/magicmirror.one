@@ -86,10 +86,6 @@ class Server {
     let config = await getConfig();
     let wrapper = await glue.load();
     /**
-     * @type {import('ipfs-core')}
-     */
-    let ipfs = wrapper.getSync('ipfs-core');
-    /**
      * @type {import('infinitymint')}
      */
     let infinitymint = wrapper.getSync('infinitymint');
@@ -103,7 +99,6 @@ class Server {
 
     this.infinityConsole = infinityConsole;
     this.config = config;
-    this.node = await ipfs.create(config.ipfs || {});
     this.ipfs = create({
       url: config.ipfsEndpoint || 'https://dweb.link/api/v0',
     });
