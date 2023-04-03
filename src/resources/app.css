@@ -71,6 +71,23 @@ div[data-theme='corporate'] .title {
   --tw-gradient-to: black !important;
 }
 
+div[data-theme='valentine'] .title {
+  color: #1d1d1d;
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme='forest'] .title {
+  color: --tw-text-primary;
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
+div[data-theme='forest'] .title {
+  --tw-gradient-from: black !important;
+  --tw-gradient-to: black !important;
+}
+
 input[disabled]:hover {
   @apply input-warning text-gray-500 border-gray-500;
 }

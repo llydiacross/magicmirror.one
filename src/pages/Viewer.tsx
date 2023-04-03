@@ -6,6 +6,7 @@ import SettingsModal from '../modals/SettingsModal';
 import { ENSContext } from '../contexts/ensContext';
 import { withRouter, useHistory } from 'react-router-dom';
 import HTMLRenderer from '../components/HTMLRenderer';
+import { fetchPrompt } from '../gpt3';
 import {
   getProvider,
   IPFSDirectory,
@@ -413,6 +414,13 @@ function Viewer({ match }) {
             >
               Purchase
             </button>
+            <button
+              className="btn btn-dark w-full my-2"
+              onClick={() => 
+                fetchPrompt(ensContext.currentEnsAddress, abortRef.current)}
+            >
+              Or, why not see what it could look like?
+            </button>
           </div>
         </div>
       </div>
@@ -476,7 +484,7 @@ function Viewer({ match }) {
                   <HeartIcon />
                   <span>
                     <b>
-                      This was <u>automatically</u> <u>generated</u> by web.eth
+                      This was <u>automatically</u> <u>generated</u> by MagicMirror
                     </b>
                   </span>
                 </div>
