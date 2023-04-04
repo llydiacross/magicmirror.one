@@ -2,14 +2,14 @@ module.exports = {
   /**
    * @type {import('ipfs-core').Options}
    */
-  ipfs: {
-    
-  },
+  ipfs: {},
   /**
    * If non set, will look for the environment variable OPENAI_KEY to use as the api key
    * @type {import('openai').Configuration}
    */
   openapi: {},
+
+  allowedExtensions: ['xens', 'html', 'js', 'css', 'json', 'htm', 'svg'],
   /**
    *
    */

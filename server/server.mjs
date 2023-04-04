@@ -17,7 +17,6 @@ tsNode.register({
   },
 });
 
-
 //load our .env
 dotenv.config({
   override: false,
@@ -94,11 +93,11 @@ class Server {
       dontDraw: true,
       scriptMode: true,
       startExpress: false,
-      test: true //will expose all logs
-    })
+      test: true, //will expose all logs
+    });
 
     this.infinityConsole = infinityConsole;
-    this.config = config;
+    this.config = config.default;
     this.ipfs = create({
       url: config.ipfsEndpoint || 'https://dweb.link/api/v0',
     });
@@ -165,7 +164,7 @@ class Server {
             }
           });
         }
-          
+
         if (route.default) this.app.use(route.default);
         this.routes.push(route);
       })

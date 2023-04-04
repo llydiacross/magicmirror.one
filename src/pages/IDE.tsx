@@ -68,6 +68,26 @@ function IDE({ theme }) {
   const history = useHistory();
 
   useEffect(() => {
+    setTabs({
+      ...tabs,
+      html: {
+        ...tabs.html,
+        code: storage.getPagePreference('html') || '',
+      },
+      css: {
+        ...tabs.css,
+        code: storage.getPagePreference('css') || '',
+      },
+      js: {
+        ...tabs.js,
+        code: storage.getPagePreference('js') || '',
+      },
+      '.xens': {
+        ...tabs['.xens'],
+        code: storage.getPagePreference('.xens') || '',
+      },
+    });
+
     if (
       themeRef.current === null &&
       storage.getGlobalPreference('defaultTheme')
@@ -126,6 +146,13 @@ function IDE({ theme }) {
                         savedCode.current[tabIndex] ||
                         tabs[tabIndex].code
                     );
+                    setTabs({
+                      ...tabs,
+                      [tabIndex]: {
+                        ...tab,
+                        code: storage.getPagePreference(tabIndex) || tab.code,
+                      },
+                    });
                   }}
                 >
                   {tab.name}
@@ -172,6 +199,13 @@ function IDE({ theme }) {
                 storage.saveData();
                 savedCode.current[selectedTab] = code;
                 setCodeBuffer(code);
+                setTabs({
+                  ...tabs,
+                  [selectedTab]: {
+                    ...tabs[selectedTab],
+                    code,
+                  },
+                });
               }, 800);
             }}
             highlight={(code) => {
@@ -316,7 +350,15 @@ function IDE({ theme }) {
             setCode(code);
             setCodeBuffer(code);
           }
-          tabs.html.code = code;
+
+          setTabs({
+            ...tabs,
+            html: {
+              ...tabs.html,
+              code,
+            },
+          });
+
           if (codeBuffer.current && codeBuffer.current.html) {
             codeBuffer.current.html = code;
           }
@@ -337,6 +379,7 @@ function IDE({ theme }) {
         }}
       />
       <PublishModal
+        tabs={tabs}
         hidden={!shouldShowPublish}
         onHide={() => {
           setShouldShowPublish(false);
