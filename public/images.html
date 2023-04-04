@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      h1 {
+        font-size: 8vw;
+        font-family: sans-serif;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="https://media.moddb.com/cache/images/mods/1/48/47699/thumb_620x2000/missing_textures.1.png"
+    />
+    <div style="position: absolute; rotate: 30deg">
+      <h1>DEFAULT WEB PAGE</h1>
+      <p style="font-size: 3vw; font-family: sans-serif; text-align: center">
+        WELCOME TO <span id="ens"></span>
+      </p>
+    </div>
+    <marquee style="position: absolute; overflow: hidden" speed="fast">
+      <img
+        src="https://techstory.in/wp-content/uploads/2021/05/vitalik-buterin.jpg"
+      />
+    </marquee>
+  </body>
+  <script>
+    document.getElementById('ens').innerHTML =
+      window.ensContext.currentEnsAddress;
+  </script>
+</html>
