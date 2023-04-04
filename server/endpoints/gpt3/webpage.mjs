@@ -32,10 +32,7 @@ export const post = async (request, response) => {
       return await server.redisClient.hGet(request.body.ensAddress);
     }
 
-    await server.redisClient.hSet(
-      request.body.ensAddress,
-      response.body.choices[0]
-    );
+    await server.redisClient.hSet(request.body.ensAddress, response);
   };
 
   if (request.body.ensAddress.split('.').pop() !== 'eth') {
@@ -57,7 +54,7 @@ export const post = async (request, response) => {
       model: 'text-davinci-003',
       prompt,
       temperature: 0.6,
-      n: 1,
+      n: 4,
       max_tokens: 2_048,
       top_p: 1,
       frequency_penalty: 0,
