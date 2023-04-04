@@ -11,8 +11,6 @@ const configuration = new Configuration(
 
 const openai = new OpenAIApi(configuration)
 
-const redisClient = server.redisClient
-
 /**
  *
  * @param {import('express').Request} request
@@ -40,45 +38,62 @@ export const post = async (request, response) => {
     n = 6
   }
 
-  const cacheEntry = async () => {
+  const cacheEntry = async response => {
     if (request.body.ensAddress === null) {
       return userError(request.body, 'No ensAddress was specified!')
     }
 
-    if (redisClient.hExists(request.body.ensAddress)) {
+    if (server.redisClient.hExists(request.body.ensAddress)) {
       // If it already exists, return the existing entry rather than wasting time
       // replacing it with new values.
-      return await redisClient.hGet(request.body.ensAddress)
+      return await server.redisClient.hGet(request.body.ensAddress)
     }
 
-    await redisClient.hSet(request.body.ensAddress, response.body.choices[0])
+    await server.redisClient.hSet(request.body.ensAddress, response.body.choices[0])
   }
 
-  if (request.body.ensAddress.split('.').pop() !== 'eth') { return userError('response', 'not an ens address') }
+  if (request.body.ensAddress.split('.').pop() !== 'eth') {
+    return userError('response', 'not an ens address')
+  }
 
   try {
     const prompt =
       `Using HTML, create a site with an idea for ${request.body.ensAddress}.
       Return only valid HTML. Do not explain your thought process.`
 
+    if (server.redisClient.hGet(request.body.ensAddress)) {
+      const data = server.redisClient.hGet(request.body.ensAddress)
+      return success(response, {
+        data
+      })
+    }
+
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
       prompt,
       temperature,
       n,
-      max_tokens: 2048,
+      max_tokens: 2_048,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0
     })
 
-    const html = completion.data.choices[Math.floor(Math.random() * completion.data.choices.length)].text
+    const html =
+      completion.data.choices[
+        Math.floor(
+          Math.random() *
+          completion.data.choices.length)].text
 
     success(response, {
       html,
       prompt,
       generated: Date.now()
     })
+      .then(response =>
+        cacheEntry(response))
+      .catch(err =>
+        console.error(err.stack))
 
     await redisClient.disconnect()
   } catch (error) {
