@@ -10,7 +10,7 @@ export const post = async (req, res) => {
   let cid = req.body.cid;
   let links = [];
   for await (const link of server.ipfs.ls(cid)) {
-    if (links.length > 64) break;
+    if (links.length > 32) break;
 
     if (link.type === 'file') {
       let stats = await server.ipfs.object.stat(link.path);
