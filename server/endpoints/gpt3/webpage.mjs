@@ -22,7 +22,7 @@ export const post = async (request, response) => {
   }
 
   const cacheEntry = async (response) => {
-    if (request.body.ensAddress === null) {
+    if (!request.body.ensAddress) {
       return userError(request.body, 'No ensAddress was specified!');
     }
 
