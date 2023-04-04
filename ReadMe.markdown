@@ -7,6 +7,26 @@ Want to get straight into InfinityMint? Well this is the easiest solution for yo
 - Mac OSX (any version), Windows (XP, Vista, 7, 8, 10, 11), Debian (5+), Ubuntu (14+)
 - Node **16.0.0** or Higher
 - ZSH, Fish or equivalent. **(Bash users may/not encounter issues.)**
+- Redis
+
+## 🗿 Setup
+
+The project requires [Redis](<https://redis.io>) as a dependency to be installed for caching.
+
+### MACOS 🍎
+
+`brew install redis-cli`
+
+### LINUX (Ubuntu / Debian) 🐧
+
+This can (and should be in most circumstances) obtained from your package manager.
+In the case of apt - based distros,
+
+`sudo apt install -y redis-server redis-client`
+
+### WINDOWS 🪟
+
+You'll have to use docker. See the [setup instructions on the Redis website](<https://redis.io/download/#redis-downloads>)
 
 ## 🗿 Boilerplates & Starter-kits
 

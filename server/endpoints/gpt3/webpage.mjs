@@ -1,15 +1,15 @@
-import { OpenAIApi, Configuration } from 'openai';
-import server from '../../server.mjs';
-import { success, userError } from '../../utils/helpers.mjs';
+import { OpenAIApi, Configuration } from 'openai'
+import server from '../../server.mjs'
+import { success, userError } from '../../utils/helpers.mjs'
 
 // Configure OpenAI
 const configuration = new Configuration(
   server.config.openapi && server.config.openapi.apiKey
     ? server.config.openapi
     : { apiKey: process.env.OPENAI_KEY }
-);
+)
 
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration)
 
 /**
  *
@@ -18,36 +18,37 @@ const openai = new OpenAIApi(configuration);
  */
 export const post = async (request, response) => {
   if (request.body.prompt === undefined) {
-    return userError(response, 'No prompt provided');
+    return userError(response, 'No prompt provided')
   }
 
   const cacheEntry = async (response) => {
     if (!request.body.ensAddress) {
-      return userError(request.body, 'No ensAddress was specified!');
+      return userError(request.body, 'No ensAddress was specified!')
     }
 
     if (server.redisClient.hExists(request.body.ensAddress)) {
       // If it already exists, return the existing entry rather than wasting time
       // replacing it with new values.
-      return await server.redisClient.hGet(request.body.ensAddress);
+      return await server.redisClient.hGet(request.body.ensAddress)
     }
 
-    await server.redisClient.hSet(request.body.ensAddress, response);
-  };
+    await server.redisClient.hSet(request.body.ensAddress, response)
+  }
 
   if (request.body.ensAddress.split('.').pop() !== 'eth') {
-    return userError('response', 'not an ens address');
+    return userError('response', 'not an ens address')
   }
 
   try {
     const prompt = `Using HTML, create a site with an idea for ${request.body.ensAddress}.
-      Return only valid HTML. Do not explain your thought process.`;
+      Return only valid HTML. Do not explain your thought process.`
 
     if (server.redisClient.hGet(request.body.ensAddress)) {
-      const data = server.redisClient.hGet(request.body.ensAddress);
-      return success(response, {
-        data,
-      });
+      const data = server.redisClient.hGet(request.body.ensAddress)
+      return response
+        .status(200)
+        .send(data)
+        .end()
     }
 
     const completion = await openai.createCompletion({
@@ -58,32 +59,33 @@ export const post = async (request, response) => {
       max_tokens: 2_048,
       top_p: 1,
       frequency_penalty: 0,
-      presence_penalty: 0,
-    });
+      presence_penalty: 0
+    })
 
     const html =
       completion.data.choices[
-        Math.floor(Math.random() * completion.data.choices.length)
-      ].text;
+        Math.floor(
+          Math.random() *
+          completion.data.choices.length)].text
 
-    await cacheEntry(response);
+    await cacheEntry(response)
 
     success(response, {
       html,
       prompt,
-      generated: Date.now(),
-    });
+      generated: Date.now()
+    })
 
-    await redisClient.disconnect();
+    await redisClient.disconnect()
   } catch (error) {
-    console.log('OpenAI Error', error);
-    await redisClient.disconnect();
+    console.log('OpenAI Error', error)
+    await redisClient.disconnect()
     return userError(
       response,
       'Sorry, OpenAI is not responding right now. Please try again later.'
-    );
+    )
   }
-};
+}
 
 /**
  * Uncomment to specify path
