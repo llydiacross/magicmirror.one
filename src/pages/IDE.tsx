@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Editor from 'react-simple-code-editor';
 
@@ -18,6 +18,8 @@ import SettingsModal from '../modals/SettingsModal';
 import { useHistory } from 'react-router-dom';
 import PublishModal from '../modals/PublishModal';
 import ChatGPTModal from '../modals/ChatGPTModal';
+import { ENSContext } from '../contexts/ensContext';
+import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
 
 const defaultTabs = {
   html: {
@@ -61,11 +63,14 @@ function IDE({ theme }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
+  const [dir, setDir] = useState<IPFSDirectory>(null);
+  const [stats, setStats] = useState<IPFSStats>(null);
   const cooldown = useRef(null);
   const savedCode = useRef({} as any);
   const eventEmitterCallbackRef = useRef(null);
   const themeRef = useRef(theme || null);
   const history = useHistory();
+  const ensContext = useContext(ENSContext);
 
   useEffect(() => {
     setTabs({
@@ -113,6 +118,32 @@ function IDE({ theme }) {
       WebEvents.off('reload', eventEmitterCallbackRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    //check get params if url exists
+    const url = new URL(window.location.href);
+    const urlParams = new URLSearchParams(url.search);
+    const urlParam = urlParams.get('url');
+
+    if (!urlParam) return;
+
+    if (ensContext.currentEnsAddress !== urlParam)
+      ensContext.setCurrentEnsAddress(urlParam);
+
+    if (!ensContext.loaded) return;
+
+    if (ensContext.contentHash !== null) {
+      (async () => {
+        let potentialStats = await getStats(ensContext.contentHash);
+        setStats(potentialStats);
+        let potentialDir = await resolveDirectory(ensContext.contentHash);
+        setDir(potentialDir);
+      })();
+    } else {
+      setStats({} as any);
+      setDir({} as any);
+    }
+  }, [ensContext]);
 
   savedCode.current.css = storage.getPagePreference('css') || '';
   savedCode.current.js = storage.getPagePreference('js') || '';
@@ -266,6 +297,23 @@ function IDE({ theme }) {
                 : {}),
             }}
           >
+            {ensContext.loaded && ensContext.ensError !== null ? (
+              <>
+                <div className="bg-red-500 text-white p-2 rounded-md">
+                  <p className="font-bold">ENS Error</p>
+                  <p>{ensContext.ensError}</p>
+                  <p
+                    style={{
+                      fontSize: 10,
+                    }}
+                  >
+                    Preview might contain broken ENS information!
+                  </p>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
             <HTMLRenderer
               code={savedCode.current}
               stylesheets={[
@@ -277,6 +325,13 @@ function IDE({ theme }) {
                   children: 'web3.eth',
                 },
               ]}
+              ensContext={{
+                ...ensContext,
+                setCurrentENSAddress: null,
+                resolver: null,
+                dir: dir,
+                stats: stats,
+              }}
               scripts={['https://cdn.tailwindcss.com']}
               currentFile={selectedTab}
               style={{

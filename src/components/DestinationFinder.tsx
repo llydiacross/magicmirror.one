@@ -34,7 +34,6 @@ export default function DestinationFinder() {
     destination = destination.replace(/ /g, '-');
     // Remove leading and trailing spaces
     destination = destination.trim();
-    destination = destination.toLowerCase();
 
     let isResolver = false;
     let resolverExtension = '';

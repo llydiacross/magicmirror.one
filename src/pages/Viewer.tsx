@@ -9,9 +9,11 @@ import HTMLRenderer from '../components/HTMLRenderer';
 import { fetchPrompt } from '../gpt3';
 import {
   getProvider,
+  getStats,
   IPFSDirectory,
   IPFSFile,
   IPFSProvider,
+  IPFSStats,
   resolveDirectory,
   resolvePotentialCID,
 } from '../ipfs';
@@ -40,7 +42,9 @@ const parseDirectory = async (files: IPFSFile[]) => {
     const partialJS = partialFiles.filter(
       (file) => file.name === 'js.partial'
     )[0];
-    const partialXens = partialFiles.filter((file) => file.name === '.xens')[0];
+    const partialXens = partialFiles.filter(
+      (file) => file.name.split('.').pop() === 'xens'
+    )[0];
 
     const struct: any = {};
     if (partialHtml !== undefined) {
@@ -88,11 +92,20 @@ const parseDirectory = async (files: IPFSFile[]) => {
   };
 };
 
-const prepareDefaultContent = async () => {
-  // Get the default content
-  const defaultContent = await fetch('/audio.html');
-  const html = await defaultContent.text();
-  return html;
+const prepareDefaultContent = async (stats?: IPFSStats) => {
+  if (!stats) {
+    //no stats available, so we ask chat GPT 3
+    const defaultContent = await fetch('/default.html');
+    const html = await defaultContent.text();
+    return html;
+  }
+
+  if (stats.hasMusic) {
+    // Get the default content
+    const defaultContent = await fetch('/audio.html');
+    const html = await defaultContent.text();
+    return html;
+  }
 };
 
 function Viewer({ match }) {
@@ -105,6 +118,7 @@ function Viewer({ match }) {
   const [empty, setEmpty] = useState(false);
   const [defaultResponse, setDefaultResponse] = useState(false);
   const [direct, setDirect] = useState(false);
+  const [stats, setStats] = useState<IPFSStats>(null);
   const [dir, setDir] = useState<IPFSDirectory>(null);
   const [buffer, setBuffer] = useState(null);
   const [aborted, setAborted] = useState(false);
@@ -151,7 +165,7 @@ function Viewer({ match }) {
     const main = async () => {
       try {
         let isEmpty = false;
-
+        let potentialStats: IPFSStats;
         //if there is no contentHash and it is completly empty then isEmpty is true
         if (
           ensContext.contentHash === null ||
@@ -167,19 +181,28 @@ function Viewer({ match }) {
 
           // Resolve the directory
           setPercentage(20);
+          potentialStats = await getStats(
+            ensContext.contentHash,
+            abortController
+          );
+          setStats(potentialStats);
+
           let directory: IPFSDirectory;
-          try {
-            directory = await resolveDirectory(
-              ensContext.contentHash,
-              abortController
-            );
-            abortRef.current = null;
-          } catch (error) {
-            if (error.name === 'AbortError') {
-              setAborted(true);
-              return;
+          if (potentialStats && potentialStats?.fileCount !== 0) {
+            try {
+              directory = await resolveDirectory(
+                ensContext.contentHash,
+                abortController
+              );
+              setDir(directory);
+              abortRef.current = null;
+            } catch (error) {
+              if (error.name === 'AbortError') {
+                setAborted(true);
+                return;
+              }
+              throw error;
             }
-            throw error;
           }
 
           //once we have a directory, parse it and try and find the index.html or .partial files
@@ -187,12 +210,14 @@ function Viewer({ match }) {
 
           //try it
           try {
-            if (directory.files.length === 0) {
+            if (
+              potentialStats.fileCount === 0 ||
+              directory.files.length === 0
+            ) {
               isEmpty = true;
             } else {
               const parsed = await parseDirectory(directory.files);
               setPercentage(65);
-              setDir(directory);
 
               if (parsed.valid) {
                 setDirect(parsed.direct);
@@ -225,7 +250,7 @@ function Viewer({ match }) {
         //if we are empty then we want the AI to take control and try and generate some content
         if (isEmpty) {
           setPercentage(90);
-          const defaultContent = await prepareDefaultContent();
+          const defaultContent = await prepareDefaultContent(potentialStats);
           setDefaultResponse(defaultContent !== null);
           setBuffer(defaultContent);
           isEmpty = defaultContent === null;
@@ -290,6 +315,13 @@ function Viewer({ match }) {
           <>
             {defaultResponse ? (
               <HTMLRenderer
+                ensContext={{
+                  ...ensContext,
+                  setCurrentENSAddress: null,
+                  resolver: null,
+                  dir: dir,
+                  stats: stats,
+                }}
                 code={buffer.source}
                 currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
               />
@@ -304,6 +336,13 @@ function Viewer({ match }) {
               />
             ) : (
               <HTMLRenderer
+                ensContext={{
+                  ...ensContext,
+                  setCurrentENSAddress: null,
+                  resolver: null,
+                  dir: dir,
+                  stats: stats,
+                }}
                 implicit={buffer}
                 currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
               />
@@ -416,8 +455,9 @@ function Viewer({ match }) {
             </button>
             <button
               className="btn btn-dark w-full my-2"
-              onClick={() => 
-                fetchPrompt(ensContext.currentEnsAddress, abortRef.current)}
+              onClick={() =>
+                fetchPrompt(ensContext.currentEnsAddress, abortRef.current)
+              }
             >
               Or, why not see what it could look like?
             </button>
@@ -484,7 +524,8 @@ function Viewer({ match }) {
                   <HeartIcon />
                   <span>
                     <b>
-                      This was <u>automatically</u> <u>generated</u> by MagicMirror
+                      This was <u>automatically</u> <u>generated</u> by
+                      MagicMirror
                     </b>
                   </span>
                 </div>

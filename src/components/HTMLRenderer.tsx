@@ -8,6 +8,7 @@ function HTMLRenderer({
   code = {} as any,
   implicit,
   currentFile,
+  ensContext = {},
   stylesheets = [],
   scripts = [],
   meta = [],
@@ -27,6 +28,9 @@ function HTMLRenderer({
             meta.tag
           }>`;
         })}
+        <script>
+          window.ensContext = ${JSON.stringify(ensContext)};
+        </script>
         <style>
           ::-webkit-scrollbar{
             direction: rtl; 
@@ -61,6 +65,16 @@ function HTMLRenderer({
         })}
       </head>
   `;
+
+  if (implicit) {
+    //inject script before closing html tag
+    implicit = `
+        <script>
+          window.ensContext = ${JSON.stringify(ensContext)};
+        </script>
+        ${implicit}
+    `;
+  }
 
   let safeJS = code.js || '';
   // Remove script tags from savejs code

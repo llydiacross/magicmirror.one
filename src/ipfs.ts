@@ -24,6 +24,30 @@ export interface IPFSDirectory {
 }
 
 /**
+ * IPFS Directory interface
+ */
+export interface IPFSStats {
+  cid: string;
+  files: IPFSFile[];
+  hasXENS: boolean;
+  hasIndex: boolean;
+  hasReadme: boolean;
+  hasLicense: boolean;
+  hasPackage: boolean;
+  hasManifest: boolean;
+  hasSettings: boolean;
+  hasMusic: boolean;
+  hasCSS: boolean;
+  hasJS: boolean;
+  hasImages: boolean;
+  hasVideos: boolean;
+  videoCount: number;
+  imageCount: number;
+  musicCount: number;
+  fileCount: number;
+}
+
+/**
  * IPFS Provider abstract class defining the methods that need to be implemented
  */
 export abstract class IPFSProvider {
@@ -33,10 +57,17 @@ export abstract class IPFSProvider {
     data: any,
     type?: string
   ): Promise<string>;
-  abstract getFile(cid: string, fileName: string): Promise<any>;
+  abstract getFile(cid: string, fileName: string): Promise<IPFSFile>;
   abstract getContentType(type: string): string;
   abstract getContentExtension(type: string): string;
-  abstract getDirectory(cid: string, abortController: AbortController): any;
+  abstract getDirectory(
+    cid: string,
+    abortController: AbortController
+  ): Promise<IPFSDirectory>;
+  abstract getStats(
+    cid: string,
+    abortController: AbortController
+  ): Promise<IPFSStats>;
   destroy() {
     //
   }
@@ -89,6 +120,11 @@ export class IPFSWebProvider extends IPFSProvider {
       default:
         return 'bin';
     }
+  }
+
+  async getStats(cid: string, abortController: AbortController) {
+    let result = await apiFetch('ipfs', 'stats', { cid }, 'POST');
+    return result;
   }
 
   async getFile(cid: string, fileName: string): Promise<IPFSFile> {
@@ -154,6 +190,21 @@ class Web3StorageProvider extends IPFSProvider {
     } else file = new File([data], filename);
 
     return await this.instance.put([file]);
+  }
+
+  async getStats(
+    cid: string,
+    abortController: AbortController
+  ): Promise<IPFSStats> {
+    //replace with web3storage stats
+    let result = await apiFetch(
+      'ipfs',
+      'stats',
+      { cid },
+      'POST',
+      abortController
+    );
+    return result;
   }
 
   async getDirectory(cid: string, abort?: any): Promise<IPFSDirectory> {
@@ -295,6 +346,17 @@ export const resolvePotentialCID = async (
 
   potentialCID = potentialCID.split('/')[0];
   return potentialCID;
+};
+
+export const getStats = async (
+  potentialCID: string,
+  abortController?: AbortController,
+  provider?: IPFSProvider
+) => {
+  provider = provider || getDefaultProvider();
+  potentialCID = await resolvePotentialCID(potentialCID, abortController);
+  let result = await provider.getStats(potentialCID, abortController);
+  return result;
 };
 
 /**

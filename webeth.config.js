@@ -9,7 +9,16 @@ module.exports = {
    */
   openapi: {},
 
-  allowedExtensions: ['xens', 'html', 'js', 'css', 'json', 'htm', 'svg'],
+  allowedExtensions: [
+    'xens',
+    'html',
+    'js',
+    'css',
+    'json',
+    'htm',
+    'svg',
+    'partial',
+  ],
   /**
    *
    */
