@@ -17,7 +17,7 @@ module.exports = {
     'json',
     'htm',
     'svg',
-    'partial',
+    'partial'
   ],
   /**
    *
@@ -39,6 +39,6 @@ module.exports = {
     'https://webx.infinitymint.app',
     'https://infinitymint.app',
     'https://web.infinitymint.app',
-    'https://web-api.infinitymint.app',
-  ],
-};
+    'https://web-api.infinitymint.app'
+  ]
+}

@@ -5,7 +5,7 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
-    require('daisyui'),
+    require('daisyui')
   ],
   daisyui: {
     themes: [
@@ -37,14 +37,14 @@ module.exports = {
       'lemonade',
       'night',
       'coffee',
-      'winter',
-    ],
+      'winter'
+    ]
   },
   theme: {
     extend: {
       fontFamily: {
         apocalypse: ['Apocalypse Grunge', 'cursive'],
-        thenextfont: ['TheNextFont', 'sans-serif'],
+        thenextfont: ['TheNextFont', 'sans-serif']
       },
 
       fontSize: {
@@ -55,8 +55,8 @@ module.exports = {
         '14xl': '7rem',
         '15xl': '7.5rem',
         '16xl': '8rem',
-        giant: '11rem',
-      },
-    },
-  },
-};
+        giant: '11rem'
+      }
+    }
+  }
+}

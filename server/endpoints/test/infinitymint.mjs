@@ -1,5 +1,4 @@
-import server from '../../server.mjs';
-
+import server from '../../server.mjs'
 
 /**
  *
@@ -7,8 +6,7 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-
-    res.json({
-        test: server.infinityConsole.getSessionId()
-    })
+  res.json({
+    test: server.infinityConsole.getSessionId()
+  })
 }
