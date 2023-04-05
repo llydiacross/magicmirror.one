@@ -1,28 +1,18 @@
-import storage from "./storage"
-import { getProvider, getReadOnlyProvider } from "./ipfs"
-import config from "./config"
+/**
+ *
+ * @param str
+ * @returns
+ */
+export const base64Encode = (str: string) => {
+  return Buffer.from(str).toString('base64');
+};
 
-export const getIPFSProvider = (
-  provider?: "web3-storage" | "ipfs-companion",
-  readOnly?: boolean
-) => {
-  const instance = readOnly
-    ? getReadOnlyProvider(
-      provider ||
-          storage.getGlobalPreference("ipfs_provider") ||
-          "web3-storage"
-    )
-    : getProvider(
-      provider ||
-          storage.getGlobalPreference("ipfs_provider") ||
-          "web3-storage"
-    )
-
-  instance.createInstance(
-    readOnly
-      ? config.defaultWeb3Storage
-      : storage.getGlobalPreference("web3_storage_token")
-  )
-
-  return instance
-}
+/**
+ *
+ * @param str
+ * @param encoding
+ * @returns
+ */
+export const base64Decode = (str: string, encoding?: BufferEncoding) => {
+  return Buffer.from(str, 'base64').toString(encoding || 'utf8');
+};

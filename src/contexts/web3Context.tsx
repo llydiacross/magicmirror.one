@@ -1,23 +1,30 @@
-import React, { createContext } from "react"
-import Header from "../components/Header"
-import useWeb3Context from "../effects/useWeb3Context"
-import { ethers } from "ethers"
-import PropTypes from "prop-types"
+import React, { createContext, useEffect } from 'react';
+import Header from '../components/Header';
+import useWeb3Context from '../effects/useWeb3Context';
+import { ethers } from 'ethers';
+import PropTypes from 'prop-types';
+import WebEvents from '../webEvents';
 
 export interface Web3ContextType {
-  balance: null
-  accounts: string[]
-  ensAddresses: string[]
-  walletInstalled: false
-  walletConnected: false
-  walletAddress: "0x0"
+  balance: number;
+  accounts: string[];
+  ensAddresses: string[];
+  walletInstalled: boolean;
+  walletConnected: boolean;
+  walletAddress: string;
   web3Provider:
-  | ethers.providers.Web3Provider
-  | ethers.providers.JsonRpcProvider
-  walletError: Error
-  chainId: 0
-  loaded: false
-  signer: ethers.Signer
+    | ethers.providers.Web3Provider
+    | ethers.providers.JsonRpcProvider;
+  walletError: Error;
+  chainId: number;
+  loaded: boolean;
+  refreshEvent: {
+    current: Function;
+  };
+  walletChangedEvent: {
+    current: Function;
+  };
+  signer: ethers.Signer;
 }
 
 export const Web3Context = createContext({
@@ -27,14 +34,16 @@ export const Web3Context = createContext({
   signer: null,
   walletInstalled: false,
   walletConnected: false,
-  walletAddress: "0x0",
+  walletAddress: null,
   web3Provider: null,
   walletError: null,
-  chainId: 0,
-  loaded: false
-} as Web3ContextType)
+  chainId: -1,
+  refreshEvent: null,
+  loaded: false,
+  walletChangedEvent: null,
+});
 
-function Web3ContextProvider ({ children }) {
+function Web3ContextProvider({ children }) {
   const {
     accounts,
     walletInstalled,
@@ -46,8 +55,40 @@ function Web3ContextProvider ({ children }) {
     signer,
     walletError,
     ensAddresses,
-    balance
-  } = useWeb3Context()
+    balance,
+    refreshEvent,
+    walletChangedEvent,
+  } = useWeb3Context();
+
+  //in order to avoid the events being deleted on every update to the context, we need to use a cleanup function and define events here here not in the context
+  useEffect(() => {
+    if (!loaded) return;
+
+    if ((window as any).ethereum !== undefined) {
+      (window as any).ethereum.on(
+        'accountsChanged',
+        walletChangedEvent.current
+      );
+      (window as any).ethereum.on('chainChanged', walletChangedEvent.current);
+    }
+
+    //do the reload event
+    WebEvents.on('reload', refreshEvent.current);
+
+    return () => {
+      WebEvents.off('reload', refreshEvent.current);
+      if ((window as any).ethereum !== undefined) {
+        (window as any).ethereum.removeListener(
+          'accountsChanged',
+          walletChangedEvent.current
+        );
+        (window as any).ethereum.removeListener(
+          'chainChanged',
+          walletChangedEvent.current
+        );
+      }
+    };
+  }, [loaded]);
 
   return (
     <Web3Context.Provider
@@ -63,27 +104,27 @@ function Web3ContextProvider ({ children }) {
           web3Provider,
           signer,
           walletError,
-          balance
+          balance,
+          refreshEvent,
+          walletChangedEvent,
         } as Web3ContextType
       }
     >
-      {loaded
-        ? (
-          <>{children}</>
-          )
-        : (
-          <Header
-            theme='acid'
-            initialText='Initializing Web3 Connection...'
-            showFinder={false}
-          />
-          )}
+      {loaded ? (
+        <>{children}</>
+      ) : (
+        <Header
+          theme="acid"
+          initialText="Initializing Web3 Connection..."
+          showFinder={false}
+        />
+      )}
     </Web3Context.Provider>
-  )
+  );
 }
 
 Web3ContextProvider.propTypes = {
-  children: PropTypes.any
-}
+  children: PropTypes.any,
+};
 
-export default Web3ContextProvider
+export default Web3ContextProvider;

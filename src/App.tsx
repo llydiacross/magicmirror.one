@@ -1,41 +1,41 @@
-import React from "react"
-import Web3ContextProvider from "./contexts/web3Context"
-import ENSContextProvider from "./contexts/ensContext"
-import IDE from "./pages/IDE"
-import Index from "./pages/Index"
-import Viewer from "./pages/Viewer"
-import { BrowserRouter, Switch, Route } from "react-router-dom"
-import NotFound from "./pages/NotFound"
+import React from 'react';
+import Web3ContextProvider from './contexts/web3Context';
+import ENSContextProvider from './contexts/ensContext';
+import IDE from './pages/IDE';
+import Index from './pages/Index';
+import Viewer from './pages/Viewer';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import NotFound from './pages/NotFound';
 
-function App () {
+function App() {
   return (
     <Web3ContextProvider>
       <ENSContextProvider>
         <BrowserRouter>
           <Switch>
-            <Route path='/ide'>
+            <Route path="/ide">
               <IDE />
             </Route>
-            <Route exact path='/'>
+            <Route exact path="/">
               <Index />
             </Route>
-            <Route exact path='/index'>
+            <Route exact path="/index">
               <Index />
             </Route>
-            <Route path='/view/:token'>
+            <Route path="/view/:token">
               <Viewer />
             </Route>
-            <Route path='/viewer/:token'>
+            <Route path="/viewer/:token">
               <Viewer />
             </Route>
-            <Route exact path='*'>
+            <Route exact path="*">
               <NotFound />
             </Route>
           </Switch>
         </BrowserRouter>
       </ENSContextProvider>
     </Web3ContextProvider>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,5 @@
 .nikeboiTextBlue {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   color: blue;
   animation: flickerBlue 2.5s infinite alternate;
   -webkit-text-stroke: 1px black;
@@ -8,7 +8,7 @@
 }
 
 .nikeboiTextRed {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flickerRed 2.5s infinite alternate;
   color: red;
   -webkit-text-stroke: 1px black;
@@ -17,7 +17,7 @@
 }
 
 .nikeboiTextGreen {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flickerGreen 2.5s infinite alternate;
   color: rgb(62, 173, 72);
   -webkit-text-stroke: 1px black;
@@ -26,7 +26,7 @@
 }
 
 .nikeboiTextGold {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   color: gold;
   -webkit-text-stroke: 1px black;
   text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000,
@@ -226,22 +226,22 @@
 }
 
 .neonText {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flicker 1.5s infinite alternate;
 }
 
 .neonTextBlue {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flickerBlue 1.5s infinite alternate;
 }
 
 .neonTextRed {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flickerRed 1.5s infinite alternate;
 }
 
 .neonTextGreen {
-  font-family: "nikeboi" !important;
+  font-family: 'nikeboi' !important;
   animation: flickerGreen 1.5s infinite alternate;
 }
 

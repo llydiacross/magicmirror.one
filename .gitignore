@@ -30,6 +30,7 @@ artifacts/
 alpha/
 beta/
 .session
+.uuid
 /gems/__*
 /gems/@*
 /alpha/__gems/
