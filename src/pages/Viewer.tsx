@@ -166,6 +166,7 @@ function Viewer({ match }) {
       try {
         let isEmpty = false;
         let potentialStats: IPFSStats;
+
         //if there is no contentHash and it is completly empty then isEmpty is true
         if (
           ensContext.contentHash === null ||
