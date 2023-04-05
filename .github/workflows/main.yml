@@ -15,8 +15,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-        - run: npm ci
-        - run: npm run build
+      - run: npm ci
+      - run: npm run build
       
       - name: Serve react
         run: cp -r build /var/www/web_eth/
