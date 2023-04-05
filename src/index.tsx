@@ -1,8 +1,7 @@
 // Import tailwind
 import './resources/app.css';
 import './resources/infinitymint.css';
-// Import infintymint client stuff
-import 'infinitymint-client';
+
 // Import react + app
 import React from 'react';
 import ReactDOM from 'react-dom/client';

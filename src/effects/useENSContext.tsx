@@ -237,7 +237,7 @@ const useENSContext = ({ ensAddress }) => {
           setContentHash(hash);
         }
       } catch (error) {
-        console.log('bad content hash: ' + error.message);
+        console.log('bad content hash: ' + JSON.stringify(error));
         setContentHash(null);
       }
 
