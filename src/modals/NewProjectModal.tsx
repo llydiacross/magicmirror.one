@@ -20,13 +20,13 @@ const defaultTabs = {
     name: '🖌️',
     icon: 'code',
     language: 'css',
-    code: '',
+    code: '/* custom css code */',
   },
   js: {
     name: '🧩',
     icon: 'code',
     language: 'javascript',
-    code: '',
+    code: '//custom javascript code',
   },
   '.xens': {
     name: '📜',

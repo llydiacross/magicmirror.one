@@ -519,7 +519,6 @@ function IDE({ theme }) {
           //remove style tags
           parsedHTML = parsedHTML.replace(/<style>(.*?)<\/style>/s, '');
 
-          setShouldShowChatGPT(false);
           let newTabs = {
             ...tabs,
             html: {
@@ -535,15 +534,15 @@ function IDE({ theme }) {
               code: fStyle,
             },
           };
-          setTabs(newTabs);
-
-          setSelectedTab('html');
-          setCode(newTabs.html?.code || '');
-          setCodeBuffer(newTabs.html?.code || '');
           Object.keys(newTabs).forEach((tabKey) => {
             storage.setPagePreference(tabKey, newTabs[tabKey].code || '');
           });
           storage.saveData();
+
+          setCode(newTabs[selectedTab].code || '');
+          setCodeBuffer(newTabs[selectedTab].code || '');
+          setTabs(newTabs);
+          setShouldShowChatGPT(false);
         }}
         hidden={!shouldShowChatGPT}
         onHide={() => {
@@ -564,14 +563,14 @@ function IDE({ theme }) {
         }}
         tabs={tabs}
         setCode={(newTabs) => {
-          setTabs(newTabs);
-          setSelectedTab('html');
-          setCode(newTabs.html?.code || '');
-          setCodeBuffer(newTabs.html?.code || '');
           Object.keys(newTabs).forEach((tabKey) => {
             storage.setPagePreference(tabKey, newTabs[tabKey].code || '');
           });
           storage.saveData();
+
+          setCodeBuffer(newTabs[selectedTab].code || '');
+          setCode(newTabs[selectedTab].code || '');
+          setTabs(newTabs);
           setShouldShowNewProject(false);
         }}
       />
