@@ -18,7 +18,7 @@ import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-json';
 import 'prismjs/themes/prism-dark.css';
 
-function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
+function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
   const [loading, setLoading] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('dracula');
   const eventEmitterCallbackRef = useRef(null);
@@ -75,6 +75,14 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
     else document.body.style.overflow = 'auto';
   }, [hidden]);
 
+  let hasCode = false;
+  for (let key in tabs) {
+    if (tabs[key].code !== '') {
+      hasCode = true;
+      break;
+    }
+  }
+
   return (
     <div
       data-theme={currentTheme}
@@ -124,6 +132,24 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {} }) {
                 </div>
               </div>
             </div>
+            {hasCode ? (
+              <div className="bg-red-500 text-white p-2 rounded-md mt-2">
+                <p className="font-bold">Warning</p>
+                <p>
+                  Your current project will be lost if you continue. You might
+                  want to save!
+                </p>
+                <p
+                  style={{
+                    fontSize: 10,
+                  }}
+                >
+                  You can save your project by clicking the '💾' button.
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
             {!loading ? (
               <ChatGPTHeader hidden={gptResult !== null} />
             ) : (
@@ -395,6 +421,7 @@ ChatGPTModal.propTypes = {
   onSetHTML: PropTypes.func,
   savedData: PropTypes.any,
   hidden: PropTypes.bool,
+  tabs: PropTypes.object,
   onHide: PropTypes.func,
 };
 

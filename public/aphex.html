@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body,
+      html {
+        background-color: black;
+      }
+
+      .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="http://1.bp.blogspot.com/_faDzgcu6HCY/TL3X4odvjDI/AAAAAAAACtE/xLKRpsIhFoA/s1600/aphex-twin-logo.jpg"
+      class="centered"
+    />
+    <p style="color: white; font-family: sans-serif">
+      <span id="ens"></span>
+      <a href="https://aphextwin.warp.net/">aphextwin.web2</a>
+    </p>
+    <iframe
+      width="560"
+      style="opacity: 0.2"
+      height="315"
+      src="https://www.youtube.com/embed/o9FJGbbOzQQ"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  </body>
+  <script>
+    document.getElementById('ens').innerHTML =
+      window.ensContext.currentEnsAddress;
+  </script>
+</html>
