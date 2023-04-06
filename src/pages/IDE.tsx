@@ -20,6 +20,7 @@ import PublishModal from '../modals/PublishModal';
 import ChatGPTModal from '../modals/ChatGPTModal';
 import { ENSContext } from '../contexts/ensContext';
 import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
+import NewProjectModal from '../modals/NewProjectModal';
 
 const defaultTabs = {
   html: {
@@ -63,6 +64,8 @@ function IDE({ theme }) {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
+  const [shouldShowNewProject, setShouldShowNewProject] = useState(false);
+  const [shouldShowDebug, setShouldShowDebug] = useState(false);
   const [dir, setDir] = useState<IPFSDirectory>(null);
   const [stats, setStats] = useState<IPFSStats>(null);
   const cooldown = useRef(null);
@@ -73,7 +76,7 @@ function IDE({ theme }) {
   const ensContext = useContext(ENSContext);
 
   useEffect(() => {
-    setTabs({
+    let _tabs = {
       ...tabs,
       html: {
         ...tabs.html,
@@ -91,7 +94,21 @@ function IDE({ theme }) {
         ...tabs['.xens'],
         code: storage.getPagePreference('.xens') || '',
       },
-    });
+    };
+
+    let allCodeEmpty = false;
+
+    if (
+      _tabs.html.code === '' &&
+      _tabs.css.code === '' &&
+      _tabs.js.code === '' &&
+      _tabs['.xens'].code === ''
+    ) {
+      allCodeEmpty = true;
+    }
+    setTabs(_tabs);
+
+    if (allCodeEmpty) setShouldShowNewProject(true);
 
     if (
       themeRef.current === null &&
@@ -190,12 +207,6 @@ function IDE({ theme }) {
                 </button>
               );
             })}
-            <button
-              className="btn rounded-none bg-success text-white hover:text-white hover:bg-black"
-              onClick={() => {}}
-            >
-              ➕
-            </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               📦
             </button>
@@ -217,6 +228,25 @@ function IDE({ theme }) {
               }}
             >
               🤖
+            </button>
+            <button
+              className="btn rounded-none bg-primary text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                setShouldShowNewProject(!shouldShowNewProject);
+              }}
+            >
+              🚀
+            </button>
+            <button
+              className={
+                'btn rounded-none text-white hover:text-white hover:bg-black ' +
+                (shouldShowDebug ? 'bg-success' : 'bg-secondary')
+              }
+              onClick={() => {
+                setShouldShowDebug(!shouldShowDebug);
+              }}
+            >
+              🐛
             </button>
           </div>
           <Editor
@@ -314,35 +344,109 @@ function IDE({ theme }) {
             ) : (
               <></>
             )}
-            <HTMLRenderer
-              code={savedCode.current}
-              stylesheets={[
-                'https://cdn.jsdelivr.net/npm/daisyui@2.47.0/dist/full.css',
-              ]}
-              meta={[
-                {
-                  tag: 'title',
-                  children: 'web3.eth',
-                },
-              ]}
-              ensContext={{
-                ...ensContext,
-                setCurrentENSAddress: null,
-                resolver: null,
-                dir: dir,
-                stats: stats,
-              }}
-              scripts={['https://cdn.tailwindcss.com']}
-              currentFile={selectedTab}
-              style={{
-                ...(!overlayPreview
-                  ? {
-                      height: '93vh',
-                      border: '1px solid black',
-                    }
-                  : {}),
-              }}
-            />
+            {ensContext.currentEnsAddress === null ? (
+              <>
+                <div className="bg-red-500 text-white p-2 rounded-md">
+                  <p className="font-bold">ENS Error</p>
+                  <p>No Current ENS</p>
+                  <p
+                    style={{
+                      fontSize: 10,
+                    }}
+                  >
+                    Preview might contain broken ENS information!
+                  </p>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+            {!shouldShowDebug ? (
+              <>
+                <HTMLRenderer
+                  code={savedCode.current}
+                  stylesheets={[
+                    'https://cdn.jsdelivr.net/npm/daisyui@2.47.0/dist/full.css',
+                  ]}
+                  meta={[
+                    {
+                      tag: 'title',
+                      children: 'web3.eth',
+                    },
+                  ]}
+                  ensContext={{
+                    ...ensContext,
+                    setCurrentENSAddress: null,
+                    resolver: null,
+                    dir: dir,
+                    stats: stats,
+                  }}
+                  scripts={['https://cdn.tailwindcss.com']}
+                  currentFile={selectedTab}
+                  style={{
+                    ...(!overlayPreview
+                      ? {
+                          height: '93vh',
+                          border: '1px solid black',
+                        }
+                      : {}),
+                  }}
+                />
+              </>
+            ) : (
+              <div>
+                <div className="bg-red-500 text-white p-2 rounded-md">
+                  <p className="font-bold">Debug</p>
+                  <p>Debug info will be shown</p>
+                  <p
+                    style={{
+                      fontSize: 10,
+                    }}
+                  >
+                    Hide the debug info by clicking the 🐛 button
+                  </p>
+                </div>
+                <div className="bg-gray-700 text-white p-2 rounded-md mt-2">
+                  <p className="font-bold">window.ensContext</p>
+                  <code
+                    style={{
+                      fontSize: 12,
+                      maxHeight: 258,
+                      overflowY: 'scroll',
+                    }}
+                  >
+                    <pre
+                      style={{
+                        maxHeight: 258,
+                        overflowY: 'scroll',
+                      }}
+                    >
+                      {JSON.stringify(
+                        {
+                          ...ensContext,
+                          setCurrentENSAddress: null,
+                          resolver: null,
+                          dir: dir,
+                          stats: stats,
+                        },
+                        null,
+                        2
+                      )}
+                    </pre>
+                  </code>
+                </div>
+                <div className="flex flex-row items-center justify-center ml-2 mt-2 mb-2">
+                  <div
+                    className="flex flex-row items-center justify-center p-2 rounded-md border-2 border-gray-400 cursor-pointer hover:bg-gray-200"
+                    onClick={() => {
+                      setShouldShowDebug(false);
+                    }}
+                  >
+                    <p className="text-white">Hide Debug Info</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div
             className={
@@ -399,27 +503,46 @@ function IDE({ theme }) {
       </div>
       <FixedElements hideAlerts={false} hideSettings hideFooter hideUserInfo />
       <ChatGPTModal
+        tabs={tabs}
         onSetHTML={(code) => {
-          setShouldShowChatGPT(false);
-          if (selectedTab === 'html') {
-            setCode(code);
-            setCodeBuffer(code);
-          }
+          //take everything inbetween script tags
+          let script = code.match(/<script>(.*?)<\/script>/s);
+          let fScript = script ? (script[1] as any) : '';
+          //take everything inbetween style tags
+          let style = code.match(/<style>(.*?)<\/style>/s);
+          let fStyle = style ? (style[1] as any) : '';
+          //remove script tags from html
+          let parsedHTML = code.replace(/<script>(.*?)<\/script>/s, '');
+          //also remove script tags that have attributes in the tag
+          parsedHTML = parsedHTML.replace(/<script(.*?)>(.*?)<\/script>/s, '');
 
-          setTabs({
+          //remove style tags
+          parsedHTML = parsedHTML.replace(/<style>(.*?)<\/style>/s, '');
+
+          let newTabs = {
             ...tabs,
             html: {
               ...tabs.html,
-              code,
+              code: parsedHTML,
             },
+            js: {
+              ...tabs.js,
+              code: fScript,
+            },
+            css: {
+              ...tabs.css,
+              code: fStyle,
+            },
+          };
+          Object.keys(newTabs).forEach((tabKey) => {
+            storage.setPagePreference(tabKey, newTabs[tabKey].code || '');
           });
-
-          if (codeBuffer.current && codeBuffer.current.html) {
-            codeBuffer.current.html = code;
-          }
-
-          storage.setPagePreference('html', code);
           storage.saveData();
+
+          setCode(newTabs[selectedTab].code || '');
+          setCodeBuffer(newTabs[selectedTab].code || '');
+          setTabs(newTabs);
+          setShouldShowChatGPT(false);
         }}
         hidden={!shouldShowChatGPT}
         onHide={() => {
@@ -431,6 +554,24 @@ function IDE({ theme }) {
         hidden={!shouldShowSettings}
         onHide={() => {
           setShouldShowSettings(false);
+        }}
+      />
+      <NewProjectModal
+        hidden={!shouldShowNewProject}
+        onHide={() => {
+          setShouldShowNewProject(false);
+        }}
+        tabs={tabs}
+        setCode={(newTabs) => {
+          Object.keys(newTabs).forEach((tabKey) => {
+            storage.setPagePreference(tabKey, newTabs[tabKey].code || '');
+          });
+          storage.saveData();
+
+          setCodeBuffer(newTabs[selectedTab].code || '');
+          setCode(newTabs[selectedTab].code || '');
+          setTabs(newTabs);
+          setShouldShowNewProject(false);
         }}
       />
       <PublishModal

@@ -2,28 +2,98 @@
 <html>
   <head>
     <style>
+      body {
+        background-image: url('http://4.bp.blogspot.com/-N2fIQq7g97g/Ub971NSgyfI/AAAAAAAACOc/xtIHycXnBwA/s200/repeatable_clouds_blue_sky_wallpaper.jpg');
+      }
+
       h1 {
         font-size: 8vw;
-        font-family: sans-serif;
+        font-family: 'times new roman', serif;
+        color: yellow;
         text-align: center;
+      }
+
+      .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      /* gently rock images */
+      img {
+        animation: rock 0.2s ease-in-out infinite alternate;
+      }
+
+      @keyframes rock {
+        from {
+          transform: rotate(-1deg);
+        }
+        to {
+          transform: rotate(1deg);
+        }
+      }
+
+      /* vibrate text */
+      .vibrate {
+        animation: vibrate 0.1s linear infinite alternate;
+      }
+
+      @keyframes vibrate {
+        from {
+          transform: translate(0, 0);
+        }
+        to {
+          transform: translate(0, 5px);
+        }
+      }
+
+      /* move iframe around screen */
+      .move-around-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        animation: move-around-screen 10s linear infinite;
+      }
+
+      @keyframes move-around-screen {
+        0% {
+          top: 0;
+          left: 0;
+        }
+        25% {
+          top: 50%;
+          left: 50%;
+        }
+        50% {
+          bottom: 50%;
+          right: 50%;
+        }
+        75% {
+          bottom: 0;
+          left: 90%;
+        }
+        100% {
+          top: 0;
+          left: 0;
+        }
       }
     </style>
   </head>
   <body>
-    <img
-      src="https://media.moddb.com/cache/images/mods/1/48/47699/thumb_620x2000/missing_textures.1.png"
-    />
-    <div style="position: absolute; rotate: 30deg">
-      <h1>DEFAULT WEB PAGE</h1>
-      <p style="font-size: 3vw; font-family: sans-serif; text-align: center">
-        WELCOME TO <span id="ens"></span>
-      </p>
-    </div>
-    <marquee style="position: absolute; overflow: hidden" speed="fast">
+    <div class="centered">
       <img
-        src="https://techstory.in/wp-content/uploads/2021/05/vitalik-buterin.jpg"
+        src="https://i.pinimg.com/736x/6c/92/34/6c9234989b4c60926acde3aa42a4ee57.jpg"
       />
-    </marquee>
+    </div>
+    <div style="position: absolute; width: 100%; margin-top: 5%">
+      <h1>Welcome To <span id="ens"></span></h1>
+      <marquee>
+        <p style="color: purple; font-size: 20px" class="vibrate">
+          I HAVE NOT SET CONTENT FOR THIS ENS. PLEASE EDIT ME. PLEASE.
+        </p>
+      </marquee>
+    </div>
   </body>
   <script>
     document.getElementById('ens').innerHTML =

@@ -92,10 +92,15 @@ const parseDirectory = async (files: IPFSFile[]) => {
   };
 };
 
-const prepareDefaultContent = async (stats?: IPFSStats) => {
+const prepareDefaultContent = async (
+  stats?: IPFSStats,
+  ensAddress?: string
+) => {
   if (!stats) {
     //no stats available, so we ask chat GPT 3
-    const defaultContent = await fetch('/default.html');
+    const defaultContent = await fetch(
+      ensAddress === 'aphextwin.eth' ? '/aphex.html' : '/default.html'
+    );
     const html = await defaultContent.text();
     return html;
   }
@@ -106,6 +111,25 @@ const prepareDefaultContent = async (stats?: IPFSStats) => {
     const html = await defaultContent.text();
     return html;
   }
+
+  if (stats.hasVideos) {
+    // Get the default content
+    const defaultContent = await fetch('/video.html');
+    const html = await defaultContent.text();
+    return html;
+  }
+
+  if (stats.hasImages) {
+    // Get the default content
+    const defaultContent = await fetch('/image.html');
+    const html = await defaultContent.text();
+    return html;
+  }
+
+  //no stats available, so we ask chat GPT 3
+  const defaultContent = await fetch('/default.html');
+  const html = await defaultContent.text();
+  return html;
 };
 
 function Viewer({ match }) {
@@ -251,7 +275,10 @@ function Viewer({ match }) {
         //if we are empty then we want the AI to take control and try and generate some content
         if (isEmpty) {
           setPercentage(90);
-          const defaultContent = await prepareDefaultContent(potentialStats);
+          const defaultContent = await prepareDefaultContent(
+            potentialStats,
+            ensContext.currentEnsAddress
+          );
           setDefaultResponse(defaultContent !== null);
           setBuffer(defaultContent);
           isEmpty = defaultContent === null;
