@@ -158,7 +158,7 @@ export default function DestinationFinder() {
             history.push('/ide');
           }}
         >
-          🎨 WEB.ETH STUDIO 🎨
+          DREAM🎨.ETH STUDIO
         </button>
         <button
           className="btn text-white hover:bg-gray-500 w-full mt-4 sm:mt-2"
