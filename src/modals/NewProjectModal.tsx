@@ -446,7 +446,7 @@ function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
                   </h1>
                   <div className="hidden md:block lg:block">
                     <p className="text-black text-1xl lg:text-2xl text-right">
-                      Welcome to the Magic dWeb Studio.
+                      Welcome to the  Dream🎨.eth Magic dWeb Studio.
                     </p>
                     <p className="text-black text-1xl lg:text-2xl  text-right">
                       You can use it to create <u>anything</u> you like.
@@ -526,9 +526,9 @@ function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
                     <p className="text-gray-400">{template.description}</p>
                   </div>
                   <div className="flex flex-row items-center">
-                    <p className="text-black">
+                    <h2 className="text-black">
                       {selectedTemplate === template ? '✅' : ''}
-                    </p>
+                    </h2>
                   </div>
                 </div>
               ))}
