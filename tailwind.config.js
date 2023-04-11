@@ -208,8 +208,7 @@ module.exports = {
           "base-100": "#181830",
           "emoji-modifier": "🐶",
         }
-      },
-      '0xToto_light',      
+      },     
       'light',
       'dark',
       'cupcake',
