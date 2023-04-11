@@ -48,3 +48,5 @@ docs/
 # Build folders
 nix/result
 /build
+package-lock.json
+yarn.lock
