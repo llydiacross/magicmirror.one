@@ -50,3 +50,4 @@ nix/result
 /build
 package-lock.json
 yarn.lock
+package-lock.json
