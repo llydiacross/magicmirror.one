@@ -378,7 +378,7 @@ function Header({
           </div>
           <div className="mt-2 max-w-screen w-full">
             <h1
-              className="text-2xl bg-warning text-black lg:text-5xl font-bold p-2 mb-4 max-w-screen truncate"
+              className="text-2xl bg-primary lg:text-5xl p-2 mb-4 max-w-screen"
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}

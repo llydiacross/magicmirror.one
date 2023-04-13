@@ -72,7 +72,7 @@ export default function DestinationFinder() {
           '/view/' + destination + (isResolver ? resolverExtension : '.eth')
         );
         resolve(true);
-      }, 3142)
+      }, 3142/4)
     );
   };
 
@@ -138,20 +138,20 @@ export default function DestinationFinder() {
             <button
               data-loading={loading}
               disabled={loading || !hasInput}
-              className="btn bg-warning text-black w-25 hover:text-white hover:bg-black hover:text-yellow-500"
+              className="btn bg-primary text-black w-25 hover:text-white hover:bg-black hover:text-yellow-500"
               onClick={handleVisit}
             >
               VISIT
             </button>
           </div>
         </div>
-        <p className="text-1xl text-shadow bg-warning text-black p-1 mt-4 mb-1 hidden lg:block">
+        <p className="text-1xl text-shadow bg-secondary text-black p-1 mt-4 mb-1 hidden lg:block">
           <b>
-            create your next <u>masterpiece</u> using the
+          👇 build the next <u>web</u> and unlock the magic of Web3 👇
           </b>
         </p>
         <button
-          className="btn text-white bg-pink-500 hover:bg-purple-500 w-full mt-4 lg:mt-3 animate-pulse"
+          className="btn bg-secondary hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
           data-loading={loading}
           disabled={loading}
           onClick={() => {
@@ -161,7 +161,7 @@ export default function DestinationFinder() {
           DREAM🎨.ETH STUDIO
         </button>
         <button
-          className="btn text-white hover:bg-gray-500 w-full mt-4 sm:mt-2"
+          className="btn hover:bg-accent-500 w-full mt-4 sm:mt-2"
           data-loading={loading}
           disabled={loading}
           onClick={handleTakeMeAnywhere}
