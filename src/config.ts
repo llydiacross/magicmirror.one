@@ -24,8 +24,8 @@ const config = {
   defaultAvatar:
     'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_640.png',
   themes: [
-    '0x0z_eth_light',
-    '0x0z_eth_dark',
+    '🟨 0x0z.eth 🌝',
+    '🟨 0x0z.eth 🌚',
     'emerald_city_light',
     'emerald_city_dark',
     '0xWizard_light',

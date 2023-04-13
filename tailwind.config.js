@@ -10,7 +10,7 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        '0x0z_eth_light': {
+        '🟨 0x0z.eth 🌝': {
           fontFamily: 'Future PT Medium, sans-serif',
           primary: '#fde900',
           secondary: '#f502fc',
@@ -19,7 +19,7 @@ module.exports = {
           'base-100': '#ffffff',
           'emoji-modifier': '🟨',
         },
-        '0x0z_eth_dark': {
+        '🟨 0x0z.eth 🌚': {
           fontFamily: 'Future PT Medium, sans-serif',
           primary: '#fde900',
           secondary: '#f502fc',

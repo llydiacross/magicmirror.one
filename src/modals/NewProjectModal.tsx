@@ -69,7 +69,7 @@ defaultTemplates.basic = {
 defaultTemplates.advanced = {
   name: 'Scripting Example',
   description:
-    'Start with some JavaScript and HTML demonstrating how to use the Magic API',
+    'Start with some JavaScript and HTML demonstrating how to use the Magic🪞 API',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -79,7 +79,7 @@ defaultTemplates.advanced = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>🧙‍♂️.Magic🪞.eth</title>
             </head>
             <body>
                 <p id='ens'>NO ENS</p>
@@ -98,8 +98,8 @@ defaultTemplates.advanced = {
       ...result['.xens'],
       code: JSON.stringify(
         {
-          name: 'Magic Mirror',
-          description: 'A simple example of how to use the Magic Mirror API',
+          name: 'Magic🪞(XENS)',
+          description: 'A simple example of how to use the Magic🪞 API',
           author: 'Magic Mirror',
           version: '0.0.1',
           direct: false,
@@ -126,9 +126,9 @@ defaultTemplates.redirect = {
       ...result['.xens'],
       code: JSON.stringify(
         {
-          name: 'Magic Mirror',
-          description: 'A redirect to another website',
-          author: 'Magic Mirror',
+          name: 'Magic🪞Mirror',
+          description: 'A simple redirect to another website',
+          author: 'Magic🪞',
           version: '0.0.1',
           direct: true,
         },
@@ -138,7 +138,7 @@ defaultTemplates.redirect = {
     };
 
     result.js.code = `
-        let location = 'https://magicmirror.xyz';
+        let location = 'https://magicmirror.one';
     
       setTimeout(() => {
         window.location.href = location;
@@ -148,10 +148,10 @@ defaultTemplates.redirect = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth </title>
             </head>
             <body>
-                <p>Redirecting...</p>
+                <p>Reflecting...</p>
             </body>
         </html>
     `;
@@ -161,8 +161,8 @@ defaultTemplates.redirect = {
 };
 
 defaultTemplates.web3Mirror = {
-  name: 'Web3 Mirror',
-  description: 'Set up a mirror of a web2 website onto your ethereum domain',
+  name: 'Web3 Reflection',
+  description: 'Set up a mirror of a web2 website onto your ENS domain',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -172,9 +172,9 @@ defaultTemplates.web3Mirror = {
     result['.xens'] = {
       ...result['.xens'],
       code: JSON.stringify({
-        name: 'Magic Mirror',
+        name: 'Magic🪞.eth',
         description: 'A mirror of a web2 website',
-        author: 'Magic Mirror',
+        author: '0x0z.Agency',
         version: '0.0.1',
         direct: true,
       }),
@@ -183,7 +183,7 @@ defaultTemplates.web3Mirror = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth</title>
             </head>
             <body>
                 <iframe src="https://pod.infinitymint.app" style="width: 100vw; height: 100vh; border: none;" 
@@ -199,7 +199,7 @@ defaultTemplates.web3Mirror = {
 
 defaultTemplates.embeded = {
   name: 'Embedded Example',
-  description: 'Example of how to embed content into magic mirror',
+  description: 'Example of how to embed content into Magic🪞.eth',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -209,8 +209,8 @@ defaultTemplates.embeded = {
     result['.xens'] = {
       ...result['.xens'],
       code: JSON.stringify({
-        name: 'Magic Mirror',
-        description: 'An example of how to embed content into magic mirror',
+        name: 'Magic🪞.eth',
+        description: 'An example of how to embed content into Magic🪞.eth',
         version: '0.0.1',
         direct: false,
       }),
@@ -219,7 +219,7 @@ defaultTemplates.embeded = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth</title>
             </head>
             <body>
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/z62_AwLC7-g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -271,7 +271,7 @@ defaultTemplates.music = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic music project using your own music. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -308,7 +308,7 @@ defaultTemplates.video = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic video project using your own videos. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -345,7 +345,7 @@ defaultTemplates.image = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic image project using your own images. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -368,7 +368,7 @@ defaultTemplates.image = {
 
 defaultTemplates.links = {
   name: 'Links',
-  description: 'Set up a "linktree like" website with your own links.',
+  description: 'Set up a Links focused landing page.',
 };
 
 defaultTemplates.blog = {
