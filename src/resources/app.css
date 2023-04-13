@@ -10,7 +10,34 @@
   font-family: 'TheNextFont';
   src: url('./TheNextFont.ttf');
 }
-
+@font-face {
+  font-family: 'Amatic SC';
+  src: url('./AmaticSC-Regular.ttf');
+}
+@font-face {
+  font-family: 'Dancing Script';
+  src: url('./DancingScript-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: 'Lobster';
+  src: url('./Lobster-Regular.ttf');
+}
+@font-face {
+  font-family: 'Luckiest Guy';
+  src: url('./LuckiestGuy-Regular.ttf');
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('./RobotoMono-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: 'Lora';
+  src: url('./Lora-VariableFont_wght.ttf');
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

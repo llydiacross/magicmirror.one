@@ -368,11 +368,11 @@ function Header({
         <div className="flex flex-col gap-4 lg:gap-3 w-full">
           {/** Mobile title */}
           <div className="max-w-screen mb-2">
-            <h1 className="text-8xl md:hidden lg:hidden font-apocalypse title truncate max-w-screen">
+            <h1 className="text-6xl md:hidden lg:hidden title max-w-screen">
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
             {/** Tablet/desktop title */}
-            <h1 className="text-15xl lg:text-giant hidden md:block lg:block  font-apocalypse title truncate max-w-screen">
+            <h1 className="text-8xl lg:text-giant hidden md:block lg:block title max-w-screen">
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
           </div>
