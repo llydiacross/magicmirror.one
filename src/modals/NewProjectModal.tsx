@@ -69,7 +69,7 @@ defaultTemplates.basic = {
 defaultTemplates.advanced = {
   name: 'Scripting Example',
   description:
-    'Start with some JavaScript and HTML demonstrating how to use the Magic API',
+    'Start with some JavaScript and HTML demonstrating how to use the Magic🪞 API',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -79,7 +79,7 @@ defaultTemplates.advanced = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>🧙‍♂️.Magic🪞.eth</title>
             </head>
             <body>
                 <p id='ens'>NO ENS</p>
@@ -98,8 +98,8 @@ defaultTemplates.advanced = {
       ...result['.xens'],
       code: JSON.stringify(
         {
-          name: 'Magic Mirror',
-          description: 'A simple example of how to use the Magic Mirror API',
+          name: 'Magic🪞(XENS)',
+          description: 'A simple example of how to use the Magic🪞 API',
           author: 'Magic Mirror',
           version: '0.0.1',
           direct: false,
@@ -114,8 +114,8 @@ defaultTemplates.advanced = {
 };
 
 defaultTemplates.redirect = {
-  name: 'Redirect',
-  description: 'Set up a redirect to another website',
+  name: 'Magic🪞.eth Reflection',
+  description: 'Set up a 🪞 to redirect to another domain',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -126,9 +126,9 @@ defaultTemplates.redirect = {
       ...result['.xens'],
       code: JSON.stringify(
         {
-          name: 'Magic Mirror',
-          description: 'A redirect to another website',
-          author: 'Magic Mirror',
+          name: 'Magic🪞.eth Reflection',
+          description: 'A simple redirect to another website',
+          author: 'Magic🪞',
           version: '0.0.1',
           direct: true,
         },
@@ -138,7 +138,7 @@ defaultTemplates.redirect = {
     };
 
     result.js.code = `
-        let location = 'https://magicmirror.xyz';
+        let location = 'https://magicmirror.one';
     
       setTimeout(() => {
         window.location.href = location;
@@ -148,10 +148,10 @@ defaultTemplates.redirect = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth Reflecting</title>
             </head>
             <body>
-                <p>Redirecting...</p>
+                <p>Reflecting...</p>
             </body>
         </html>
     `;
@@ -161,8 +161,8 @@ defaultTemplates.redirect = {
 };
 
 defaultTemplates.web3Mirror = {
-  name: 'Web3 Mirror',
-  description: 'Set up a mirror of a web2 website onto your ethereum domain',
+  name: 'Magic🪞.eth Web2<>ENS Refraction',
+  description: 'Set up a your 🪞 to refract the light of your web2 site into your ENS domain',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -172,9 +172,9 @@ defaultTemplates.web3Mirror = {
     result['.xens'] = {
       ...result['.xens'],
       code: JSON.stringify({
-        name: 'Magic Mirror',
-        description: 'A mirror of a web2 website',
-        author: 'Magic Mirror',
+        name: 'Magic🪞.eth Refraction',
+        description: 'A refraction to a web2 website',
+        author: '0x0z.Agency',
         version: '0.0.1',
         direct: true,
       }),
@@ -183,7 +183,7 @@ defaultTemplates.web3Mirror = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth</title>
             </head>
             <body>
                 <iframe src="https://pod.infinitymint.app" style="width: 100vw; height: 100vh; border: none;" 
@@ -198,8 +198,8 @@ defaultTemplates.web3Mirror = {
 };
 
 defaultTemplates.embeded = {
-  name: 'Embedded Example',
-  description: 'Example of how to embed content into magic mirror',
+  name: 'Magic🪞.eth Embedding',
+  description: 'Example of how to embed content into Magic🪞.eth',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -209,8 +209,8 @@ defaultTemplates.embeded = {
     result['.xens'] = {
       ...result['.xens'],
       code: JSON.stringify({
-        name: 'Magic Mirror',
-        description: 'An example of how to embed content into magic mirror',
+        name: 'Magic🪞.eth',
+        description: 'An example of how to embed content into Magic🪞.eth',
         version: '0.0.1',
         direct: false,
       }),
@@ -219,7 +219,7 @@ defaultTemplates.embeded = {
     result.html.code = `
         <html>
             <head>
-                <title>🧙‍♂️ Magic Mirror</title>
+                <title>Magic🪞.eth Embedding</title>
             </head>
             <body>
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/z62_AwLC7-g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -256,7 +256,7 @@ let fetchContent = async (contentIndex: string = 'audio.html') => {
 };
 
 defaultTemplates.music = {
-  name: 'Music',
+  name: '🎧Club.eth',
   description:
     'Setup a basic music project using your own music. You can choose to use our own theme for the website or work on your own.',
   onSelection: (tabs: any, setCode: any) => {
@@ -271,7 +271,7 @@ defaultTemplates.music = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic music project using your own music. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -293,7 +293,7 @@ defaultTemplates.music = {
 };
 
 defaultTemplates.video = {
-  name: 'Video',
+  name: 'NewTube.eth',
   description:
     'Setup a basic video project using your own video. You can choose to use our own theme for the website or work on your own.',
   onSelection: (tabs: any, setCode: any) => {
@@ -308,7 +308,7 @@ defaultTemplates.video = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic video project using your own videos. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -345,7 +345,7 @@ defaultTemplates.image = {
         ...result['.xens'],
         code: JSON.stringify(
           {
-            name: 'Magic Mirror',
+            name: 'Magic🪞.eth',
             description:
               'Setup a basic image project using your own images. You can choose to use our own theme for the website or work on your own.',
             version: '0.0.1',
@@ -367,8 +367,72 @@ defaultTemplates.image = {
 };
 
 defaultTemplates.links = {
-  name: 'Links',
-  description: 'Set up a "linktree like" website with your own links.',
+  name: '♾️links.eth',
+  description: 'Set up your own free and infinite links page.',
+  onSelection: (tabs: any, setCode: any) => {
+    //should do stuff and set up the project
+    let result = {
+      ...defaultTabs,
+    };
+
+    result['.xens'] = {
+      ...result['.xens'],
+      code: JSON.stringify({
+        name: '♾️links.eth',
+        description: 'A free and infinite links page',
+        author: '0x0z.Agency',
+        version: '0.0.1',
+        direct: true,
+      }),
+    };
+
+    result.html.code = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>♾️LINKS</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-100">
+        <header class="bg-white shadow-md py-4 px-8">
+            <!-- Header text -->
+            <h1 class="text-3xl font-bold text-gray-900 inline">
+                My Title
+            </h1>
+            <!-- Header image -->
+            <!-- <img src="your-image-url" alt="My Title" class="h-10 w-auto inline"> -->
+        </header>
+        <main class="container mx-auto mt-8">
+            <ul class="space-y-4">
+                <li>
+                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
+                        <img src="your-inline-image-url" alt="Button 1" class="h-5 w-auto inline mr-2">
+                        Button 1
+                    </a>
+                </li>
+                <li>
+                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
+                        <img src="your-inline-image-url" alt="Button 2" class="h-5 w-auto inline mr-2">
+                        Button 2
+                    </a>
+                </li>
+                <li>
+                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
+                        <img src="your-inline-image-url" alt="Button 3" class="h-5 w-auto inline mr-2">
+                        Button 3
+                    </a>
+                </li>
+            </ul>
+        </main>
+    </body>
+    </html>
+    
+      `;
+
+    setCode(result);
+  },
 };
 
 defaultTemplates.blog = {

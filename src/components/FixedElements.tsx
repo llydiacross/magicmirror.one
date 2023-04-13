@@ -231,8 +231,10 @@ function FixedElements({
                 daisyui
               </a>
               . Made with <u className="text-error">love</u> by{' '}
-              <a href="/view/llydia.eth" className="text-yellow-100 underline">
-                llydia.eth
+              <a href="/view/0xTinman.eth" className="text-yellow-100 underline">
+                🤖.0xTinman.eth
+              </a> - <a href="/view/0xWizardof0z.eth" className="text-yellow-100 underline">
+                🧙🏼‍♂️.0xWizardof0z.eth
               </a>
               .
             </div>
@@ -254,8 +256,12 @@ function FixedElements({
               Created by 0x0zAgency.
               <br />
               Made with ❤️ by{' '}
-              <a href="/view/llydia.eth" className="text-yellow-100 underline">
-                llydia.eth
+              
+              <a href="/view/0xTinman.eth" className="text-yellow-100 underline">
+                0xTinman.eth
+              </a> - 
+              <a href="/view/0xWizardof0z.eth" className="text-yellow-100 underline">
+                0xWizardof0z.eth
               </a>
             </p>
           </div>
