@@ -72,7 +72,7 @@ export default function DestinationFinder() {
           '/view/' + destination + (isResolver ? resolverExtension : '.eth')
         );
         resolve(true);
-      }, 1000)
+      }, 3142)
     );
   };
 
@@ -99,7 +99,7 @@ export default function DestinationFinder() {
   // Pick random tokenId from ENS and try and got to it...
   const handleTakeMeAnywhere = () => {
     setLoading(true);
-    gotoAddress('xxx.eth')
+    gotoAddress('♾️mint.eth')
       .catch(errorHandler)
       .finally(() => {
         setLoading(false);
