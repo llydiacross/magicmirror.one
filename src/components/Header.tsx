@@ -372,7 +372,7 @@ function Header({
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
             {/** Tablet/desktop title */}
-            <h1 className="text-8xl hidden font-sans md:block lg:block title max-w-screen">
+            <h1 className="text-8xl hidden md:block lg:block title max-w-screen">
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
           </div>
