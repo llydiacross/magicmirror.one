@@ -39,7 +39,7 @@
   src: url('./Montserrat-VariableFont_wght.ttf');
 }
 @font-face {
-  font-family: 'Lora';
+  font-family: 'Lora, sans-serif';
   src: url('./Lora-VariableFont_wght.ttf');
 }
 

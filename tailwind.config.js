@@ -11,7 +11,7 @@ module.exports = {
     themes: [
       {
         Ox0z_light : {
-          'fontFamily': "'Lora', sans-serif",
+          'fontFamily': 'Lora, sans-serif',
           'primary': '#facc15',
           'secondary': '#ec4899',
           'accent': '#d946ef',
