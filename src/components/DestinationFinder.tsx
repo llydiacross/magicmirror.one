@@ -138,14 +138,14 @@ export default function DestinationFinder() {
             <button
               data-loading={loading}
               disabled={loading || !hasInput}
-              className="btn bg-primary text-black w-25 hover:text-white hover:bg-black hover:text-yellow-500"
+              className="btn bg-primary w-25 hover:text-white hover:bg-black hover:text-yellow-500"
               onClick={handleVisit}
             >
               VISIT
             </button>
           </div>
         </div>
-        <p className="text-1xl text-shadow bg-secondary text-black p-1 mt-4 mb-1 hidden lg:block">
+        <p className="text-1xl text-shadow bg-secondary p-1 mt-4 mb-1 lg:block">
           <b>
           👇 build the next <u>web</u> and unlock the magic of Web3 👇
           </b>

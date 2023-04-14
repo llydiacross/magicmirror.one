@@ -372,13 +372,13 @@ function Header({
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
             {/** Tablet/desktop title */}
-            <h1 className="text-8xl lg:text-giant hidden md:block lg:block title max-w-screen">
+            <h1 className="text-8xl hidden md:block lg:block title max-w-screen">
               {!title || title.length === 0 ? 'Magic🪞.eth' : title}
             </h1>
           </div>
           <div className="mt-2 max-w-screen w-full">
             <h1
-              className="text-2xl bg-primary lg:text-5xl p-2 mb-4 max-w-screen"
+              className="text-2xl text-accent bg-primary lg:text-5xl p-2 mb-4 max-w-screen"
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}

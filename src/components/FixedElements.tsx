@@ -223,13 +223,7 @@ function FixedElements({
               >
                 GitHub
               </a>
-              . Themes provided by{' '}
-              <a
-                href="https://daisyui.com/"
-                className="text-yellow-100 underline"
-              >
-                daisyui
-              </a>
+              
               . Made with <u className="text-error">love</u> by{' '}
               <a href="/view/0xTinman.eth" className="text-yellow-100 underline">
                 🤖.0xTinman.eth
