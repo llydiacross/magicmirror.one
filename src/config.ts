@@ -21,8 +21,7 @@ const config = {
     ipns: 'ipns',
     wallet: 'wallet',
   },
-  defaultAvatar:
-    'img/0x0zLogo.jpg',
+  defaultAvatar: '/img/0x0zLogo.jpg',
   themes: [
     'Ox0z_light',
     'Ox0z_dark',

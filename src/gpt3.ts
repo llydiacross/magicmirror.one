@@ -15,6 +15,20 @@ export const fetchPrompt = async (
   );
 };
 
+export const fetchWebpage = async (
+  ensAddress: string,
+  abort?: AbortController,
+  options?: any
+) => {
+  return await apiFetch(
+    'gpt3',
+    'webpage',
+    { ensAddress, ...(options || {}) },
+    'POST',
+    abort
+  );
+};
+
 // Fetches a moderation response from chat gpt3
 export const fetchModeration = async (
   prompt: string,
