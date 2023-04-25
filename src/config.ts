@@ -9,7 +9,7 @@ const config = {
   chatGPTTopP: 1,
   useLocalApi: false,
   localApiEndpoint: 'http://localhost:9090/',
-  apiEndpoint: 'https://web-api.infinitymint.app/',
+  apiEndpoint: 'https://magicmirror.0x0z.me/',
   /**
    * routes for the api system, don't change these
    */
