@@ -6,6 +6,8 @@ import { Web3Context } from '../contexts/web3Context';
 import { ENSContext } from '../contexts/ensContext';
 import { useHistory } from 'react-router-dom';
 import storage from '../storage';
+import config from '../config';
+import WebEvents from '../webEvents';
 
 function FixedElements({
   onSettings,
@@ -134,8 +136,10 @@ function FixedElements({
               ref={errorRef}
               hidden={hideAlerts}
               className="alert alert-error shadow-lg animate-bounce p-4 mb-2 mt-4 opacity-70 hover:opacity-100 cursor-pointer w-auto"
-              onClick={() => {
-                errorRef.current.hidden = true;
+              onClick={async () => {
+                await config.onboard.walletSelect();
+                await config.onboard.walletCheck();
+                WebEvents.emit('reload');
               }}
             >
               <ErrorIcon />

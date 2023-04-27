@@ -256,6 +256,15 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
                 ) : (
                   <></>
                 )}
+                {error ? (
+                  <p className="text-center text-3xl text-black">
+                    There was an issue with that transaction. Please check
+                    etherscan.
+                  </p>
+                ) : (
+                  <></>
+                )}
+
                 <div className="flex flex-col p-2 w-full mt-2">
                   <div className="stats shadow">
                     <div className="stat">
