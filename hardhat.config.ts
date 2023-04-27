@@ -13,11 +13,7 @@ import '@nomicfoundation/hardhat-toolbox';
 import '@nomiclabs/hardhat-ethers';
 import 'hardhat-deploy';
 import 'hardhat-change-network'; // Allows hre.changeNetwork to occur
-import {
-  prepareConfig,
-  loadInfinityMint,
-  logDirect,
-} from 'infinitymint/dist/app/helpers';
+import { prepareConfig, loadInfinityMint } from 'infinitymint/dist/app/helpers';
 import { createDefaultFactory } from 'infinitymint/dist/app/pipes';
 
 // Create default pipe

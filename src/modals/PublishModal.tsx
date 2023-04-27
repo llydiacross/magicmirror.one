@@ -8,6 +8,7 @@ import WebEvents from '../webEvents';
 import { useHistory } from 'react-router-dom';
 import HeartIcon from '../components/Icons/HeartIcon';
 import ViewIcon from '../components/Icons/ViewIcon';
+import config from '../config';
 
 const avatars = {
   html: 'https://cdn.icon-icons.com/icons2/1488/PNG/512/5352-html5_102567.png',
@@ -25,7 +26,7 @@ const avatars = {
 function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
   const defaultThemeRef = useRef(null);
   const context = useContext(Web3Context);
-  const [currentTheme, setCurrentTheme] = useState('dracula');
+  const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 

@@ -1,27 +1,28 @@
-import express from 'express'
-import glue from 'jsglue'
-import { findEndpoints, getConfig, getEndpointPath } from './utils/helpers.mjs'
-import cors from 'cors'
-import helmet from 'helmet'
-import bodyParser from 'body-parser'
-import morgan from 'morgan'
-import dotenv from 'dotenv'
-import { create } from 'ipfs-http-client'
-import { createClient } from 'redis'
+import express from 'express';
+import glue from 'jsglue';
+import { findEndpoints, getConfig, getEndpointPath } from './utils/helpers.mjs';
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import { create } from 'ipfs-http-client';
+import { createClient } from 'redis';
+
 // do ts node register
-import tsNode from 'ts-node'
+import tsNode from 'ts-node';
 
 tsNode.register({
   transpileOnly: true,
   compilerOptions: {
-    module: 'commonjs'
-  }
-})
+    module: 'commonjs',
+  },
+});
 
 // load our .env
 dotenv.config({
-  override: false
-})
+  override: false,
+});
 
 /**
  * Simple server class
@@ -30,176 +31,173 @@ class Server {
   /**
    * @type {import('infinitymint/dist/app/console').InfinityConsole}
    * */
-  infinityConsole
+  infinityConsole;
   /**
    * @type {import('express').Express}
    */
-  app
+  app;
   /**
-   * @type {import('redis').Server}
-  */
-  redisClient
+   * @type {import('redis').RedisClientType}
+   */
+  redisClient;
   /**
    * @type {number}
    * */
-  port
+  port;
   /**
    * @type {import('ipfs-core').IPFS}
    */
-  node = null
+  node = null;
   /**
    * @type {import('ipfs-http-client').IPFSHTTPClient}
    */
-  ipfs = null
+  ipfs = null;
   /**
    * @type {Array}
    */
-  routes = []
+  routes = [];
   /**
    * Only accessible after start
    * @type {import('../webeth.config')}
    */
-  config
+  config;
 
   constructor(port = 9090) {
-    this.app = express()
-    this.port = port
+    this.app = express();
+    this.port = port;
 
-    this.redisClient = createClient()
+    this.redisClient = createClient();
 
-    this.app.use(helmet())
+    this.app.use(helmet());
 
     // allows CORS headers to work
     this.app.use((_, res, next) => {
       res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
-      )
-      next()
-    })
+      );
+      next();
+    });
 
     // the json body parser
-    this.app.use(bodyParser.json())
-    this.app.use(bodyParser.urlencoded({ extended: true }))
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
 
     // for dev
-    this.app.use(morgan('dev'))
+    this.app.use(morgan('dev'));
   }
 
   async start() {
-    const config = await getConfig()
-    const wrapper = await glue.load()
+    const config = await getConfig();
+    const wrapper = await glue.load();
     /**
      * @type {import('infinitymint')}
      */
-    const infinitymint = wrapper.getSync('infinitymint')
+    const infinitymint = wrapper.getSync('infinitymint');
 
     const infinityConsole = await infinitymint.load({
       dontDraw: true,
       scriptMode: true,
       startExpress: false,
-      test: true // will expose all logs
-    })
+      test: true, // will expose all logs
+    });
 
-    this.infinityConsole = infinityConsole
-    this.config = config.default
+    this.infinityConsole = infinityConsole;
+    this.config = config.default;
     this.ipfs = create({
-      url: config.ipfsEndpoint || 'https://dweb.link/api/v0'
-    })
+      url: config.ipfsEndpoint || 'https://dweb.link/api/v0',
+    });
 
     // set CORS after config has been loaded
     this.app.use(
       cors({
-        origin: config.cors && config.cors.length !== 0 ? config.cors : '*'
+        origin: config.cors && config.cors.length !== 0 ? config.cors : '*',
       })
-    )
+    );
 
     // load all the endpoints
-    await this.loadEndpoints()
+    await this.loadEndpoints();
 
-    this.redisClient.on('err', err => {
-      console.error(err.stack)
-      process.exit(129)
-    })
+    this.redisClient.on('err', (err) => {
+      console.error(err.stack);
+      process.exit(129);
+    });
 
     this.redisClient
       .connect()
       .then(() => console.info('[RDB]: Redis client connected!'))
-      .catch(err => console.error(err.stack))
+      .catch((err) => console.error(err.stack));
 
     this.app.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}`)
-    })
+      console.log(`Server listening on port ${this.port}`);
+    });
   }
 
   /**
    * Loads all the endpoints from the endpoints folder and adds them to the server
    */
   async loadEndpoints() {
-    const files = await findEndpoints()
+    const files = await findEndpoints();
     // load all the endpoints
     await Promise.all(
       files.map(async (file) => {
-        const route = await import(file)
-        const endpointPath = await getEndpointPath()
+        const route = await import(file);
+        const endpointPath = await getEndpointPath();
         let path =
           route.path ||
           file
             .replace(endpointPath, '')
             .replace('.mjs', '')
             .replace('.js', '')
-            .replace(process.cwd(), '')
+            .replace(process.cwd(), '');
 
-        if (path[0] !== '/') path = '/' + path
+        if (path[0] !== '/') path = '/' + path;
 
-        console.log('New route: ' + path)
+        console.log('New route: ' + path);
 
         if (route.post) {
-          console.log('\tPost Registered')
+          console.log('\tPost Registered');
           this.app.post(path, async (req, res) => {
             try {
-              await route.post(req, res)
+              await route.post(req, res);
+            } catch (error) {
+              console.log('Error in post route: ' + path);
+              console.error(error);
             }
-            catch (error) {
-              console.log('Error in post route: ' + path)
-              console.error(error)
-            }
-          })
+          });
         }
 
         if (route.get) {
-          console.log('\tGet Registered')
+          console.log('\tGet Registered');
           this.app.get(path, async (req, res) => {
             try {
-              await route.get(req, res)
-            }
-            catch (error) {
-              console.log('Error in get route: ' + path)
-              console.error(error)
+              await route.get(req, res);
+            } catch (error) {
+              console.log('Error in get route: ' + path);
+              console.error(error);
               res.statusCode(500).send({
                 ok: false,
-                error: error.message
-              })
+                error: error.message,
+              });
             }
-          })
+          });
         }
 
         if (route.default) {
-          this.app.use(route.default)
+          this.app.use(route.default);
         }
 
-        this.routes.push(route)
+        this.routes.push(route);
       })
-    )
+    );
   }
 }
 
-export const server = new Server()
-export default server
-  ;
+export const server = new Server();
+export default server;
 (async () => {
-  await server.start()
+  await server.start();
 })().catch((err) => {
-  console.error(err.stack)
-  process.exit(1)
-})
+  console.error(err.stack);
+  process.exit(1);
+});

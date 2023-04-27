@@ -386,7 +386,7 @@ function IDE({ theme }) {
                   style={{
                     ...(!overlayPreview
                       ? {
-                          height: '93vh',
+                          height: '92vh',
                           border: '1px solid black',
                         }
                       : {}),

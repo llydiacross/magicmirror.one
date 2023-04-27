@@ -7,9 +7,9 @@ const config = {
   chatGPTMaxTokens: 100,
   chatGPTTemperature: 0.7,
   chatGPTTopP: 1,
-  useLocalApi: false,
+  useLocalApi: true,
   localApiEndpoint: 'http://localhost:9090/',
-  apiEndpoint: 'https://web-api.infinitymint.app/',
+  apiEndpoint: 'https://reflect.magicmirror.one/',
   /**
    * routes for the api system, don't change these
    */
@@ -21,8 +21,8 @@ const config = {
     ipns: 'ipns',
     wallet: 'wallet',
   },
-  defaultAvatar:
-    'img/0x0zLogo.jpg',
+  defaultAvatar: '/img/0x0zLogo.jpg',
+  defaultTheme: 'forest',
   themes: [
     'Ox0z_light',
     'Ox0z_dark',

@@ -5,6 +5,8 @@ import SettingsModal from '../modals/SettingsModal';
 import Hero from '../components/Hero';
 import { ENSContext } from '../contexts/ensContext';
 import WebEvents from '../webEvents';
+import storage from '../storage';
+import config from '../config';
 
 export default function Index() {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -32,7 +34,13 @@ export default function Index() {
     };
   }, []);
   return (
-    <>
+    <div
+      data-theme={
+        storage.getGlobalPreference('defaultTheme') ||
+        config.defaultTheme ||
+        'forest'
+      }
+    >
       <div
         className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
         hidden={!shouldShowBackdrop}
@@ -98,6 +106,6 @@ export default function Index() {
           setShouldShowSettings(false);
         }}
       />
-    </>
+    </div>
   );
 }

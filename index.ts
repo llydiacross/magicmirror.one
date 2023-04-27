@@ -1,3 +1,5 @@
-// Simply require InfinityMint
-import 'infinitymint';
-// And enjoy building web3!
+import { load } from 'infinitymint';
+
+load({
+  startExpress: false,
+});

@@ -3,6 +3,16 @@ import { useHistory } from 'react-router-dom';
 import FixedElements from '../components/FixedElements';
 export default function NotFound() {
   const history = useHistory();
+
+  //get the current URL
+  const currentURL = window.location.href;
+
+  //if it ends in a .eth and is on the root of the domain, redirect to the viewer
+  if (currentURL.endsWith('.eth') && currentURL.split('/').length === 4) {
+    const token = currentURL.split('/').pop();
+    history.push(`/🧱/${token}`);
+  }
+
   return (
     <>
       <div className="hero min-h-screen">

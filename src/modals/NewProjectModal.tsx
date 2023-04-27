@@ -162,7 +162,8 @@ defaultTemplates.redirect = {
 
 defaultTemplates.web3Mirror = {
   name: 'Magic🪞.eth Web2<>ENS Refraction',
-  description: 'Set up a your 🪞 to refract the light of your web2 site into your ENS domain',
+  description:
+    'Set up a your 🪞 to refract the light of your web2 site into your ENS domain',
   onSelection: (tabs: any, setCode: any) => {
     //should do stuff and set up the project
     let result = {
@@ -448,7 +449,7 @@ defaultTemplates.portfolio = {
 function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templates, setTemplates] = useState([]);
-  const [currentTheme, setCurrentTheme] = useState('dracula');
+  const [currentTheme, setCurrentTheme] = useState('forest');
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 
@@ -503,14 +504,13 @@ function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
             bg="bg-gray-400"
             children={
               <>
-               
                 <div className="p-2 w-full mt-4">
                   <h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
                     Dream🎨.eth
                   </h1>
                   <div className="hidden md:block lg:block">
                     <p className="text-black text-1xl lg:text-2xl text-right">
-                      Welcome to the  Dream🎨.eth Magic dWeb Studio.
+                      Welcome to the Dream🎨.eth Magic dWeb Studio.
                     </p>
                     <p className="text-black text-1xl lg:text-2xl  text-right">
                       You can use it to create <u>anything</u> you like.

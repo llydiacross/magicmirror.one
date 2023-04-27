@@ -17,10 +17,11 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-json';
 import 'prismjs/themes/prism-dark.css';
+import config from '../config';
 
 function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
   const [loading, setLoading] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState('dracula');
+  const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
   const eventEmitterCallbackRef = useRef(null);
 
   const [percentage, setPercentage] = useState(0);

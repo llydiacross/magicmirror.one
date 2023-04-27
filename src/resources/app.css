@@ -39,8 +39,16 @@
   src: url('./Montserrat-VariableFont_wght.ttf');
 }
 @font-face {
-  font-family: 'Lora, sans-serif';
-  src: url('./Lora-VariableFont_wght.ttf');
+  font-family: 'Comfortaa';
+  src: url('./Comfortaa-Regular.ttf');
+}
+
+input {
+  font-family: 'Comfortaa' !important;
+}
+
+select {
+  font-family: 'Comfortaa' !important;
 }
 
 @keyframes blink-text {
@@ -56,6 +64,10 @@
   100% {
     color: black;
   }
+}
+
+.title {
+  font-weight: 500;
 }
 
 div[hidden] {

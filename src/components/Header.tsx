@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DestinationFinder from './DestinationFinder';
 import WebEvents from '../webEvents';
 import storage from '../storage';
+import config from '../config';
 
 /**
  * Might move these to a config file...
@@ -249,7 +250,9 @@ function Header({
   const typeWriterElement = useRef(
     `#${btoa(Math.floor(Math.random() * 100000).toString())}`
   );
-  const [currentTheme, setCurrentTheme] = useState(theme || null);
+  const [currentTheme, setCurrentTheme] = useState(
+    theme || config.defaultTheme || 'forest'
+  );
   const speedRef = useRef(typeWriterSpeed);
   const textRef = useRef(initialText);
   const callbackRef = useRef(null);
@@ -378,7 +381,7 @@ function Header({
           </div>
           <div className="mt-2 max-w-screen w-full">
             <h1
-              className="text-2xl bg-secondary text-white lg:text-5xl p-2 mb-4 max-w-screen"
+              className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen"
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}
