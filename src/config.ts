@@ -9,7 +9,7 @@ const config = {
   chatGPTTopP: 1,
   useLocalApi: false,
   localApiEndpoint: 'http://localhost:9090/',
-  apiEndpoint: 'https://magicmirror.0x0z.me/',
+  apiEndpoint: 'https://reflect.magicmirror.one/',
   /**
    * routes for the api system, don't change these
    */

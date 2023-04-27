@@ -38,6 +38,7 @@ module.exports = {
     'http://localhost:9090',
     'https://webx.infinitymint.app',
     'https://magicmirror.one',
+    'https://reflect.magicmirror.one',
     'https://geocities.com',
     'https://infinitymint.app',
     'https://web.infinitymint.app',
