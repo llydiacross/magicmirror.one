@@ -1,4 +1,16 @@
+import OnBoard from 'bnc-onboard';
+import WebEvents from './webEvents';
+
 const config = {
+  onboard: OnBoard({
+    dappId: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',
+    networkId: 1,
+    subscriptions: {
+      wallet: async (wallet) => {
+        WebEvents.emit('reload');
+      },
+    },
+  }),
   providerUrl: 'https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c',
   ipfsProviderURL: 'https://dweb.link/api/v0',
   ipfsWebProvider: 'https://dweb.link/ipfs/',

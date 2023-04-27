@@ -70,6 +70,7 @@ const useWeb3Context = () => {
     if (loaded) return;
 
     const main = async () => {
+      setWalletError(null);
       try {
         /* Empty */
       } catch (walletError) {
