@@ -7,6 +7,7 @@ const config = {
   chatGPTMaxTokens: 100,
   chatGPTTemperature: 0.7,
   chatGPTTopP: 1,
+  fileSizeLimit: 10, //10mb
   useLocalApi: true,
   localApiEndpoint: 'http://localhost:9090/',
   apiEndpoint: 'https://reflect.magicmirror.one/',

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DestinationFinder from './DestinationFinder';
 import WebEvents from '../webEvents';
@@ -16,7 +17,7 @@ const destinations = [
   '0x0z.me',
   '0x0z.eth',
   '0x0z🏡.eth',
-  '0x0z.nft',
+  '0x0z.ntf',
   '0x0z.dao',
   '0x0z🟨🧙🏼‍♂👠🐶😱🦁🤖🧙🏻‍♀.eth',
   '0x🟨Road.eth',
@@ -28,14 +29,14 @@ const destinations = [
   '0xWitch.eth',
   '0xToto.eth',
   'NFTofME.eth',
-  'NFTofME.NFT',
-  'NFTofME.DAO',
+  'NFTofME.ntf',
+  'NFTofME.dao',
   'NFTofME.wallet',
   'HomoLudens.x',
-  'HomoLudens.NFT',
+  'HomoLudens.ntf',
   'HomoLudens.wallet',
-  'HomoLudens.DAO',
-  'MagicMirror.NFT',
+  'HomoLudens.dao',
+  'MagicMirror.ntf',
   'Magic🪞.eth',
   '📻Station.eth',
   '🕹Club.eth',
@@ -244,6 +245,7 @@ function Header({
   initialText = 'Where will you go today?',
   showFinder = true,
 }) {
+  const history = useHistory();
   const pickDestinationHandle = useRef(null);
   const typeWriterHandle = useRef(null);
   // To allow more than one header
@@ -381,7 +383,30 @@ function Header({
           </div>
           <div className="mt-2 max-w-screen w-full">
             <h1
-              className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen"
+              className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={async () => {
+                let destination = document.getElementById(
+                  typeWriterElement.current
+                ).innerText;
+
+                if (destination.indexOf('.eth') === -1) return;
+
+                if (destination[destination.length - 1] === '_')
+                  destination = destination.slice(0, -1);
+
+                WebEvents.emit('gotoDestination', destination);
+
+                // Gives time for animations to animates\
+                await new Promise((resolve) =>
+                  setTimeout(() => {
+                    history.push('/view/' + destination);
+                    resolve(true);
+                  }, 3142 / 4)
+                );
+              }}
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}

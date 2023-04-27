@@ -11,16 +11,12 @@ import ViewIcon from '../components/Icons/ViewIcon';
 import config from '../config';
 
 const avatars = {
-  html: 'https://cdn.icon-icons.com/icons2/1488/PNG/512/5352-html5_102567.png',
-  css: 'https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_css_icon_130661.png',
-  js: 'https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_js_official_icon_130509.png',
-  javascript:
-    'https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_js_official_icon_130509.png',
-  react:
-    'https://cdn.icon-icons.com/icons2/2415/PNG/512/react_original_logo_icon_146374.png',
-  ts: 'https://cdn.icon-icons.com/icons2/2415/PNG/512/typescript_plain_logo_icon_146316.png',
-  json: 'http://www.newdesignfile.com/postpic/2015/02/json-logo_22611.png',
-  xens: 'https://images.vexels.com/media/users/3/137724/isolated/preview/c30bc541ea2fe03747c7f569bee90089-minimalism-infinity-logo-infinite-by-vexels.png',
+  html: '/img/html.png',
+  css: '/img/css.png',
+  js: '/img/js.png',
+  javascript: '/img/js.png',
+  ts: '/img/ts.png',
+  json: '/img/json.png',
 };
 
 function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
@@ -60,15 +56,15 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
   let tabSize = Object.values(tabs || {}).length;
   let contents = '';
   let size = 0;
-  let limit = 12; //12 mb limit
+  let limit = config.fileSizeLimit; //10mb limit
   Object.values(tabs).forEach((tab: any) => {
     console.log(tab);
     contents += tab.code;
     tab.size = new Blob([tab.code]).size;
-    tab.size = (tab.size / 1024).toFixed(2);
+    tab.size = (tab.size / 1024 / 1024).toFixed(3);
   });
   size = new Blob([contents]).size;
-  size = parseFloat((size / 1024).toFixed(2));
+  size = parseFloat((size / 1024 / 1024).toFixed(3));
 
   let totalPercent = Math.floor((size / limit) * 100);
   let tabKeys = Object.keys(tabs);
