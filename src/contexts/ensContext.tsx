@@ -2,6 +2,8 @@ import React, { createContext } from 'react';
 import Header from '../components/Header';
 import useENSContext from '../effects/useENSContext';
 
+export interface ENSContextType {}
+
 export const ENSContext = createContext({
   resolver: null,
   loaded: false,

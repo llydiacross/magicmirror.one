@@ -153,7 +153,7 @@ const prepareAvatar = async (
 };
 
 const useENSContext = ({ ensAddress }) => {
-  const context = useContext(Web3Context);
+  const context = useContext<Web3ContextType>(Web3Context);
   const [currentEnsAddress, setCurrentEnsAddress] = useState(ensAddress);
   const [resolver, setResolver] = useState<ethers.providers.Resolver>(null);
   const [avatar, setAvatar] = useState(null);

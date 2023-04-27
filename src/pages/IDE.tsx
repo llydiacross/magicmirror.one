@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Editor from 'react-simple-code-editor';
-import prettier from 'html-prettify';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-markup';
@@ -21,6 +20,7 @@ import ChatGPTModal from '../modals/ChatGPTModal';
 import { ENSContext } from '../contexts/ensContext';
 import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
 import NewProjectModal from '../modals/NewProjectModal';
+import { prettifyCode } from '../helpers';
 
 const defaultTabs = {
   html: {
@@ -230,36 +230,9 @@ function IDE({ theme }) {
             <button
               className="btn bg-pink-500 rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black"
               onClick={() => {
-                let newCurrentCode = currentCode;
-
-                if (selectedTab === 'html') {
-                  newCurrentCode = prettier(currentCode);
-                  //prettify the code
-                  setCode(newCurrentCode);
-                }
-
-                if (selectedTab === 'js' || selectedTab === 'css') {
-                  //remove the white space before the first character on each line
-                  newCurrentCode = newCurrentCode.replace(/^\s+/gm, '');
-                  //tab the start of each line that contains a :, do not tab if the line contains a curly brace or a comment
-                  newCurrentCode = newCurrentCode.replace(
-                    /^((?!\{|\}|\/\*|\*\/).)*:\s*/gm,
-                    '\t$&'
-                  );
-                  setCode(newCurrentCode);
-                }
-
-                if (selectedTab === 'json' || selectedTab == '.xens') {
-                  newCurrentCode = JSON.stringify(
-                    JSON.parse(currentCode),
-                    null,
-                    2
-                  );
-                  setCode(newCurrentCode);
-                }
-
-                //save
-                storage.setPagePreference(selectedTab, newCurrentCode);
+                let newCode = prettifyCode(currentCode, selectedTab);
+                setCode(newCode);
+                storage.setPagePreference(selectedTab, newCode);
                 storage.saveData();
               }}
             >
@@ -363,8 +336,6 @@ function IDE({ theme }) {
             className="z-50 line-numbers"
             spellCheck
             style={{
-              width: '100%',
-              height: '100%',
               fontFamily: '"Fira code", "Fira Mono", monospace',
               fontSize: 12,
               background: 'rgba(0,0,0,0.1)',
