@@ -39,8 +39,10 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
   const [success, setSuccess] = useState(false);
   const setContentHash = async (cid) => {
     setLoading(true);
+
     await setENSContentHash(
       ensContext.currentEnsAddress,
+      ensContext.resolverAddress,
       cid,
       context.web3Provider,
       context.signer
@@ -170,7 +172,7 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
                         <b>🌟</b>
                       </div>
                       <p className="text-center text-3xl text-black">
-                        Your content hash has been updated!
+                        Your content has been uploaded to IPFS!
                       </p>
                     </>
                   )}

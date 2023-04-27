@@ -159,6 +159,7 @@ const useENSContext = ({ ensAddress }) => {
   const [avatar, setAvatar] = useState(null);
   const [email, setEmail] = useState(null);
   const [owner, setOwner] = useState(null);
+  const [resolverAddress, setResolverAddress] = useState(null);
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
@@ -187,6 +188,7 @@ const useENSContext = ({ ensAddress }) => {
       }
 
       setResolver(resolver);
+      setResolverAddress(resolver.address);
 
       // Will kill and make new abort controllers
       if (fetchImageAbortController.current !== null)
@@ -264,6 +266,7 @@ const useENSContext = ({ ensAddress }) => {
     contentHash,
     owner,
     ensError,
+    resolverAddress,
     avatar,
     currentEnsAddress,
     setCurrentEnsAddress,

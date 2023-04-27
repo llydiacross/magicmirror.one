@@ -3,29 +3,32 @@ import { ethers } from 'ethers';
 import { namehash } from './namehash';
 
 export const setEnsTextRecord = async (
-  ensAddress: string,
+  ensDomain: string,
+  resolverAddress: string,
   text: string,
   provider: ethers.providers.Provider,
   signer: ethers.Signer,
   record: string = 'contentHash'
 ) => {
-  let node = namehash(ensAddress);
+  let node = namehash(ensDomain);
   let abi = ['function setText(bytes32 node, string key, string value)'];
-  const contract = new ethers.Contract(ensAddress, abi, provider);
+
+  const contract = new ethers.Contract(resolverAddress, abi, provider);
   const contractWithSigner = contract.connect(signer);
   const tx = await contractWithSigner.setText(node, record, text);
   return tx;
 };
 
 export const setENSContentHash = async (
-  ensAddress: string,
+  ensDomain: string,
+  resolverAddress: string,
   contentHash: string,
   provider: ethers.providers.Provider,
   signer: ethers.Signer
 ) => {
-  let node = namehash(ensAddress);
+  let node = namehash(ensDomain);
   let abi = ['function setContenthash(bytes32 node, bytes hash)'];
-  const contract = new ethers.Contract(ensAddress, abi, provider);
+  const contract = new ethers.Contract(resolverAddress, abi, provider);
   const contractWithSigner = contract.connect(signer);
   const tx = await contractWithSigner.setContenthash(
     node,

@@ -11,6 +11,7 @@ export const ENSContext = createContext({
   contentHash: '',
   avatar: '',
   owner: '',
+  resolverAddress: '',
   currentEnsAddress: null,
   setCurrentEnsAddress: null,
   ensError: null,
@@ -26,6 +27,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
     avatar,
     owner,
     ensError,
+    resolverAddress,
     currentEnsAddress,
     setCurrentEnsAddress,
   } = useENSContext({
@@ -42,6 +44,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         owner,
         currentEnsAddress,
         setCurrentEnsAddress,
+        resolverAddress,
         avatar,
         ensError,
       }}
