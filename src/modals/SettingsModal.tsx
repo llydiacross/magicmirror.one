@@ -11,7 +11,7 @@ function SettingsModal({ hidden, onHide }) {
   const ipfsCompanionRef = useRef(null);
   const defaultThemeRef = useRef(null);
   const context = useContext(Web3Context);
-  const [currentTheme, setCurrentTheme] = useState('dracula');
+  const [currentTheme, setCurrentTheme] = useState('forest');
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 
@@ -74,11 +74,11 @@ function SettingsModal({ hidden, onHide }) {
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
                 />
-                <button className="btn bg-black w-[14em] hover:text-white">
+                <button className="btn bg-black w-[14em] text-white">
                   Sign Up To Web3 Storage
                 </button>
               </div>
-              <button className="btn btn-sm bg-blue-500 mt-2 text-black hover:text-white">
+              <button className="btn btn-sm bg-blue-500 mt-2 text-black text-white">
                 Check Web3 Storage Key
               </button>
             </div>
@@ -97,7 +97,7 @@ function SettingsModal({ hidden, onHide }) {
                   placeholder="Enter your IPFS Companion Endpoint..."
                   className="input input-bordered  w-full"
                 />
-                <button className="btn bg-black w-[14em] hover:text-white">
+                <button className="btn bg-black w-[14em] text-white">
                   Check
                 </button>
               </div>
@@ -157,7 +157,8 @@ function SettingsModal({ hidden, onHide }) {
                   className="select w-full"
                   ref={defaultThemeRef}
                   defaultValue={
-                    storage.getGlobalPreference('defaultTheme') || 'dracula'
+                    storage.getGlobalPreference('defaultTheme') ||
+                    config.defaultTheme
                   }
                 >
                   {config.themes.map((theme, index) => {

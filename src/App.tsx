@@ -28,6 +28,9 @@ function App() {
             <Route path="/viewer/:token">
               <Viewer />
             </Route>
+            <Route path="/🧱/:token">
+              <Viewer />
+            </Route>
             <Route exact path="*">
               <NotFound />
             </Route>

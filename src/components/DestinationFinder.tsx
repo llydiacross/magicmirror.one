@@ -72,7 +72,7 @@ export default function DestinationFinder() {
           '/view/' + destination + (isResolver ? resolverExtension : '.eth')
         );
         resolve(true);
-      }, 3142/4)
+      }, 3142 / 4)
     );
   };
 
@@ -145,13 +145,21 @@ export default function DestinationFinder() {
             </button>
           </div>
         </div>
+        <button
+          className="btn btn-outline bg-light w-full mt-4 sm:mt-2"
+          data-loading={loading}
+          disabled={loading}
+          onClick={handleTakeMeAnywhere}
+        >
+          TAKE ME ANYWHERE
+        </button>
         <p className="text-1xl text-shadow text-white bg-secondary p-1 mt-4 mb-1 lg:block">
           <b>
-          👇 build the next <u>web</u> and unlock the magic of Web3 👇
+            👇 build the next <u>web</u> and unlock the magic of Web3 👇
           </b>
         </p>
         <button
-          className="btn bg-secondary hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
+          className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
           data-loading={loading}
           disabled={loading}
           onClick={() => {
@@ -159,14 +167,6 @@ export default function DestinationFinder() {
           }}
         >
           DREAM🎨.ETH STUDIO
-        </button>
-        <button
-          className="btn hover:bg-accent-500 w-full mt-4 sm:mt-2"
-          data-loading={loading}
-          disabled={loading}
-          onClick={handleTakeMeAnywhere}
-        >
-          TAKE ME ANYWHERE
         </button>
       </div>
     </div>
