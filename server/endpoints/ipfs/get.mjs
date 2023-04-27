@@ -1,6 +1,5 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
-import { CID } from 'ipfs-http-client';
 
 /**
  *
@@ -8,13 +7,12 @@ import { CID } from 'ipfs-http-client';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-  const cid = req.body.cid;
+  let cid = req.body.cid;
   let file;
 
   if (!cid) return userError(res, 'Bad CID');
 
   try {
-    cid = new CID(cid);
     file = server.ipfs.get(cid);
     const stats = await server.ipfs.object.stat(link.path);
     link.size = stats.CumulativeSize;

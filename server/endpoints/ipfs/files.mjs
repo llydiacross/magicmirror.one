@@ -7,13 +7,12 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-  const cid = req.body.cid;
+  let cid = req.body.cid;
   const links = [];
 
   if (!cid) return userError(res, 'Bad CID');
 
   try {
-    cid = new CID(cid);
     for await (const link of server.ipfs.ls(cid)) {
       if (links.length > 32) break;
 
