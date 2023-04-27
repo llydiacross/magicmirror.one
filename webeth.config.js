@@ -32,10 +32,6 @@ module.exports = {
    * CORS allowed origins, can be set to an empty array or removed to allow all origins
    */
   cors: [
-    'https://localhost:3000',
-    'https://localhost:9090',
-    'http://localhost:3000',
-    'http://localhost:9090',
     'https://webx.infinitymint.app',
     'https://magicmirror.one',
     'https://reflect.magicmirror.one',
