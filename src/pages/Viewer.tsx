@@ -168,7 +168,6 @@ function Viewer({ match }) {
         });
     }
   }
-
   // If the current ens address is not the same as the one in the url, update it
   useEffect(() => {
     matchRef.current = match.params.token;
