@@ -259,7 +259,7 @@ function Viewer({ match }) {
 
             console.error(error);
 
-            //if it's a block with cid error, then we can still render it if we use a direct link
+            //if it's a block with \cid error, then we can still render it if we use a direct link
             //TODO: Find a better way to do this
             if (error.message.indexOf('block with cid') !== -1) {
               setDirect(true);
@@ -289,8 +289,6 @@ function Viewer({ match }) {
         setAborted(false);
         setLoaded(true);
       } catch (error) {
-        //log it
-        console.log(error);
         setError(error);
         setLoaded(true);
       }
@@ -304,6 +302,8 @@ function Viewer({ match }) {
     // Call async
     main();
   }, [ensContext, loaded]);
+
+  console.log(error);
 
   return (
     <div>

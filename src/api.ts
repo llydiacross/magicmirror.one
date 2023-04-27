@@ -39,6 +39,7 @@ export const apiFetch = async (
     let message = await result.json();
 
     if (message.message) message = message.message;
+    if (message.error) message = message.error;
     throw new Error(message);
   }
 

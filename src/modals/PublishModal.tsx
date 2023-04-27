@@ -96,7 +96,9 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
                 </div>
                 <div className="stat-title">Paypload Size</div>
                 <div className="stat-value text-primary">{size}mb</div>
-                <div className="stat-desc">{totalPercent}% of limit</div>
+                <div className="stat-desc">
+                  {totalPercent}% of limit ({config.fileSizeLimit}mb)
+                </div>
               </div>
             </div>
             <div className="overflow-x-auto w-full mt-4">

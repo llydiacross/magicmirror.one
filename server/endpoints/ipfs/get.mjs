@@ -1,5 +1,5 @@
-import { success } from '../../utils/helpers.mjs'
-import server from '../../server.mjs'
+import { success, userError } from '../../utils/helpers.mjs';
+import server from '../../server.mjs';
 
 /**
  *
@@ -7,29 +7,37 @@ import server from '../../server.mjs'
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-  const cid = req.body.cid
-  let file
-  if (cid) {
-    file = server.ipfs.get(cid)
-    const stats = await server.ipfs.object.stat(link.path)
-    link.size = stats.CumulativeSize
+  const cid = req.body.cid;
+  let file;
 
-    const extension = link.name.split('.').pop()
+  if (!cid) return userError(res, 'Bad CID');
 
-    if (!server?.config?.allowedExtensions?.includes(extension)) { throw new Error('File extension not allowed') }
+  try {
+    file = server.ipfs.get(cid);
+    const stats = await server.ipfs.object.stat(link.path);
+    link.size = stats.CumulativeSize;
 
-    if (link.size > 1024 * 1024 * 10) throw new Error('File too big')
+    const extension = link.name.split('.').pop();
 
-    const resp = server.ipfs.cat(cid)
-    let content = []
-    for await (const chunk of resp) {
-      content = [...content, ...chunk]
+    if (!server?.config?.allowedExtensions?.includes(extension)) {
+      throw new Error('File extension not allowed');
     }
-    file.content = content
+  } catch (error) {
+    console.log(error);
+    return userError(res, 'Bad CID');
   }
+
+  if (link.size > 1024 * 1024 * 10) throw new Error('File too big');
+
+  const resp = server.ipfs.cat(cid);
+  let content = [];
+  for await (const chunk of resp) {
+    content = [...content, ...chunk];
+  }
+  file.content = content;
 
   success(res, {
     cid,
-    ...file
-  })
-}
+    ...file,
+  });
+};
