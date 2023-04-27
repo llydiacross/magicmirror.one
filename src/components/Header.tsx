@@ -1,240 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DestinationFinder from './DestinationFinder';
 import WebEvents from '../webEvents';
 import storage from '../storage';
 import config from '../config';
-
-/**
- * Might move these to a config file...
- */
-const destinations = [
-  //EADS.eth can control sponsored destinations
-  'infinitymint.eth',
-  '0x0z.agency',
-  '0x0z.xyz',
-  '0x0z.me',
-  '0x0z.eth',
-  '0x0z🏡.eth',
-  '0x0z.nft',
-  '0x0z.dao',
-  '0x0z🟨🧙🏼‍♂👠🐶😱🦁🤖🧙🏻‍♀.eth',
-  '0x🟨Road.eth',
-  '0xWizardof0x.eth',
-  '0x0z🟨🧙🏼‍♂👠😱🦁🥫🧙🏻‍♀.eth',
-  '0xScarecrow.eth',
-  '0xTinman.eth',
-  '0xLionheart.eth',
-  '0xWitch.eth',
-  '0xToto.eth',
-  'NFTofME.eth',
-  'NFTofME.NFT',
-  'NFTofME.DAO',
-  'NFTofME.wallet',
-  'HomoLudens.x',
-  'HomoLudens.NFT',
-  'HomoLudens.wallet',
-  'HomoLudens.DAO',
-  'MagicMirror.NFT',
-  'Magic🪞.eth',
-  '📻Station.eth',
-  '🕹Club.eth',
-  '🧚‍♀️Forest.eth',
-  '🖼Farm.eth',
-  '🍳Book.eth',
-  '⚖️Center.eth',
-  '🍄Kingdom.eth',
-  '♾Archive.eth',
-  'Class🍎Room.eth',
-  '👾Bestiary.eth',
-  '🍬land.eth',
-  '⭐️Atlas.eth',
-  '🌷Graveyard.eth',
-  'carpe☀diem.eth',
-  'EADS.eth',
-  '☢rads.eth',
-  'EGPS.eth',
-  '📍egps.eth',
-  'b0b🔧w3b.eth',
-  'charlottes🕸.eth',
-  'GMArena.eth',
-  'GMArena🏟.eth',
-  'Free📧.eth',
-  '🎫Mint.eth',
-  '🥠Factory.eth',
-  'TicketMint.eth',
-  'NewTube.eth',
-  '🏴‍☠🌊.eth',
-  '🏴‍☠️Sea.eth',
-  'PirateSea.eth',
-  'UnderThe🌊.eth',
-  'UnderTheSea.eth',
-  'achieveMINT.eth',
-  'StayOnTarget.eth',
-  'StayOn🎯.eth',
-  'MonoNFTism.eth',
-  'PortRoyal🏝.eth',
-  '🎒Attack.eth',
-  'Dream🎨.eth',
-  '👑Label.eth',
-  '👟Mint.eth',
-  '👟Club.eth',
-  'Imapact🎛.eth',
-  'Tech🏜.eth',
-  '🌎Sport.eth',
-  '🧱Jungle.eth',
-  '🧢Mint.eth',
-  '🧢Shop.eth',
-  '🎮Shop.eth',
-  'Travel🌎.eth',
-  '💾Depot.eth',
-  '🚗City.eth',
-  '🚀Launcher.eth',
-  '⛽️Nation.eth',
-  '🚮Town.eth',
-  '🦙Kicker.eth',
-  '🎄Village.eth',
-  'Liquid😻.eth',
-  'Botanical🎋.eth',
-  '🎞Fest.eth',
-  '🥳Time.eth',
-  'Legal🦅.eth',
-  '⚖️Center.eth',
-  '🥚Hunt.eth',
-  '🌪Watch.eth',
-  '🦕Land.eth',
-  'Lucky🎰.eth',
-  'Collab🏖.eth',
-  '🧼Club.eth',
-  '🗺Mint.eth',
-  '💎Cold.eth',
-  '🧧Day.eth',
-  'Charity🔮.eth',
-  '🏞Trail.eth',
-  'eastern.eth',
-  'western.eth',
-  'central.eth',
-  'northern.eth',
-  'southern.eth',
-  'far-east.eth',
-  'far-west.eth',
-  'far-north.eth',
-  'far-south.eth',
-  'far-eastern.eth',
-  'far-western.eth',
-  'far-northern.eth',
-  'far-southern.eth',
-  'vitalik.eth',
-  'ytcracker.eth',
-  'rms.eth',
-  'elon.eth',
-  'bill-gates.eth',
-  'jeff-bezos.eth',
-  'jack-dorsey.eth',
-  'jack-ma.eth',
-  'paul-graham.eth',
-  'paul-omar.eth',
-  'satoshi.eth',
-  'jimmy-wales.eth',
-  'jimmy-song.eth',
-  'jimmy-dorsey.eth',
-  'jimmy-ma.eth',
-  'jimmy-graham.eth',
-  'jimmy-omar.eth',
-  'eleanor-omar.eth',
-  'tim-berners-lee.eth',
-  'linus-torvalds.eth',
-  'linus-omar.eth',
-  'linus-graham.eth',
-  'linus-song.eth',
-  'linus-dorsey.eth',
-  'linus-ma.eth',
-  'iain-maclaren.eth',
-  'james-montgomery.eth',
-  'lord-randolph.eth',
-  'martha-washington.eth',
-  'george-washington.eth',
-  'john-adams.eth',
-  'thomas-jefferson.eth',
-  'james-madison.eth',
-  'james-monroe.eth',
-  'fish.eth',
-  'cat.eth',
-  'dog.eth',
-  'bird.eth',
-  'fish.eth',
-  'snake.eth',
-  'frog.eth',
-  'cow.eth',
-  'pig.eth',
-  'chicken.eth',
-  'goat.eth',
-  '0xDorothy.eth',
-  '0xToto.eth',
-  '0xScarecrow.eth',
-  '0xTinMan.eth',
-  '0xLionheart.eth',
-  '0xWitch.eth',
-  '0xWizardOfOz.eth',
-  '0xMunchkin.eth',
-  'track1.sow3.🎧club.eth',
-  'track2.sow3.🎧club.eth',
-  'track3.sow3.🎧club.eth',
-  'track4.sow3.🎧club.eth',
-  'track5.sow3.🎧club.eth',
-  'track6.sow3.🎧club.eth',
-  'track7.sow3.🎧club.eth',
-  'track8.sow3.🎧club.eth',
-  'track9.sow3.🎧club.eth',
-  'track10.sow3.🎧club.eth',
-  '🎧club.eth',
-  'sow3.eth',
-  'sow3.🎧club.eth',
-  'deer.eth',
-  'rabbit.eth',
-  'fox.eth',
-  'bear.eth',
-  'wolf.eth',
-  'lion.eth',
-  'tiger.eth',
-  'elephant.eth',
-  'giraffe.eth',
-  'rhino.eth',
-  'hippo.eth',
-  'zebra.eth',
-  'gorilla.eth',
-  'monkey.eth',
-  'panda.eth',
-  'koala.eth',
-  'penguin.eth',
-  'dolphin.eth',
-  'whale.eth',
-  'shark.eth',
-  'seal.eth',
-  'octopus.eth',
-  'squid.eth',
-  'crab.eth',
-  'lobster.eth',
-  'shrimp.eth',
-  'salmon.eth',
-  'trout.eth',
-  'eel.eth',
-  'frog.eth',
-  'toad.eth',
-  'lizard.eth',
-  'snake.eth',
-  'turtle.eth',
-  'chameleon.eth',
-  'iguana.eth',
-  'alligator.eth',
-  'jimmy.eth',
-  'jimmy-omar.eth',
-  'jimmy-song.eth',
-  'jimmy-dorsey.eth',
-  'jimmy-ma.eth',
-  'jimmy-graham.eth',
-  'jimmy-omar.eth',
-];
 
 // Handle for the typeWriter animation
 function Header({
@@ -244,6 +14,7 @@ function Header({
   initialText = 'Where will you go today?',
   showFinder = true,
 }) {
+  const history = useHistory();
   const pickDestinationHandle = useRef(null);
   const typeWriterHandle = useRef(null);
   // To allow more than one header
@@ -344,8 +115,10 @@ function Header({
       text.innerHTML = '';
       buffer = '';
       i = 0;
-      const randomIndex = Math.floor(Math.random() * destinations.length);
-      txt = `${destinations[randomIndex]}`;
+      const randomIndex = Math.floor(
+        Math.random() * config.destinations.length
+      );
+      txt = `${config.destinations[randomIndex]}`;
       writeTextRef.current(true);
     };
 
@@ -381,7 +154,30 @@ function Header({
           </div>
           <div className="mt-2 max-w-screen w-full">
             <h1
-              className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen"
+              className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={async () => {
+                let destination = document.getElementById(
+                  typeWriterElement.current
+                ).innerText;
+
+                if (destination.indexOf('.eth') === -1) return;
+
+                if (destination[destination.length - 1] === '_')
+                  destination = destination.slice(0, -1);
+
+                WebEvents.emit('gotoDestination', destination);
+
+                // Gives time for animations to animates\
+                await new Promise((resolve) =>
+                  setTimeout(() => {
+                    history.push('/view/' + destination);
+                    resolve(true);
+                  }, 3142 / 4)
+                );
+              }}
               id={typeWriterElement.current}
             >
               {/** The initial input is controlled by a prop */}

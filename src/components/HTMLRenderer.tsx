@@ -141,7 +141,7 @@ function HTMLRenderer({
       seamless
       title="preview"
       sandbox="allow-scripts allow-same-origin allow-forms"
-      className="w-full h-full block border-l-1 border-black overflow-scroll"
+      className="w-full h-full block border-l-1 border-black overflow-y-scroll overflow-x-scroll"
     ></iframe>
   );
 }

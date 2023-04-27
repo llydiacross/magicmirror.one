@@ -57,6 +57,13 @@ export abstract class IPFSProvider {
     data: any,
     type?: string
   ): Promise<string>;
+  abstract uploadFiles(
+    files: {
+      name: string;
+      data: any;
+      type?: string;
+    }[]
+  ): Promise<string>;
   abstract getFile(cid: string, fileName: string): Promise<IPFSFile>;
   abstract getContentType(type: string): string;
   abstract getContentExtension(type: string): string;
@@ -82,6 +89,16 @@ export class IPFSWebProvider extends IPFSProvider {
   }
 
   async uploadFile(filename: string, data: any, type?: string): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+
+  async uploadFiles(
+    files: {
+      name: string;
+      data: any;
+      type?: string;
+    }[]
+  ): Promise<string> {
     throw new Error('Method not implemented.');
   }
 
@@ -165,8 +182,7 @@ class Web3StorageProvider extends IPFSProvider {
 
   createInstance(options: any) {
     this.instance = new Web3Storage({
-      token:
-        options?.apiKey || storage.getGlobalPreference('web3StorageApiKey'),
+      token: options?.apiKey || storage.getGlobalPreference('web3_storage_key'),
     });
   }
 
@@ -190,6 +206,22 @@ class Web3StorageProvider extends IPFSProvider {
     } else file = new File([data], filename);
 
     return await this.instance.put([file]);
+  }
+
+  async uploadFiles(
+    files: { name: string; data: any; type?: string }[]
+  ): Promise<string> {
+    let fileTypes = [];
+
+    Object.values(files).forEach((file) => {
+      fileTypes.push(
+        new File([file.data], file.name, {
+          type: file.type,
+        })
+      );
+    });
+
+    return await this.instance.put(fileTypes);
   }
 
   async getStats(

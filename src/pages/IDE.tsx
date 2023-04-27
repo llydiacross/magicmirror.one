@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Editor from 'react-simple-code-editor';
-
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-markup';
@@ -21,6 +20,7 @@ import ChatGPTModal from '../modals/ChatGPTModal';
 import { ENSContext } from '../contexts/ensContext';
 import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
 import NewProjectModal from '../modals/NewProjectModal';
+import { prettifyCode } from '../helpers';
 
 const defaultTabs = {
   html: {
@@ -59,6 +59,7 @@ function IDE({ theme }) {
   const [showPreview, setShowPreview] = useState(true);
   const [showCode, setShowCode] = useState(true);
   const [codeBuffer, setCodeBuffer] = useState(currentCode);
+  const [width, setWidth] = useState(50);
   const [overlayPreview, setOverlayPreview] = React.useState(false);
   const [currentTheme, setCurrentTheme] = useState(theme || null);
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -74,6 +75,12 @@ function IDE({ theme }) {
   const themeRef = useRef(theme || null);
   const history = useHistory();
   const ensContext = useContext(ENSContext);
+
+  const onResize = () => {
+    if (window.innerWidth < 800 && width !== 100) {
+      setWidth(100);
+    }
+  };
 
   useEffect(() => {
     let _tabs = {
@@ -131,8 +138,17 @@ function IDE({ theme }) {
     WebEvents.off('reload', eventEmitterCallbackRef.current);
     WebEvents.on('reload', eventEmitterCallbackRef.current);
 
+    //if the screen is below mobile size, set the width to 100%
+    if (window.innerWidth < 800) {
+      setWidth(100);
+    }
+
+    //on window resize
+    window.addEventListener('resize', onResize);
+
     return () => {
       WebEvents.off('reload', eventEmitterCallbackRef.current);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
@@ -171,11 +187,15 @@ function IDE({ theme }) {
     <div data-theme={currentTheme}>
       <div className="flex flex-col lg:flex-row w-full overflow-hidden">
         <div
-          className="w-50 lg:w-full md:w-full overflow-y-scroll min-h-screen max-h-screen"
+          style={{
+            width: !overlayPreview ? width + '%' : '100%',
+            minWidth: '500px',
+          }}
+          className="w-full overflow-y-scroll overflow-x-hidden min-h-screen max-h-screen"
           hidden={!showCode || (overlayPreview && !showPreview)}
         >
           <div
-            className="inline-flex w-full rounded-sm border-1 shadow-sm overflow-hidden z-50"
+            className="inline-flex w-full rounded-sm border-1 shadow-sm z-50"
             role="group"
           >
             {Object.keys(tabs).map((tabIndex, index) => {
@@ -207,6 +227,17 @@ function IDE({ theme }) {
                 </button>
               );
             })}
+            <button
+              className="btn bg-pink-500 rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                let newCode = prettifyCode(currentCode, selectedTab);
+                setCode(newCode);
+                storage.setPagePreference(selectedTab, newCode);
+                storage.saveData();
+              }}
+            >
+              🧹
+            </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               📦
             </button>
@@ -237,16 +268,31 @@ function IDE({ theme }) {
             >
               🚀
             </button>
+            <div className="p-1 mx-2 w-[5vw]">
+              <input
+                type="range"
+                min={35}
+                max={85}
+                value={width}
+                onChange={(e) => {
+                  //if the screen width is mobile size set the width to 100%
+                  if (window.innerWidth < 768) {
+                    setWidth(100);
+                    return;
+                  }
+
+                  setWidth(parseInt(e.target.value));
+                }}
+                className="transparent h-1.5 mt-4 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
+              />
+            </div>
             <button
-              className={
-                'btn rounded-none text-white hover:text-white hover:bg-black ' +
-                (shouldShowDebug ? 'bg-success' : 'bg-secondary')
-              }
+              className="btn rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black"
               onClick={() => {
-                setShouldShowDebug(!shouldShowDebug);
+                setWidth(50);
               }}
             >
-              🐛
+              📱
             </button>
           </div>
           <Editor
@@ -300,7 +346,12 @@ function IDE({ theme }) {
         <div
           className={'h-full ' + (showPreview ? 'w-full' : 'w-auto')}
           style={{
+            width:
+              showPreview && !overlayPreview && showCode && width !== 100
+                ? 100 - width + '%'
+                : '100%',
             borderLeft: '1px solid black',
+            minWidth: '375px',
             ...(overlayPreview
               ? {
                   position: 'absolute',
@@ -481,6 +532,17 @@ function IDE({ theme }) {
             </button>
             <button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
               📁
+            </button>
+            <button
+              className={
+                'btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black ' +
+                (shouldShowDebug ? 'bg-success' : 'bg-warning')
+              }
+              onClick={() => {
+                setShouldShowDebug(!shouldShowDebug);
+              }}
+            >
+              🐛
             </button>
             <button
               className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"

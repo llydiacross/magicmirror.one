@@ -20,11 +20,6 @@ module.exports = {
     'partial',
   ],
   /**
-   *
-   */
-  web3Storage:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZjZWYwNjFCYTkxNGZhYTdFNjU3NEI2N0E0NjU4YjIyNzgwMTYxQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTA0MTM0MTMzMjgsIm5hbWUiOiJpbmZpbml0eS1taW50In0.se1kP3g-ssSs0G8DjIrd2pbUeq1b_OzuCqFoxzepZVA',
-  /**
    * used to get files from IPFS, can be set to local host to use the node that is inside of the server already
    */
   ipfsEndpoint: 'https://dweb.link/api/v0',

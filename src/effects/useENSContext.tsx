@@ -153,12 +153,13 @@ const prepareAvatar = async (
 };
 
 const useENSContext = ({ ensAddress }) => {
-  const context = useContext(Web3Context);
+  const context = useContext<Web3ContextType>(Web3Context);
   const [currentEnsAddress, setCurrentEnsAddress] = useState(ensAddress);
   const [resolver, setResolver] = useState<ethers.providers.Resolver>(null);
   const [avatar, setAvatar] = useState(null);
   const [email, setEmail] = useState(null);
   const [owner, setOwner] = useState(null);
+  const [resolverAddress, setResolverAddress] = useState(null);
   const [contentHash, setContentHash] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [ensError, setEnsError] = useState(null);
@@ -187,6 +188,7 @@ const useENSContext = ({ ensAddress }) => {
       }
 
       setResolver(resolver);
+      setResolverAddress(resolver.address);
 
       // Will kill and make new abort controllers
       if (fetchImageAbortController.current !== null)
@@ -264,6 +266,7 @@ const useENSContext = ({ ensAddress }) => {
     contentHash,
     owner,
     ensError,
+    resolverAddress,
     avatar,
     currentEnsAddress,
     setCurrentEnsAddress,

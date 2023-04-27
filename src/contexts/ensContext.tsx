@@ -2,6 +2,8 @@ import React, { createContext } from 'react';
 import Header from '../components/Header';
 import useENSContext from '../effects/useENSContext';
 
+export interface ENSContextType {}
+
 export const ENSContext = createContext({
   resolver: null,
   loaded: false,
@@ -9,6 +11,7 @@ export const ENSContext = createContext({
   contentHash: '',
   avatar: '',
   owner: '',
+  resolverAddress: '',
   currentEnsAddress: null,
   setCurrentEnsAddress: null,
   ensError: null,
@@ -24,6 +27,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
     avatar,
     owner,
     ensError,
+    resolverAddress,
     currentEnsAddress,
     setCurrentEnsAddress,
   } = useENSContext({
@@ -40,6 +44,7 @@ const ENSContextProvider = ({ children, ensAddress = null }) => {
         owner,
         currentEnsAddress,
         setCurrentEnsAddress,
+        resolverAddress,
         avatar,
         ensError,
       }}

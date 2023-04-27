@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import ErrorIcon from './Icons/ErrorIcon';
 import { Web3Context } from '../contexts/web3Context';
@@ -28,11 +28,13 @@ function FixedElements({
   const hudRef = useRef(null);
   const history = useHistory();
 
-  if (hudRef.current !== null) {
-    if (storage.getGlobalPreference('hideAlerts')) {
-      hudRef.current.style.display = 'none';
-    } else hudRef.current.style.display = 'flex';
-  }
+  useEffect(() => {
+    if (hudRef.current !== null) {
+      if (storage.getGlobalPreference('hideAlerts')) {
+        hudRef.current.style.display = 'none';
+      } else hudRef.current.style.display = 'flex';
+    }
+  });
 
   const toggleHud = () => {
     if (
@@ -51,7 +53,7 @@ function FixedElements({
     <>
       {/** Element for the Wallet Error */}
       <div
-        className="fixed top-0 left-0 z-50 flex flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem] max-w-[80%] w-full"
+        className="fixed top-0 left-0 z-50 flex flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem] max-w-[75%] w-full"
         ref={hudRef}
       >
         <div
@@ -136,15 +138,13 @@ function FixedElements({
                 errorRef.current.hidden = true;
               }}
             >
-              <div>
-                <ErrorIcon />
-                <span>
-                  <b className="mr-2">No Web3 Session</b>
-                  {context.walletError?.message ||
-                    context.walletError?.toString() ||
-                    "We don't know why!"}
-                </span>
-              </div>
+              <ErrorIcon />
+              <span className="text-1xl hidden md:block lg:block">
+                <b className="mr-2">No Web3 Session</b>
+                {context.walletError?.message ||
+                  context.walletError?.toString() ||
+                  "We don't know why!"}
+              </span>
             </div>
           ) : (
             <></>
@@ -223,11 +223,18 @@ function FixedElements({
               >
                 GitHub
               </a>
-              
               . Made with <u className="text-error">love</u> by{' '}
-              <a href="/view/0xTinman.eth" className="text-yellow-100 underline">
+              <a
+                href="/view/0xTinman.eth"
+                className="text-yellow-100 underline"
+              >
                 🤖.0xTinman.eth
-              </a> - <a href="/view/0xWizardof0z.eth" className="text-yellow-100 underline">
+              </a>{' '}
+              -{' '}
+              <a
+                href="/view/0xWizardof0z.eth"
+                className="text-yellow-100 underline"
+              >
                 🧙🏼‍♂️.0xWizardof0z.eth
               </a>
               .
@@ -250,11 +257,17 @@ function FixedElements({
               Created by 0x0zAgency.
               <br />
               Made with ❤️ by{' '}
-              
-              <a href="/view/0xTinman.eth" className="text-yellow-100 underline">
+              <a
+                href="/view/0xTinman.eth"
+                className="text-yellow-100 underline"
+              >
                 0xTinman.eth
-              </a> - 
-              <a href="/view/0xWizardof0z.eth" className="text-yellow-100 underline">
+              </a>{' '}
+              -
+              <a
+                href="/view/0xWizardof0z.eth"
+                className="text-yellow-100 underline"
+              >
                 0xWizardof0z.eth
               </a>
             </p>

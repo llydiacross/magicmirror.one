@@ -12,6 +12,9 @@ function SettingsModal({ hidden, onHide }) {
   const defaultThemeRef = useRef(null);
   const context = useContext(Web3Context);
   const [currentTheme, setCurrentTheme] = useState('forest');
+  const [currentIPFSProvider, setCurrentIPFSProvider] = useState(
+    storage.getGlobalPreference('ipfsProvider') || 'web3.storage'
+  );
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 
@@ -55,9 +58,8 @@ function SettingsModal({ hidden, onHide }) {
           </div>
           <div className="flex flex-col flex-1 p-3">
             <p className="mt-4 text-black">
-              Here you can specify the storage provider you want to use. You
-              must have an account with web3.storage or an IPFS Companion on
-              your system.
+              Here you can change which IPFS provider to use when saving your
+              work and also other settings such as the theme.
             </p>
 
             <div className="form-control mt-4">
@@ -102,9 +104,53 @@ function SettingsModal({ hidden, onHide }) {
                 </button>
               </div>
             </div>
+            <p className="text-2xl mb-4 border-b-2 text-black mt-4">
+              Prefered IPFS Provider
+            </p>
+            <div className="btn-group btn-group-vertical">
+              <button
+                className={`btn ${
+                  currentIPFSProvider === 'web3-storage' || !currentIPFSProvider
+                    ? 'btn-active'
+                    : ''
+                }`}
+                onClick={() => {
+                  setCurrentIPFSProvider('web3-storage');
+                }}
+              >
+                Web3Storage{' '}
+                <div className="badge badge-warning mx-4">
+                  Requires A Web3Storage Account
+                </div>
+              </button>
+              <button
+                className={`btn ${
+                  currentIPFSProvider === 'ipfs-http' ? 'btn-active' : ''
+                }`}
+                onClick={() => {
+                  setCurrentIPFSProvider('ipfs-http');
+                }}
+              >
+                IPFS Companion
+              </button>
+              <button
+                className={`btn ${
+                  currentIPFSProvider === 'ipfs-api' ? 'btn-active' : ''
+                }`}
+                onClick={() => {
+                  setCurrentIPFSProvider('ipfs-api');
+                }}
+              >
+                Magic🪞
+                <div className="badge badge-warning mx-4">
+                  Requires A Magic🎫
+                </div>
+              </button>
+            </div>
+
             {context.walletConnected ? (
               <>
-                <p className="text-2xl mb-4 mt-2 text-black border-b-2">
+                <p className="text-2xl mb-4 mt-4 text-black border-b-2">
                   Your Connected Accounts
                 </p>
                 <div className="overflow-x-auto">
@@ -193,12 +239,33 @@ function SettingsModal({ hidden, onHide }) {
                   'defaultTheme',
                   defaultThemeRef.current.value
                 );
+                storage.setGlobalPreference(
+                  'ipfsProvider',
+                  currentIPFSProvider
+                );
                 storage.saveData();
                 WebEvents.emit('reload');
                 if (onHide) onHide();
               }}
             >
               Save & Close
+            </button>
+            <button
+              className="btn bg-red-500 text-white mt-4 hover:bg-black"
+              onClick={() => {
+                setCurrentIPFSProvider(
+                  storage.getGlobalPreference('ipfsProvider') || 'web3-storage'
+                );
+                ipfsCompanionRef.current.value = storage.getGlobalPreference(
+                  'ipfs_companion_endpoint'
+                );
+                web3StorageRef.current.value =
+                  storage.getGlobalPreference('web3_storage_key');
+                WebEvents.emit('reload');
+                if (onHide) onHide();
+              }}
+            >
+              Cancel
             </button>
           </div>
         </div>

@@ -99,7 +99,11 @@ export default function DestinationFinder() {
   // Pick random tokenId from ENS and try and got to it...
   const handleTakeMeAnywhere = () => {
     setLoading(true);
-    gotoAddress('♾️mint.eth')
+    gotoAddress(
+      config.destinations[
+        Math.floor(Math.random() * config.destinations.length)
+      ]
+    )
       .catch(errorHandler)
       .finally(() => {
         setLoading(false);
