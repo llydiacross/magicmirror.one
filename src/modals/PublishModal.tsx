@@ -9,12 +9,10 @@ import { useHistory } from 'react-router-dom';
 import HeartIcon from '../components/Icons/HeartIcon';
 import ViewIcon from '../components/Icons/ViewIcon';
 import config from '../config';
-import { getDefaultProvider } from '../ipfs';
 import { recreateProvider } from '../ipfs';
 import Loading from '../components/Loading';
 import { Web3ContextType } from '../contexts/web3Context';
 import { ENSContext } from '../contexts/ensContext';
-import { ethers } from 'ethers';
 import { setENSContentHash } from '../helpers';
 
 const avatars = {
