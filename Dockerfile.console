@@ -1,0 +1,11 @@
+# And finally our console, in case it's ever needed.
+FROM node:18
+WORKDIR /console
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 8888
+
+CMD ["npx", "infinitymint", "--console"]
