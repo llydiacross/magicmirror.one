@@ -1,5 +1,6 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
+import { CID } from 'ipfs-http-client';
 
 /**
  *
@@ -13,6 +14,7 @@ export const post = async (req, res) => {
   if (!cid) return userError(res, 'Bad CID');
 
   try {
+    cid = new CID(cid);
     file = server.ipfs.get(cid);
     const stats = await server.ipfs.object.stat(link.path);
     link.size = stats.CumulativeSize;

@@ -13,6 +13,7 @@ export const post = async (req, res) => {
   if (!cid) return userError(res, 'Bad CID');
 
   try {
+    cid = new CID(cid);
     for await (const link of server.ipfs.ls(cid)) {
       if (links.length > 32) break;
 

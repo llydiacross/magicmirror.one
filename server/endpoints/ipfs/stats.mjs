@@ -1,5 +1,6 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
+import { CID } from 'ipfs-http-client';
 
 /**
  *
@@ -11,8 +12,8 @@ export const post = async (req, res) => {
   const links = [];
 
   if (!cid) return userError(res, 'Bad CID');
-
   try {
+    cid = new CID(cid);
     for await (const link of server.ipfs.ls(cid)) {
       if (links.length > 32) break;
 
