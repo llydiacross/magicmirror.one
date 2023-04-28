@@ -2,17 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// Create a react component that takes html code as a string and renders it
-function HTMLRenderer({
-  style,
-  code = {} as any,
-  implicit,
-  currentFile,
-  ensContext = {},
-  stylesheets = [],
-  scripts = [],
-  meta = [],
-}) {
+export const renderHTML = (
+  code: any = {},
+  stylesheets: any = [],
+  meta: any = [],
+  scripts: any = [],
+  ensContext
+) => {
   let safeCSS = code.css || '';
   // Remove html tags from savejs code
   safeCSS = safeCSS.replace(/<[^>]*>?/gm, '');
@@ -66,21 +62,11 @@ function HTMLRenderer({
       </head>
   `;
 
-  if (implicit) {
-    //inject script before closing html tag
-    implicit = `
-        <script>
-          window.ensContext = ${JSON.stringify(ensContext)};
-        </script>
-        ${implicit}
-    `;
-  }
-
   let safeJS = code.js || '';
   // Remove script tags from savejs code
   safeJS = safeJS.replace(/<\//g, '');
 
-  const _html = `
+  return `
     <html>
       ${head}
       <body>
@@ -107,37 +93,54 @@ function HTMLRenderer({
         </div>
       </body>
       <script>
-        document.body.innerHTML = document.body.innerHTML + \`${
-          code.html || ''
-        }\`;
-      
-        //remove all href tags from all links in the body
-        let links = document.getElementsByTagName("a");
-        for (var i = 0; i < links.length; i++) {
-          links[i].onclick = (e) => {
-            e.preventDefault();
+        window.ensContext = ${JSON.stringify(ensContext)};
+        (() => {
+          document.body.innerHTML = document.body.innerHTML + \`${
+            code.html || ''
+          }\`;
+          //remove all href tags from all links in the body
+          let _links = document.getElementsByTagName("a");
+          for (var i = 0; i < _links.length; i++) {
+            _links[i].onclick = (e) => {
+              e.preventDefault();
 
-            if (e.target?.getAttribute("href")[0] === "#")
-              return;
+              if (e.target?.getAttribute("href")[0] === "#")
+                return;
 
-            //show box
-            let box = document.getElementById("box");
-            box.style.display = "block";
-            //set location
-            let location = document.getElementById("location");
-            location.innerHTML = e.target.getAttribute("href");
+              //show box
+              let _box = document.getElementById("box");
+              _box.style.display = "block";
+              //set location
+              let _location = document.getElementById("location");
+              _location.innerHTML = e.target.getAttribute("href");
+            }
           }
-        }
+        })();
       </script>
       <script>
         ${safeJS}
       </script>
     </html>`;
+};
+
+// Create a react component that takes html code as a string and renders it
+function HTMLRenderer({
+  style,
+  code = {} as any,
+  implicit,
+  ensContext = {},
+  stylesheets = [],
+  scripts = [],
+  meta = [],
+}) {
+  let html: string;
+  if (!implicit)
+    html = renderHTML(code, stylesheets, meta, scripts, ensContext);
 
   return (
     <iframe
       style={style}
-      srcDoc={implicit || _html}
+      srcDoc={implicit || html}
       seamless
       title="preview"
       sandbox="allow-scripts allow-same-origin allow-forms"

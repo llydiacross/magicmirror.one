@@ -14,6 +14,7 @@ import Loading from '../components/Loading';
 import { Web3ContextType } from '../contexts/web3Context';
 import { ENSContext } from '../contexts/ensContext';
 import { setENSContentHash } from '../helpers';
+import { renderHTML } from '../components/HTMLRenderer';
 
 const avatars = {
   html: '/img/html.png',
@@ -31,16 +32,15 @@ function PublishModal({
   tabs = {},
   onSettings,
 }) {
-  const defaultThemeRef = useRef(null);
   const context = useContext<Web3ContextType>(Web3Context);
   const ensContext = useContext(ENSContext);
   const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
   const eventEmitterCallbackRef = useRef(null);
-  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [savedCid, setSavedCid] = useState(storage.getPagePreference('cid'));
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
   const setContentHash = async (cid) => {
     setLoading(true);
 
@@ -67,8 +67,6 @@ function PublishModal({
     let ipfsProvider = recreateProvider('web3-storage');
 
     let files = Object.values(tabs).map((tab: any) => {
-      console.log(tab);
-
       let name = tab.name;
 
       switch (tab.language) {
@@ -95,6 +93,31 @@ function PublishModal({
         type: ipfsProvider.getContentType(tab.language),
       };
     });
+
+    //get xens file
+    let xensFile = files.find((file) => file.name === '.xens');
+    if (xensFile) {
+      let xens = JSON.parse(xensFile.data);
+
+      if (xens.direct) {
+        //construct index.html
+        let html = files.find((file) => file.name === 'index.partial');
+        let css = files.find((file) => file.name === 'css.partial');
+        let js = files.find((file) => file.name === 'js.partial');
+
+        let code = {
+          html: html ? html.data : '',
+          css: css ? css.data : '',
+          js: js ? js.data : '',
+        };
+
+        files.push({
+          name: 'index.html',
+          data: renderHTML(code, [], [], [], ensContext),
+          type: ipfsProvider.getContentType('html'),
+        });
+      }
+    }
 
     let cid = await ipfsProvider.uploadFiles(files);
 

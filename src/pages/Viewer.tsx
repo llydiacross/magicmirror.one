@@ -350,7 +350,6 @@ function Viewer({ match }) {
                   stats: stats,
                 }}
                 code={buffer.source}
-                currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
               />
             ) : (
               <> </>
@@ -371,7 +370,6 @@ function Viewer({ match }) {
                   stats: stats,
                 }}
                 implicit={buffer}
-                currentFile={(ensContext.currentEnsAddress || 'null') + '.web3'}
               />
             )}
           </>
