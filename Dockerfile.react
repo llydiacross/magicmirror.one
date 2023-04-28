@@ -1,13 +1,13 @@
 # To copy & run our main React build-
 FROM node:18
-WORKDIR /frontend
+WORKDIR /usr/app
 
-COPY ./package*.json .
-COPY ./public ./public
-COPY ./src ./src
+COPY ./package*.json /usr/app/.
+COPY ./public /usr/app/.
+COPY ./src /usr/app/.
 
 RUN npm install
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "serve"]

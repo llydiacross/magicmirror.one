@@ -1,8 +1,8 @@
 # And finally our console, in case it's ever needed.
-FROM node:18
-WORKDIR /console
+FROM node:18.4.0-alpine
+WORKDIR /usr/console
 
-COPY . .
+COPY . /usr/console/
 
 RUN npm install
 
