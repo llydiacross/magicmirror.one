@@ -20,6 +20,3 @@ jobs:
       
       - name: Serve react
         run: cp -r build/* /var/www/magicmirror/html/
-        
-      - name: Serve API
-        run: cp -r . /var/www/magicmirror/api/
