@@ -459,7 +459,14 @@ function Viewer({ match }) {
             </h1>
             <p className="mb-5 text-black">
               This ENS address does not exist and is can be purchased right now!
+              <center>
+                <a href='https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/43404484862317751072749643860451660777873344222238548813148311469445141757953' target="_blank">
+                  <img className='flex' src="/img/404.webp" width="309" height="395"></img>
+                </a>  
+              </center>
+             
             </p>
+            
             <button
               className="btn btn-dark w-full"
               onClick={() => {
