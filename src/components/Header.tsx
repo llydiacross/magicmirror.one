@@ -10,7 +10,7 @@ import config from '../config';
 function Header({
   theme,
   title,
-  typeWriterSpeed = 50,
+  typeWriterSpeed = 100,
   initialText = 'Where will you go today?',
   showFinder = true,
 }) {

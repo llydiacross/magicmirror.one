@@ -5,9 +5,11 @@ import { Web3Context, Web3ContextType } from '../contexts/web3Context';
 import { resolveDirectory, resolveFile, resolveIPNS } from '../ipfs';
 import { Buffer } from 'buffer';
 
-const prepareAvatar = async (
+export const prepareAvatar = async (
   resolver: ethers.providers.Resolver,
-  context: Web3ContextType,
+  web3Provider:
+    | ethers.providers.Web3Provider
+    | ethers.providers.JsonRpcProvider,
   imageAbortController: {
     current: AbortController | null;
   },
@@ -54,7 +56,7 @@ const prepareAvatar = async (
 
       const [contract, tokenId] = stub.split('/');
       const abi = ['function uri(uint256 tokenId) view returns (string value)'];
-      const instance = new ethers.Contract(contract, abi, context.web3Provider);
+      const instance = new ethers.Contract(contract, abi, web3Provider);
 
       let decoded;
       try {
@@ -202,7 +204,7 @@ const useENSContext = ({ ensAddress }) => {
       setAvatar(
         await prepareAvatar(
           resolver,
-          context,
+          context.web3Provider,
           fetchImageAbortController,
           fetchMetadataAbortController
         )

@@ -1,6 +1,21 @@
 import prettier from 'html-prettify';
 import { ethers } from 'ethers';
 import { namehash } from './namehash';
+import { prepareAvatar } from './effects/useENSContext';
+
+export const getFastAvatar = async (address: string, web3Provider) => {
+  const resolver = await web3Provider.getResolver(address);
+
+  if (resolver === null) {
+    return '/img/0x0z.jpg';
+  }
+
+  try {
+    return await prepareAvatar(resolver, web3Provider, null, null);
+  } catch (error) {
+    return '/img/0x0z.jpg';
+  }
+};
 
 export const setEnsTextRecord = async (
   ensDomain: string,
