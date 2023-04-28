@@ -199,6 +199,22 @@ function IDE({ theme }) {
             className="inline-flex w-full rounded-sm border-1 shadow-sm z-50"
             role="group"
           >
+            <button
+              className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black hidden md:block lg:block"
+              onClick={() => {
+                setShouldShowPublish(!shouldShowPublish);
+              }}
+            >
+              PUBLISH
+            </button>
+            <button
+              className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black block md:hidden lg:hidden"
+              onClick={() => {
+                setShouldShowPublish(!shouldShowPublish);
+              }}
+            >
+              ⬆️
+            </button>
             {Object.keys(tabs).map((tabIndex, index) => {
               const tab = tabs[tabIndex];
               return (
@@ -228,27 +244,8 @@ function IDE({ theme }) {
                 </button>
               );
             })}
-            <button
-              className="btn bg-pink-500 rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black"
-              onClick={() => {
-                let newCode = prettifyCode(currentCode, selectedTab);
-                setCode(newCode);
-                storage.setPagePreference(selectedTab, newCode);
-                storage.saveData();
-              }}
-            >
-              🧹
-            </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               🗃️
-            </button>
-            <button
-              className="btn rounded-none bg-warning animate-pulse text-white hover:text-white hover:bg-black"
-              onClick={() => {
-                setShouldShowPublish(!shouldShowPublish);
-              }}
-            >
-              🌟
             </button>
             <button
               className="btn rounded-none bg-info animate-pulse text-white hover:text-white hover:bg-black"
@@ -523,7 +520,7 @@ function IDE({ theme }) {
               className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
               onClick={() => setOverlayPreview(!overlayPreview)}
             >
-              {!overlayPreview ? 'Overlay Preview' : 'Stop Overlaying Preview'}
+              {!overlayPreview ? 'Overlay' : 'Stop Overlaying'}
             </button>
             <button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
               💾
@@ -532,15 +529,34 @@ function IDE({ theme }) {
               📁
             </button>
             <button
+              className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                let newCode = prettifyCode(currentCode, selectedTab);
+                setCode(newCode);
+                storage.setPagePreference(selectedTab, newCode);
+                storage.saveData();
+              }}
+            >
+              🧹
+            </button>
+            <button
               className={
                 'btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black ' +
-                (shouldShowDebug ? 'bg-success' : 'bg-warning')
+                (shouldShowDebug ? 'bg-success' : 'bg-info')
               }
               onClick={() => {
                 setShouldShowDebug(!shouldShowDebug);
               }}
             >
               🐛
+            </button>
+            <button
+              className="btn rounded-none bg-warning animate-pulse border-none text-white hover:text-white hover:bg-black"
+              onClick={() => {
+                setShouldShowPublish(!shouldShowPublish);
+              }}
+            >
+              PUBLISH
             </button>
             <button
               className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
