@@ -24,7 +24,13 @@ const avatars = {
   json: '/img/json.png',
 };
 
-function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
+function PublishModal({
+  hidden,
+  onHide,
+  savedData = {},
+  tabs = {},
+  onSettings,
+}) {
   const defaultThemeRef = useRef(null);
   const context = useContext<Web3ContextType>(Web3Context);
   const ensContext = useContext(ENSContext);
@@ -257,9 +263,9 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
                   <></>
                 )}
                 {error ? (
-                  <p className="text-center text-3xl text-black">
-                    There was an issue with that transaction. Please check
-                    etherscan.
+                  <p className="text-center text-3xl text-black mt-2">
+                    There was an issue uploading your stuff to IPFS. Please
+                    check that that your IPFS settings are correct.
                   </p>
                 ) : (
                   <></>
@@ -366,6 +372,14 @@ function PublishModal({ hidden, onHide, savedData = {}, tabs = {} }) {
                       }}
                     >
                       Publish
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        if (onSettings) onSettings();
+                      }}
+                    >
+                      Open Settings
                     </button>
                     <button
                       className="btn btn-error"

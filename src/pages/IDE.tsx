@@ -66,6 +66,7 @@ function IDE({ theme }) {
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
   const [shouldShowNewProject, setShouldShowNewProject] = useState(false);
+  const [shouldOpenPublishMenu, setShouldOpenPublishMenu] = useState(false);
   const [shouldShowDebug, setShouldShowDebug] = useState(false);
   const [dir, setDir] = useState<IPFSDirectory>(null);
   const [stats, setStats] = useState<IPFSStats>(null);
@@ -139,7 +140,7 @@ function IDE({ theme }) {
     WebEvents.on('reload', eventEmitterCallbackRef.current);
 
     //if the screen is below mobile size, set the width to 100%
-    if (window.innerWidth < 800) {
+    if (window.innerWidth < 900) {
       setWidth(100);
     }
 
@@ -188,8 +189,8 @@ function IDE({ theme }) {
       <div className="flex flex-col lg:flex-row w-full overflow-hidden">
         <div
           style={{
-            width: !overlayPreview ? width + '%' : '100%',
-            minWidth: '500px',
+            width: !overlayPreview && showPreview ? width + '%' : '100%',
+            minWidth: '536px',
           }}
           className="w-full overflow-y-scroll overflow-x-hidden min-h-screen max-h-screen"
           hidden={!showCode || (overlayPreview && !showPreview)}
@@ -239,9 +240,6 @@ function IDE({ theme }) {
               🧹
             </button>
             <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
-              📦
-            </button>
-            <button className="btn rounded-none bg-pink-500 text-white hover:text-white hover:bg-black">
               🗃️
             </button>
             <button
@@ -268,7 +266,7 @@ function IDE({ theme }) {
             >
               🚀
             </button>
-            <div className="p-1 mx-2 w-[5vw]">
+            <div className="p-1 mx-2 w-[6vw] hidden lg:block">
               <input
                 type="range"
                 min={35}
@@ -287,7 +285,7 @@ function IDE({ theme }) {
               />
             </div>
             <button
-              className="btn rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black"
+              className="btn rounded-none bg-neutral-200 text-white hover:text-white hover:bg-black hidden lg:block"
               onClick={() => {
                 setWidth(50);
               }}
@@ -349,7 +347,7 @@ function IDE({ theme }) {
             width:
               showPreview && !overlayPreview && showCode && width !== 100
                 ? 100 - width + '%'
-                : '100%',
+                : `${showPreview ? '100' : '0'}%`,
             borderLeft: '1px solid black',
             minWidth: '375px',
             ...(overlayPreview
@@ -615,6 +613,11 @@ function IDE({ theme }) {
       <SettingsModal
         hidden={!shouldShowSettings}
         onHide={() => {
+          if (shouldOpenPublishMenu) {
+            setShouldShowPublish(true);
+            setShouldOpenPublishMenu(false);
+          }
+
           setShouldShowSettings(false);
         }}
       />
@@ -639,6 +642,11 @@ function IDE({ theme }) {
       <PublishModal
         tabs={tabs}
         hidden={!shouldShowPublish}
+        onSettings={() => {
+          setShouldShowPublish(false);
+          setShouldOpenPublishMenu(true);
+          setShouldShowSettings(true);
+        }}
         onHide={() => {
           setShouldShowPublish(false);
         }}

@@ -182,7 +182,7 @@ class Web3StorageProvider extends IPFSProvider {
 
   createInstance(options: any) {
     this.instance = new Web3Storage({
-      token: options?.apiKey || storage.getGlobalPreference('web3_storage_key'),
+      token: options?.apiKey || storage.getGlobalPreference('web3StorageKey'),
     });
   }
 
