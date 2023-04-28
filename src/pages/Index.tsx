@@ -7,17 +7,29 @@ import { ENSContext } from '../contexts/ensContext';
 import WebEvents from '../webEvents';
 import storage from '../storage';
 import config from '../config';
+import { getFastAvatar } from '../helpers';
+import { Web3Context } from '../contexts/web3Context';
 
 export default function Index() {
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowBackdrop, setShouldShowBackdrop] = useState(false);
   const [currentDestination, setCurrentDestination] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
   const ensContext = useContext(ENSContext);
+  const context = useContext(Web3Context);
   const cooldown = useRef(null);
 
   useEffect(() => {
+    if (!context.loaded) return;
+    if (ensContext.loaded) setBackgroundImage(ensContext.avatar);
+
     if (cooldown.current === null) {
-      cooldown.current = (destination) => {
+      cooldown.current = async (destination) => {
+        setBackgroundImage('/img/0x0z.jpg');
+        let result = await getFastAvatar(destination, context.web3Provider);
+        if (result) {
+          setBackgroundImage(result);
+        }
         setShouldShowBackdrop(true);
         setCurrentDestination(destination);
       };
@@ -32,7 +44,7 @@ export default function Index() {
     return () => {
       WebEvents.off('gotoDestination', cooldown.current);
     };
-  }, []);
+  }, [context, ensContext]);
   return (
     <div
       data-theme={
@@ -45,7 +57,7 @@ export default function Index() {
         className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
         hidden={!shouldShowBackdrop}
         style={{
-          backgroundImage: `url("${ensContext.avatar}")`,
+          backgroundImage: `url("${backgroundImage}")`,
         }}
       />
       <div

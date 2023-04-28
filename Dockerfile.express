@@ -1,9 +1,9 @@
 # To start our API-
 FROM node:18-bullseye
-WORKDIR /api
+WORKDIR /usr/api
 
-COPY ./package*.json .
-COPY ./server/* .
+COPY ./package*.json /usr/api/.
+COPY ./server/* /usr/api/.
 
 RUN npm install
 
