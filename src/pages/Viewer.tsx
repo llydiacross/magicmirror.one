@@ -302,8 +302,6 @@ function Viewer({ match }) {
     main();
   }, [ensContext, loaded]);
 
-  console.log(error);
-
   return (
     <div>
       <div className="hero min-h-screen" hidden={loaded}>
@@ -340,7 +338,7 @@ function Viewer({ match }) {
       >
         {buffer !== null && !aborted && ensContext.ensError === null ? (
           <>
-            {defaultResponse ? (
+            {!direct && !defaultResponse ? (
               <HTMLRenderer
                 ensContext={{
                   ...ensContext,

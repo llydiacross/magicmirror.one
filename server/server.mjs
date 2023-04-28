@@ -99,6 +99,7 @@ class Server {
       dontDraw: true,
       scriptMode: true,
       startExpress: false,
+      startGanache: false,
       test: true, // will expose all logs
     });
 

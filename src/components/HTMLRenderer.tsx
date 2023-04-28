@@ -137,6 +137,15 @@ function HTMLRenderer({
   if (!implicit)
     html = renderHTML(code, stylesheets, meta, scripts, ensContext);
 
+  if (implicit)
+    implicit = `
+      <script>
+        window.ensContext = ${JSON.stringify(ensContext)};
+      </script>
+      ${implicit}
+    
+      `;
+
   return (
     <iframe
       style={style}

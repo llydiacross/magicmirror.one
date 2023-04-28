@@ -72,7 +72,7 @@ export default function DestinationFinder() {
           '/' + destination + (isResolver ? resolverExtension : '.eth')
         );
         resolve(true);
-      }, 5142)
+      }, 4542)
     );
   };
 
