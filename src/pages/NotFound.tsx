@@ -24,6 +24,7 @@ export default function NotFound() {
             <p className="mb-5 text-black">
               This page straight up doesn&apos;t exist. Try elsewhere.
             </p>
+            <img src="public/img/404.webp" width="618" height="790"></img>
             <button
               className="btn btn-dark w-full"
               onClick={() => {
