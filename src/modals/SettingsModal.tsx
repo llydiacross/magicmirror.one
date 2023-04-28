@@ -71,7 +71,7 @@ function SettingsModal({ hidden, onHide }) {
                   type="text"
                   ref={web3StorageRef}
                   defaultValue={
-                    storage.getGlobalPreference('web3StorageApiKey') || ''
+                    storage.getGlobalPreference('web3StorageKey') || ''
                   }
                   placeholder="Enter Web3 Storage Key..."
                   className="input input-bordered w-full"
@@ -92,7 +92,7 @@ function SettingsModal({ hidden, onHide }) {
                 <input
                   type="url"
                   defaultValue={
-                    storage.getGlobalPreference('ipfsCompanionEndpoint') ||
+                    storage.getGlobalPreference('ipsCompanionEndpoint') ||
                     'http://localhost:5001/api/v0'
                   }
                   ref={ipfsCompanionRef}
@@ -228,11 +228,11 @@ function SettingsModal({ hidden, onHide }) {
               className="btn bg-success text-white mt-4 hover:bg-black animate-pulse hover:animate-none"
               onClick={() => {
                 storage.setGlobalPreference(
-                  'web3_storage_key',
+                  'web3StorageKey',
                   web3StorageRef.current.value
                 );
                 storage.setGlobalPreference(
-                  'ipfs_companion_endpoint',
+                  'ipsCompanionEndpoint',
                   ipfsCompanionRef.current.value
                 );
                 storage.setGlobalPreference(
@@ -257,10 +257,10 @@ function SettingsModal({ hidden, onHide }) {
                   storage.getGlobalPreference('ipfsProvider') || 'web3-storage'
                 );
                 ipfsCompanionRef.current.value = storage.getGlobalPreference(
-                  'ipfs_companion_endpoint'
+                  'ipsCompanionEndpoint'
                 );
                 web3StorageRef.current.value =
-                  storage.getGlobalPreference('web3_storage_key');
+                  storage.getGlobalPreference('web3StorageKey');
                 WebEvents.emit('reload');
                 if (onHide) onHide();
               }}
