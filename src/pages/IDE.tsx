@@ -21,6 +21,7 @@ import { ENSContext } from '../contexts/ensContext';
 import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
 import NewProjectModal from '../modals/NewProjectModal';
 import { prettifyCode } from '../helpers';
+import config from '../config';
 
 const defaultTabs = {
   html: {
@@ -61,7 +62,9 @@ function IDE({ theme }) {
   const [codeBuffer, setCodeBuffer] = useState(currentCode);
   const [width, setWidth] = useState(50);
   const [overlayPreview, setOverlayPreview] = React.useState(false);
-  const [currentTheme, setCurrentTheme] = useState(theme || null);
+  const [currentTheme, setCurrentTheme] = useState(
+    theme || config.defaultTheme || null
+  );
   const [shouldShowSettings, setShouldShowSettings] = useState(false);
   const [shouldShowPublish, setShouldShowPublish] = useState(false);
   const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
@@ -428,7 +431,6 @@ function IDE({ theme }) {
                     stats: stats,
                   }}
                   scripts={['https://cdn.tailwindcss.com']}
-                  currentFile={selectedTab}
                   style={{
                     ...(!overlayPreview
                       ? {

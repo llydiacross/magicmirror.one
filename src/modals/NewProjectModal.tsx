@@ -9,6 +9,30 @@ import Hero from '../components/Hero';
 import ChatGPTHeader from '../components/ChatGPTHeader';
 const defaultTemplates: any = {};
 
+let fetchContent = async (contentIndex: string = 'audio.html') => {
+  if (contentIndex[0] !== '/') contentIndex = '/' + contentIndex;
+  // Get the default content
+  const defaultContent = await fetch(contentIndex);
+  const html = await defaultContent.text();
+  //take everything inbetween script tags
+  let script = html.match(/<script>(.*?)<\/script>/s);
+  let fScript = (script[1] as any) || '';
+  //take everything inbetween style tags
+  let style = html.match(/<style>(.*?)<\/style>/s);
+  let fStyle = (style[1] as any) || '';
+
+  //remove script tags from html
+  let parsedHTML = html.replace(/<script>(.*?)<\/script>/s, '');
+
+  //also remove script tags that have attributes in the tag
+  parsedHTML = parsedHTML.replace(/<script(.*?)>(.*?)<\/script>/s, '');
+
+  //remove style tags
+  parsedHTML = parsedHTML.replace(/<style>(.*?)<\/style>/s, '');
+
+  return { parsedHTML, script: fScript, style: fStyle };
+};
+
 const defaultTabs = {
   html: {
     name: '📃',
@@ -137,11 +161,9 @@ defaultTemplates.redirect = {
       ),
     };
 
-    result.js.code = `
-        let location = 'https://magicmirror.one';
-    
+    result.js.code = `   
       setTimeout(() => {
-        window.location.href = location;
+        window.location.href = 'https://magicmirror.one';
         }, 1000);
     `;
 
@@ -230,30 +252,6 @@ defaultTemplates.embeded = {
 
     setCode(result);
   },
-};
-
-let fetchContent = async (contentIndex: string = 'audio.html') => {
-  if (contentIndex[0] !== '/') contentIndex = '/' + contentIndex;
-  // Get the default content
-  const defaultContent = await fetch(contentIndex);
-  const html = await defaultContent.text();
-  //take everything inbetween script tags
-  let script = html.match(/<script>(.*?)<\/script>/s);
-  let fScript = (script[1] as any) || '';
-  //take everything inbetween style tags
-  let style = html.match(/<style>(.*?)<\/style>/s);
-  let fStyle = (style[1] as any) || '';
-
-  //remove script tags from html
-  let parsedHTML = html.replace(/<script>(.*?)<\/script>/s, '');
-
-  //also remove script tags that have attributes in the tag
-  parsedHTML = parsedHTML.replace(/<script(.*?)>(.*?)<\/script>/s, '');
-
-  //remove style tags
-  parsedHTML = parsedHTML.replace(/<style>(.*?)<\/style>/s, '');
-
-  return { parsedHTML, script: fScript, style: fStyle };
 };
 
 defaultTemplates.music = {
