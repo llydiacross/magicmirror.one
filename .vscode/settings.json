@@ -1,4 +1,5 @@
 {
   "terminal.integrated.defaultProfile.linux": "zsh",
-  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace"
+  "editor.fontFamily": "Iosevka,   Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 13.5
 }

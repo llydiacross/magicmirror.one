@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import Session from 'express-session';
 import { create } from 'ipfs-http-client';
 import { createClient } from 'redis';
 
@@ -85,6 +86,15 @@ class Server {
 
     // for dev
     this.app.use(morgan('dev'));
+
+    // Integrating SIWE
+    this.app.use(Session({
+      name: 'magicmirror',
+      secret: config.siwe.secret || process.env.SIWE_SECRET,
+      resave: true,
+      saveUninitialized: true,
+      cookie: { secure: false, sameSite: true }
+    }))
   }
 
   async start() {
