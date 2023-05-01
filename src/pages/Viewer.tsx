@@ -591,4 +591,4 @@ Viewer.propTypes = {
   match: PropTypes.object,
 };
 
-export default withRouter(Viewer);
+export default withRouter(Viewer as any) as any;

@@ -1,7 +1,7 @@
-import { SiweMessage, ErrorTypes } from 'siwe'
+import pkg from 'siwe';
 import jwt from 'jsonwebtoken'
 import server from '../../server.mjs'
-import {authReducer} from '../../../src/contexts/AuthContext'
+const { SiweMessage, ErrorTypes } = pkg;
 
 /**
  *
@@ -19,7 +19,8 @@ export const post = async (request, response) => {
       try {
         if (!request.body.message) {
           response.status(422).json({
-            message: 'Expected prepareMessage object as body.'
+            ok: false,
+            error: 'Expected prepareMessage object as body.'
           })
           return
         }
@@ -29,12 +30,13 @@ export const post = async (request, response) => {
         const fields = await siweMessage.validate(signature)
 
         if (fields.nonce !== request.session.nonce) {
-          console.log(request.session)
           response.status(422).json({
-            message: 'Invalid nonce.'
+            ok: false,
+            error: 'Invalid nonce.'
           })
           return
         }
+        
         request.session.siwe = fields
         request.session.cookie.expires = new Date(fields.expirationTime)
 
@@ -62,19 +64,19 @@ export const post = async (request, response) => {
         switch (err) {
           case ErrorTypes.EXPIRED_MESSAGE: {
             request.session.save(() =>
-              response.status(440).json({ message })
+              response.status(440).ok(false).json({ message })
             )
             break
           }
           case ErrorTypes.INVALID_SIGNATURE: {
             request.session.save(() =>
-              response.status(422).json({ message })
+              response.status(422).ok(false).json({ message })
             )
             break
           }
           default: {
             request.session.save(() =>
-              response.status(500).json({ message })
+              response.status(500).ok(false).json({ message })
             )
             break
           }

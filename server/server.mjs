@@ -90,7 +90,7 @@ class Server {
     // Integrating SIWE
     this.app.use(Session({
       name: 'magicmirror',
-      secret: config.siwe.secret || process.env.SIWE_SECRET,
+      secret: process.env.SIWE_SECRET,
       resave: true,
       saveUninitialized: true,
       cookie: { secure: false, sameSite: true }
