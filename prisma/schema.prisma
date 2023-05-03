@@ -11,19 +11,16 @@ datasource db {
 }
 
 model User {
-  ensRecord      String         @id @unique
-  createdAt      DateTime       @default(now())
-  role           Role           @default(USER)
-  fakeRegistries FakeRegistry[]
+  address   String   @id @unique
+  createdAt DateTime @default(now())
+  role      Role     @default(USER)
 }
 
 model FakeRegistry {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  jsonObject    String
-  User          User?    @relation(fields: [userEnsRecord], references: [ensRecord])
-  userEnsRecord String?
+  ensAddress String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  jsonObject String
 }
 
 enum Role {
