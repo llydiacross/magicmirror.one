@@ -17,6 +17,13 @@ Welcome to the new web.
 
 The project requires [Redis](<https://redis.io>) as a dependency to be installed for caching.
 
+> __NOTE:__ If `npx infinitymint` returns an error, put this in an index.ts in the root of your repository:
+
+```js
+import {load} from 'infinitymint'
+load()
+```
+
 ### MACOS 🍎
 
 `brew install redis-cli`
