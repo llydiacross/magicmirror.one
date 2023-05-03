@@ -1,10 +1,11 @@
 import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
-import contentHash from 'content-hash';
 import { useRef, useState } from 'react';
+import { ethers } from 'ethers';
 
-export default function ContentHash() {
+export default function NameHash() {
 	const history = useHistory();
+
 	const hash = useRef(null);
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
@@ -12,9 +13,9 @@ export default function ContentHash() {
 		setError(null);
 		try {
 			if (hash.current.value === '')
-				throw new Error('please enter a content hash');
+				throw new Error('please enter a dns domain');
 
-			const decoded = contentHash.decode(hash.current.value);
+			const decoded = ethers.utils.namehash(hash.current.value);
 			setDecoded(decoded);
 		} catch (e) {
 			console.log(e);
@@ -29,19 +30,21 @@ export default function ContentHash() {
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
 					<div className="max-w-xl">
 						<h1 className="mb-5 text-5xl font-bold text-black">
-							Content Hash Decoder
+							ENS NameHash Calculator
 						</h1>
 						<p className="mb-5 text-black">
-							Please enter a content hash to decode
+							Please enter an ENS domain to calculate the namehash
 						</p>
 						<input
 							className="input input-bordered w-full mb-2"
 							ref={hash}
 						></input>
 						{error === null ? (
-							<p className="mb-5 text-success mt-2">{decoded}</p>
+							<p className="mb-5 text-success mt-2 break-words">{decoded}</p>
 						) : (
-							<p className="mb-5 text-error mt-2">{error.message}</p>
+							<p className="mb-5 text-error mt-2 break-words">
+								{error.message}
+							</p>
 						)}
 						<button
 							className="btn btn-dark w-full"
@@ -54,7 +57,7 @@ export default function ContentHash() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/');
+								history.push('/utilities/');
 							}}
 						>
 							Dashboard

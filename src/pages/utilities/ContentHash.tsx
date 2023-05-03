@@ -1,11 +1,10 @@
 import FixedElements from '../../components/FixedElements';
-import { ethers } from 'ethers';
 import { useHistory } from 'react-router-dom';
+import contentHash from 'content-hash';
 import { useRef, useState } from 'react';
 
-export default function Converter() {
+export default function ContentHash() {
 	const history = useHistory();
-
 	const hash = useRef(null);
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
@@ -14,11 +13,8 @@ export default function Converter() {
 		try {
 			if (hash.current.value === '')
 				throw new Error('please enter a content hash');
-			let decoded: any;
-			if (hash.current.value.startsWith('0x')) {
-				hash.current.value = hash.current.value.slice(2);
-				decoded = ethers.utils.toUtf8String(hash.current.value);
-			} else decoded = ethers.utils.toUtf8Bytes(hash.current.value);
+
+			const decoded = contentHash.decode(hash.current.value);
 			setDecoded(decoded);
 		} catch (e) {
 			console.log(e);
@@ -33,17 +29,14 @@ export default function Converter() {
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
 					<div className="max-w-xl">
 						<h1 className="mb-5 text-5xl font-bold text-black">
-							UTF8String / UTF8Bytes Converter
+							Content Hash Decoder
 						</h1>
 						<p className="mb-5 text-black">
-							Please enter ither UTF8String or UTF8Bytes
+							Please enter a content hash to decode
 						</p>
 						<input
 							className="input input-bordered w-full mb-2"
 							ref={hash}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') decode();
-							}}
 						></input>
 						{error === null ? (
 							<p className="mb-5 text-success mt-2">{decoded}</p>
@@ -56,12 +49,12 @@ export default function Converter() {
 								decode();
 							}}
 						>
-							Convert
+							Decode
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/');
+								history.push('/utilities/');
 							}}
 						>
 							Dashboard

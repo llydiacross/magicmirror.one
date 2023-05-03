@@ -187,7 +187,7 @@ function FixedElements({
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
-									history.push('/utilitys/');
+									history.push('/utilities/');
 								}}
 							>
 								🧰

@@ -102,7 +102,7 @@ export default function ENSLookup() {
 												className="text-xs text-blue-700 cursor-pointer hover:underline"
 												onClick={() => {
 													history.push(
-														'/utilitys/contenthash/' + registry.rawContentHash
+														'/utilities/contenthash/' + registry.rawContentHash
 													);
 												}}
 											>
@@ -142,7 +142,7 @@ export default function ENSLookup() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/');
+								history.push('/utilities/');
 							}}
 						>
 							Dashboard

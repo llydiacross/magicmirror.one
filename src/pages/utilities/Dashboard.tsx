@@ -33,13 +33,13 @@ export default function Dashboard() {
 							Utility Dashboard
 						</h1>
 						<p className="mb-5 text-black">
-							Heres a list of utilitys you can use
+							Heres a list of utilities you can use
 						</p>
 
 						<button
 							className="btn btn-dark w-full"
 							onClick={() => {
-								history.push('/utilitys/namehash');
+								history.push('/utilities/namehash');
 							}}
 						>
 							Name Hash
@@ -47,7 +47,7 @@ export default function Dashboard() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/contenthash');
+								history.push('/utilities/contenthash');
 							}}
 						>
 							Content Hash
@@ -55,7 +55,7 @@ export default function Dashboard() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/ens');
+								history.push('/utilities/ens');
 							}}
 						>
 							ENS Lookup
@@ -63,7 +63,7 @@ export default function Dashboard() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/converter');
+								history.push('/utilities/converter');
 							}}
 						>
 							UTF8 Bytes / String Converter

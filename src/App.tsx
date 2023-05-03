@@ -7,11 +7,11 @@ import Viewer from './pages/Viewer';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import { AuthContextProvider } from './contexts/AuthContext';
-import Converter from './pages/utilitys/Converter';
-import ContentHash from './pages/utilitys/ContentHash';
-import NameHash from './pages/utilitys/NameHash';
-import Dashboard from './pages/utilitys/Dashboard';
-import ENSLookup from './pages/utilitys/ENSLookup';
+import Converter from './pages/utilities/Converter';
+import ContentHash from './pages/utilities/ContentHash';
+import NameHash from './pages/utilities/NameHash';
+import Dashboard from './pages/utilities/Dashboard';
+import ENSLookup from './pages/utilities/ENSLookup';
 
 function App() {
 	return (
@@ -38,19 +38,19 @@ function App() {
 							<Route path="/🧱/:token">
 								<Viewer />
 							</Route>
-							<Route exact path="/utilitys/converter">
+							<Route exact path="/utilities/converter">
 								<Converter />
 							</Route>
-							<Route exact path="/utilitys/contenthash">
+							<Route exact path="/utilities/contenthash">
 								<ContentHash />
 							</Route>
-							<Route exact path="/utilitys/ens">
+							<Route exact path="/utilities/ens">
 								<ENSLookup />
 							</Route>
-							<Route exact path="/utilitys/">
+							<Route exact path="/utilities/">
 								<Dashboard />
 							</Route>
-							<Route exact path="/utilitys/namehash">
+							<Route exact path="/utilities/namehash">
 								<NameHash />
 							</Route>
 							<Route exact path="*">
