@@ -1,6 +1,6 @@
 import express from 'express';
 import glue from 'jsglue';
-import { findEndpoints, getConfig, getEndpointPath } from './utils/helpers.mjs';
+import { findEndpoints, getEndpointPath } from './utils/helpers.mjs';
 import cors from 'cors';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -100,7 +100,6 @@ class Server {
 	}
 
 	async start() {
-		const config = await getConfig();
 		const wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
@@ -116,15 +115,20 @@ class Server {
 		});
 
 		this.infinityConsole = infinityConsole;
-		this.config = config.default;
+		this.config =
+			this.infinityConsole.Helpers.getConfigFile()?.magicMirror || {};
+
 		this.ipfs = create({
-			url: config.ipfsEndpoint || 'https://dweb.link/api/v0',
+			url: this.config.ipfsEndpoint || 'https://dweb.link/api/v0',
 		});
 
 		// set CORS after config has been loaded
 		this.app.use(
 			cors({
-				origin: config.cors && config.cors.length !== 0 ? config.cors : '*',
+				origin:
+					this.config.cors && this.config.cors.length !== 0
+						? this.config.cors
+						: '*',
 			})
 		);
 
@@ -150,12 +154,14 @@ class Server {
 	 * Loads all the endpoints from the endpoints folder and adds them to the server
 	 */
 	async loadEndpoints() {
-		const files = await findEndpoints();
+		const endpointPath = getEndpointPath(this.config);
+		const files = await findEndpoints(endpointPath);
+
 		// load all the endpoints
 		await Promise.all(
 			files.map(async (file) => {
 				const route = await import(file);
-				const endpointPath = await getEndpointPath();
+
 				let path =
 					route.path ||
 					file

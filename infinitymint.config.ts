@@ -36,6 +36,12 @@ const config = {
 			localhost: {
 				url: 'http://127.0.0.1:1998',
 			},
+			ganache: {
+				url: 'http://127.0.0.1:8545',
+				accounts: {
+					mnemonic: session.environment?.ganacheMnemonic,
+				},
+			},
 			ethereum: {
 				url: 'https://mainnet.infura.io/v3/ef00c000f793483bbf8506235ba4439b',
 				accounts: {
@@ -116,6 +122,45 @@ const config = {
 			classicScripts: ['/infinitymint-buildtools/'],
 		},
 		deploy: {},
+	},
+	magicMirror: {
+		/**
+		 * @type {import('ipfs-core').Options}
+		 */
+		ipfs: {},
+		/**
+		 * If non set, will look for the environment variable OPENAI_KEY to use as the api key
+		 * @type {import('openai').Configuration}
+		 */
+		openapi: {},
+
+		allowedExtensions: [
+			'xens',
+			'html',
+			'js',
+			'css',
+			'json',
+			'htm',
+			'svg',
+			'partial',
+		],
+		/**
+		 * used to get files from IPFS, can be set to local host to use the node that is inside of the server already
+		 */
+		ipfsEndpoint: 'https://dweb.link/api/v0',
+		/**
+		 * CORS allowed origins, can be set to an empty array or removed to allow all origins
+		 */
+		cors: [
+			'http://localhost:3000',
+			'https://webx.infinitymint.app',
+			'https://magicmirror.one',
+			'https://reflect.magicmirror.one',
+			'https://geocities.com',
+			'https://infinitymint.app',
+			'https://web.infinitymint.app',
+			'https://web-api.infinitymint.app',
+		],
 	},
 };
 

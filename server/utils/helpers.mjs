@@ -1,12 +1,4 @@
-import glob from 'glob'
-
-/**
- *
- * @returns
- */
-export const getConfig = async () => {
-  return await import('./../../webeth.config.js')
-}
+import glob from 'glob';
 
 /**
  *
@@ -15,8 +7,8 @@ export const getConfig = async () => {
  * @returns
  */
 export const success = (res, data) => {
-  res.status(200).json(data)
-}
+	res.status(200).json(data);
+};
 
 /**
  *
@@ -25,40 +17,39 @@ export const success = (res, data) => {
  * @returns
  */
 export const userError = (res, message) => {
-  res.status(400).json({
-    ok: false,
-    error: message
-  })
-  return false
-}
+	res.status(400).json({
+		ok: false,
+		error: message,
+	});
+	return false;
+};
 
 /**
- *
+ * @param {import('infinitymint/dist/app/interfaces').InfinityMintConfig} config
  * @returns
  */
-export const getEndpointPath = async () => {
-  const config = await getConfig()
-  let endpointPath = config.endpointPath || 'server/endpoints'
-  if (endpointPath[endpointPath.length - 1] !== '/') endpointPath += '/'
-  return process.cwd() + '/' + endpointPath
-}
+export const getEndpointPath = (config) => {
+	console.log(config);
+	let endpointPath = config.endpointPath || 'server/endpoints';
+	if (endpointPath[endpointPath.length - 1] !== '/') endpointPath += '/';
+	return process.cwd() + '/' + endpointPath;
+};
 
 /**
  * Fetches all endpoints
  * @returns
  */
-export const findEndpoints = async () => {
-  const endpointPath = await getEndpointPath()
-  // find endpoints
+export const findEndpoints = async (endpointPath) => {
+	// find endpoints
 
-  console.log(endpointPath + '**/*.mjs', 'glob')
+	console.log(endpointPath + '**/*.mjs', 'glob');
 
-  return await new Promise(async (resolve, reject) => {
-    glob(endpointPath + '**/*.mjs', (err, files) => {
-      if (err) {
-        reject(err)
-      }
-      resolve(files)
-    })
-  })
-}
+	return await new Promise(async (resolve, reject) => {
+		glob(endpointPath + '**/*.mjs', (err, files) => {
+			if (err) {
+				reject(err);
+			}
+			resolve(files);
+		});
+	});
+};
