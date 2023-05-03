@@ -1,47 +1,47 @@
 import config from './config';
 
 export const getEndpointHref = () => {
-  const isLocalhost = window.location.href.includes('localhost');
-  if (isLocalhost && config.useLocalApi) return config.localApiEndpoint;
-  else return config.apiEndpoint;
+	const isLocalhost = window.location.href.includes('localhost');
+	if (isLocalhost && config.useLocalApi) return config.localApiEndpoint;
+	else return config.apiEndpoint;
 };
 
 export const getEndpoint = (
-  type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns'
+	type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns' | 'wallet'
 ) => {
-  if (config.routes[type] === undefined)
-    throw new Error('invalid api type: ' + type);
+	if (config.routes[type] === undefined)
+		throw new Error('invalid api type: ' + type);
 
-  let route = config.routes[type];
+	let route = config.routes[type];
 
-  if (route[route.length - 1] !== '/') route += '/';
-  return getEndpointHref() + route;
+	if (route[route.length - 1] !== '/') route += '/';
+	return getEndpointHref() + route;
 };
 
 export const apiFetch = async (
-  type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns',
-  method: string,
-  data: any,
-  requestMethod: 'GET' | 'POST',
-  abortController?: AbortController
+	type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns',
+	method: string,
+	data: any,
+	requestMethod: 'GET' | 'POST',
+	abortController?: AbortController
 ) => {
-  let endPoint = getEndpoint(type);
-  requestMethod = requestMethod || 'GET';
+	let endPoint = getEndpoint(type);
+	requestMethod = requestMethod || 'GET';
 
-  const result = await fetch(endPoint + method, {
-    method: requestMethod,
-    headers: { 'Content-Type': 'application/json' },
-    signal: abortController?.signal,
-    body: JSON.stringify(data),
-  });
+	const result = await fetch(endPoint + method, {
+		method: requestMethod,
+		headers: { 'Content-Type': 'application/json' },
+		signal: abortController?.signal,
+		body: JSON.stringify(data),
+	});
 
-  if (result.status !== 200) {
-    let message = await result.json();
+	if (result.status !== 200) {
+		let message = await result.json();
 
-    if (message.message) message = message.message;
-    if (message.error) message = message.error;
-    throw new Error(message);
-  }
+		if (message.message) message = message.message;
+		if (message.error) message = message.error;
+		throw new Error(message);
+	}
 
-  return await result.json();
+	return await result.json();
 };
