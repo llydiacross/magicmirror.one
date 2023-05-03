@@ -758,6 +758,7 @@ module.exports = function (webpackEnv) {
 							}),
 						},
 					},
+					
 				}),
 				new webpack.ProvidePlugin({
 					Buffer: ['buffer', 'Buffer']
