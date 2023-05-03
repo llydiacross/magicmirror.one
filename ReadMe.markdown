@@ -1,6 +1,6 @@
-# InfinityMint Typescript Boilerplate by 0x0zAgency
+# MagicMirror by 0x0zAgency
 
-Want to get straight into InfinityMint? Well this is the easiest solution for you! With just one click you can setup the developer environment to work with InfinityMint.
+Welcome to the new web.
 
 ## 🗿 Requirements
 
@@ -27,6 +27,32 @@ In the case of apt - based distros,
 ### WINDOWS 🪟
 
 You'll have to use docker. See the [setup instructions on the Redis website](<https://redis.io/download/#redis-downloads>)
+
+
+Your `.env` will require a few extra keys for the Web2 endpoints.
+These include:
+
+- OPENAI_KEY
+- JWT_KEY
+- SIWE_SECRET
+- DATABASE_URL
+
+Your OpenAI key is your API token retrieved from [your dashboard on OpenAI's platform](<https://platform.openai.com>).
+
+The JWT key is any string, or a valid SHA512 key that is used to sign your JWT tokens. Make sure this is an __extremely__ strong phrase!
+
+The `SIWE_SECRET` is used for generating your Sign in with Ethereum sessions. This should also be a secure key!
+
+Finally, the database URL should be a Prisma valid string used for connecting to your database layer. This is determined by you.
+
+In summary, the bottom of your end should resemble something like this:
+
+```dotenv
+OPENAI_KEY="MYVERYSECRETSECUREKEYHERE"
+JWT_KEY="80HSODJKFLH340OHJKLDSFIHUKJLKHDKLH)£U$)£($)HR£HKJDKSJHLK"
+SIWE_SECRET="*KJSDFKALH34908OIHUJK0*(&^&%${ERFTGSHDKAIUHF)"
+DATABASE_URL="postgresql://user:user@localhost:5432/mydb?schema=public"
+```
 
 ## 🗿 Boilerplates & Starter-kits
 

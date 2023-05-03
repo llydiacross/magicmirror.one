@@ -42,7 +42,7 @@ export const post = async (request, response) => {
 
 				// We'll use this for actually authenticating the user to login.
 				const jwtToken = jwt.sign({ message }, process.env.JWT_KEY, {
-					expiresIn: 60 * 60,
+					expiresIn: '12h',
 				});
 
 				// Set the wallet's sessionID to redis.
