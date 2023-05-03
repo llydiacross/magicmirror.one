@@ -27,7 +27,6 @@ export const setEnsTextRecord = async (
 ) => {
 	let node = ethers.utils.namehash(ensDomain);
 	let abi = ['function setText(bytes32 node, string key, string value)'];
-	text = contentHash.encode(text, 'ipfs-ns');
 	const contract = new ethers.Contract(resolverAddress, abi, provider);
 	const contractWithSigner = contract.connect(signer);
 	const tx = await contractWithSigner.setText(node, record, text);
@@ -37,18 +36,17 @@ export const setEnsTextRecord = async (
 export const setENSContentHash = async (
 	ensDomain: string,
 	resolverAddress: string,
-	contentHash: string,
+	ipfsContentHash: string,
 	provider: ethers.providers.Provider,
-	signer: ethers.Signer
+	signer: ethers.Signer,
+	encoding: 'ipfs-ns' | 'ipns-ns' | 'swarm-ns' = 'ipfs-ns'
 ) => {
 	let node = ethers.utils.namehash(ensDomain);
 	let abi = ['function setContenthash(bytes32 node, bytes hash)'];
+	let hash = contentHash.encode(ipfsContentHash, encoding);
 	const contract = new ethers.Contract(resolverAddress, abi, provider);
 	const contractWithSigner = contract.connect(signer);
-	const tx = await contractWithSigner.setContenthash(
-		node,
-		ethers.utils.toUtf8Bytes('ipfs://' + contentHash)
-	);
+	const tx = await contractWithSigner.setContenthash(node, hash);
 	return tx;
 };
 
