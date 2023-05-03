@@ -13,6 +13,9 @@ export default function Update() {
 				overflow: 'scroll',
 			}}
 		>
+			{
+				//Mobile
+			}
 			<div className="block md:hidden">
 				<p
 					className="font-amatic"
@@ -41,6 +44,9 @@ export default function Update() {
 					Please be patient as we update the site.
 				</p>
 			</div>
+			{
+				//Desktop
+			}
 			<div className="hidden md:block">
 				<p
 					className="font-amatic"
