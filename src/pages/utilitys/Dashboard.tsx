@@ -1,9 +1,9 @@
 import FixedElements from '../../components/FixedElements';
-import { ethers } from 'ethers';
 import { useHistory } from 'react-router-dom';
 import { useRef, useState } from 'react';
+import { ethers } from 'ethers';
 
-export default function Converter() {
+export default function Dashboard() {
 	const history = useHistory();
 
 	const hash = useRef(null);
@@ -13,12 +13,9 @@ export default function Converter() {
 		setError(null);
 		try {
 			if (hash.current.value === '')
-				throw new Error('please enter a content hash');
-			let decoded: any;
-			if (hash.current.value.startsWith('0x')) {
-				hash.current.value = hash.current.value.slice(2);
-				decoded = ethers.utils.toUtf8String(hash.current.value);
-			} else decoded = ethers.utils.toUtf8Bytes(hash.current.value);
+				throw new Error('please enter a dns domain');
+
+			const decoded = ethers.utils.namehash(hash.current.value);
 			setDecoded(decoded);
 		} catch (e) {
 			console.log(e);
@@ -31,40 +28,45 @@ export default function Converter() {
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
-					<div className="max-w-xl">
+					<div className="min-w-screen">
 						<h1 className="mb-5 text-5xl font-bold text-black">
-							UTF8String / UTF8Bytes Converter
+							Utility Dashboard
 						</h1>
 						<p className="mb-5 text-black">
-							Please enter ither UTF8String or UTF8Bytes
+							Heres a list of utilitys you can use
 						</p>
-						<input
-							className="input input-bordered w-full mb-2"
-							ref={hash}
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') decode();
-							}}
-						></input>
-						{error === null ? (
-							<p className="mb-5 text-success mt-2">{decoded}</p>
-						) : (
-							<p className="mb-5 text-error mt-2">{error.message}</p>
-						)}
+
 						<button
 							className="btn btn-dark w-full"
 							onClick={() => {
-								decode();
+								history.push('/utilitys/namehash');
 							}}
 						>
-							Convert
+							Name Hash
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								history.push('/utilitys/');
+								history.push('/utilitys/contenthash');
 							}}
 						>
-							Dashboard
+							Content Hash
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
+								history.push('/utilitys/ens');
+							}}
+						>
+							ENS Lookup
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
+								history.push('/utilitys/converter');
+							}}
+						>
+							UTF8 Bytes / String Converter
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"

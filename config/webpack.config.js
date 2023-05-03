@@ -330,7 +330,7 @@ module.exports = function (webpackEnv) {
 				// Webpack > 5 does not polyfill core node modules.
 				// Events: require.resolve('events/') || false,
 				buffer: require.resolve('buffer'),
-				'process/browser': require.resolve('process/browser')
+				'process/browser': require.resolve('process/browser'),
 			},
 			plugins: [
 				// Prevents users from importing files from outside of src/ (or node_modules/).
@@ -758,14 +758,13 @@ module.exports = function (webpackEnv) {
 							}),
 						},
 					},
-					
 				}),
-				new webpack.ProvidePlugin({
-					Buffer: ['buffer', 'Buffer']
-				}),
-				new webpack.ProvidePlugin({
-					process: 'process/browser'
-				})
+			new webpack.ProvidePlugin({
+				Buffer: ['buffer', 'Buffer'],
+			}),
+			new webpack.ProvidePlugin({
+				process: 'process/browser',
+			}),
 		].filter(Boolean),
 		// Turn off performance processing because we utilize
 		// Our own hints via the FileSizeReporter
