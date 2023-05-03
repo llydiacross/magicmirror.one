@@ -6,7 +6,7 @@ Welcome to the new web.
 
 - MacOSX, Windows (XP, Vista, 7, 8, 10, 11), Debian 10, Ubuntu 20.04
 - Node **18.12.1** ~~or higher~~
-- ZSH, Fish or equivalent. **(Bash users may/not encounter issues.)**
+- Bash / ZSH. Either & any will do (as long as it's a POSIX-compliant shell.)
 - Redis
 - Any database of your choice (compatible with Prisma ORM)
 
@@ -33,7 +33,7 @@ load()
 This can (and should be in most circumstances) obtained from your package manager.
 In the case of apt - based distros,
 
-`sudo apt install -y redis-server redis-client`
+`sudo apt install -y redis`
 
 ### WINDOWS 🪟
 
@@ -148,7 +148,7 @@ Congratulations! You've set up your API server with InfinityMint.
 ## Using this template
 
 For developer convenience, [TailwindCSS](<https://tailwindcss.com>) is already plugged in with PostCSS.
-If you do not wish to use it, simply uninstall & remove the following lines within your `webpack.config.js`
+If you do not wish to use PostCSS, simply uninstall & remove the following lines within your `webpack.config.js`
 
 ```js
 // Starts at line 119
