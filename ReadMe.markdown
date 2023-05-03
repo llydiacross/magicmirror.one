@@ -5,7 +5,7 @@ Welcome to the new web.
 ## 🗿 Requirements
 
 - MacOSX, Windows (XP, Vista, 7, 8, 10, 11), Debian 10, Ubuntu 20.04
-- Node **18.12.1** or Higher
+- Node **18.12.1** ~~or higher~~
 - ZSH, Fish or equivalent. **(Bash users may/not encounter issues.)**
 - Redis
 - Any database of your choice (compatible with Prisma ORM)
