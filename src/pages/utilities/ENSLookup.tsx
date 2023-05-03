@@ -61,7 +61,7 @@ export default function ENSLookup() {
 				<div className="hero-content text-neutral-content bg-gray-500">
 					<div className="max-w-screen">
 						<h1 className="mb-5 text-5xl font-bold text-black text-center">
-							ENS Lookup
+							WHOIS
 						</h1>
 						<p className="mb-5 text-black text-center ">
 							Enter a domain name to retrieve the owner, and resolver address
@@ -137,7 +137,7 @@ export default function ENSLookup() {
 								decode();
 							}}
 						>
-							Convert
+							Look Up
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"

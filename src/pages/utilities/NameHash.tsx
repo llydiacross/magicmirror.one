@@ -52,7 +52,7 @@ export default function NameHash() {
 								decode();
 							}}
 						>
-							Decode
+							Calculate
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"

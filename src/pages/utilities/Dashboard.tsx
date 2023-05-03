@@ -58,7 +58,7 @@ export default function Dashboard() {
 								history.push('/utilities/ens');
 							}}
 						>
-							ENS Lookup
+							ENS WHOIS
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"
