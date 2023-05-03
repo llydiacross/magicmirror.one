@@ -4,8 +4,8 @@ WORKDIR /
 
 COPY . .
 
-RUN npm install
+RUN npm ci
 
-EXPOSE 3000
+EXPOSE 9090
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "server"]
