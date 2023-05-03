@@ -10,7 +10,7 @@ export default function Update() {
 				backgroundImage: 'url(/img/updatebg.gif)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
-				overflow: 'scroll',
+				overflow: 'hidden',
 			}}
 		>
 			{
