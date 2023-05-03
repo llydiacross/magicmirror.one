@@ -9,6 +9,9 @@ import NotFound from './pages/NotFound';
 import { AuthContextProvider } from './contexts/AuthContext';
 import Converter from './pages/utilitys/Converter';
 import ContentHash from './pages/utilitys/ContentHash';
+import NameHash from './pages/utilitys/NameHash';
+import Dashboard from './pages/utilitys/Dashboard';
+import ENSLookup from './pages/utilitys/ENSLookup';
 
 function App() {
 	return (
@@ -35,14 +38,23 @@ function App() {
 							<Route path="/🧱/:token">
 								<Viewer />
 							</Route>
-							<Route exact path="*">
-								<NotFound />
-							</Route>
-							<Route path="/utilitys/converter">
+							<Route exact path="/utilitys/converter">
 								<Converter />
 							</Route>
-							<Route path="/utilitys/contenthash">
+							<Route exact path="/utilitys/contenthash">
 								<ContentHash />
+							</Route>
+							<Route exact path="/utilitys/ens">
+								<ENSLookup />
+							</Route>
+							<Route exact path="/utilitys/">
+								<Dashboard />
+							</Route>
+							<Route exact path="/utilitys/namehash">
+								<NameHash />
+							</Route>
+							<Route exact path="*">
+								<NotFound />
 							</Route>
 						</Switch>
 					</BrowserRouter>
