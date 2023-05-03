@@ -87,6 +87,11 @@ class Server {
 		// for dev
 		this.app.use(morgan('dev'));
 
+		if (!process.env.SIWE_SECRET)
+			throw new Error(
+				'SIWE_SECRET not set in .env. Please make sure to set it. It can equal any random base64 string.'
+			);
+
 		// Integrating SIWE
 		this.app.use(
 			Session({
