@@ -152,8 +152,8 @@ dependencies:
     specifier: ^5.0.7
     version: 5.0.7
   infinitymint:
-    specifier: ^1.9.1
-    version: 1.9.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5)
+    specifier: ^1.10.1
+    version: 1.10.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5)
   infinitymint-client:
     specifier: ^1.9.0
     version: 1.9.0(@babel/plugin-syntax-flow@7.21.4)(@babel/plugin-transform-react-jsx@7.21.5)(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@testing-library/dom@9.2.0)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(postcss@8.4.23)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)
@@ -12555,7 +12555,7 @@ packages:
       http-browserify: 1.7.0
       https-browserify: 1.0.0
       identity-obj-proxy: 3.0.0
-      infinitymint: 1.9.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5)
+      infinitymint: 1.10.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5)
       jest: 27.5.1(ts-node@10.9.1)
       jest-resolve: 27.5.1
       jest-watch-typeahead: 1.1.0(jest@27.5.1)
@@ -12639,8 +12639,8 @@ packages:
       - webpack-plugin-serve
     dev: false
 
-  /infinitymint@1.9.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5):
-    resolution: {integrity: sha512-eKP9DLt/mFQtgOTtpE31Okx6vlgK7G0PNVoJokk4vQ+5UV8KIBy0bx+cLmTwDMX5gxrBl3DoOyBZq5V2ZLDm0A==}
+  /infinitymint@1.10.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(@nomicfoundation/hardhat-network-helpers@1.0.8)(@typechain/ethers-v5@10.2.0)(@typechain/hardhat@6.1.5)(@types/chai@4.3.5)(@types/mocha@10.0.1)(@types/node@16.18.25)(ethers@5.7.2)(hardhat-gas-reporter@1.0.9)(node-fetch@3.3.1)(solidity-coverage@0.8.2)(ts-node@10.9.1)(typechain@8.1.1)(typescript@4.9.5):
+    resolution: {integrity: sha512-Fv0lfm2mSvAIBAhKs5qJ65OycvzDZdB1pYM2iW1eDHtwWM1y7svvAoH6W4dWAU7H+a5mMJOS4622NREjbUxKWA==}
     hasBin: true
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 1.0.6(@nomiclabs/hardhat-ethers@2.2.3)(chai@4.3.7)(ethers@5.7.2)(hardhat@2.14.0)
@@ -20545,7 +20545,7 @@ packages:
   /signed-varint@2.0.1:
     resolution: {integrity: sha512-abgDPg1106vuZZOvw7cFwdCABddfJRz5akcCcchzTbhyhYnsG31y4AlZEgp315T7W3nQq5P4xeOm186ZiPVFzw==}
     dependencies:
-      varint: 5.0.0
+      varint: 5.0.2
     dev: false
 
   /simple-concat@1.0.1:
