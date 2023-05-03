@@ -21,26 +21,29 @@ export default function ENSLookup() {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const decode = async () => {
+		let domain = hash;
 		setError(null);
 		setLoading(true);
 		try {
-			if (hash === '') throw new Error('please enter an ENS domain');
+			if (domain === '') throw new Error('please enter an ENS domain');
 
-			const resolver = await context.web3Provider.getResolver(hash);
+			if (domain.indexOf('.eth') === -1) domain = domain + '.eth';
 
-			console.log('resolver created for ' + hash);
+			const resolver = await context.web3Provider.getResolver(domain);
+
+			console.log('resolver created for ' + domain);
 
 			if (resolver === null) {
-				throw new Error('No resolver found for "' + hash + '"');
+				throw new Error('No resolver found for "' + domain + '"');
 			}
 
 			let contentHash = await resolver.getContentHash();
 			let address = resolver.address;
-			let owner = await context.web3Provider.resolveName(hash);
+			let owner = await context.web3Provider.resolveName(domain);
 			let rawContentHash = await resolver._fetchBytes('0xbc1c58d1');
 
 			setRegistry({
-				domain: hash,
+				domain,
 				contentHash: contentHash,
 				address: address,
 				owner: owner,
