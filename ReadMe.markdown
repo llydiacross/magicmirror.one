@@ -32,6 +32,7 @@ In the case of apt - based distros,
 
 You'll have to use docker. See the [setup instructions on the Redis website](<https://redis.io/download/#redis-downloads>)
 
+### SETUP
 
 Your `.env` will require a few extra keys for the Web2 endpoints.
 These include:
@@ -101,6 +102,7 @@ apt install -y --no-recommends nodejs
 
 ```
 
+
 > __WARNING!!__ If you're trying to build your project and are stuck at downloading the `solc` compiler during an npm install, check your node version!! It __must__ be on 18.12.1.
 Check this with: `node -v`.
 
@@ -112,7 +114,6 @@ Your Nginx config should look something like this:
 ```nginx
 server {
     listen 80;
-    root /your/root;
     server_name api.example.com;
 
     location / {
