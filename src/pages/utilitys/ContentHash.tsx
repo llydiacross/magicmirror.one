@@ -1,5 +1,3 @@
-import React from 'react';
-import { ethers } from 'ethers';
 import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
 import contentHash from 'content-hash';
