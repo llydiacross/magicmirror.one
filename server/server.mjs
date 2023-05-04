@@ -81,6 +81,26 @@ export class Server {
 	config;
 
 	constructor(port = 9090) {
+		if (!process.env.SIWE_SECRET)
+			throw new Error(
+				'SIWE_SECRET not set in .env. Please make sure to set it. It can equal any random base64 string.'
+			);
+
+		if (!process.env.ALCHEMY_API_KEY)
+			throw new Error(
+				'ALCHEMY_API_KEY not set in .env. Please set your alchemy API key in the .env and start again.'
+			);
+
+		if (!process.env.OPENAI_API_KEY)
+			throw new Error(
+				'OPENAI_API_KEY not set in .env. Please set your openai API key in the .env and start again.'
+			);
+
+		if (!process.env.DATABASE_URL)
+			throw new Error(
+				'DATABASE_URL not set in .env. Please set your postgress database url in the .env and start again.'
+			);
+
 		this.app = express();
 		this.port = port;
 
@@ -101,11 +121,6 @@ export class Server {
 
 		// for dev
 		this.app.use(morgan('dev'));
-
-		if (!process.env.SIWE_SECRET)
-			throw new Error(
-				'SIWE_SECRET not set in .env. Please make sure to set it. It can equal any random base64 string.'
-			);
 
 		// Integrating SIWE
 		this.app.use(
@@ -148,7 +163,7 @@ export class Server {
 				this?.config?.magicMirror?.openapi?.apiKey
 					? this.config.magicMirror.openapi
 					: {
-							apiKey: process.env.OPENAI_KEY,
+							apiKey: process.env.OPENAI_API_KEY,
 					  }
 			)
 		);
