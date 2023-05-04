@@ -14,8 +14,7 @@ import { Alchemy, Network } from 'alchemy-sdk';
 import { PrismaClient } from '@prisma/client';
 // do ts node register
 import tsNode from 'ts-node';
-//for config type, dont use this use this.infinityMint.getConfigFile() instead
-import configType from '../infinitymint.config.ts';
+import { Configuration, OpenAIApi } from 'openai';
 
 tsNode.register({
 	transpileOnly: true,
@@ -75,9 +74,9 @@ export class Server {
 	 * @type {Alchemy}
 	 */
 	alchemy = null;
+
 	/**
-	 * Only accessible after start
-	 * @type {configType}
+	 * @type {import('infinitymint/dist/app/interfaces').InfinityMintConfig}
 	 */
 	config;
 
@@ -88,7 +87,6 @@ export class Server {
 		//helmet stuff for security
 		this.app.use(helmet());
 
-		// allows CORS headers to work
 		this.app.use((_, res, next) => {
 			res.header(
 				'Access-Control-Allow-Headers',

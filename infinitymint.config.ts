@@ -1,9 +1,9 @@
-import { debugLog, readGlobalSession } from 'infinitymint/dist/app/helpers';
+import { readGlobalSession } from 'infinitymint/dist/app/helpers';
 
 //the session
 let session = readGlobalSession();
 //please visit docs.infinitymint.app
-const config = {
+export const config = {
 	/** 
 	telnet: {
 		anonymous: true,
