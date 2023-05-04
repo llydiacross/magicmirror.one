@@ -35,25 +35,6 @@ export default function Properties() {
 			'POST'
 		);
 
-		console.log(result);
-
-		//basically if theres no NFTS returned by they do have an ENS address it means they are a manager, but not the owner of this NFT
-		if (
-			context.ensAddresses &&
-			result.nfts &&
-			result.nfts.length === 0 &&
-			context.ensAddresses.length !== 0 &&
-			context.ensAddresses[0] !== null
-		)
-			result.nfts = context.ensAddresses.map((address) => ({
-				domainName: address,
-				nftMedia: [{ raw: '/img/0x0zLogo.jpg' }],
-				manager: true,
-				imported: false,
-				nftDescription:
-					'This is your default domain. It has been auto-imported for you!',
-			}));
-
 		setENS(result.nfts || []);
 		setCount(result.nfts?.length || 0);
 	};
@@ -151,16 +132,6 @@ export default function Properties() {
 							setSearchTerm(e.target.value);
 						}}
 					/>
-					<button
-						disabled={loading || !loginContext.isSignedIn}
-						data-loading={loading}
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-						onClick={() => {
-							history.push('/ens/new');
-						}}
-					>
-						Add
-					</button>
 					<button
 						disabled={loading || !loginContext.isSignedIn}
 						data-loading={loading}
@@ -312,17 +283,20 @@ export default function Properties() {
 									<div className="col-span-1 md:col-span-3 lg:col-span-5 row-span-1">
 										<div className="flex flex-col justify-center items-center">
 											<div className="text-2xl font-bold">
-												No ENS addresses found
+												No ENS addresses found!
 											</div>
-											<div className="text-sm text-gray-500">
+											<div className="text-sm text-gray-500 text-center">
 												We use an external API to
 												collect your mints which can
-												sometimes be incorrect. If you
-												are sure that your current
-												wallet address has mints, please
-												click the add button below to
-												add a custom ENS address to your
-												portfolio.
+												sometimes be incorrect. Please
+												be aware that this only shows{' '}
+												<u>
+													ENS properties that you own!
+												</u>
+												<br />
+												Press the 'Fetch' button next to
+												the search bar to fetch your ENS
+												properties.
 											</div>
 											<div className="flex flex-row gap-2 mt-2">
 												<button
@@ -344,16 +318,6 @@ export default function Properties() {
 													}}
 												>
 													Refresh
-												</button>
-												<button
-													disabled={
-														loading ||
-														!loginContext.isSignedIn
-													}
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-													onClick={() => {}}
-												>
-													Add
 												</button>
 											</div>
 										</div>
