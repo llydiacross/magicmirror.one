@@ -53,7 +53,7 @@ export const userError = (res, message) => {
  * @returns
  */
 export const getEndpointPath = (config) => {
-	let endpointPath = config.endpointPath || 'server/endpoints';
+	let endpointPath = config?.magicMirror?.endpointPath || 'server/endpoints';
 	if (endpointPath[endpointPath.length - 1] !== '/') endpointPath += '/';
 	return process.cwd() + '/' + endpointPath;
 };

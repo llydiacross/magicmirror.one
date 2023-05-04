@@ -9,13 +9,13 @@ import dotenv from 'dotenv';
 import Session from 'express-session';
 import { create } from 'ipfs-http-client';
 import { createClient } from 'redis';
-// Setup: npm install alchemy-sdk
 import { Alchemy, Network } from 'alchemy-sdk';
-
 //prisma
 import { PrismaClient } from '@prisma/client';
 // do ts node register
 import tsNode from 'ts-node';
+//for config type, dont use this use this.infinityMint.getConfigFile() instead
+import configType from '../infinitymint.config.ts';
 
 tsNode.register({
 	transpileOnly: true,
@@ -51,6 +51,10 @@ export class Server {
 	 **/
 	prisma;
 	/**
+	 * @type {import('openai').OpenAIApi}
+	 */
+	openAI;
+	/**
 	 * @type {number}
 	 * */
 	port;
@@ -73,19 +77,15 @@ export class Server {
 	alchemy = null;
 	/**
 	 * Only accessible after start
-	 * @type {import('../webeth.config')}
+	 * @type {configType}
 	 */
 	config;
 
 	constructor(port = 9090) {
 		this.app = express();
 		this.port = port;
-		this.alchemy = new Alchemy({
-			apiKey: process.env.ALCHEMY_API_KEY,
-			network: Network.ETH_MAINNET,
-		});
-		this.redisClient = createClient();
-		this.prisma = new PrismaClient();
+
+		//helmet stuff for security
 		this.app.use(helmet());
 
 		// allows CORS headers to work
@@ -122,51 +122,62 @@ export class Server {
 	}
 
 	async start() {
+		//load InfinityMint
 		const wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
 		 */
-		const infinitymint = wrapper.getSync('infinitymint');
-
-		const infinityConsole = await infinitymint.load({
+		this.infinityConsole = await wrapper.getSync('infinitymint').load({
 			dontDraw: true,
 			scriptMode: true,
 			startExpress: false,
 			startGanache: false,
 			test: true, // will expose all logs
 		});
-
-		this.infinityConsole = infinityConsole;
-		this.config =
-			this.infinityConsole.Helpers.getConfigFile()?.magicMirror || {};
-
+		this.config = this.infinityConsole.Helpers.getConfigFile();
 		this.ipfs = create({
-			url: this.config.ipfsEndpoint || 'https://dweb.link/api/v0',
+			url: this.config.magicMirror.ipfsEndpoint || 'https://dweb.link/api/v0',
 		});
+		this.alchemy = new Alchemy({
+			apiKey: process.env.ALCHEMY_API_KEY,
+			network: Network.ETH_MAINNET,
+		});
+		this.redisClient = createClient();
+		this.prisma = new PrismaClient();
+		this.openAI = new OpenAIApi(
+			new Configuration(
+				this?.config?.magicMirror?.openapi &&
+				this?.config?.magicMirror?.openapi?.apiKey
+					? this.config.magicMirror.openapi
+					: {
+							apiKey: process.env.OPENAI_KEY,
+					  }
+			)
+		);
 
 		// set CORS after config has been loaded
 		this.app.use(
 			cors({
 				origin:
-					this.config.cors && this.config.cors.length !== 0
-						? this.config.cors
+					this.config.magicMirror.cors &&
+					this.config.magicMirror.cors.length !== 0
+						? this.config.magicMirror.cors
 						: '*',
 			})
 		);
 
+		//wait for redis to connect
+		await this.redisClient.connect();
 		// load all the endpoints
 		await this.loadEndpoints();
 
+		// handle redis errors
 		this.redisClient.on('err', (err) => {
 			console.error(err.stack);
 			process.exit(129);
 		});
 
-		this.redisClient
-			.connect()
-			.then(() => console.info('[RDB]: Redis client connected!'))
-			.catch((err) => console.error(err.stack));
-
+		//start listening
 		this.app.listen(this.port, () => {
 			console.log(`Server listening on port ${this.port}`);
 		});
