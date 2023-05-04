@@ -7,10 +7,10 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	if (isLoggedIn(req, server) !== true)
+	if ((await isLoggedIn(req, server)) !== true)
 		return success(res, {
 			verified: false,
-			reason: isLoggedIn(req, server),
+			reason: await isLoggedIn(req, server),
 		});
 
 	return success(res, {

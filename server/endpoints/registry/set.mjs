@@ -7,8 +7,8 @@ import { isLoggedIn, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	if (isLoggedIn(req, res) !== true)
-		return userError(res, isLoggedIn(req, res));
+	if ((await isLoggedIn(req, res)) !== true)
+		return userError(res, await isLoggedIn(req, res));
 
 	let domainName = req.body.domainName;
 	let registry = req.body.registry;

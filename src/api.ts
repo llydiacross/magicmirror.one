@@ -56,6 +56,7 @@ export const apiFetch = async (
 				: data
 				? JSON.stringify(data)
 				: JSON.stringify({}),
+		credentials: 'include',
 	});
 
 	if (result.status !== 200) {

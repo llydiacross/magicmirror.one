@@ -13,7 +13,7 @@ export interface loginContextType {
 	checkLogin: Function;
 }
 
-export const loginContext = createContext({
+export const LoginContext = createContext({
 	login: null,
 	isSignedIn: false,
 	loaded: false,
@@ -33,7 +33,7 @@ function LoginContextProvider({ children }) {
 	} = useLogin();
 
 	return (
-		<loginContext.Provider
+		<LoginContext.Provider
 			value={
 				{
 					login,
@@ -51,11 +51,11 @@ function LoginContextProvider({ children }) {
 			) : (
 				<Header
 					theme="acid"
-					initialText="Initializing Web3 Connection..."
+					initialText="Logging Into MagicMirror..."
 					showFinder={false}
 				/>
 			)}
-		</loginContext.Provider>
+		</LoginContext.Provider>
 	);
 }
 

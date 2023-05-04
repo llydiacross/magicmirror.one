@@ -24,10 +24,13 @@ export const success = (res, data) => {
  * @param {import('../server.mjs').Server} server
  * @returns
  */
-export const isLoggedIn = (req, server) => {
+export const isLoggedIn = async (req, server) => {
 	if (!req?.session?.siwe) return 'You are not signed in with SIWE!';
 
-	if (req?.sessionID !== server.redisClient.get(req.session?.siwe?.address))
+	if (
+		req?.sessionID !==
+		(await server.redisClient.get(req.session?.siwe?.address))
+	)
 		return 'Security Issue: SessionID is attached to different address';
 
 	return true;

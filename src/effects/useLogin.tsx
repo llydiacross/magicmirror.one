@@ -10,9 +10,8 @@ async function createSiweMessage(
 	address: any,
 	statement: string
 ): Promise<string> {
-	const response = await fetch(getEndpointHref() + 'nonce', {
-		credentials: 'include',
-	});
+	const response = await fetch(getEndpointHref() + 'wallet/nonce');
+	let json = await response.json();
 	const message = new SiweMessage({
 		domain,
 		address,
@@ -20,7 +19,7 @@ async function createSiweMessage(
 		uri: origin,
 		version: '1',
 		chainId: 1,
-		nonce: await response.text(),
+		nonce: json.nonce,
 	});
 
 	return message.prepareMessage();
@@ -81,11 +80,11 @@ export const useLogin = () => {
 	};
 
 	const login = async () => {
-		setLoaded(true);
+		setLoaded(false);
 		setError(null);
 
 		if (!web3Context.walletAddress || !web3Context.walletConnected) {
-			setLoaded(false);
+			setLoaded(true);
 			setIsSignedIn(false);
 			setError('Please connect your wallet');
 			return;
@@ -96,28 +95,28 @@ export const useLogin = () => {
 			'Sign in with Ethereum to the app.'
 		);
 		const signature = await web3Context.signer.signMessage(message);
-		const response = await fetch(getEndpointHref() + 'login', {
+		const response = await fetch(getEndpointHref() + 'wallet/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ message, signature }),
 			credentials: 'include',
+			body: JSON.stringify({ message, signature }),
 		});
 
 		if (!response.ok) {
-			setLoaded(false);
+			setLoaded(true);
 			setError(response.body);
 			return;
 		}
 
 		if (response.status === 200) {
-			setLoaded(false);
+			setLoaded(true);
 			setIsSignedIn(true);
 			setAddress(web3Context.walletAddress);
 			return;
 		} else {
-			setLoaded(false);
+			setLoaded(true);
 			setError('Something went wrong');
 			return;
 		}

@@ -1,7 +1,7 @@
 import pkg from 'siwe';
 import jwt from 'jsonwebtoken';
 import server from '../../server.mjs';
-import { userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 const { SiweMessage, ErrorTypes } = pkg;
 
 /**
@@ -20,24 +20,29 @@ export const post = async (req, res) => {
 		});
 		req.session.siwe = message;
 		req.session.cookie.expires = new Date(message.expirationTime);
+		//save the session
 		await new Promise((resolve) => req.session.save(resolve));
-
 		//set the current address to equal the current sessionId, we do this to prevent session hijacking
-		server.redisClient.set(message.address, req.sessionID);
+		await server.redisClient.set(message.address, req.sessionID);
 
 		//add them to the database if they don't exist
 		if (
-			server.prisma.user.count({
+			!(await server.prisma.user.count({
 				where: {
 					address: message.address,
 				},
-			}) === 0
+			}))
 		)
-			server.prisma.user.create({
+			await server.prisma.user.create({
 				data: {
 					address: message.address,
 				},
 			});
+
+		return success(res, {
+			verified: true,
+			address: message.address,
+		});
 	} catch (err) {
 		req.session.siwe = null;
 		req.session.nonce = null;

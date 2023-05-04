@@ -10,6 +10,8 @@ import config from '../config';
 import { getFastAvatar } from '../helpers';
 import { Web3Context } from '../contexts/web3Context';
 import UpdateBanner from '../components/UpdateBanner';
+import LoginModal from '../modals/LoginModal';
+import { LoginContext } from '../contexts/loginContext';
 
 export default function Index() {
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -18,6 +20,7 @@ export default function Index() {
 	const [backgroundImage, setBackgroundImage] = useState(null);
 	const ensContext = useContext(ENSContext);
 	const context = useContext(Web3Context);
+	const loginContext = useContext(LoginContext);
 	const cooldown = useRef(null);
 
 	useEffect(() => {
@@ -118,6 +121,12 @@ export default function Index() {
 				hidden={!shouldShowSettings}
 				onHide={() => {
 					setShouldShowSettings(false);
+				}}
+			/>
+			<LoginModal
+				hidden={loginContext.isSignedIn || !context.walletConnected}
+				onLogin={async () => {
+					await loginContext.login();
 				}}
 			/>
 		</div>
