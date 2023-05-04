@@ -47,7 +47,8 @@ export default function Properties() {
 			result.nfts = context.ensAddresses.map((address) => ({
 				domainName: address,
 				nftMedia: [{ raw: '/img/0x0zLogo.jpg' }],
-				description: 'This is your default domain',
+				nftDescription:
+					'This is your default domain. It has been auto-imported for you!',
 			}));
 
 		setENS(result.nfts || []);
