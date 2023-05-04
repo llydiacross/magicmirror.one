@@ -5,8 +5,6 @@ export default function UpdateBanner() {
 		<div
 			className="w-full h-[64px] z-0 bg-white flex-col md:flex-row"
 			style={{
-				//make teh background a yellow gradient which starts from the bottom
-				//dark red
 				backgroundImage: 'url(/img/updatebg.gif)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
@@ -21,7 +19,6 @@ export default function UpdateBanner() {
 					className="font-amatic"
 					style={{
 						fontSize: '2.6rem',
-						//turn it a little
 						textAlign: 'left',
 						paddingLeft: '2rem',
 						paddingBottom: '1rem',
@@ -52,7 +49,6 @@ export default function UpdateBanner() {
 					className="font-amatic"
 					style={{
 						fontSize: '2.6rem',
-						//turn it a little
 						textAlign: 'left',
 						paddingLeft: '2rem',
 						paddingBottom: '1rem',
@@ -67,22 +63,16 @@ export default function UpdateBanner() {
 					className="font-apocalypse"
 					style={{
 						fontSize: '4.25rem',
-						//turn it a little
 						textAlign: 'left',
 						paddingLeft: '4.5rem',
 						paddingBottom: '1rem',
 						marginTop: '-94px',
-						//make the text colour a bright yellow and orange gradiant
 						backgroundImage: 'linear-gradient(to right, red, orange)',
-						//clip the backgorund to the text
 						WebkitBackgroundClip: 'text',
 						backgroundClip: 'text',
-						//make the text transparent
 						WebkitTextFillColor: 'transparent',
 						clipRule: 'evenodd',
-						//give the text a black outline
 						textShadow: '0 0 2px rgba(0,0,0,0.1)',
-						//give the text a stroke
 						WebkitTextStroke: '0.5px #000000',
 					}}
 				>
@@ -92,7 +82,6 @@ export default function UpdateBanner() {
 					style={{
 						fontSize: '1rem',
 						width: '560px',
-						//turn it a little
 						textAlign: 'left',
 						marginLeft: '32.5rem',
 						padding: '12px',

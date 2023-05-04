@@ -13,7 +13,7 @@ export default function Converter() {
 		setError(null);
 		try {
 			if (hash.current.value === '')
-				throw new Error('please enter a content hash');
+				throw new Error('please enter a value to convert');
 			let decoded: any;
 			if (hash.current.value.startsWith('0x')) {
 				hash.current.value = hash.current.value.slice(2);
