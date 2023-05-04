@@ -111,14 +111,7 @@ export default function Properties() {
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 hidden md:block">
 					<div className="text-2xl font-bold">Your Properties</div>
-					<div className="text-sm text-gray-500">
-						Total:{' '}
-						{count === 0 &&
-						context?.ensAddresses?.length !== 0 &&
-						context?.ensAddresses[0] !== null
-							? context?.ensAddresses?.length
-							: count}
-					</div>
+					<div className="text-sm text-gray-500">Total: {count}</div>
 				</div>
 				<div className="flex flex-row gap-2 pr-0 md:pr-4">
 					<input
