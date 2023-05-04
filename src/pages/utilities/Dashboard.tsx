@@ -74,7 +74,7 @@ export default function Dashboard() {
 								history.push('/utilities/user');
 							}}
 						>
-							User Overview (need to be logged in)
+							Current User Checker
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"

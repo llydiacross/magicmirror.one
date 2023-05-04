@@ -19,8 +19,7 @@ export default function User() {
 				);
 
 			let result = await apiFetch('user', 'me', null, 'GET');
-			result = await result.json();
-			setUser(result);
+			setUser(result.user);
 		} catch (e) {
 			console.log(e);
 			setError(e);
@@ -31,12 +30,12 @@ export default function User() {
 		<>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
-				<div className="hero-content text-center text-neutral-content bg-gray-500">
+				<div className="hero-content text-neutral-content bg-gray-500">
 					<div className="max-w-xl">
-						<h1 className="mb-5 text-5xl font-bold text-black">
+						<h1 className="mb-5 text-5xl font-bold text-black text-center ">
 							Current User Checker
 						</h1>
-						<p className="mb-5 text-black">
+						<p className="mb-5 text-black text-center ">
 							This will require you to be currently logged in to
 							magic mirror. Returns your user row from the
 							database.
@@ -54,7 +53,13 @@ export default function User() {
 													className="mb-5 text-success mt-2"
 													key={key}
 												>
-													{key}: {user[key]}
+													{key}:{' '}
+													{typeof user[key] ===
+													'object'
+														? JSON.stringify(
+																user[key]
+														  )
+														: user[key]}
 												</p>
 											);
 										})}
