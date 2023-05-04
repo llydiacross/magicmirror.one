@@ -32,7 +32,7 @@ dotenv.config({
 /**
  * Simple server class
  */
-class Server {
+export class Server {
 	/**
 	 * @type {import('infinitymint/dist/app/console').InfinityConsole}
 	 * */

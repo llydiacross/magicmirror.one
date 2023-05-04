@@ -22,6 +22,9 @@ export const post = async (req, res) => {
 		req.session.cookie.expires = new Date(message.expirationTime);
 		await new Promise((resolve) => req.session.save(resolve));
 
+		//set the current address to equal the current sessionId, we do this to prevent session hijacking
+		server.redisClient.set(message.address, req.sessionID);
+
 		//add them to the database if they don't exist
 		if (
 			server.prisma.user.count({

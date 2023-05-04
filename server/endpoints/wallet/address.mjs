@@ -7,16 +7,7 @@ import { success, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const get = (req, res) => {
-	if (!req?.session?.siwe)
-		return userError(res, 'You are not signed in with SIWE!');
-
-	if (req?.sessionID !== server.redisClient.get(req.session?.siwe?.address)) {
-		return userError(
-			res,
-			'Security Issue: SessionID is attached to different address'
-		);
-	}
-
+	if (!isLoggedIn(req, res)) return userError(res, isLoggedIn(req, res));
 	return success(res, {
 		address: res.session.siwe.address,
 	});
