@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 import Session from 'express-session';
 import { create } from 'ipfs-http-client';
 import { createClient } from 'redis';
+// Setup: npm install alchemy-sdk
+import { Alchemy, Network } from 'alchemy-sdk';
 
 // do ts node register
 import tsNode from 'ts-node';
@@ -57,6 +59,11 @@ class Server {
 	 * @type {Array}
 	 */
 	routes = [];
+
+	/**
+	 * @type {Alchemy}
+	 */
+	alchemy = null;
 	/**
 	 * Only accessible after start
 	 * @type {import('../webeth.config')}
@@ -66,7 +73,10 @@ class Server {
 	constructor(port = 9090) {
 		this.app = express();
 		this.port = port;
-
+		this.alchemy = new Alchemy({
+			apiKey: process.env.ALCHEMY_API_KEY,
+			network: Network.ETH_MAINNET,
+		});
 		this.redisClient = createClient();
 
 		this.app.use(helmet());

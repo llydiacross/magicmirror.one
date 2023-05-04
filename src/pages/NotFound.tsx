@@ -26,7 +26,7 @@ export default function NotFound() {
 						</p>
 						<img src="/img/404.webp" width="618" height="790"></img>
 						<button
-							className="btn btn-dark w-full"
+							className="btn btn-dark w-full mt-2"
 							onClick={() => {
 								history.push('/');
 							}}

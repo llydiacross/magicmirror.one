@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Update() {
+export default function UpdateBanner() {
 	return (
 		<div
 			className="w-full h-[64px] z-0 bg-white flex-col md:flex-row"

@@ -9,7 +9,7 @@ import storage from '../storage';
 import config from '../config';
 import { getFastAvatar } from '../helpers';
 import { Web3Context } from '../contexts/web3Context';
-import Update from '../components/Update';
+import UpdateBanner from '../components/UpdateBanner';
 
 export default function Index() {
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -54,7 +54,7 @@ export default function Index() {
 				'forest'
 			}
 		>
-			<Update />
+			<UpdateBanner />
 			<div
 				className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
 				hidden={!shouldShowBackdrop}
