@@ -13,7 +13,7 @@
     "start": "concurrently \"npm run react\" \"npm run server:dev\"",
     "react": "node react/start.js",
     "build": "node react/build.js",
-    "console": "npx tsc && npx hardhat compile && npx ts-node index.ts",
+    "console": "npx ts-node index.ts",
     "server": "npx pm2 start server/server.mjs",
     "server:dev": "nodemon server/server.mjs --watch /server/"
   },

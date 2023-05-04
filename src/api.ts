@@ -7,7 +7,16 @@ export const getEndpointHref = () => {
 };
 
 export const getEndpoint = (
-	type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns' | 'wallet'
+	type:
+		| 'chat'
+		| 'gpt3'
+		| 'search'
+		| 'nft'
+		| 'ipfs'
+		| 'ipns'
+		| 'wallet'
+		| 'ens'
+		| 'user'
 ) => {
 	if (config.routes[type] === undefined)
 		throw new Error('invalid api type: ' + type);
@@ -19,7 +28,16 @@ export const getEndpoint = (
 };
 
 export const apiFetch = async (
-	type: 'chat' | 'gpt3' | 'search' | 'nft' | 'ipfs' | 'ipns',
+	type:
+		| 'chat'
+		| 'gpt3'
+		| 'search'
+		| 'nft'
+		| 'ipfs'
+		| 'ipns'
+		| 'wallet'
+		| 'ens'
+		| 'user',
 	method: string,
 	data: any,
 	requestMethod: 'GET' | 'POST',
@@ -32,7 +50,12 @@ export const apiFetch = async (
 		method: requestMethod,
 		headers: { 'Content-Type': 'application/json' },
 		signal: abortController?.signal,
-		body: JSON.stringify(data),
+		body:
+			requestMethod === 'GET'
+				? undefined
+				: data
+				? JSON.stringify(data)
+				: JSON.stringify({}),
 	});
 
 	if (result.status !== 200) {

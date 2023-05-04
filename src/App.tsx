@@ -6,7 +6,7 @@ import Index from './pages/Index';
 import Viewer from './pages/Viewer';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound';
-import { AuthContextProvider } from './contexts/AuthContext';
+import LoginContextProvider from './contexts/loginContext';
 import Converter from './pages/utilities/Converter';
 import ContentHash from './pages/utilities/ContentHash';
 import NameHash from './pages/utilities/NameHash';
@@ -15,8 +15,8 @@ import ENSLookup from './pages/utilities/ENSLookup';
 
 function App() {
 	return (
-		<AuthContextProvider>
-			<Web3ContextProvider>
+		<Web3ContextProvider>
+			<LoginContextProvider>
 				<ENSContextProvider>
 					<BrowserRouter>
 						<Switch>
@@ -59,8 +59,8 @@ function App() {
 						</Switch>
 					</BrowserRouter>
 				</ENSContextProvider>
-			</Web3ContextProvider>
-		</AuthContextProvider>
+			</LoginContextProvider>
+		</Web3ContextProvider>
 	);
 }
 

@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import { SiweMessage } from 'siwe';
-import { useState } from 'react';
-import { useAuthContext } from './useAuthContext';
-import { getEndpointHref } from '../api';
+import { useContext, useEffect, useState } from 'react';
+import { apiFetch, getEndpointHref } from '../api';
+import { Web3Context } from '../contexts/web3Context';
 
 const domain = window.location.host;
 
@@ -28,21 +28,74 @@ async function createSiweMessage(
 
 export const useLogin = () => {
 	const [error, setError] = useState(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const provider = new ethers.providers.Web3Provider(window.ethereum);
-	const signer = provider.getSigner();
-	const { state, dispatch } = useAuthContext();
+	const [loaded, setLoaded] = useState(false);
+	const [isSignedIn, setIsSignedIn] = useState(false);
+	const [isIncorrectAddress, setIsIncorrectAddress] = useState(false);
+	const [address, setAddress] = useState(null); // [1]
+	const web3Context = useContext(Web3Context);
 
-	const login = async (wallet) => {
-		setIsLoading(true);
+	useEffect(() => {
+		setLoaded(false);
 		setError(null);
 
+		if (!web3Context.loaded) return;
+
+		checkLogin()
+			.then((result) => {
+				if (!result) {
+					setIsSignedIn(false);
+					console.log('not signed in');
+					return;
+				}
+
+				(async () => {
+					if ((await getAddress()) !== web3Context.walletAddress) {
+						setIsSignedIn(false);
+						setError('Incorrect address');
+						setIsIncorrectAddress(true);
+						setLoaded(true);
+						console.log('incorrect address');
+						return;
+					}
+
+					console.log('signed in & valid');
+					setIsSignedIn(result);
+					setAddress(web3Context.walletAddress);
+					setIsIncorrectAddress(false);
+					setLoaded(true);
+				})();
+			})
+			.finally(() => {
+				setLoaded(true);
+			});
+	}, [web3Context.loaded]);
+
+	const checkLogin = async () => {
+		let result = await apiFetch('wallet', 'verify', null, 'GET');
+		return result.verified;
+	};
+
+	const getAddress = async () => {
+		let result = await apiFetch('wallet', 'verify', null, 'GET');
+		return result?.address;
+	};
+
+	const login = async () => {
+		setLoaded(true);
+		setError(null);
+
+		if (!web3Context.walletAddress || !web3Context.walletConnected) {
+			setLoaded(false);
+			setIsSignedIn(false);
+			setError('Please connect your wallet');
+			return;
+		}
+
 		const message = await createSiweMessage(
-			await state.walletAddress,
+			web3Context.walletAddress,
 			'Sign in with Ethereum to the app.'
 		);
-		const signature = await signer.signMessage(message);
-
+		const signature = await web3Context.signer.signMessage(message);
 		const response = await fetch(getEndpointHref() + 'login', {
 			method: 'POST',
 			headers: {
@@ -52,19 +105,31 @@ export const useLogin = () => {
 			credentials: 'include',
 		});
 
-		console.log(response);
-
 		if (!response.ok) {
-			setIsLoading(false);
+			setLoaded(false);
 			setError(response.body);
 			return;
 		}
 
 		if (response.status === 200) {
-			dispatch({ type: 'LOGIN', payload: response });
-			setIsLoading(false);
+			setLoaded(false);
+			setIsSignedIn(true);
+			setAddress(web3Context.walletAddress);
+			return;
+		} else {
+			setLoaded(false);
+			setError('Something went wrong');
+			return;
 		}
 	};
 
-	return { login, isLoading, error };
+	return {
+		login,
+		loaded,
+		isSignedIn,
+		error,
+		address,
+		checkLogin,
+		isIncorrectAddress,
+	};
 };
