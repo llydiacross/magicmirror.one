@@ -7,7 +7,6 @@ import LoginModal from '../modals/LoginModal';
 import { Web3Context } from '../contexts/web3Context';
 import { LoginContext } from '../contexts/loginContext';
 import { apiFetch } from '../api';
-import Hero from '../components/Hero';
 import { useHistory } from 'react-router-dom';
 import Loading from '../components/Loading';
 
