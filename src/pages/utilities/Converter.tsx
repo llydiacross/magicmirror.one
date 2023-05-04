@@ -16,9 +16,11 @@ export default function Converter() {
 				throw new Error('please enter a value to convert');
 			let decoded: any;
 			if (hash.current.value.startsWith('0x')) {
-				hash.current.value = hash.current.value.slice(2);
 				decoded = ethers.utils.toUtf8String(hash.current.value);
-			} else decoded = ethers.utils.toUtf8Bytes(hash.current.value);
+			} else
+				decoded = ethers.utils.hexlify(
+					ethers.utils.toUtf8Bytes(hash.current.value)
+				);
 			setDecoded(decoded);
 		} catch (e) {
 			console.log(e);
@@ -48,7 +50,9 @@ export default function Converter() {
 						{error === null ? (
 							<p className="mb-5 text-success mt-2">{decoded}</p>
 						) : (
-							<p className="mb-5 text-error mt-2">{error.message}</p>
+							<p className="mb-5 text-error mt-2">
+								{error.message}
+							</p>
 						)}
 						<button
 							className="btn btn-dark w-full"

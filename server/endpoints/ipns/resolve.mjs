@@ -23,7 +23,7 @@ export const post = async (req, res) => {
 
 	let path;
 	for await (const name of result) {
-		console.log(path);
+		path = name;
 	}
 
 	if (path === undefined)
