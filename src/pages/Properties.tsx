@@ -35,6 +35,21 @@ export default function Properties() {
 			'POST'
 		);
 
+		console.log(result);
+
+		if (
+			context.ensAddresses &&
+			result.nfts &&
+			result.nfts.length === 0 &&
+			context.ensAddresses.length !== 0 &&
+			context.ensAddresses[0] !== null
+		)
+			result.nfts = context.ensAddresses.map((address) => ({
+				domainName: address,
+				nftMedia: [{ raw: '/img/0x0zLogo.jpg' }],
+				description: 'This is your default domain',
+			}));
+
 		setENS(result.nfts || []);
 		setCount(result.nfts?.length || 0);
 	};
@@ -85,6 +100,14 @@ export default function Properties() {
 						>
 							Utilities
 						</button>
+						<button
+							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+							onClick={() => {
+								history.push('/ide');
+							}}
+						>
+							DREAM🎨.ETH STUDIO
+						</button>
 					</div>
 				</div>
 			</div>
@@ -103,7 +126,14 @@ export default function Properties() {
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 hidden md:block">
 					<div className="text-2xl font-bold">Your Properties</div>
-					<div className="text-sm text-gray-500">Total: {count}</div>
+					<div className="text-sm text-gray-500">
+						Total:{' '}
+						{count === 0 &&
+						context?.ensAddresses?.length !== 0 &&
+						context?.ensAddresses[0] !== null
+							? context?.ensAddresses?.length
+							: count}
+					</div>
 				</div>
 				<div className="flex flex-row gap-2 pr-0 md:pr-4">
 					<input
@@ -143,7 +173,9 @@ export default function Properties() {
 				</div>
 			</div>
 			{loading ? (
-				<Loading />
+				<div className="p-2">
+					<Loading showLoadingBar={false} />
+				</div>
 			) : (
 				<>
 					<div className="p-2 hidden md:block">
@@ -204,7 +236,10 @@ export default function Properties() {
 											</div>
 											{item.nftMedia ? (
 												<img
-													src={item.nftMedia[0].raw}
+													src={
+														item.nftMedia[0]?.raw ||
+														'/img/0x0zLogo.jpg'
+													}
 													alt="avatar"
 													className="mt-2 border-2 border-gray-500 rounded-lg"
 												/>
@@ -212,6 +247,9 @@ export default function Properties() {
 
 											<div className="flex flex-row gap-2 mt-2">
 												<button
+													hidden={item.domainName.includes(
+														'Untitled Token'
+													)}
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 													onClick={() => {
 														history.push(
@@ -219,7 +257,22 @@ export default function Properties() {
 														);
 													}}
 												>
-													Edit
+													Open In DREAM🎨.ETH STUDIO
+												</button>
+												<button
+													hidden={
+														!item.domainName.includes(
+															'Untitled Token'
+														)
+													}
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														history.push(
+															`/ide?url=${item.domainName}`
+														);
+													}}
+												>
+													Fix
 												</button>
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -245,28 +298,47 @@ export default function Properties() {
 												No ENS addresses found
 											</div>
 											<div className="text-sm text-gray-500">
-												You can try fetching your ENS
-												addresses, or they might just
-												need a refresh...
+												We use an external API to
+												collect your mints which can
+												sometimes be incorrect. If you
+												are sure that your current
+												wallet address has mints, please
+												click the add button below to
+												add a custom ENS address to your
+												portfolio.
 											</div>
-											<button
-												disabled={
-													loading ||
-													!loginContext.isSignedIn
-												}
-												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-												onClick={() => {
-													getAllEns()
-														.catch((error) => {
-															setError(error);
-														})
-														.finally(() => {
-															setLoading(false);
-														});
-												}}
-											>
-												Refresh
-											</button>
+											<div className="flex flex-row gap-2 mt-2">
+												<button
+													disabled={
+														loading ||
+														!loginContext.isSignedIn
+													}
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														getAllEns()
+															.catch((error) => {
+																setError(error);
+															})
+															.finally(() => {
+																setLoading(
+																	false
+																);
+															});
+													}}
+												>
+													Refresh
+												</button>
+												<button
+													disabled={
+														loading ||
+														!loginContext.isSignedIn
+													}
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {}}
+												>
+													Add
+												</button>
+											</div>
 										</div>
 									</div>
 								) : (

@@ -67,7 +67,8 @@ export default function UpdateBanner() {
 						paddingLeft: '4.5rem',
 						paddingBottom: '1rem',
 						marginTop: '-94px',
-						backgroundImage: 'linear-gradient(to right, red, orange)',
+						backgroundImage:
+							'linear-gradient(to right, red, orange)',
 						WebkitBackgroundClip: 'text',
 						backgroundClip: 'text',
 						WebkitTextFillColor: 'transparent',
@@ -85,21 +86,14 @@ export default function UpdateBanner() {
 						textAlign: 'left',
 						marginLeft: '32.5rem',
 						padding: '12px',
+						paddingTop: '22px',
 						marginTop: '-115px',
 						color: 'whitesmoke',
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					We've got some{' '}
-					<b
-						style={{
-							fontSize: '1.5rem',
-						}}
-					>
-						kick ass new features
-					</b>{' '}
-					on the way for you. Please note that we might go offline one or two
-					times...
+					<b>OUT NOW!</b> New features include the Property Manager
+					and Virtual Registry, and more!
 				</p>
 			</div>
 		</div>

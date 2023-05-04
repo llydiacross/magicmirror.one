@@ -40,22 +40,20 @@ export const post = async (req, res) => {
 	try {
 		let totalCount = 0;
 		let fetchNFTS = async (currentAddress, pageKey) => {
-			let nfts = await server.alchemy.nft.getNftsForOwner(
-				'0xDFF917ab602e8508b6907dE1b038dd52B24A2379',
-				{
-					contractAddresses: [
-						'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
-					],
-					pageKey: pageKey,
-				}
-			);
+			let nfts = await server.alchemy.nft.getNftsForOwner(address, {
+				contractAddresses: [
+					'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+				],
+				pageKey: pageKey,
+			});
 
 			for (let i = 0; i < nfts.ownedNfts.length; i++) {
 				let nft = nfts.ownedNfts[i];
 
 				totalCount++;
 
-				if (!nft.title || nft.title.length === 0) continue;
+				if (!nft.title || nft.title.length === 0)
+					nft.title = 'Untitled TokenID #' + nft.tokenId;
 
 				await server.prisma.eNS.upsert({
 					where: {
@@ -88,20 +86,22 @@ export const post = async (req, res) => {
 		};
 
 		await fetchNFTS(address);
-		await server.prisma.lastFetched.upsert({
-			where: {
-				address: address,
-			},
-			update: {
-				lastFetched: new Date(),
-				isPowerUser: totalCount > 100,
-			},
-			create: {
-				address: address,
-				lastFetched: new Date(),
-				isPowerUser: totalCount > 100,
-			},
-		});
+
+		if (totalCount > 0)
+			await server.prisma.lastFetched.upsert({
+				where: {
+					address: address,
+				},
+				update: {
+					lastFetched: new Date(),
+					isPowerUser: totalCount > 100,
+				},
+				create: {
+					address: address,
+					lastFetched: new Date(),
+					isPowerUser: totalCount > 100,
+				},
+			});
 
 		return success(res, {
 			success: true,
