@@ -9,7 +9,7 @@ import { userError } from '../../utils/helpers.mjs';
 export const post = async (req, res) => {
 	if (!req.session.siwe) return userError(res, 'Missing session');
 	try {
-		server.redisClient.del(req.session.siwe.address);
+		await server.redisClient.del(req.session.siwe.address);
 		req.session.destroy();
 	} catch (err) {
 		return userError(res, 'Internal server error, you may never leave');
