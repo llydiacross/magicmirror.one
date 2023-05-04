@@ -13,10 +13,11 @@ export const success = (res, data) => {
 /**
  *
  * @param {import('express').Response} res
- * @param {string} message
+ * @param {string | object} message
  * @returns
  */
 export const userError = (res, message) => {
+	if (message?.error !== undefined) message = message.error;
 	res.status(400).json({
 		ok: false,
 		error: message,

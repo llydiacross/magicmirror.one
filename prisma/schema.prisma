@@ -16,6 +16,7 @@ model User {
   role         Role           @default(USER)
   ENS          ENS[]
   FakeRegistry FakeRegistry[]
+  LastFetched  LastFetched?
 }
 
 model FakeRegistry {
@@ -35,12 +36,21 @@ model ENS {
   ownerAddress       String
   ensContractAddress String
   domainName         String        @unique
-  nftUri             String
+  nftUri             Json
   nftName            String
   nftDescription     String
-  nftImage           String
-  owner              User          @relation(fields: [ownerAddress], references: [address])
+  nftMedia           Json
   FakeRegistry       FakeRegistry?
+  User               User?         @relation(fields: [ownerAddress], references: [address])
+}
+
+model LastFetched {
+  address     String   @id @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastFetched DateTime
+  isPowerUser Boolean
+  owner       User     @relation(fields: [address], references: [address])
 }
 
 enum Role {

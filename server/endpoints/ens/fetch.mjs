@@ -2,12 +2,6 @@ import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 export const get = async (req, res) => {
-	if (!req.query.address)
-		return res.status(400).send({
-			error: 'Missing address',
-		});
-
-	req.body.address = req.query.address;
 	await post(req, res);
 };
 
@@ -17,33 +11,74 @@ export const get = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	let address = req.body.address;
+	if (!req.session.siwe) return userError(res, 'Missing session');
+	let address = res?.session?.siwe?.address;
 
-	if (!req.session.siewe)
-		return res.status(400).send({
-			error: 'Missing session',
-		});
+	if (!address) return userError(res, 'Missing session');
 
-	if (!address)
-		return res.status(400).send({
-			error: 'Missing address',
-		});
+	let lastFetched = await server.prisma.lastFetched.findFirst({
+		where: {
+			address: address,
+		},
+	});
+
+	if (
+		lastFetched &&
+		lastFetched.lastFetched > (lastFetched.isPowerUser ? 10 : 1) * 60 * 1000
+	)
+		return userError(res, 'You have to wait a bit before fetching again');
 
 	try {
-		let nfts = await server.alchemy.nft.getNftsForOwner(address, {
-			contractAddresses: ['0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85'],
+		let totalCount = 0;
+		let fetchNFTS = async (address, pageKey) => {
+			let nfts = await server.alchemy.nft.getNftsForOwner(address, {
+				contractAddresses: ['0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85'],
+				pageKey: pageKey,
+			});
+
+			for (let i = 0; i < nfts.ownedNfts.length; i++) {
+				let nft = nfts.ownedNfts[i];
+
+				totalCount++;
+
+				await server.prisma.eNS.create({
+					data: {
+						tokenId: nft.tokenId,
+						ownerAddress: address,
+						ensContractAddress: nft.contract.address,
+						domainName: nft.title,
+						nftUri: nft.tokenUri,
+						nftName: nft.title,
+						nftDescription: nft.description,
+						nftMedia: nft.media,
+					},
+				});
+			}
+
+			if (nfts.pageKey) await fetchNFTS(address, nfts.pageKey);
+		};
+
+		await fetchNFTS(address);
+
+		await server.prisma.lastFetched.upsert({
+			where: {
+				address: address,
+			},
+			update: {
+				lastFetched: new Date(),
+				isPowerUser: totalCount > 100,
+			},
+			create: {
+				address: address,
+				lastFetched: new Date(),
+				isPowerUser: totalCount > 100,
+			},
 		});
 
-		for (let i = 0; i < nfts.length; i++) {
-			let nft = nfts.ownedNfts[i];
-
-			await server.prisma.ENS.create({
-				data: {
-					name: 'Alice',
-					email: 'alice@prisma.io',
-				},
-			});
-		}
+		return success(res, {
+			success: true,
+			totalCount: totalCount,
+		});
 	} catch (error) {
 		console.log(error);
 		return userError(res, 'Bad Address');

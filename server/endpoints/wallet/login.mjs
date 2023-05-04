@@ -54,6 +54,20 @@ export const post = async (request, response) => {
 						.send(jwtToken)
 						.end()
 				);
+
+				//add them to the database if they don't exist
+				if (
+					server.prisma.user.count({
+						where: {
+							address: fields.address,
+						},
+					}) === 0
+				)
+					server.prisma.user.create({
+						data: {
+							address: fields.address,
+						},
+					});
 			} catch (err) {
 				request.session.siwe = null;
 				request.session.nonce = null;
