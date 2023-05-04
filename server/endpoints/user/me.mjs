@@ -18,7 +18,6 @@ export const get = async (req, res) => {
 		select: {
 			address: true,
 			createdAt: true,
-			updatedAt: true,
 			role: true,
 		},
 	});
