@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { isLoggedIn, userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 
 /**
  *

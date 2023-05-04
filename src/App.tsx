@@ -12,6 +12,7 @@ import ContentHash from './pages/utilities/ContentHash';
 import NameHash from './pages/utilities/NameHash';
 import Dashboard from './pages/utilities/Dashboard';
 import ENSLookup from './pages/utilities/ENSLookup';
+import User from './pages/utilities/User';
 
 function App() {
 	return (
@@ -52,6 +53,9 @@ function App() {
 							</Route>
 							<Route exact path="/utilities/namehash">
 								<NameHash />
+							</Route>
+							<Route exact path="/utilities/user">
+								<User />
 							</Route>
 							<Route exact path="*">
 								<NotFound />

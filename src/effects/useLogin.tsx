@@ -64,6 +64,10 @@ export const useLogin = () => {
 					setLoaded(true);
 				})();
 			})
+			.catch((err) => {
+				setError(err);
+				setIsSignedIn(false);
+			})
 			.finally(() => {
 				setLoaded(true);
 			});
@@ -83,42 +87,40 @@ export const useLogin = () => {
 		setLoaded(false);
 		setError(null);
 
-		if (!web3Context.walletAddress || !web3Context.walletConnected) {
-			setLoaded(true);
-			setIsSignedIn(false);
-			setError('Please connect your wallet');
-			return;
-		}
+		try {
+			if (!web3Context.walletAddress || !web3Context.walletConnected) {
+				setLoaded(true);
+				setIsSignedIn(false);
+				setError('Please connect your wallet');
+				return;
+			}
 
-		const message = await createSiweMessage(
-			web3Context.walletAddress,
-			'Sign in with Ethereum to the app.'
-		);
-		const signature = await web3Context.signer.signMessage(message);
-		const response = await fetch(getEndpointHref() + 'wallet/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			credentials: 'include',
-			body: JSON.stringify({ message, signature }),
-		});
+			const message = await createSiweMessage(
+				web3Context.walletAddress,
+				'Sign in with Ethereum to the app.'
+			);
+			const signature = await web3Context.signer.signMessage(message);
+			const response = await fetch(getEndpointHref() + 'wallet/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify({ message, signature }),
+			});
 
-		if (!response.ok) {
+			if (!response.ok) {
+				setError(response.body);
+			} else if (response.status === 200) {
+				setIsSignedIn(true);
+				setAddress(web3Context.walletAddress);
+			} else {
+				setError('Something went wrong');
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
 			setLoaded(true);
-			setError(response.body);
-			return;
-		}
-
-		if (response.status === 200) {
-			setLoaded(true);
-			setIsSignedIn(true);
-			setAddress(web3Context.walletAddress);
-			return;
-		} else {
-			setLoaded(true);
-			setError('Something went wrong');
-			return;
 		}
 	};
 

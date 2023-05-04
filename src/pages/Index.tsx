@@ -17,6 +17,7 @@ export default function Index() {
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
 	const [shouldShowBackdrop, setShouldShowBackdrop] = useState(false);
 	const [currentDestination, setCurrentDestination] = useState(null);
+	const [shouldShowLogin, setShouldShowLogin] = useState(null);
 	const [backgroundImage, setBackgroundImage] = useState(null);
 	const ensContext = useContext(ENSContext);
 	const context = useContext(Web3Context);
@@ -30,7 +31,10 @@ export default function Index() {
 		if (cooldown.current === null) {
 			cooldown.current = async (destination) => {
 				setBackgroundImage('/img/0x0z.jpg');
-				let result = await getFastAvatar(destination, context.web3Provider);
+				let result = await getFastAvatar(
+					destination,
+					context.web3Provider
+				);
 				if (result) {
 					setBackgroundImage(result);
 				}
@@ -85,14 +89,16 @@ export default function Index() {
 						</div>
 						<div className="p-4">
 							<h1 className="text-3xl md:text-5xl lg:text-7xl text-black text-right font-bold mb-4 pb-4">
-								Harness the power of <u>decentralized web</u> to create{' '}
-								<u>something magical</u>
+								Harness the power of <u>decentralized web</u> to
+								create <u>something magical</u>
 							</h1>
 							<p className="text-black text-1xl lg:text-2xl text-right">
-								We&apos;ve made an easy online IDE for you to use.
+								We&apos;ve made an easy online IDE for you to
+								use.
 							</p>
 							<p className="text-black text-1xl lg:text-2xl  text-right">
-								You can use it to create <u>anything</u> you like.
+								You can use it to create <u>anything</u> you
+								like.
 							</p>
 							<p className="text-black text-1xl lg:text-2xl text-right">
 								We make sure your creation is safe.
@@ -101,7 +107,8 @@ export default function Index() {
 								Your creation is saved to IPFS.
 							</p>
 							<p className="text-black text-1xl lg:text-2xl text-right">
-								Deploy <u>smart contracts</u> to empower your creation.
+								Deploy <u>smart contracts</u> to empower your
+								creation.
 							</p>
 						</div>
 					</div>
@@ -124,7 +131,14 @@ export default function Index() {
 				}}
 			/>
 			<LoginModal
-				hidden={loginContext.isSignedIn || !context.walletConnected}
+				hidden={
+					shouldShowLogin !== null
+						? !shouldShowLogin
+						: loginContext.isSignedIn || !context.walletConnected
+				}
+				onHide={() => {
+					setShouldShowLogin(false);
+				}}
 				onLogin={async () => {
 					await loginContext.login();
 				}}

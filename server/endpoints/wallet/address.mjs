@@ -7,9 +7,8 @@ import { success, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	if ((await isLoggedIn(req, res)) !== true)
-		return userError(res, await isLoggedIn(req, res));
-
+	if ((await isLoggedIn(req, server)) !== true)
+		return userError(res, await isLoggedIn(req, server));
 	return success(res, {
 		address: res.session.siwe.address,
 	});

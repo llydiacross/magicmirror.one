@@ -11,10 +11,8 @@ export const get = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	if (!req.session.siwe) return userError(res, 'Missing session');
-	let address = res?.session?.siwe?.address;
-
-	if (!address) return userError(res, 'Missing session');
+	if ((await isLoggedIn(req, server)) !== true)
+		return userError(res, await isLoggedIn(req, server));
 
 	let lastFetched = await server.prisma.lastFetched.findFirst({
 		where: {
@@ -32,7 +30,9 @@ export const post = async (req, res) => {
 		let totalCount = 0;
 		let fetchNFTS = async (address, pageKey) => {
 			let nfts = await server.alchemy.nft.getNftsForOwner(address, {
-				contractAddresses: ['0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85'],
+				contractAddresses: [
+					'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+				],
 				pageKey: pageKey,
 			});
 

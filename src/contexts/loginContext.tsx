@@ -19,6 +19,8 @@ export const LoginContext = createContext({
 	loaded: false,
 	error: null,
 	address: null,
+	isIncorrectAddress: false,
+	checkLogin: null,
 });
 
 function LoginContextProvider({ children }) {

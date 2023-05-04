@@ -71,6 +71,14 @@ export default function Dashboard() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
+								history.push('/utilities/user');
+							}}
+						>
+							User Overview (need to be logged in)
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
 								history.push('/');
 							}}
 						>
