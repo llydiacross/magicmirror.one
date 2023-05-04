@@ -3,10 +3,17 @@ import glob from 'glob';
 /**
  *
  * @param {import('express').Response} res
- * @param {object} data
+ * @param {object | string} data
  * @returns
  */
 export const success = (res, data) => {
+	if (res.locals === undefined)
+		throw new Error(
+			'you have forgot to pass the express Response as the first argument to success()'
+		);
+
+	if (typeof data === 'string') data = { message: data };
+	if (data.ok === undefined) data.ok = true;
 	res.status(200).json(data);
 };
 
