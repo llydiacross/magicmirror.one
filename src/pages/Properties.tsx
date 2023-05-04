@@ -37,6 +37,7 @@ export default function Properties() {
 
 		console.log(result);
 
+		//basically if theres no NFTS returned by they do have an ENS address it means they are a manager, but not the owner of this NFT
 		if (
 			context.ensAddresses &&
 			result.nfts &&
@@ -47,6 +48,8 @@ export default function Properties() {
 			result.nfts = context.ensAddresses.map((address) => ({
 				domainName: address,
 				nftMedia: [{ raw: '/img/0x0zLogo.jpg' }],
+				manager: true,
+				imported: false,
 				nftDescription:
 					'This is your default domain. It has been auto-imported for you!',
 			}));
@@ -96,7 +99,7 @@ export default function Properties() {
 						<button
 							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
 							onClick={() => {
-								history.push('/');
+								history.push('/utilities/');
 							}}
 						>
 							Utilities
@@ -139,6 +142,7 @@ export default function Properties() {
 				<div className="flex flex-row gap-2 pr-0 md:pr-4">
 					<input
 						disabled={!loginContext.isSignedIn}
+						data-loading={loading}
 						className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
 						id="domain"
 						type="text"
@@ -149,6 +153,7 @@ export default function Properties() {
 					/>
 					<button
 						disabled={loading || !loginContext.isSignedIn}
+						data-loading={loading}
 						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 						onClick={() => {
 							history.push('/ens/new');
@@ -158,6 +163,7 @@ export default function Properties() {
 					</button>
 					<button
 						disabled={loading || !loginContext.isSignedIn}
+						data-loading={loading}
 						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 						onClick={async () => {
 							fetchENS()
@@ -201,16 +207,21 @@ export default function Properties() {
 										<div className="flex flex-col">
 											<div className="text-2xl font-bold text-black">
 												{item.domainName.length > 20 ? (
-													<div>
+													<>
 														{item.domainName.substring(
 															0,
 															20
 														)}
 														...
-													</div>
+													</>
 												) : (
-													<div>{item.domainName}</div>
+													<>{item.domainName}</>
 												)}
+												{item.imported ? (
+													<span className="ms-2 badge bg-error text-black">
+														Imported
+													</span>
+												) : null}
 											</div>
 											<div className="text-sm text-gray-500 break-all">
 												{item.nftDescription &&
