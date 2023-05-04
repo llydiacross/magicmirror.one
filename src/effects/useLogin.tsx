@@ -78,6 +78,18 @@ export const useLogin = () => {
 		return result.verified;
 	};
 
+	const destroy = async () => {
+		try {
+			let result = await apiFetch('wallet', 'destroy', null, 'POST');
+		} catch (error) {
+		} finally {
+			setIsSignedIn(false);
+			setAddress(null);
+			setIsIncorrectAddress(false);
+			setError(null);
+		}
+	};
+
 	const getAddress = async () => {
 		let result = await apiFetch('wallet', 'verify', null, 'GET');
 		return result?.address;
@@ -132,5 +144,6 @@ export const useLogin = () => {
 		address,
 		checkLogin,
 		isIncorrectAddress,
+		destroy,
 	};
 };

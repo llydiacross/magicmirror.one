@@ -75,7 +75,9 @@ function FixedElements({
 					<div
 						className="text-center"
 						onClick={() => {
-							history.push(`/ide?url=${ensContext.currentEnsAddress}`);
+							history.push(
+								`/ide?url=${ensContext.currentEnsAddress}`
+							);
 						}}
 					>
 						<span className="text-4xl">
@@ -112,7 +114,10 @@ function FixedElements({
 						className="alert alert-success shadow-lg p-2 cursor-pointer opacity-70 hover:opacity-100 w-auto"
 						onClick={() => {
 							history.push(
-								`/view/${context.ensAddresses[0] || context.accounts[0]}`
+								`/view/${
+									context.ensAddresses[0] ||
+									context.accounts[0]
+								}`
 							);
 						}}
 					>
@@ -165,7 +170,10 @@ function FixedElements({
 								}
 
 								ensContext.currentEnsAddress !== null
-									? history.push('/view/' + ensContext.currentEnsAddress)
+									? history.push(
+											'/view/' +
+												ensContext.currentEnsAddress
+									  )
 									: history.push('/');
 							}}
 						/>
@@ -183,6 +191,14 @@ function FixedElements({
 								}}
 							>
 								🏠
+							</button>
+							<button
+								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
+								onClick={() => {
+									history.push('/properties');
+								}}
+							>
+								📝
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"

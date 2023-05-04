@@ -58,11 +58,37 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 								<b>🌟</b>
 							</div>
 							<p className="text-center text-3xl text-black mt-2">
-								Login
+								Login To Your Account
 							</p>
-							<p className="text-center text-1xl text-black">
-								Login to your account to access awesome features
-								such as the property manager and more!
+
+							<div className="flex flex-col w-full border-opacity-50 mt-2 p-2">
+								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
+									Gain access to our{' '}
+									<u className="text-success">
+										Virtual Registry Service
+									</u>
+									Allowing you to set the contentHash on your
+									ens domain (along with other text fields)
+									absolutely free.
+								</div>
+								<div className="divider text-black">AND</div>
+								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
+									Gain acess to our{' '}
+									<u className="text-success">
+										Property Management Tools
+									</u>
+									Allowing you to see and manage all of your
+									properties (ens domains) in one place.
+								</div>
+							</div>
+
+							<p className="text-center text-1xl text-black p-2">
+								<b>Note:</b> We use <u>Sign In With Ethereum</u>{' '}
+								to handle the login so you can be rest assured
+								that we cannot do anything fishy with your
+								account. We only use your address to identify
+								you and your account. We do not store any other
+								information about you.
 							</p>
 							{loginContext.loaded && loginContext.error ? (
 								<p className="mt-2 text-center text-2xl text-error">

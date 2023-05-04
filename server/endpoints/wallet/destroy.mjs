@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 
 /**
  *
@@ -11,6 +11,9 @@ export const post = async (req, res) => {
 	try {
 		await server.redisClient.del(req.session.siwe.address);
 		req.session.destroy();
+		return success(res, {
+			destroyed: true,
+		});
 	} catch (err) {
 		return userError(res, 'Internal server error, you may never leave');
 	}

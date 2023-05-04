@@ -79,6 +79,14 @@ export default function Dashboard() {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
+								history.push('/utilities/logout');
+							}}
+						>
+							Logout
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
 								history.push('/');
 							}}
 						>

@@ -9,6 +9,7 @@ export interface loginContextType {
 	loaded: boolean;
 	error: Error;
 	address: string;
+	destroy: Function;
 	isIncorrectAddress: boolean;
 	checkLogin: Function;
 }
@@ -19,6 +20,7 @@ export const LoginContext = createContext({
 	loaded: false,
 	error: null,
 	address: null,
+	destroy: null,
 	isIncorrectAddress: false,
 	checkLogin: null,
 });
@@ -31,6 +33,7 @@ function LoginContextProvider({ children }) {
 		error,
 		address,
 		isIncorrectAddress,
+		destroy,
 		checkLogin,
 	} = useLogin();
 
@@ -43,6 +46,7 @@ function LoginContextProvider({ children }) {
 					loaded,
 					error,
 					address,
+					destroy,
 					isIncorrectAddress,
 					checkLogin,
 				} as loginContextType

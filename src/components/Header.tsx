@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DestinationFinder from './DestinationFinder';
 import WebEvents from '../webEvents';
 import storage from '../storage';
 import config from '../config';
+import { LoginContext } from '../contexts/loginContext';
 
 // Handle for the typeWriter animation
 function Header({
@@ -30,6 +31,7 @@ function Header({
 	const writeTextRef = useRef(null);
 	const eventEmitterCallbackRef = useRef(null);
 	const themeRef = useRef(theme || null);
+	const loginContext = useContext(LoginContext);
 
 	// Code for the h1 text animation is in the animation.ts file
 	useEffect(() => {
@@ -46,7 +48,9 @@ function Header({
 					themeRef.current === null &&
 					storage.getGlobalPreference('defaultTheme')
 				) {
-					setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
+					setCurrentTheme(
+						storage.getGlobalPreference('defaultTheme')
+					);
 				}
 			};
 		}
@@ -56,7 +60,8 @@ function Header({
 
 		// Cb for the typeWriter animation
 		callbackRef.current = (destination: string) => {
-			if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
+			if (typeWriterHandle.current)
+				clearTimeout(typeWriterHandle.current);
 			if (pickDestinationHandle.current) {
 				clearTimeout(pickDestinationHandle.current);
 			}
@@ -72,7 +77,9 @@ function Header({
 		WebEvents.on('gotoDestination', callbackRef.current);
 
 		if (!document.getElementById(typeWriterElement.current)) {
-			throw new Error(`no element with id ${typeWriterElement.current} found`);
+			throw new Error(
+				`no element with id ${typeWriterElement.current} found`
+			);
 		}
 
 		// Fixes reloading
@@ -96,7 +103,8 @@ function Header({
 					speedRef.current
 				);
 			} else {
-				text.innerHTML = text.innerHTML + "<span class='blink-text'>_</span>";
+				text.innerHTML =
+					text.innerHTML + "<span class='blink-text'>_</span>";
 
 				if (doRandomName) {
 					pickDestinationHandle.current = setTimeout(() => {
@@ -106,7 +114,8 @@ function Header({
 					if (pickDestinationHandle.current) {
 						clearTimeout(pickDestinationHandle.current);
 					}
-					if (typeWriterHandle.current) clearTimeout(typeWriterHandle.current);
+					if (typeWriterHandle.current)
+						clearTimeout(typeWriterHandle.current);
 				}
 			}
 		};
@@ -151,11 +160,15 @@ function Header({
 					{/** Mobile title */}
 					<div className="max-w-screen mb-2">
 						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all">
-							{!title || title.length === 0 ? 'Magic🪞.eth' : title}
+							{!title || title.length === 0
+								? 'Magic🪞.eth'
+								: title}
 						</h1>
 						{/** Tablet/desktop title */}
 						<h1 className="text-8xl hidden md:block lg:block title max-w-screen break-all">
-							{!title || title.length === 0 ? 'Magic🪞.eth' : title}
+							{!title || title.length === 0
+								? 'Magic🪞.eth'
+								: title}
 						</h1>
 					</div>
 					<div className="mt-2 max-w-screen w-full">

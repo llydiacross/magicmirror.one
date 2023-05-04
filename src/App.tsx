@@ -13,6 +13,8 @@ import NameHash from './pages/utilities/NameHash';
 import Dashboard from './pages/utilities/Dashboard';
 import ENSLookup from './pages/utilities/ENSLookup';
 import User from './pages/utilities/User';
+import Logout from './pages/utilities/Logout';
+import Properties from './pages/Properties';
 
 function App() {
 	return (
@@ -56,6 +58,12 @@ function App() {
 							</Route>
 							<Route exact path="/utilities/user">
 								<User />
+							</Route>
+							<Route exact path="/utilities/logout">
+								<Logout />
+							</Route>
+							<Route exact path="/properties">
+								<Properties />
 							</Route>
 							<Route exact path="*">
 								<NotFound />
