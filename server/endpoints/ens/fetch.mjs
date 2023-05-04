@@ -1,5 +1,6 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
+
 export const get = async (req, res) => {
 	if (!req.query.address)
 		return res.status(400).send({
@@ -33,11 +34,16 @@ export const post = async (req, res) => {
 			contractAddresses: ['0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85'],
 		});
 
-		return success(res, {
-			page: nfts.pageKey,
-			totalDomains: nfts.totalNfts,
-			domains: nfts.ownedNfts,
-		});
+		for (let i = 0; i < nfts.length; i++) {
+			let nft = nfts.ownedNfts[i];
+
+			await server.prisma.ENS.create({
+				data: {
+					name: 'Alice',
+					email: 'alice@prisma.io',
+				},
+			});
+		}
 	} catch (error) {
 		console.log(error);
 		return userError(res, 'Bad Address');

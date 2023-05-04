@@ -12,6 +12,8 @@ import { createClient } from 'redis';
 // Setup: npm install alchemy-sdk
 import { Alchemy, Network } from 'alchemy-sdk';
 
+//prisma
+import { PrismaClient } from '@prisma/client';
 // do ts node register
 import tsNode from 'ts-node';
 
@@ -43,6 +45,11 @@ class Server {
 	 * @type {import('redis').RedisClientType}
 	 */
 	redisClient;
+
+	/**
+	 * @type {PrismaClient}
+	 **/
+	prisma;
 	/**
 	 * @type {number}
 	 * */
@@ -78,7 +85,7 @@ class Server {
 			network: Network.ETH_MAINNET,
 		});
 		this.redisClient = createClient();
-
+		this.prisma = new PrismaClient();
 		this.app.use(helmet());
 
 		// allows CORS headers to work
