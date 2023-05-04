@@ -2,58 +2,58 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  address      String         @id @unique
-  createdAt    DateTime       @default(now())
-  role         Role           @default(USER)
-  ENS          ENS[]
-  FakeRegistry FakeRegistry[]
-  LastFetched  LastFetched?
+    address      String         @id @unique
+    createdAt    DateTime       @default(now())
+    role         Role           @default(USER)
+    ENS          ENS[]
+    FakeRegistry FakeRegistry[]
+    LastFetched  LastFetched?
 }
 
 model FakeRegistry {
-  domainName   String   @unique
-  ownerAddress String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  owner        User     @relation(fields: [ownerAddress], references: [address])
-  ens          ENS      @relation(fields: [domainName], references: [domainName])
-  registry     String
+    domainName   String   @unique
+    ownerAddress String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    owner        User     @relation(fields: [ownerAddress], references: [address])
+    ens          ENS      @relation(fields: [domainName], references: [domainName])
+    registry     String
 }
 
 model ENS {
-  tokenId            String        @id @unique
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  ownerAddress       String
-  ensContractAddress String
-  domainName         String        @unique
-  nftUri             Json
-  nftName            String
-  nftDescription     String
-  nftMedia           Json
-  FakeRegistry       FakeRegistry?
-  User               User?         @relation(fields: [ownerAddress], references: [address])
+    tokenId            String        @id @unique
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+    ownerAddress       String
+    ensContractAddress String
+    domainName         String        @unique
+    nftUri             Json
+    nftName            String
+    nftDescription     String
+    nftMedia           Json
+    FakeRegistry       FakeRegistry?
+    User               User?         @relation(fields: [ownerAddress], references: [address])
 }
 
 model LastFetched {
-  address     String   @id @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  lastFetched DateTime
-  isPowerUser Boolean
-  owner       User     @relation(fields: [address], references: [address])
+    address     String   @id @unique
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    lastFetched DateTime
+    isPowerUser Boolean
+    owner       User     @relation(fields: [address], references: [address])
 }
 
 enum Role {
-  USER
-  ADMIN
+    USER
+    ADMIN
 }
