@@ -222,6 +222,11 @@ export default function Properties() {
 														Imported
 													</span>
 												) : null}
+												{item.manager ? (
+													<span className="ms-2 badge bg-error text-black">
+														Manager
+													</span>
+												) : null}
 											</div>
 											<div className="text-sm text-gray-500 break-all">
 												{item.nftDescription &&
