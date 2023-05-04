@@ -1,5 +1,5 @@
 import { generateNonce } from 'siwe';
-import { userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 
 /**
  *

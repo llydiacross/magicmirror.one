@@ -7,7 +7,8 @@ import { isLoggedIn, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	if (!isLoggedIn(req, res)) return userError(res, isLoggedIn(req, res));
+	if (isLoggedIn(req, res) !== true)
+		return userError(res, isLoggedIn(req, res));
 
 	let address = req.session.siwe.address;
 	let user = await server.prisma.user.findUnique({

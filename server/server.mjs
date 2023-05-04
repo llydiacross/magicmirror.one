@@ -216,7 +216,7 @@ export class Server {
 						} catch (error) {
 							console.log('Error in get route: ' + path);
 							console.error(error);
-							res.statusCode(500).send({
+							res.status(500).send({
 								ok: false,
 								error: error.message,
 							});
