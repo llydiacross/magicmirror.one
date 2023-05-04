@@ -6,70 +6,50 @@ const { SiweMessage, ErrorTypes } = pkg;
 
 /**
  *
- * @param {import('express').Request} request
- * @param {import('express').Response} response
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
-export const post = async (request, response) => {
+export const post = async (req, res) => {
 	try {
-		if (!request.body.message) return userError(response, 'Missing message.');
+		if (!req.body.message) return userError(res, 'Missing message.');
 
-		const { message, signature } = request.body;
-		const siweMessage = new SiweMessage(message);
-		const fields = await siweMessage.validate(signature);
-
-		if (fields.nonce !== request.session.nonce) {
-			request.session.siwe = null;
-			request.session.nonce = null;
-			await new Promise((resolve) => request.session.save(resolve));
-			return userError(response, 'Invalid nonce.');
-		}
-
-		request.session.siwe = fields;
-		request.session.cookie.expires = new Date(fields.expirationTime);
-
-		// We'll use this for actually authenticating the user to login.
-		const jwtToken = jwt.sign({ message }, process.env.JWT_KEY, {
-			expiresIn: '12h',
+		let SIWEObject = new SiweMessage(req.body.message);
+		const { data: message } = await SIWEObject.verify({
+			signature: req.body.signature,
+			nonce: req.session.nonce,
 		});
-
-		// Set the wallet's sessionID to redis.
-		server.redisClient.set(fields.address, request.sessionID);
-		request.session.save(() =>
-			response
-				.status(200)
-				.cookie('jwt_token=authentication', jwtToken)
-				.send(jwtToken)
-				.end()
-		);
+		req.session.siwe = message;
+		req.session.cookie.expires = new Date(message.expirationTime);
+		await new Promise((resolve) => req.session.save(resolve));
 
 		//add them to the database if they don't exist
 		if (
 			server.prisma.user.count({
 				where: {
-					address: fields.address,
+					address: message.address,
 				},
 			}) === 0
 		)
 			server.prisma.user.create({
 				data: {
-					address: fields.address,
+					address: message.address,
 				},
 			});
 	} catch (err) {
-		request.session.siwe = null;
-		request.session.nonce = null;
-		await new Promise((resolve) => request.session.save(resolve));
+		req.session.siwe = null;
+		req.session.nonce = null;
+		await new Promise((resolve) => req.session.save(resolve));
 		// Log the error.
 		console.error(err);
 		// Very specifc error handling.
 		switch (err) {
 			case ErrorTypes.EXPIRED_MESSAGE:
-				return userError(response, 'Expired message.');
+				return userError(res, 'Expired message.');
 
 			case ErrorTypes.INVALID_SIGNATURE:
-				return userError(response, 'Invalid signature.');
+				return userError(res, 'Invalid signature.');
 			default:
-				return userError(response, err.message);
+				return userError(res, err.message);
 		}
 	}
 };
