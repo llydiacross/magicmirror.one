@@ -18,6 +18,11 @@ export const get = async (req, res) => {
 export const post = async (req, res) => {
 	let address = req.body.address;
 
+	if (!req.session.siewe)
+		return res.status(400).send({
+			error: 'Missing session',
+		});
+
 	if (!address)
 		return res.status(400).send({
 			error: 'Missing address',
@@ -29,7 +34,9 @@ export const post = async (req, res) => {
 		});
 
 		return success(res, {
-			...nfts.ownedNfts,
+			page: nfts.pageKey,
+			totalDomains: nfts.totalNfts,
+			domains: nfts.ownedNfts,
 		});
 	} catch (error) {
 		console.log(error);
