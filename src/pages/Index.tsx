@@ -93,7 +93,7 @@ export default function Index() {
 							MAGIC🪞 is a self-contained Web3 browser that shows you the future of Web3. It allows the user to view Web3 websites without using proxies or extensions. It is a browser that is built to let you build the future of the internet.
 							</h4>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-							This is the Google moment of Web3, and the interface is akin to a search/address bar. If the user inputs an ETH domain like 0x0z.eth, it takes them to the active content tag for that ENS domain. Users don't even need to add the .eth and can also skip right to marketplaces like [ens.vision](http://ens.vision/) by typing 0x0z.vision. And this is just the beginning.
+							This is the Google moment of Web3, and the interface is akin to a search/address bar. If the user inputs an ETH domain like 0x0z.eth, it takes them to the active content tag for that ENS domain. Users don't even need to add the .eth and can also skip right to marketplaces like <a href="http://ens.vision/">[ens.vision]</a> by typing 0x0z.vision. And this is just the beginning.
 							</p>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
 							The 🪞 also features the dream🎨.eth dWeb Studio, the most magical way to create your own decentralized websites and add more power to your Web3 domains.
@@ -102,7 +102,7 @@ export default function Index() {
 							Magic🪞.eth is a self-contained Web3 browser that can be instantiated inside of any typical browser. It allows users to view Web3 websites without using proxies such as .link or .limo.
 							</p>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-							The interface of this browser is similar to the search/address bar of Google. By inputting an ETH domain such as 0x0z.eth, the user is taken to the active content tag for that ENS domain. Users don't even need to add the .eth and can also skip right to marketplaces such as [ens.vision](http://ens.vision/) by typing 0x0z.vision. This is just the beginning of the possibilities with Magic🪞.eth.
+							The interface of this browser is similar to the search/address bar of Google. By inputting an ETH domain such as 0x0z.eth, the user is taken to the active content tag for that ENS domain. Users don't even need to add the .eth and can also skip right to marketplaces such as <a href="http://ens.vision/">[ens.vision]</a> by typing 0x0z.vision. This is just the beginning of the possibilities with Magic🪞.eth.
 							</p>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
 							The 🪞 also features the dream🎨.eth dWeb Studio, which is the most magical way to create your own decentralized websites and add more power to your Web3 domains.
@@ -115,7 +115,7 @@ export default function Index() {
 			<div className="text-center w-full bg-warning">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
 						<div className="lg:pl-5 lg:ml-5 md:pl-2 md:ml-2">
-							<p className="text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-14x xl:text-giant text-black text-center md:text-left xl:text-left">
+							<p className="text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-11x xl:text-[6rem] text-black text-center md:text-left lg:justify-center lg:items-center lg:flex xl:text-left">
 								FOLLOW THE 0x🟨ROAD
 							</p>
 						</div>
