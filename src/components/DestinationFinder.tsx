@@ -171,7 +171,7 @@ export default function DestinationFinder() {
 					</b>
 				</p>
 				<button
-					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
+					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3"
 					data-loading={loading}
 					disabled={loading}
 					onClick={() => {
