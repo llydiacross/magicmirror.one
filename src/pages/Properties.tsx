@@ -69,23 +69,23 @@ export default function Properties() {
 				<div className="max-w-3xl mx-auto text-black">
 					<div className="flex flex-row justify-center gap-2">
 						<button
-							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 							onClick={() => {
 								history.push('/');
 							}}
 						>
-							Home
+							MAGIC🪞.ETH
 						</button>
 						<button
-							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 							onClick={() => {
 								history.push('/utilities/');
 							}}
 						>
-							Utilities
+							🧰TIME.ETH
 						</button>
 						<button
-							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 							onClick={() => {
 								history.push('/ide');
 							}}
@@ -107,6 +107,12 @@ export default function Properties() {
 					</div>
 				</div>
 			) : null}
+			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
+				<div className="flex flex-col pl-4 hidden md:block">
+					<div className="header-text text-accent font-bold">Welcome to 🍬LAND.eth</div>
+					<div className="text-accent bg-info p-6 rounded ">🍬Land Landscapers, Meta Real Estate & the Metaverse's most exciting Candy Store! Make sure that your Web3 Property looks as SWEET as possible and are ready to become the dream of a DEcentralized GENeration.</div>
+				</div>
+			</div>
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 hidden md:block">
 					<div className="text-2xl font-bold">Your Properties</div>
@@ -237,12 +243,12 @@ export default function Properties() {
 														);
 													}}
 												>
-													Open In DREAM🎨.ETH STUDIO
+													🖌.DREAM🎨.ETH STUDIO
 												</button>
 												<button
 													hidden={
 														!item.domainName.includes(
-															'Untitled Token'
+															'Untitled ENS Token'
 														)
 													}
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -280,7 +286,7 @@ export default function Properties() {
 											<div className="text-sm text-gray-500 text-center">
 												We use an external API to
 												collect your mints which can
-												sometimes be incorrect. Please
+												sometimes render innaccurately. Please
 												be aware that this only shows{' '}
 												<u>
 													ENS properties that you own!
@@ -322,9 +328,7 @@ export default function Properties() {
 												Properties
 											</div>
 											<div className="text-sm text-gray-500">
-												You will need to login to view
-												all of your properties. If you
-												do not have an account.
+												You will need to login to load all of your properties so that you can let the 🍬LAND.eth Landscaping Service get to work for you DEGEN!
 											</div>
 											<button
 												className="bg-success text-white font-bold py-2 px-4 rounded mt-2"
@@ -332,7 +336,7 @@ export default function Properties() {
 													setShouldShowLogin(true);
 												}}
 											>
-												Login
+												Login 🔑
 											</button>
 										</div>
 									</div>
