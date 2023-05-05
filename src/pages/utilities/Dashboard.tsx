@@ -2,6 +2,7 @@ import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { ethers } from 'ethers';
+import Header from '../../components/Header';
 
 export default function Dashboard() {
 	const history = useHistory();
@@ -27,13 +28,13 @@ export default function Dashboard() {
 		<>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
-				<div className="hero-content text-center text-neutral-content bg-gray-500">
+				<div className="hero-content text-center text-neutral-content bg-primary">
 					<div className="min-w-screen">
-						<h1 className="mb-5 text-5xl font-bold text-black">
-							Utility Dashboard
+						<h1 className="mb-5 text-5xl font-bold text-warning">
+						🧰TIME.eth
 						</h1>
-						<p className="mb-5 text-black">
-							Heres a list of utilities you can use
+						<p className="mb-5 text-accent">
+							Here is 🧰 box full of utilities that you can use to manage and maintain your MAGIC🪞 experience.
 						</p>
 
 						<button
@@ -75,6 +76,14 @@ export default function Dashboard() {
 							}}
 						>
 							Current User Checker
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
+								history.push('/utilities/logout');
+							}}
+						>
+							Wipe 🪞
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"

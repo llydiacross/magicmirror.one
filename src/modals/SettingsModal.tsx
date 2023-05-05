@@ -11,7 +11,7 @@ function SettingsModal({ hidden, onHide }) {
 	const ipfsCompanionRef = useRef(null);
 	const defaultThemeRef = useRef(null);
 	const context = useContext(Web3Context);
-	const [currentTheme, setCurrentTheme] = useState('forest');
+	const [currentTheme, setCurrentTheme] = useState('Ox0z_light');
 	const [currentIPFSProvider, setCurrentIPFSProvider] = useState(
 		storage.getGlobalPreference('ipfsProvider') || 'web3.storage'
 	);
@@ -56,13 +56,11 @@ function SettingsModal({ hidden, onHide }) {
 			<div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow shadow-lg border-2">
 				<div className="flex flex-col w-full">
 					<div className="bg-yellow-400 p-2 text-black text-3xl">
-						<b>⚙️</b>
+						<b>⚙️settings.eth</b>
 					</div>
 					<div className="flex flex-col flex-1 p-3">
 						<p className="mt-4 text-black">
-							Here you can change which IPFS provider to use when
-							saving your work and also other settings such as the
-							theme.
+							Welcome to ⚙️settings.eth! Here you can configure important aspects of your Magic🪞Mirror experience.
 						</p>
 
 						<div className="form-control mt-4">
@@ -82,11 +80,11 @@ function SettingsModal({ hidden, onHide }) {
 									className="input input-bordered w-full"
 								/>
 								<button className="btn bg-black w-[14em] text-white">
-									Sign Up To Web3 Storage
+									Login to Web3.Storage
 								</button>
 							</div>
 							<button className="btn btn-sm bg-blue-500 mt-2 text-black text-white">
-								Check Web3 Storage Key
+								Check Web3.Storage API Key
 							</button>
 						</div>
 						<div className="form-control mt-4">
@@ -106,7 +104,7 @@ function SettingsModal({ hidden, onHide }) {
 									className="input input-bordered  w-full"
 								/>
 								<button className="btn bg-black w-[14em] text-white">
-									Check
+									Test Connection
 								</button>
 							</div>
 						</div>
@@ -125,9 +123,9 @@ function SettingsModal({ hidden, onHide }) {
 									setCurrentIPFSProvider('web3-storage');
 								}}
 							>
-								Web3Storage{' '}
+								Web3.Storage{' '}
 								<div className="badge badge-warning mx-4">
-									Requires A Web3Storage Account
+									Requires Web3.Storage Account
 								</div>
 							</button>
 							<button
@@ -154,7 +152,7 @@ function SettingsModal({ hidden, onHide }) {
 							>
 								Magic🪞
 								<div className="badge badge-warning mx-4">
-									Requires A Magic🎫
+									Requires A Golden 🎫
 								</div>
 							</button>
 						</div>
@@ -162,16 +160,16 @@ function SettingsModal({ hidden, onHide }) {
 						{context.walletConnected ? (
 							<>
 								<p className="text-2xl mb-4 mt-4 text-black border-b-2">
-									Your Connected Accounts
+									Connected Accounts
 								</p>
 								<div className="overflow-x-auto">
 									<table className="table w-full mb-2">
 										<thead>
 											<tr>
 												<th />
-
-												<th>Wallet Address</th>
 												<th>ENS Address</th>
+												<th>Wallet Address</th>
+												
 											</tr>
 										</thead>
 										<tbody>
@@ -180,7 +178,7 @@ function SettingsModal({ hidden, onHide }) {
 													return (
 														<tr key={index}>
 															<th>{index}</th>
-															<td>{account}</td>
+															
 															<td
 																className="cursor-pointer underline"
 																onClick={() => {
@@ -197,6 +195,7 @@ function SettingsModal({ hidden, onHide }) {
 																] ||
 																	'ENS Not Found...'}
 															</td>
+															<td>{account}</td>
 														</tr>
 													);
 												}
@@ -213,7 +212,7 @@ function SettingsModal({ hidden, onHide }) {
 						)}
 						<div className="form-control mt-4">
 							<p className="text-2xl mb-4 border-b-2 text-black">
-								Default Theme
+								Default Frame
 							</p>
 							<div className="input-group">
 								<select

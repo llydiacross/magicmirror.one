@@ -190,7 +190,7 @@ function FixedElements({
 									history.push('/');
 								}}
 							>
-								🏠
+								🪞
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
@@ -198,7 +198,7 @@ function FixedElements({
 									history.push('/properties');
 								}}
 							>
-								📝
+								🍬
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"

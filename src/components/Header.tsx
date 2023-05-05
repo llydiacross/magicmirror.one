@@ -23,7 +23,7 @@ function Header({
 		`#${btoa(Math.floor(Math.random() * 100000).toString())}`
 	);
 	const [currentTheme, setCurrentTheme] = useState(
-		theme || config.defaultTheme || 'forest'
+		theme || config.defaultTheme || 'Ox0z_light'
 	);
 	const speedRef = useRef(typeWriterSpeed);
 	const textRef = useRef(initialText);

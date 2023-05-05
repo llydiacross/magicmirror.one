@@ -297,7 +297,7 @@ const config = {
 		ens: 'ens',
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
-	defaultTheme: 'forest',
+	defaultTheme: 'Ox0z_light',
 	themes: [
 		'Ox0z_light',
 		'Ox0z_dark',
