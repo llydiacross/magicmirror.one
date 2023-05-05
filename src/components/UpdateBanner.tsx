@@ -60,7 +60,7 @@ export default function UpdateBanner() {
 					THE
 				</p>
 				<p
-					className="font-apocalypse"
+					className="font-amatic"
 					style={{
 						fontSize: '4.25rem',
 						textAlign: 'left',
@@ -92,8 +92,8 @@ export default function UpdateBanner() {
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					<b>OUT NOW!</b> New features include the Property Manager
-					and Virtual Registry, and more!
+					<b>OUT NOW!</b> New features include the DREAM🎨.ETH STUDIO, 🍬LAND.ETH LANDSCAPING
+					and the Virtual ENS Registry, and more!
 				</p>
 			</div>
 		</div>

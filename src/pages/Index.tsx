@@ -9,7 +9,6 @@ import storage from '../storage';
 import config from '../config';
 import { getFastAvatar } from '../helpers';
 import { Web3Context } from '../contexts/web3Context';
-import UpdateBanner from '../components/UpdateBanner';
 import LoginModal from '../modals/LoginModal';
 import { LoginContext } from '../contexts/loginContext';
 
@@ -61,7 +60,6 @@ export default function Index() {
 				'Ox0z_light'
 			}
 		>
-			<UpdateBanner />
 			<div
 				className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
 				hidden={!shouldShowBackdrop}
