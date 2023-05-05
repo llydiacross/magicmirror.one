@@ -386,47 +386,60 @@ defaultTemplates.links = {
     };
 
     result.html.code = `
+    
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>♾️LINKS</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-    <body class="bg-gray-100">
-        <header class="bg-white shadow-md py-4 px-8">
-            <!-- Header text -->
-            <h1 class="text-3xl font-bold text-gray-900 inline">
-                My Title
-            </h1>
-            <!-- Header image -->
-            <!-- <img src="your-image-url" alt="My Title" class="h-10 w-auto inline"> -->
-        </header>
-        <main class="container mx-auto mt-8">
-            <ul class="space-y-4">
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 1" class="h-5 w-auto inline mr-2">
-                        Button 1
-                    </a>
-                </li>
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 2" class="h-5 w-auto inline mr-2">
-                        Button 2
-                    </a>
-                </li>
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 3" class="h-5 w-auto inline mr-2">
-                        Button 3
-                    </a>
-                </li>
-            </ul>
-        </main>
-    </body>
-    </html>
+		<html lang="en">
+		<head>
+			<title>My InfinityLinks</title>
+			
+			<!--- THEMES: in settings.json change 'glitch' to 'gallery', 'menu', or any other theme in the layout/themes folder --->
+			<link rel="icon" type="image/png" href="https://cdn.glitch.global/20ae658d-f2cd-4f54-8582-809a3659c90d/888081218418130966.gif?v=1680273695023">
+			<link rel="icon" type="image/jpg" href="https://cdn.glitch.global/20ae658d-f2cd-4f54-8582-809a3659c90d/Blood_Moon.jpg?v=1680273043224">
+			
+			<!--   Meta Tags!   -->
+			<meta name="description" content={{ settings.metaDescription }}>
+		</head>
+		<body>
+			<main class="bg-[#11111d]">
+			<div class="flex flex-col">
+				<div class="justify-center items-center flex flex-col gap-8">
+				
+					<div class="pt-8 text-2xl italic">
+						My ♾️Links!
+					</div>
+
+					
+					<img
+					class="rounded-full w-24"
+					src="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81MTQ3YzVlOTg4MWNhZTJkZmM3YzNlN2E2M2E2ZGM5Zj9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.dRPInXEWrciilXfMeoIIrGCjimEYKtp81jKZQlqb2KY"/>
+
+                    <div class='gap-4 w-full flex flex-col justify-center items-center'>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My First ♾️int
+					
+					</div>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My Second Infinitymint
+					
+					</div>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My Twitter
+					
+					</div>
+					</div>
+				</div>
+
+			  <footer class="pt-24">
+			    Copyright 2023 InfinityMint.
+			  </footer>
+			
+			</main>
+		</body>
+		</html>
+      
     
       `;
 
