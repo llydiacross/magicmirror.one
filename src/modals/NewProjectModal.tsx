@@ -470,7 +470,7 @@ defaultTemplates.blog = {
 	  <!DOCTYPE html>
 		<html lang="en">
 
-		<body>
+		<body class="bg-[#11111d]">
 			<header class="flex justify-between m-auto px-4">
 			<h1 class="text-4xl">My Blog</h1>
 			<div class="my-auto gap-4 inline-flex">
@@ -525,6 +525,9 @@ defaultTemplates.blog = {
 				</li>
 			</section>
 			</article>
+			<footer class="mt-12 px-4">
+			Created by 0x0zAgency
+			</footer>
 		</body>
 		</html>
 	  `
