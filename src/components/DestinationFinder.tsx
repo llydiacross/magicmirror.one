@@ -162,7 +162,7 @@ export default function DestinationFinder() {
 					disabled={loading}
 					onClick={handleTakeMeAnywhere}
 				>
-					TAKE ME ANYWHERE
+					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
 				<p className="text-1xl text-shadow text-white bg-secondary p-1 mt-4 mb-1 lg:block">
 					<b>
