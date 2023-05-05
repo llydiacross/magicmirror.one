@@ -450,6 +450,86 @@ defaultTemplates.links = {
 defaultTemplates.blog = {
   name: 'Blog',
   description: 'Set up a blog with your own content.',
+  onSelection: (tabs: any, setCode: any) => {
+	let result = {
+		...defaultTabs,
+	  };
+  
+	  result['.xens'] = {
+		...result['.xens'],
+		code: JSON.stringify({
+		  name: '♾️links.eth',
+		  description: 'A free and infinite links page',
+		  author: '0x0z.Agency',
+		  version: '0.0.1',
+		  direct: true,
+		}),
+	  };
+
+	  result.html.code = `
+	  <!DOCTYPE html>
+		<html lang="en">
+
+		<body>
+			<header class="flex justify-between m-auto px-4">
+			<h1 class="text-4xl">My Blog</h1>
+			<div class="my-auto gap-4 inline-flex">
+			<a href="#">
+				About
+			</a>
+			<a href="#">
+				Contact
+			</a>
+			<a href="#">
+				Posts
+			</a>
+			</div>
+			</header>
+			<article class="my-12 px-8">
+			<section class="flex-col inline-flex gap-8">
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My first post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My second post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My third post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My fourth post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+			</section>
+			</article>
+		</body>
+		</html>
+	  `
+	  setCode(result);
+  }
 };
 
 defaultTemplates.portfolio = {
