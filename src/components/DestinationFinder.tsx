@@ -184,7 +184,7 @@ export default function DestinationFinder() {
 				{loginContext.isSignedIn ? (
 					<>
 						<p className="text-2xl text-shadow text-white bg-error p-1 mt-4 mb-1 lg:block">
-							<b>👇 🍬Land Landscapers, Meta Real Estate & the Metaverse's most exc	iting Candy Store! 👇</b>
+							<b>👇 🍬Land Landscapers, Meta Real Estate & the Metaverse's most exciting Candy Store! 👇</b>
 						</p>
 						<button
 							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
