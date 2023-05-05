@@ -155,7 +155,7 @@ export default function Properties() {
 			) : (
 				<>
 					<div className="p-2 hidden md:block">
-						<div className="divider">{context.walletAddress}</div>
+						<div className="divider">{context.ensAddresses[0]}<span className='bg-alert p-2 text-1'>{context.walletAddress}</span></div>
 					</div>
 					<div className="grid gap-4 grid-flow-row-dense grid-cols-1 md:grid-cols-3 lg:grid-cols-5 grid-rows-3 p-4 mx-auto min-h-screen">
 						{ens.length > 0 ? (
@@ -175,11 +175,11 @@ export default function Properties() {
 									>
 										<div className="flex flex-col">
 											<div className="text-2xl font-bold text-black">
-												{item.domainName.length > 20 ? (
+												{item.domainName.length > 42 ? (
 													<>
 														{item.domainName.substring(
 															0,
-															20
+															42
 														)}
 														...
 													</>
@@ -200,11 +200,11 @@ export default function Properties() {
 											<div className="text-sm text-gray-500 break-all">
 												{item.nftDescription &&
 												item.nftDescription.length >
-													32 ? (
+													64 ? (
 													<div>
 														{item.nftDescription.substring(
 															0,
-															32
+															64
 														)}
 														...
 													</div>
@@ -215,8 +215,7 @@ export default function Properties() {
 												)}
 												{!item.nftDescription ? (
 													<div>
-														No description
-														available...
+														⚪️
 													</div>
 												) : null}
 											</div>
@@ -292,7 +291,7 @@ export default function Properties() {
 													ENS properties that you own!
 												</u>
 												<br />
-												Press the 'Fetch' button next to
+												Tap the 'Fetch' button next to
 												the search bar to fetch your ENS
 												properties.
 											</div>
