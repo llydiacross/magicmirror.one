@@ -232,6 +232,7 @@ export default function Properties() {
 
 											<div className="flex flex-row gap-2 mt-2">
 												<button
+													title="Buidl a page with Dream🎨.eth"
 													hidden={item.domainName.includes(
 														'Untitled Token'
 													)}
@@ -242,7 +243,7 @@ export default function Properties() {
 														);
 													}}
 												>
-													🖌.DREAM🎨.ETH STUDIO
+													🖌.DREAM🎨.ETH
 												</button>
 												<button
 													hidden={

@@ -543,7 +543,7 @@ defaultTemplates.portfolio = {
 function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templates, setTemplates] = useState([]);
-  const [currentTheme, setCurrentTheme] = useState('Ox0z_light');
+  const [currentTheme, setCurrentTheme] = useState('0x0z Light');
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 

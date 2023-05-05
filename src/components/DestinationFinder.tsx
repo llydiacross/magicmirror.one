@@ -128,13 +128,13 @@ export default function DestinationFinder() {
 			</div>
 			<div className="flex flex-col">
 				<div className="form-control w-full">
-					<div className="input-group w-75">
+					<div className="input-group w-75 p-6">
 						<input
 							type="text"
 							data-loading={loading}
 							disabled={loading}
 							ref={inputElement}
-							maxLength={52}
+							maxLength={64}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') handleVisit();
 							}}
@@ -144,7 +144,9 @@ export default function DestinationFinder() {
 								);
 							}}
 							placeholder="Enter a destination..."
-							className="input input-bordered w-full"
+							className={`input input-bordered w-full ${
+								!loading ? 'animate-pulse hover:animation-play-state:paused' : ''
+							  }`}
 						/>
 						<button
 							data-loading={loading}
@@ -161,6 +163,7 @@ export default function DestinationFinder() {
 					data-loading={loading}
 					disabled={loading}
 					onClick={handleTakeMeAnywhere}
+					title='Trancend spacetime and visit a random destination in the 🟨 Metaverse!'
 				>
 					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
@@ -177,6 +180,7 @@ export default function DestinationFinder() {
 					onClick={() => {
 						history.push('/ide');
 					}}
+					title='Dream a little dream of Web3 with the Dream🎨.eth Studio!'
 				>
 					DREAM🎨.ETH STUDIO
 				</button>
@@ -193,6 +197,7 @@ export default function DestinationFinder() {
 							onClick={() => {
 								history.push('/properties');
 							}}
+							title='🍬Land.eth - Manage your ENS Property, Web3 Landing Pages, Marketplaces, NFTs, and more!'
 						>
 							🍬LAND.ETH
 						</button>

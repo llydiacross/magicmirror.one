@@ -23,7 +23,7 @@ function Header({
 		`#${btoa(Math.floor(Math.random() * 100000).toString())}`
 	);
 	const [currentTheme, setCurrentTheme] = useState(
-		theme || config.defaultTheme || 'Ox0z_light'
+		theme || config.defaultTheme || '0x0z Light'
 	);
 	const speedRef = useRef(typeWriterSpeed);
 	const textRef = useRef(initialText);
@@ -159,7 +159,7 @@ function Header({
 				<div className="flex flex-col gap-4 lg:gap-3 w-full">
 					{/** Mobile title */}
 					<div className="max-w-screen mb-2">
-						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all mt-6">
+						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all pt-4 mt-6">
 							{!title || title.length === 0
 								? 'Magic🪞.eth'
 								: title}
@@ -198,6 +198,7 @@ function Header({
 								);
 							}}
 							id={typeWriterElement.current}
+							title="See the reflection of Web3, and build the dreams of a Decentralized Generation on Magic🪞.eth"
 						>
 							{/** The initial input is controlled by a prop */}
 						</h1>

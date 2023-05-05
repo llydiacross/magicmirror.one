@@ -57,7 +57,7 @@ export default function Index() {
 			data-theme={
 				storage.getGlobalPreference('defaultTheme') ||
 				config.defaultTheme ||
-				'Ox0z_light'
+				'0x0z Light'
 			}
 		>
 			<div
