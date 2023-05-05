@@ -159,7 +159,7 @@ function Header({
 				<div className="flex flex-col gap-4 lg:gap-3 w-full">
 					{/** Mobile title */}
 					<div className="max-w-screen mb-2">
-						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all">
+						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all mt-6">
 							{!title || title.length === 0
 								? 'Magic🪞.eth'
 								: title}
