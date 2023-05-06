@@ -73,7 +73,7 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 								
 								<div className="divider text-black">AND</div>
 								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
-									Gain access to our highly experimental Web3 Name Service Aggrigator {' '}	
+									Gain access to our highly experimental, and controversial Web3 Name Service Aggrigator {' '}	
 									<u className="text-success">
 										Virtual Web3 Registry Service
 									</u>
