@@ -110,7 +110,7 @@ export default function Properties() {
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 md:block">
 					<div className="header-text text-accent font-bold">Welcome to 🍬LAND.eth</div>
-					<div className="text-accent bg-info p-6 rounded ">🍬Land Landscapers, Meta Real Estate & the Metaverse's most exciting Candy Store! Make sure that your Web3 Property looks as SWEET as possible and are ready to become the dream of a DEcentralized GENeration.</div>
+					<div className="text-accent bg-info p-6 rounded ">🍬LAND.ETH - Web3 Landscaping and Property Management Services & the Metaverse's most exciting Candy Store! Make sure that your Web3 Property looks as SWEET as possible and are ready to become the dream of a DEcentralized GENeration.</div>
 				</div>
 			</div>
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
