@@ -1,6 +1,11 @@
 import { success, userError, isLoggedIn } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
+export const settings = {
+	requireLogin: true,
+	admin: false,
+};
+
 export const get = async (req, res) => {
 	await post(req, res);
 };
@@ -11,9 +16,6 @@ export const get = async (req, res) => {
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	if ((await isLoggedIn(req, server)) !== true)
-		return userError(res, await isLoggedIn(req, server));
-
 	let address = req.session.siwe.address;
 	let lastFetched = await server.prisma.lastFetched.findFirst({
 		where: {

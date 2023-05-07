@@ -1,6 +1,6 @@
 import express from 'express';
 import glue from 'jsglue';
-import { findEndpoints, getEndpointPath } from './utils/helpers.mjs';
+import { findEndpoints, getEndpointPath, userError } from './utils/helpers.mjs';
 import cors from 'cors';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -15,6 +15,7 @@ import { PrismaClient } from '@prisma/client';
 // do ts node register
 import tsNode from 'ts-node';
 import { Configuration, OpenAIApi } from 'openai';
+import { isLoggedIn } from './utils/helpers.mjs';
 
 tsNode.register({
 	transpileOnly: true,
@@ -137,7 +138,7 @@ export class Server {
 
 	async start() {
 		//load InfinityMint
-		const wrapper = await glue.load();
+		let wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
 		 */
@@ -150,7 +151,9 @@ export class Server {
 		});
 		this.config = this.infinityConsole.Helpers.getConfigFile();
 		this.ipfs = create({
-			url: this.config.magicMirror.ipfsEndpoint || 'https://dweb.link/api/v0',
+			url:
+				this.config.magicMirror.ipfsEndpoint ||
+				'https://dweb.link/api/v0',
 		});
 		this.alchemy = new Alchemy({
 			apiKey: process.env.ALCHEMY_API_KEY,
@@ -201,8 +204,8 @@ export class Server {
 	 * Loads all the endpoints from the endpoints folder and adds them to the server
 	 */
 	async loadEndpoints() {
-		const endpointPath = getEndpointPath(this.config);
-		const files = await findEndpoints(endpointPath);
+		let endpointPath = getEndpointPath(this.config);
+		let files = await findEndpoints(endpointPath);
 
 		// load all the endpoints
 		await Promise.all(
@@ -220,41 +223,57 @@ export class Server {
 				if (path[0] !== '/') path = '/' + path;
 
 				console.log('New route: ' + path);
+				let _route = async (method) => {
+					console.log('\t' + method.toUpperCase() + ' Registered');
+					if (route.settings !== undefined) {
+						if (route.settings.requireLogin) {
+							let result = await isLoggedIn(req, this);
+
+							if (result !== true) return userError(res, result);
+						}
+
+						if (route.settings.admin && !req.session.admin)
+							return userError(res, 'Admin only route');
+					}
+
+					try {
+						await route[method](req, res);
+					} catch (error) {
+						console.log(
+							`Error in ${method.toUpperCase()} route: ` + path
+						);
+						console.error(error);
+						return userError(res, 'Internal Server Error');
+					}
+				};
+
+				if (route.settings) {
+					if (route.settings.requireLogin) {
+						console.log('\tLogin Required');
+					}
+
+					if (route.settings.admin) {
+						console.log('\tAdmin Only');
+					}
+				}
+
+				if (route.default) {
+					console.log('\tMiddleware Registered');
+					this.app.use(route.default);
+				}
 
 				if (route.post) {
 					console.log('\tPost Registered');
 					this.app.post(path, async (req, res) => {
-						try {
-							await route.post(req, res);
-						} catch (error) {
-							console.log('Error in post route: ' + path);
-							console.error(error);
-							res.status(500).send({
-								ok: false,
-								error: error.message,
-							});
-						}
+						await _route('post');
 					});
 				}
 
 				if (route.get) {
 					console.log('\tGet Registered');
 					this.app.get(path, async (req, res) => {
-						try {
-							await route.get(req, res);
-						} catch (error) {
-							console.log('Error in get route: ' + path);
-							console.error(error);
-							res.status(500).send({
-								ok: false,
-								error: error.message,
-							});
-						}
+						await _route('get');
 					});
-				}
-
-				if (route.default) {
-					this.app.use(route.default);
 				}
 
 				this.routes.push(route);
@@ -265,6 +284,7 @@ export class Server {
 
 export const server = new Server();
 export default server;
+
 (async () => {
 	await server.start();
 })().catch((err) => {

@@ -1,5 +1,6 @@
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
+
 /**
  *
  * @param {import('express').Request} request
@@ -19,7 +20,10 @@ export const post = async (request, response) => {
 		if (server.redisClient.hGet(request.body.ensAddress)) {
 			const data = server.redisClient.hGet(request.body.ensAddress);
 
-			if (data.generated && data.generate > Date.now() - 1000 * 60 * 60 * 24)
+			if (
+				data.generated &&
+				data.generate > Date.now() - 1000 * 60 * 60 * 24
+			)
 				return success(response, data);
 
 			server.redisClient.del(request.body.ensAddress);
@@ -67,7 +71,10 @@ export const post = async (request, response) => {
 				'Sorry, OpenAI is not responding right now. Please try again later.'
 			);
 		} finally {
-			server.redisClient.hSet(request.body.ensAddress + '_pending', false);
+			server.redisClient.hSet(
+				request.body.ensAddress + '_pending',
+				false
+			);
 		}
 	} catch (error) {
 		console.log('OpenAI Error', error);
