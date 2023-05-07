@@ -54,41 +54,40 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 						</div>
 					) : (
 						<>
-							<div className="bg-blue-400 p-2 text-black text-3xl mb-2">
-								<b>🌟</b>
+							<div className="bg-info p-2 text-accent text-3xl mb-2">
+								<b>🌟 SIGN IN</b>
 							</div>
 							<p className="text-center text-3xl text-black mt-2">
-								Login To Your Account
+								Mirror Mirror on the wall Sign In and see it all...
 							</p>
 
 							<div className="flex flex-col w-full border-opacity-50 mt-2 p-2">
-								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
-									Gain access to our{' '}
+							<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
+									Signed in creators can access the exclusive and 🆓 services of {' '}
 									<u className="text-success">
-										Virtual Registry Service
+										🍬LAND.ETH - Web3 Landscaping and Property Management Services
 									</u>
-									Allowing you to set the contentHash on your
-									ens domain (along with other text fields)
-									absolutely free.
+									Manage all of the builds, on all of your
+									properties, all in one place.
 								</div>
+								
 								<div className="divider text-black">AND</div>
 								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
-									Gain acess to our{' '}
+									Gain access to our highly experimental, and controversial Web3 Name Service Aggrigator {' '}	
 									<u className="text-success">
-										Property Management Tools
+										Virtual Web3 Registry Service
 									</u>
-									Allowing you to see and manage all of your
-									properties (ens domains) in one place.
+									Preview the Content Hash and other Metadata on your
+									ENS Name absolutely free.
 								</div>
 							</div>
 
 							<p className="text-center text-1xl text-black p-2">
-								<b>Note:</b> We use <u>Sign In With Ethereum</u>{' '}
-								to handle the login so you can be rest assured
-								that we cannot do anything fishy with your
-								account. We only use your address to identify
-								you and your account. We do not store any other
-								information about you.
+								<b>Note:</b> We use industry standard <u>Sign In With Ethereum</u>{' '}
+								to handle your session information. Rest assured
+								that we only use your address to identify
+								your account. We do not store, track or siphon any other
+								information about you, your account, the sites you create, etc..
 							</p>
 							{loginContext.loaded && loginContext.error ? (
 								<p className="mt-2 text-center text-2xl text-error">

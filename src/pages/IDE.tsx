@@ -276,7 +276,7 @@ function IDE({ theme }) {
 								setShouldShowNewProject(!shouldShowNewProject);
 							}}
 						>
-							🚀
+							🎨
 						</button>
 						<div className="p-1 mx-2 w-[6vw] hidden lg:block">
 							<input
@@ -593,7 +593,7 @@ function IDE({ theme }) {
 								history.push('/');
 							}}
 						>
-							🏠
+							🪞
 						</button>
 						<button
 							className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
@@ -601,7 +601,7 @@ function IDE({ theme }) {
 								history.push('/properties');
 							}}
 						>
-							📝
+							🍬
 						</button>
 					</div>
 				</div>

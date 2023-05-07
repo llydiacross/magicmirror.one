@@ -128,13 +128,13 @@ export default function DestinationFinder() {
 			</div>
 			<div className="flex flex-col">
 				<div className="form-control w-full">
-					<div className="input-group w-75">
+					<div className="input-group w-75 p-6">
 						<input
 							type="text"
 							data-loading={loading}
 							disabled={loading}
 							ref={inputElement}
-							maxLength={52}
+							maxLength={64}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') handleVisit();
 							}}
@@ -144,7 +144,9 @@ export default function DestinationFinder() {
 								);
 							}}
 							placeholder="Enter a destination..."
-							className="input input-bordered w-full"
+							className={`input input-bordered w-full ${
+								!loading ? 'animate-pulse hover:animation-play-state:paused' : ''
+							  }`}
 						/>
 						<button
 							data-loading={loading}
@@ -161,8 +163,9 @@ export default function DestinationFinder() {
 					data-loading={loading}
 					disabled={loading}
 					onClick={handleTakeMeAnywhere}
+					title='Trancend spacetime and visit a random destination in the 🟨 Metaverse!'
 				>
-					TAKE ME ANYWHERE
+					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
 				<p className="text-1xl text-shadow text-white bg-secondary p-1 mt-4 mb-1 lg:block">
 					<b>
@@ -171,12 +174,13 @@ export default function DestinationFinder() {
 					</b>
 				</p>
 				<button
-					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
+					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3"
 					data-loading={loading}
 					disabled={loading}
 					onClick={() => {
 						history.push('/ide');
 					}}
+					title='Dream a little dream of Web3 with the Dream🎨.eth Studio!'
 				>
 					DREAM🎨.ETH STUDIO
 				</button>
@@ -184,7 +188,7 @@ export default function DestinationFinder() {
 				{loginContext.isSignedIn ? (
 					<>
 						<p className="text-2xl text-shadow text-white bg-error p-1 mt-4 mb-1 lg:block">
-							<b>👇 NEW 👇</b>
+							<b>👇 🍬Land Landscapers, Meta Real Estate & the Metaverse's most exciting Candy Store! 👇</b>
 						</p>
 						<button
 							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
@@ -193,8 +197,9 @@ export default function DestinationFinder() {
 							onClick={() => {
 								history.push('/properties');
 							}}
+							title='🍬Land.eth - Manage your ENS Property, Web3 Landing Pages, Marketplaces, NFTs, and more!'
 						>
-							📝 Property Dashboard
+							🍬LAND.ETH
 						</button>
 					</>
 				) : (

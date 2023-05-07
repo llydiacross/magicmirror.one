@@ -386,47 +386,60 @@ defaultTemplates.links = {
     };
 
     result.html.code = `
+    
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>♾️LINKS</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-    <body class="bg-gray-100">
-        <header class="bg-white shadow-md py-4 px-8">
-            <!-- Header text -->
-            <h1 class="text-3xl font-bold text-gray-900 inline">
-                My Title
-            </h1>
-            <!-- Header image -->
-            <!-- <img src="your-image-url" alt="My Title" class="h-10 w-auto inline"> -->
-        </header>
-        <main class="container mx-auto mt-8">
-            <ul class="space-y-4">
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 1" class="h-5 w-auto inline mr-2">
-                        Button 1
-                    </a>
-                </li>
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 2" class="h-5 w-auto inline mr-2">
-                        Button 2
-                    </a>
-                </li>
-                <li>
-                    <a href="https://example.com" class="inline-block px-4 py-2 text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md">
-                        <img src="your-inline-image-url" alt="Button 3" class="h-5 w-auto inline mr-2">
-                        Button 3
-                    </a>
-                </li>
-            </ul>
-        </main>
-    </body>
-    </html>
+		<html lang="en">
+		<head>
+			<title>My InfinityLinks</title>
+			
+			<!--- THEMES: in settings.json change 'glitch' to 'gallery', 'menu', or any other theme in the layout/themes folder --->
+			<link rel="icon" type="image/png" href="https://cdn.glitch.global/20ae658d-f2cd-4f54-8582-809a3659c90d/888081218418130966.gif?v=1680273695023">
+			<link rel="icon" type="image/jpg" href="https://cdn.glitch.global/20ae658d-f2cd-4f54-8582-809a3659c90d/Blood_Moon.jpg?v=1680273043224">
+			
+			<!--   Meta Tags!   -->
+			<meta name="description" content={{ settings.metaDescription }}>
+		</head>
+		<body>
+			<main class="bg-[#11111d]">
+			<div class="flex flex-col">
+				<div class="justify-center items-center flex flex-col gap-8">
+				
+					<div class="pt-8 text-2xl italic">
+						My ♾️Links!
+					</div>
+
+					
+					<img
+					class="rounded-full w-24"
+					src="https://www.npmjs.com/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81MTQ3YzVlOTg4MWNhZTJkZmM3YzNlN2E2M2E2ZGM5Zj9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.dRPInXEWrciilXfMeoIIrGCjimEYKtp81jKZQlqb2KY"/>
+
+                    <div class='gap-4 w-full flex flex-col justify-center items-center'>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My First ♾️int
+					
+					</div>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My Second Infinitymint
+					
+					</div>
+					<div class="w-3/4 text-center bg-base-300 rounded-md bold border-2 border-slate-600 hover:bg-base-100 transition-colors">
+
+					My Twitter
+					
+					</div>
+					</div>
+				</div>
+
+			  <footer class="pt-24">
+			    Copyright 2023 InfinityMint.
+			  </footer>
+			
+			</main>
+		</body>
+		</html>
+      
     
       `;
 
@@ -437,6 +450,89 @@ defaultTemplates.links = {
 defaultTemplates.blog = {
   name: 'Blog',
   description: 'Set up a blog with your own content.',
+  onSelection: (tabs: any, setCode: any) => {
+	let result = {
+		...defaultTabs,
+	  };
+  
+	  result['.xens'] = {
+		...result['.xens'],
+		code: JSON.stringify({
+		  name: '♾️links.eth',
+		  description: 'A free and infinite links page',
+		  author: '0x0z.Agency',
+		  version: '0.0.1',
+		  direct: true,
+		}),
+	  };
+
+	  result.html.code = `
+	  <!DOCTYPE html>
+		<html lang="en">
+
+		<body class="bg-[#11111d]">
+			<header class="flex justify-between m-auto px-4">
+			<h1 class="text-4xl">My Blog</h1>
+			<div class="my-auto gap-4 inline-flex">
+			<a href="#">
+				About
+			</a>
+			<a href="#">
+				Contact
+			</a>
+			<a href="#">
+				Posts
+			</a>
+			</div>
+			</header>
+			<article class="my-12 px-8">
+			<section class="flex-col inline-flex gap-8">
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My first post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My second post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My third post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+				<li class="inline-flex flex-col">
+				<div class="inline-flex my-auto">
+					<h1 class="text-2xl text-white">
+					My fourth post
+					</h1>
+					<small class="mt-auto inline-flex px-2">2023-05-05</small>
+				</div>
+				<p class="my-auto">What I like to write about</p>
+				</li>
+			</section>
+			</article>
+			<footer class="mt-12 px-4">
+			Created by 0x0zAgency
+			</footer>
+		</body>
+		</html>
+	  `
+	  setCode(result);
+  }
 };
 
 defaultTemplates.portfolio = {
@@ -447,7 +543,7 @@ defaultTemplates.portfolio = {
 function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templates, setTemplates] = useState([]);
-  const [currentTheme, setCurrentTheme] = useState('forest');
+  const [currentTheme, setCurrentTheme] = useState('0x0z Light');
   const eventEmitterCallbackRef = useRef(null);
   const history = useHistory();
 

@@ -161,7 +161,7 @@ function FixedElements({
 					<div>
 						<img
 							src={ensContext.avatar || '/img/0x0zLogo.jpg'}
-							alt="InfinityMint Logo"
+							alt="Magic🪞"
 							className="w-24 cursor-pointer"
 							onClick={() => {
 								if (linkHref !== null) {
@@ -181,6 +181,7 @@ function FixedElements({
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={onSettings}
+								title='⚙️Settings.eth'
 							>
 								⚙️
 							</button>
@@ -189,22 +190,34 @@ function FixedElements({
 								onClick={() => {
 									history.push('/');
 								}}
+								title='🪞Magic.eth'
 							>
-								🏠
+								🪞
+							</button>
+							<button
+								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
+								onClick={() => {
+									history.push('/ide');
+								}}
+								title='Dream🎨.eth'
+							>
+								🎨
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
 									history.push('/properties');
 								}}
+								title='🍬Land.eth'
 							>
-								📝
+								🍬
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
 									history.push('/utilities/');
 								}}
+								title='🧰time.eth'
 							>
 								🧰
 							</button>
@@ -214,6 +227,7 @@ function FixedElements({
 									(!showHud ? 'bg-pink-500' : 'bg-black')
 								}
 								onClick={toggleHud}
+								title='Close Menu'
 							>
 								{showHud ? 'ᐃ' : 'ᐁ'}
 							</button>
@@ -224,6 +238,7 @@ function FixedElements({
 									'btn btn-square rounded-none border-none text-white w-full hover:text-white hover:bg-pink-500 bg-black'
 								}
 								onClick={toggleHud}
+								title='Open Menu'
 							>
 								{showHud ? 'ᐃ' : 'ᐁ'}
 							</button>
