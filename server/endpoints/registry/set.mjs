@@ -1,5 +1,9 @@
 import server from '../../server.mjs';
-import { isLoggedIn, success, userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
+
+export const settings = {
+	requireLogin: true,
+};
 
 /**
  *
@@ -7,9 +11,6 @@ import { isLoggedIn, success, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	if ((await isLoggedIn(req, server)) !== true)
-		return userError(res, await isLoggedIn(req, server));
-
 	let domainName = req.body.domainName;
 	let registry = req.body.registry;
 	if (!domainName) return userError(res, 'No domain name provided');

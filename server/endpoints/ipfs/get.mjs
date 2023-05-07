@@ -19,7 +19,9 @@ export const post = async (req, res) => {
 
 		const extension = link.name.split('.').pop();
 
-		if (!server?.config?.magicMirror.allowedExtensions?.includes(extension)) {
+		if (
+			!server?.config?.magicMirror.allowedExtensions?.includes(extension)
+		) {
 			throw new Error('File extension not allowed');
 		}
 	} catch (error) {
@@ -29,7 +31,7 @@ export const post = async (req, res) => {
 
 	if (link.size > 1024 * 1024 * 10) throw new Error('File too big');
 
-	const resp = server.ipfs.cat(cid);
+	let resp = server.ipfs.cat(cid);
 	let content = [];
 	for await (const chunk of resp) {
 		content = [...content, ...chunk];

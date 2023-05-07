@@ -8,7 +8,7 @@ import server from '../../server.mjs';
  */
 export const post = async (req, res) => {
 	let cid = req.body.cid;
-	const links = [];
+	let links = [];
 
 	if (!cid) return userError(res, 'Bad CID');
 
@@ -24,7 +24,11 @@ export const post = async (req, res) => {
 
 				const extension = link.name.split('.').pop();
 
-				if (!server?.config?.magicMirror.allowedExtensions?.includes(extension))
+				if (
+					!server?.config?.magicMirror.allowedExtensions?.includes(
+						extension
+					)
+				)
 					continue;
 
 				if (link.size < 1024 * 1024 * 10) {

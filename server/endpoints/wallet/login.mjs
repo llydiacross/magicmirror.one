@@ -1,5 +1,4 @@
 import pkg from 'siwe';
-import jwt from 'jsonwebtoken';
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
 const { SiweMessage, ErrorTypes } = pkg;
@@ -22,7 +21,7 @@ export const post = async (req, res) => {
 		req.session.cookie.expires = new Date(message.expirationTime);
 		//save the session
 		await new Promise((resolve) => req.session.save(resolve));
-		//set the current address to equal the current sessionId, we do this to prevent session hijacking
+		//set the current address to equal the current sessionId, we do this to prevent session hijacking and if they switch wallet
 		await server.redisClient.set(message.address, req.sessionID);
 
 		//add them to the database if they don't exist
@@ -39,6 +38,20 @@ export const post = async (req, res) => {
 				},
 			});
 
+		let user = await server.prisma.user.findUnique({
+			where: {
+				address: message.address,
+			},
+			select: {
+				role: true,
+			},
+		});
+
+		res.session.role = user.role;
+		if (user.role === 'ADMIN') res.session.admin = true;
+		//save the session
+		await new Promise((resolve) => req.session.save(resolve));
+
 		return success(res, {
 			verified: true,
 			address: message.address,
@@ -46,6 +59,8 @@ export const post = async (req, res) => {
 	} catch (err) {
 		req.session.siwe = null;
 		req.session.nonce = null;
+		res.session.admin = false;
+		res.session.role = 'USER';
 		await new Promise((resolve) => req.session.save(resolve));
 		// Log the error.
 		console.error(err);

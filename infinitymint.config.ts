@@ -124,6 +124,7 @@ export const config = {
 		deploy: {},
 	},
 	magicMirror: {
+		pageMax: 100,
 		/**
 		 * @type {import('ipfs-core').Options}
 		 */

@@ -1,5 +1,9 @@
 import server from '../../server.mjs';
-import { isLoggedIn, success, userError } from '../../utils/helpers.mjs';
+import { success } from '../../utils/helpers.mjs';
+
+export const settings = {
+	requireLogin: true,
+};
 
 /**
  *
@@ -7,9 +11,6 @@ import { isLoggedIn, success, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	if ((await isLoggedIn(req, server)) !== true)
-		return userError(res, await isLoggedIn(req, server));
-
 	let address = req.session.siwe.address;
 	let user = await server.prisma.user.findUnique({
 		where: {
