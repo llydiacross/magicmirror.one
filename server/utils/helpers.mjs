@@ -66,10 +66,6 @@ export const getEndpointPath = (config) => {
  * @returns
  */
 export const findEndpoints = async (endpointPath) => {
-	// find endpoints
-
-	console.log(endpointPath + '**/*.mjs', 'glob');
-
 	return await new Promise(async (resolve, reject) => {
 		glob(endpointPath + '**/*.mjs', (err, files) => {
 			if (err) {

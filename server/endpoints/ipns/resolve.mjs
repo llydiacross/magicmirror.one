@@ -17,11 +17,11 @@ export const post = async (req, res) => {
 		});
 	}
 
-	const result = await server.ipfs.name.resolve(name, {
+	let path;
+	let result = await server.ipfs.name.resolve(name, {
 		timeout: 2000,
 	});
 
-	let path;
 	for await (const name of result) {
 		path = name;
 	}

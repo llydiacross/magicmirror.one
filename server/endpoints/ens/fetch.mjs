@@ -1,4 +1,4 @@
-import { success, userError, isLoggedIn } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 export const settings = {

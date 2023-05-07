@@ -5,8 +5,8 @@ import { success, userError } from '../../utils/helpers.mjs';
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-export const post = async (req, res) => {
-	let { address } = req.body;
+export const get = async (req, res) => {
+	let { address } = req.query;
 
 	if (!address) return userError(res, 'Missing address');
 
@@ -18,6 +18,6 @@ export const post = async (req, res) => {
 
 	return success(res, {
 		count,
-		pages: Math.ceil(count / 100),
+		pages: Math.ceil(count / 32),
 	});
 };

@@ -1,5 +1,4 @@
-import server from '../../server.mjs';
-import { success, userError } from '../../utils/helpers.mjs';
+import { success } from '../../utils/helpers.mjs';
 
 export const settings = {
 	requireLogin: true,

@@ -14,11 +14,11 @@ export const post = async (request, response) => {
 		return userError('response', 'not an ens address');
 
 	try {
-		const prompt = `Using HTML, create a site with an idea for ${request.body.ensAddress}.
+		let prompt = `Using HTML, create a site with an idea for ${request.body.ensAddress}.
       Return only valid HTML. Do not explain your thought process.`;
 
 		if (server.redisClient.hGet(request.body.ensAddress)) {
-			const data = server.redisClient.hGet(request.body.ensAddress);
+			let data = server.redisClient.hGet(request.body.ensAddress);
 
 			if (
 				data.generated &&
@@ -40,7 +40,7 @@ export const post = async (request, response) => {
 		server.redisClient.hSet(request.body.ensAddress + '_pending', true);
 
 		try {
-			const completion = await server.openAI.createCompletion({
+			let completion = await server.openAI.createCompletion({
 				model: 'text-davinci-003',
 				prompt,
 				temperature: 0.6,
@@ -51,7 +51,7 @@ export const post = async (request, response) => {
 				presence_penalty: 0,
 			});
 
-			const html =
+			let html =
 				completion.data.choices[
 					Math.floor(Math.random() * completion.data.choices.length)
 				].text;
@@ -62,6 +62,7 @@ export const post = async (request, response) => {
 				status: 'generated',
 				html: html,
 			};
+
 			server.redisClient.hSet(request.body.ensAddress, obj);
 			return success(response, obj);
 		} catch (error) {
