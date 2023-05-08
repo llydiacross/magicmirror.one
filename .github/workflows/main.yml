@@ -15,11 +15,5 @@ jobs:
 			uses: actions/setup-node@v3
 			with:
 			node-version: '18.12.1'
-		- run: npm ci --verbose
-		- run: npm run build
 
-		- name: Serve react
-			run: cp -r build/* /var/www/magicmirror/html/
-
-		- name: Serve API
-			run: cp -r . /var/www/magicmirror/api
+		- run: integration
