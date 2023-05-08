@@ -20,7 +20,7 @@ export const success = (res, data) => {
 };
 
 /**
- * Excutes keys on a row
+ * Excutes keys on a row, also works on an object of course :)
  * @param {*} row
  * @param {*} keys
  * @returns

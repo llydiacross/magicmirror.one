@@ -30,7 +30,7 @@ export const get = async (req, res) => {
 
 	if (enses)
 		enses = enses.map((ens) => {
-			return exclude(ens, ['FakeRegistry', 'Manager', 'User']);
+			return exclude(ens, ['Manager', 'User']);
 		});
 
 	return success(res, {
