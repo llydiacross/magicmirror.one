@@ -28,13 +28,14 @@ export default function Dashboard() {
 		<>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
-				<div className="hero-content text-center text-neutral-content bg-primary">
+				<div className="hero-content text-center bg-gray-500">
 					<div className="min-w-screen">
-						<h1 className="mb-5 text-5xl font-bold text-warning">
-						🧰TIME.eth
+						<h1 className="mb-5 text-5xl font-bold text-black">
+							🧰TIME.eth
 						</h1>
-						<p className="mb-5 text-accent">
-							Here is 🧰 box full of utilities that you can use to manage and maintain your MAGIC🪞 experience.
+						<p className="mb-5 text-black">
+							Here is 🧰 box full of utilities that you can use to
+							manage and maintain your MAGIC🪞 experience.
 						</p>
 
 						<button

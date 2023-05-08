@@ -109,8 +109,16 @@ export default function Properties() {
 			) : null}
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 md:block">
-					<div className="header-text text-accent font-bold">Welcome to 🍬LAND.eth</div>
-					<div className="text-accent bg-info p-6 rounded ">🍬LAND.ETH - Web3 Landscaping and Property Management Services & the Metaverse's most exciting Candy Store! Make sure that your Web3 Property looks as SWEET as possible and are ready to become the dream of a DEcentralized GENeration.</div>
+					<div className="text-6xl text-center font-bold">
+						Welcome to 🍬LAND.eth
+					</div>
+					<div className="text-black bg-info p-6 rounded mt-4">
+						🍬LAND.ETH - Web3 Landscaping and Property Management
+						Services & the Metaverse's most exciting Candy Store!
+						Make sure that your Web3 Property looks as SWEET as
+						possible and are ready to become the dream of a
+						DEcentralized GENeration.
+					</div>
 				</div>
 			</div>
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
@@ -155,7 +163,12 @@ export default function Properties() {
 			) : (
 				<>
 					<div className="p-2 hidden md:block">
-						<div className="divider">{context.ensAddresses[0]}<span className='bg-alert p-2 text-1'>{context.walletAddress}</span></div>
+						<div className="divider">
+							{context.ensAddresses[0]}
+							<span className="bg-alert p-2 text-1">
+								{context.walletAddress}
+							</span>
+						</div>
 					</div>
 					<div className="grid gap-4 grid-flow-row-dense grid-cols-1 md:grid-cols-3 lg:grid-cols-5 grid-rows-3 p-4 mx-auto min-h-screen">
 						{ens.length > 0 ? (
@@ -214,9 +227,7 @@ export default function Properties() {
 													</div>
 												)}
 												{!item.nftDescription ? (
-													<div>
-														⚪️
-													</div>
+													<div>⚪️</div>
 												) : null}
 											</div>
 											{item.nftMedia ? (
@@ -286,8 +297,9 @@ export default function Properties() {
 											<div className="text-sm text-gray-500 text-center">
 												We use an external API to
 												collect your mints which can
-												sometimes render innaccurately. Please
-												be aware that this only shows{' '}
+												sometimes render innaccurately.
+												Please be aware that this only
+												shows{' '}
 												<u>
 													ENS properties that you own!
 												</u>
@@ -328,7 +340,11 @@ export default function Properties() {
 												Properties
 											</div>
 											<div className="text-sm text-gray-500">
-												You will need to login to load all of your properties so that you can let the 🍬LAND.eth Landscaping Service get to work for you DEGEN!
+												You will need to login to load
+												all of your properties so that
+												you can let the 🍬LAND.eth
+												Landscaping Service get to work
+												for you DEGEN!
 											</div>
 											<button
 												className="bg-success text-white font-bold py-2 px-4 rounded mt-2"

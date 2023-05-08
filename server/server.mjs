@@ -223,7 +223,7 @@ export class Server {
 				if (path[0] !== '/') path = '/' + path;
 
 				console.log('New route: ' + path);
-				let _route = async (method) => {
+				let _route = async (method, res, req) => {
 					console.log('\t' + method.toUpperCase() + ' Registered');
 					if (route.settings !== undefined) {
 						if (route.settings.requireLogin) {
@@ -273,14 +273,14 @@ export class Server {
 				if (route.post) {
 					console.log('\tPost Registered');
 					this.app.post(path, async (req, res) => {
-						await _route('post');
+						await _route('post', res, req);
 					});
 				}
 
 				if (route.get) {
 					console.log('\tGet Registered');
 					this.app.get(path, async (req, res) => {
-						await _route('get');
+						await _route('get', res, req);
 					});
 				}
 

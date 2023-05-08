@@ -47,8 +47,8 @@ export const post = async (req, res) => {
 			},
 		});
 
-		res.session.role = user.role;
-		if (user.role === 'ADMIN') res.session.admin = true;
+		req.session.role = user.role;
+		if (user.role === 'ADMIN') req.session.admin = true;
 		//save the session
 		await new Promise((resolve) => req.session.save(resolve));
 
@@ -59,8 +59,6 @@ export const post = async (req, res) => {
 	} catch (err) {
 		req.session.siwe = null;
 		req.session.nonce = null;
-		res.session.admin = false;
-		res.session.role = 'USER';
 		await new Promise((resolve) => req.session.save(resolve));
 		// Log the error.
 		console.error(err);
