@@ -27,9 +27,9 @@ export const success = (res, data) => {
  */
 export const exclude = (row, keys) => {
 	for (let key of keys) {
-		delete user[key];
+		delete row[key];
 	}
-	return user;
+	return row;
 };
 
 /**
