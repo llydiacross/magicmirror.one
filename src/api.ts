@@ -45,8 +45,11 @@ export const apiFetch = async (
 ) => {
 	let endPoint = getEndpoint(type);
 	requestMethod = requestMethod || 'GET';
+	endPoint = endPoint + method;
+	if (requestMethod === 'GET' && data)
+		endPoint += '?' + new URLSearchParams(data).toString();
 
-	const result = await fetch(endPoint + method, {
+	const result = await fetch(endPoint, {
 		method: requestMethod,
 		headers: { 'Content-Type': 'application/json' },
 		signal: abortController?.signal,

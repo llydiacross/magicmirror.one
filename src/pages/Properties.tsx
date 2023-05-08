@@ -15,9 +15,12 @@ export default function Properties() {
 	const [shouldShowLogin, setShouldShowLogin] = useState(null);
 	const [ens, setENS] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [searchTerm, setSearchTerm] = useState('');
+	const [filterTerm, setFilterTerm] = useState('');
 	const [error, setError] = useState(null);
 	const [count, setCount] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+	const [page, setPage] = useState(0);
+	const [pageMax, setPageMax] = useState(100);
 	const context = useContext(Web3Context);
 	const history = useHistory();
 	const loginContext = useContext(LoginContext);
@@ -31,25 +34,47 @@ export default function Properties() {
 			{
 				address: context.walletAddress,
 			},
-			'POST'
+			'GET'
 		);
 
 		setENS(result.nfts || []);
-		setCount(result.nfts?.length || 0);
+		setLoading(false);
 	};
 
 	let fetchENS = async () => {
 		setLoading(true);
 		setError(null);
-		let result = await apiFetch('ens', 'fetch', null, 'POST');
-		setCount(result.totalCount);
+		await apiFetch('ens', 'fetch', null, 'POST');
+		await getAllEns();
+		await getCount();
+		setLoading(false);
+	};
+
+	let getCount = async () => {
+		setLoading(true);
+		setError(null);
+		let result = await apiFetch(
+			'ens',
+			'count',
+			{
+				address: context.walletAddress,
+			},
+			'GET'
+		);
+		setCount(result.count);
+		setTotalPages(result.pages);
+		setPageMax(result.pageMax);
+		setLoading(false);
+		return result.count;
 	};
 
 	useEffect(() => {
 		if (!context.loaded || !loginContext.loaded) return;
 		if (!loginContext.isSignedIn) return;
 		try {
-			getAllEns();
+			getCount().then((count) => {
+				if (count > 0) getAllEns();
+			});
 		} catch (error) {
 			setError(error);
 		} finally {
@@ -109,8 +134,16 @@ export default function Properties() {
 			) : null}
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
 				<div className="flex flex-col pl-4 md:block">
-					<div className="header-text text-accent font-bold">Welcome to 🍬LAND.eth</div>
-					<div className="text-accent bg-info p-6 rounded ">🍬LAND.ETH - Web3 Landscaping and Property Management Services & the Metaverse's most exciting Candy Store! Make sure that your Web3 Property looks as SWEET as possible and are ready to become the dream of a DEcentralized GENeration.</div>
+					<div className="text-3xl text-center font-bold">
+						Welcome to 🍬LAND.eth
+					</div>
+					<div className="text-black bg-info p-6 rounded mt-4">
+						🍬LAND.ETH - Web3 Landscaping and Property Management
+						Services & the Metaverse's most exciting Candy Store!
+						Make sure that your Web3 Property looks as SWEET as
+						possible and are ready to become the dream of a
+						DEcentralized GENeration.
+					</div>
 				</div>
 			</div>
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
@@ -125,9 +158,20 @@ export default function Properties() {
 						className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
 						id="domain"
 						type="text"
-						placeholder="Search"
+						placeholder="Filter by name..."
 						onChange={(e) => {
-							setSearchTerm(e.target.value);
+							setFilterTerm(e.target.value);
+						}}
+					/>
+					<input
+						disabled={!loginContext.isSignedIn}
+						data-loading={loading}
+						className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+						id="domain"
+						type="text"
+						placeholder="Search by address..."
+						onChange={(e) => {
+							setFilterTerm(e.target.value);
 						}}
 					/>
 					<button
@@ -144,42 +188,54 @@ export default function Properties() {
 								});
 						}}
 					>
-						Fetch
+						🔄
 					</button>
 				</div>
 			</div>
 			{loading ? (
 				<div className="p-2">
-					<Loading showLoadingBar={false} />
+					<Loading
+						showLoadingBar={false}
+						loadingReason="Fetching your ENS from our server..."
+					/>
 				</div>
 			) : (
 				<>
 					<div className="p-2 hidden md:block">
-						<div className="divider">{context.ensAddresses[0]}<span className='bg-alert p-2 text-1'>{context.walletAddress}</span></div>
+						<div className="divider">
+							{context.ensAddresses[0]}
+							<span className="bg-alert p-2 text-1">
+								{context.walletAddress}
+							</span>
+						</div>
 					</div>
 					<div className="grid gap-4 grid-flow-row-dense grid-cols-1 md:grid-cols-3 lg:grid-cols-5 grid-rows-3 p-4 mx-auto min-h-screen">
 						{ens.length > 0 ? (
 							ens.map((item, index) => {
+								let filtered = false;
 								if (
-									searchTerm.length > 0 &&
+									filterTerm.length > 0 &&
 									!item.domainName
 										.toLowerCase()
-										.includes(searchTerm.toLowerCase())
+										.includes(filterTerm.toLowerCase())
 								)
-									return null;
+									filtered = true;
 
 								return (
 									<div
 										className="col-span-1 row-span-1 bg-white rounded-lg shadow-lg p-4"
+										style={{
+											opacity: filtered ? 0.5 : 1,
+										}}
 										key={index}
 									>
 										<div className="flex flex-col">
 											<div className="text-2xl font-bold text-black">
-												{item.domainName.length > 42 ? (
+												{item.domainName.length > 18 ? (
 													<>
 														{item.domainName.substring(
 															0,
-															42
+															18
 														)}
 														...
 													</>
@@ -197,14 +253,14 @@ export default function Properties() {
 													</span>
 												) : null}
 											</div>
-											<div className="text-sm text-gray-500 break-all">
+											<div className="text-sm text-gray-500 break-all hidden lg:block">
 												{item.nftDescription &&
 												item.nftDescription.length >
-													64 ? (
+													28 ? (
 													<div>
 														{item.nftDescription.substring(
 															0,
-															64
+															28
 														)}
 														...
 													</div>
@@ -214,9 +270,7 @@ export default function Properties() {
 													</div>
 												)}
 												{!item.nftDescription ? (
-													<div>
-														⚪️
-													</div>
+													<div>⚪️</div>
 												) : null}
 											</div>
 											{item.nftMedia ? (
@@ -286,8 +340,9 @@ export default function Properties() {
 											<div className="text-sm text-gray-500 text-center">
 												We use an external API to
 												collect your mints which can
-												sometimes render innaccurately. Please
-												be aware that this only shows{' '}
+												sometimes render innaccurately.
+												Please be aware that this only
+												shows{' '}
 												<u>
 													ENS properties that you own!
 												</u>
@@ -328,7 +383,11 @@ export default function Properties() {
 												Properties
 											</div>
 											<div className="text-sm text-gray-500">
-												You will need to login to load all of your properties so that you can let the 🍬LAND.eth Landscaping Service get to work for you DEGEN!
+												You will need to login to load
+												all of your properties so that
+												you can let the 🍬LAND.eth
+												Landscaping Service get to work
+												for you DEGEN!
 											</div>
 											<button
 												className="bg-success text-white font-bold py-2 px-4 rounded mt-2"

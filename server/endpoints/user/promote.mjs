@@ -1,9 +1,11 @@
+//import server from '../../server.mjs';
+
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
-import { ethers } from 'ethers';
 
 export const settings = {
-	requireLogin: true,
+	requireLogin: false,
+	admin: false,
 };
 
 /**
@@ -11,8 +13,10 @@ export const settings = {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-export const get = async (req, res) => {
-	let address = req.query.address || req.session.siwe.address;
+export const post = async (req, res) => {
+	let address = req.body.address;
+	let group = req.body.group;
+
 	if (!address) return userError(res, 'Missing address');
 	if (!ethers.utils.isAddress(address))
 		return userError(res, 'Invalid address');
@@ -21,15 +25,21 @@ export const get = async (req, res) => {
 		where: {
 			address,
 		},
-		select: {
-			address: true,
-			createdAt: true,
-			role: true,
-		},
 	});
+
 	if (!user) return userError(res, 'User not found');
 
-	return success(res, {
-		user,
+	if (user.role === 'ADMIN' && req.session.role !== 'SUPER_ADMIN')
+		return userError(res, 'Only super admins can promote or demote admins');
+
+	await server.prisma.user.update({
+		where: {
+			address,
+		},
+		data: {
+			role: group.toUpperCase(),
+		},
 	});
+
+	return success(res);
 };

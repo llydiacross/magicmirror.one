@@ -1,7 +1,8 @@
-//import server from '../../server.mjs';
+import server from '../../server.mjs';
 
 export const settings = {
 	requireLogin: false,
+	requireTicket: false,
 	admin: false,
 };
 

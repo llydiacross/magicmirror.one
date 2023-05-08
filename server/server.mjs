@@ -12,11 +12,11 @@ import { createClient } from 'redis';
 import { Alchemy, Network } from 'alchemy-sdk';
 //prisma
 import { PrismaClient } from '@prisma/client';
-// do ts node register
 import tsNode from 'ts-node';
 import { Configuration, OpenAIApi } from 'openai';
 import { isLoggedIn } from './utils/helpers.mjs';
 
+// do ts node register
 tsNode.register({
 	transpileOnly: true,
 	compilerOptions: {
@@ -138,16 +138,20 @@ export class Server {
 
 	async start() {
 		//load InfinityMint
+
 		let wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
 		 */
-		this.infinityConsole = await wrapper.getSync('infinitymint').load({
+		let infinityMint = await wrapper.getSync('infinitymint');
+		this.infinityConsole = await infinityMint.load({
 			dontDraw: true,
 			scriptMode: true,
 			startExpress: false,
 			startGanache: false,
-			test: true, // will expose all logs
+			network: process.env.PRODUCTION === 'true' ? 'ethereum' : 'ganache',
+			//will tell InfinityMint not to pipe its outputs to the InfinityConsole and instead print them directly to the console, essentially showing all of the logs! turning this to false will only show debug and default logs
+			dontPipe: true,
 		});
 		this.config = this.infinityConsole.Helpers.getConfigFile();
 		this.ipfs = create({
@@ -223,7 +227,7 @@ export class Server {
 				if (path[0] !== '/') path = '/' + path;
 
 				console.log('New route: ' + path);
-				let _route = async (method) => {
+				let _route = async (method, res, req) => {
 					console.log('\t' + method.toUpperCase() + ' Registered');
 					if (route.settings !== undefined) {
 						if (route.settings.requireLogin) {
@@ -234,6 +238,14 @@ export class Server {
 
 						if (route.settings.admin && !req.session.admin)
 							return userError(res, 'Admin only route');
+
+						if (
+							route.settings.requireTicket &&
+							!res.session.role !== 'TICKET_HOLDER' &&
+							!res.session.admin
+						) {
+							return userError(res, 'Ticket Holder only route');
+						}
 					}
 
 					try {
@@ -265,14 +277,14 @@ export class Server {
 				if (route.post) {
 					console.log('\tPost Registered');
 					this.app.post(path, async (req, res) => {
-						await _route('post');
+						await _route('post', res, req);
 					});
 				}
 
 				if (route.get) {
 					console.log('\tGet Registered');
 					this.app.get(path, async (req, res) => {
-						await _route('get');
+						await _route('get', res, req);
 					});
 				}
 

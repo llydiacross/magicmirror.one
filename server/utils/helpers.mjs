@@ -7,6 +7,8 @@ import glob from 'glob';
  * @returns
  */
 export const success = (res, data) => {
+	if (!data) data = {};
+
 	if (res.locals === undefined)
 		throw new Error(
 			'you have forgot to pass the express Response as the first argument to success()'
@@ -15,6 +17,19 @@ export const success = (res, data) => {
 	if (typeof data === 'string') data = { message: data };
 	if (data.ok === undefined) data.ok = true;
 	res.status(200).json(data);
+};
+
+/**
+ * Excutes keys on a row, also works on an object of course :)
+ * @param {*} row
+ * @param {*} keys
+ * @returns
+ */
+export const exclude = (row, keys) => {
+	for (let key of keys) {
+		delete row[key];
+	}
+	return row;
 };
 
 /**

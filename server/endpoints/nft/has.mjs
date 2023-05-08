@@ -1,9 +1,10 @@
 import server from '../../server.mjs';
-import { success } from '../../utils/helpers.mjs';
 import { ethers } from 'ethers';
 
 export const settings = {
 	requireLogin: true,
+	requireTicket: false,
+	admin: false,
 };
 
 /**
@@ -18,18 +19,12 @@ export const get = async (req, res) => {
 	if (!ethers.utils.isAddress(address))
 		return userError(res, 'Invalid address');
 
-	let user = await server.prisma.user.findUnique({
-		where: {
-			address,
-		},
-		select: {
-			address: true,
-			createdAt: true,
-			role: true,
-		},
-	});
+	let erc721 = await server.infinityConsole.getProjectERC721();
+	//then we call balance of
+	let balance = await erc721.balanceOf(address);
 
 	return success(res, {
-		user,
+		has: balance > 0,
+		count: balance,
 	});
 };

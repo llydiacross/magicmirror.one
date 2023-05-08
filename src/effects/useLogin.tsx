@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { SiweMessage } from 'siwe';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { apiFetch, getEndpointHref } from '../api';
 import { Web3Context } from '../contexts/web3Context';
 
@@ -32,12 +32,15 @@ export const useLogin = () => {
 	const [isIncorrectAddress, setIsIncorrectAddress] = useState(false);
 	const [address, setAddress] = useState(null); // [1]
 	const web3Context = useContext(Web3Context);
+	const timerHandle = useRef(null);
 
 	useEffect(() => {
 		setLoaded(false);
 		setError(null);
 
 		if (!web3Context.loaded) return;
+
+		if (timerHandle.current) clearInterval(timerHandle.current);
 
 		checkLogin()
 			.then((result) => {
@@ -62,6 +65,25 @@ export const useLogin = () => {
 					setAddress(web3Context.walletAddress);
 					setIsIncorrectAddress(false);
 					setLoaded(true);
+
+					//check login every minute
+					timerHandle.current = setInterval(async () => {
+						let result: boolean;
+						try {
+							result = await checkLogin();
+						} catch (err) {
+							console.log(err);
+							result = false;
+						}
+
+						if (!result) {
+							setIsSignedIn(false);
+							setAddress(null);
+							setIsIncorrectAddress(false);
+							setError(null);
+							clearInterval(timerHandle.current);
+						}
+					}, 1000 * 60 * 5);
 				})();
 			})
 			.catch((err) => {

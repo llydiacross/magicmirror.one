@@ -1,5 +1,6 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
+import { ethers } from 'ethers';
 
 export const settings = {
 	requireLogin: true,
@@ -17,6 +18,11 @@ export const get = async (req, res) => {
  */
 export const post = async (req, res) => {
 	let address = req.session.siwe.address;
+
+	if (!address) return userError(res, 'Missing address');
+	if (!ethers.utils.isAddress(address))
+		return userError(res, 'Invalid address');
+
 	let lastFetched = await server.prisma.lastFetched.findFirst({
 		where: {
 			address: address,
@@ -42,12 +48,19 @@ export const post = async (req, res) => {
 	try {
 		let totalCount = 0;
 		let fetchNFTS = async (currentAddress, pageKey) => {
-			let nfts = await server.alchemy.nft.getNftsForOwner(address, {
-				contractAddresses: [
-					'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
-				],
-				pageKey: pageKey,
-			});
+			/**
+			 * NOTE: If you want to test what having over 600 ENS is like, replace address with this address:
+			 * 0xDFF917ab602e8508b6907dE1b038dd52B24A2379
+			 */
+			let nfts = await server.alchemy.nft.getNftsForOwner(
+				'0xDFF917ab602e8508b6907dE1b038dd52B24A2379',
+				{
+					contractAddresses: [
+						'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+					],
+					pageKey: pageKey,
+				}
+			);
 
 			for (let i = 0; i < nfts.ownedNfts.length; i++) {
 				let nft = nfts.ownedNfts[i];

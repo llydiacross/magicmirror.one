@@ -1,5 +1,5 @@
 import { load } from 'infinitymint';
 
 load({
-  startExpress: false,
+	startExpress: false,
 });
