@@ -12,11 +12,11 @@ import { createClient } from 'redis';
 import { Alchemy, Network } from 'alchemy-sdk';
 //prisma
 import { PrismaClient } from '@prisma/client';
-// do ts node register
 import tsNode from 'ts-node';
 import { Configuration, OpenAIApi } from 'openai';
 import { isLoggedIn } from './utils/helpers.mjs';
 
+// do ts node register
 tsNode.register({
 	transpileOnly: true,
 	compilerOptions: {
