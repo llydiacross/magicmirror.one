@@ -7,6 +7,7 @@ import server from '../../server.mjs';
  */
 export const get = async (req, res) => {
 	let { address, page } = req.query;
+	page = parseInt(page) || 0;
 
 	if (!address) return userError(res, 'Missing address');
 
@@ -14,8 +15,8 @@ export const get = async (req, res) => {
 		where: {
 			ownerAddress: address,
 		},
-		skip: page * server.config.magicMirror.pageSize,
-		take: server.config.magicMirror.pageSize,
+		skip: page * server.config.magicMirror.pageMax,
+		take: server.config.magicMirror.pageMax,
 	});
 
 	return success(res, {

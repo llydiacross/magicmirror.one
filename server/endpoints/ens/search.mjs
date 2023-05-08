@@ -20,8 +20,8 @@ export const get = async (req, res) => {
 				contains: address,
 			},
 		},
-		skip: page * server.config.magicMirror.pageSize,
-		take: server.config.magicMirror.pageSize,
+		skip: page * server.config.magicMirror.pageMax,
+		take: server.config.magicMirror.pageMax,
 	});
 
 	return success(res, {

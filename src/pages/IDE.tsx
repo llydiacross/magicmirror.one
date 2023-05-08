@@ -166,24 +166,13 @@ function IDE({ theme }) {
 		const botParam = urlParams.get('bot');
 		const dreamParam = urlParams.get('dream');
 
-		if (!dreamParam) return;
-		
-		if (dreamParam === 'true') 
+		if (dreamParam === 'true')
 			setShouldShowNewProject(!shouldShowNewProject);
-			
-		if (!botParam) return;
-		
-		if (botParam === 'army') 
-			setShouldShowChatGPT(!shouldShowPublish);
-			
-		if (!urlParam) return;
-
+		if (botParam === 'army') setShouldShowChatGPT(!shouldShowPublish);
 		if (ensContext.currentEnsAddress !== urlParam)
 			ensContext.setCurrentEnsAddress(urlParam);
 
-		if (!ensContext.loaded) return;
-
-		if (ensContext.contentHash !== null) {
+		if (ensContext.loaded && ensContext.contentHash !== null) {
 			(async () => {
 				let potentialStats = await getStats(ensContext.contentHash);
 				setStats(potentialStats);
@@ -279,7 +268,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowChatGPT(!shouldShowPublish);
 							}}
-							title='🤖Army.eth - Employ the power of AI to build your dWeb project'
+							title="🤖Army.eth - Employ the power of AI to build your dWeb project"
 						>
 							🤖
 						</button>
@@ -288,7 +277,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowNewProject(!shouldShowNewProject);
 							}}
-							title='Dream🎨.eth - Create a new dream project'
+							title="Dream🎨.eth - Create a new dream project"
 						>
 							🎨
 						</button>
@@ -564,13 +553,13 @@ function IDE({ theme }) {
 						</button>
 						<button
 							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
-							title='Save'
+							title="Save"
 						>
 							💾
 						</button>
-						<button 
+						<button
 							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
-							title='Open'	
+							title="Open"
 						>
 							📁
 						</button>
@@ -606,7 +595,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowSettings(!shouldShowSettings);
 							}}
-							title='⚙️Settings.eth'
+							title="⚙️Settings.eth"
 						>
 							⚙️
 						</button>
