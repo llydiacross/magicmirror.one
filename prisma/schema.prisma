@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Don't touch with out asking lyds :)
 
 generator client {
   provider = "prisma-client-js"
@@ -17,6 +16,7 @@ model User {
   ENS          ENS[]
   FakeRegistry FakeRegistry[]
   LastFetched  LastFetched?
+  Manager      Manager[]
 }
 
 model FakeRegistry {
@@ -37,11 +37,23 @@ model ENS {
   ensContractAddress String
   domainName         String        @unique
   nftUri             Json
+  managers           String[]
   nftName            String
   nftDescription     String
   nftMedia           Json
   FakeRegistry       FakeRegistry?
   User               User?         @relation(fields: [ownerAddress], references: [address])
+  Manager            Manager[]
+}
+
+model Manager {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  managerAddress String
+  domainName     String
+  user           User     @relation(fields: [managerAddress], references: [address])
+  ens            ENS      @relation(fields: [domainName], references: [domainName])
 }
 
 model LastFetched {
