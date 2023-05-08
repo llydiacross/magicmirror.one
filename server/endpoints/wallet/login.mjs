@@ -1,7 +1,8 @@
-import { SiweMessage, ErrorTypes } from 'siwe';
+import siwe from 'siwe';
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
-
+//siwe stuff
+const { SiweMessage, ErrorTypes } = siwe;
 /**
  *
  * @param {import('express').Request} req

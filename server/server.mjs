@@ -138,16 +138,20 @@ export class Server {
 
 	async start() {
 		//load InfinityMint
+
 		let wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
 		 */
-		this.infinityConsole = await wrapper.getSync('infinitymint').load({
+		let infinityMint = await wrapper.getSync('infinitymint');
+		this.infinityConsole = await infinityMint.load({
 			dontDraw: true,
 			scriptMode: true,
 			startExpress: false,
-			startGanache: false,
-			test: true, // will expose all logs
+			startGanache: process.env.PRODUCTION !== 'true',
+			network: process.env.PRODUCTION === 'true' ? 'ethereum' : 'ganache',
+			//will tell InfinityMint not to pipe its outputs to the InfinityConsole and instead print them directly to the console, essentially showing all of the logs! turning this to false will only show debug and default logs
+			dontPipe: true,
 		});
 		this.config = this.infinityConsole.Helpers.getConfigFile();
 		this.ipfs = create({
