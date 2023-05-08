@@ -23,6 +23,10 @@ export const post = async (req, res) => {
 		},
 	});
 
+	if (!address) return userError(res, 'Missing address');
+	if (!ethers.utils.isAddress(address))
+		return userError(res, 'Invalid address');
+
 	//if last fetched less than an hour ago, return
 	if (
 		lastFetched &&

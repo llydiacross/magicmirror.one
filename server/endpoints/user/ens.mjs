@@ -13,7 +13,9 @@ export const settings = {
 export const get = async (req, res) => {
 	let address = req.query.address || req.session.siwe.address;
 
-	if (!address) return userError(res, 'No address provided');
+	if (!address) return userError(res, 'Missing address');
+	if (!ethers.utils.isAddress(address))
+		return userError(res, 'Invalid address');
 
 	let user = await server.prisma.user.findUnique({
 		where: {

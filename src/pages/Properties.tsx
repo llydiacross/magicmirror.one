@@ -18,6 +18,9 @@ export default function Properties() {
 	const [filterTerm, setFilterTerm] = useState('');
 	const [error, setError] = useState(null);
 	const [count, setCount] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+	const [page, setPage] = useState(0);
+	const [pageMax, setPageMax] = useState(100);
 	const context = useContext(Web3Context);
 	const history = useHistory();
 	const loginContext = useContext(LoginContext);
@@ -35,21 +38,43 @@ export default function Properties() {
 		);
 
 		setENS(result.nfts || []);
-		setCount(result.nfts?.length || 0);
+		setLoading(false);
 	};
 
 	let fetchENS = async () => {
 		setLoading(true);
 		setError(null);
-		let result = await apiFetch('ens', 'fetch', null, 'POST');
-		setCount(result.totalCount);
+		await apiFetch('ens', 'fetch', null, 'POST');
+		await getAllEns();
+		await getCount();
+		setLoading(false);
+	};
+
+	let getCount = async () => {
+		setLoading(true);
+		setError(null);
+		let result = await apiFetch(
+			'ens',
+			'count',
+			{
+				address: context.walletAddress,
+			},
+			'GET'
+		);
+		setCount(result.count);
+		setTotalPages(result.pages);
+		setPageMax(result.pageMax);
+		setLoading(false);
+		return result.count;
 	};
 
 	useEffect(() => {
 		if (!context.loaded || !loginContext.loaded) return;
 		if (!loginContext.isSignedIn) return;
 		try {
-			getAllEns();
+			getCount().then((count) => {
+				if (count > 0) getAllEns();
+			});
 		} catch (error) {
 			setError(error);
 		} finally {

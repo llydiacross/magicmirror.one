@@ -37,7 +37,6 @@ model ENS {
   ensContractAddress String
   domainName         String        @unique
   nftUri             Json
-  managers           String[]
   nftName            String
   nftDescription     String
   nftMedia           Json
