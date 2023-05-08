@@ -88,7 +88,6 @@ export const config = {
 			defaultBalance: 69420,
 		},
 	},
-	roots: ['../infinitymint-buildtools/'],
 	settings: {
 		networks: {
 			hardhat: {
@@ -117,10 +116,6 @@ export const config = {
 			supportedExtensions: ['.flac'],
 		},
 		build: {},
-		scripts: {
-			disableMainExecution: ['/infinitymint-buildtools/'],
-			classicScripts: ['/infinitymint-buildtools/'],
-		},
 		deploy: {},
 	},
 	magicMirror: {
