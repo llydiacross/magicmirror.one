@@ -234,6 +234,14 @@ export class Server {
 
 						if (route.settings.admin && !req.session.admin)
 							return userError(res, 'Admin only route');
+
+						if (
+							route.settings.requireTicket &&
+							!res.session.role !== 'TICKET_HOLDER' &&
+							!res.session.admin
+						) {
+							return userError(res, 'Ticket Holder only route');
+						}
 					}
 
 					try {

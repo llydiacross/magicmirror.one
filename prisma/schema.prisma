@@ -56,4 +56,5 @@ model LastFetched {
 enum Role {
   USER
   ADMIN
+  TICKET_HOLDER
 }

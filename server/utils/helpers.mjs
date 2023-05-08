@@ -7,6 +7,8 @@ import glob from 'glob';
  * @returns
  */
 export const success = (res, data) => {
+	if (!data) data = {};
+
 	if (res.locals === undefined)
 		throw new Error(
 			'you have forgot to pass the express Response as the first argument to success()'

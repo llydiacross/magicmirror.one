@@ -53,11 +53,11 @@ export const setENSContentHash = async (
 /**
  *
  * @param currentCode
- * @param selectedTab
+ * @param codeFormat
  * @returns
  */
-export const prettifyCode = (currentCode: string, selectedTab = 'html') => {
-	if (selectedTab === 'html') {
+export const prettifyCode = (currentCode: string, codeFormat = 'html') => {
+	if (codeFormat === 'html') {
 		currentCode = prettier(currentCode);
 		//remove double spaces
 		currentCode = currentCode.replace(/  /g, ' ');
@@ -65,7 +65,7 @@ export const prettifyCode = (currentCode: string, selectedTab = 'html') => {
 		return currentCode;
 	}
 
-	if (selectedTab === 'js' || selectedTab === 'css') {
+	if (codeFormat === 'js' || codeFormat === 'css') {
 		//remove all tabs
 		currentCode = currentCode.replace(/\t/g, '');
 		//remove the white space before the first character on each line
@@ -76,7 +76,10 @@ export const prettifyCode = (currentCode: string, selectedTab = 'html') => {
 		currentCode = currentCode.replace(/{\s*$/gm, '{\n');
 		//loop through each line, adding tabs where necessary
 
-		if (currentCode.indexOf('}') !== -1 && currentCode.indexOf('{') !== -1) {
+		if (
+			currentCode.indexOf('}') !== -1 &&
+			currentCode.indexOf('{') !== -1
+		) {
 			let lines = currentCode.split('\n');
 			let newLines = [];
 			let tabCount = 0;
@@ -101,7 +104,7 @@ export const prettifyCode = (currentCode: string, selectedTab = 'html') => {
 		return currentCode;
 	}
 
-	if (selectedTab === 'json' || selectedTab == '.xens') {
+	if (codeFormat === 'json' || codeFormat == '.xens') {
 		currentCode = JSON.stringify(JSON.parse(currentCode), null, 2);
 		return currentCode;
 	}

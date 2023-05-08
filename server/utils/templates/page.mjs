@@ -2,6 +2,7 @@
 
 export const settings = {
 	requireLogin: false,
+	requireTicket: false,
 	admin: false,
 };
 
