@@ -93,9 +93,13 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
       <div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow-lg border-2">
         <div className="flex flex-col w-full">
           <div className="bg-info p-2 text-black text-3xl">
-            <b>🤖</b>
+            <b>🤖Army.eth</b>
+            
           </div>
           <div className="flex flex-col p-2 w-full mt-2">
+          <p className="text-1 mb-2 text-accent">
+              <b>Command the power of an AI Army to help you craft the pages and product you want to see on Web3.</b>
+            </p>
             <p className="text-2xl mb-2 text-black">
               <b>GPT-3 Stats</b>
             </p>
@@ -121,7 +125,7 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
                 <div className="stat-figure text-primary">
                   <ViewIcon />
                 </div>
-                <div className="stat-title">Amount of Solutions</div>
+                <div className="stat-title">Solutions</div>
                 <div className="stat-value text-primary">
                   {gptResult?.choices?.length || 0}
                 </div>
@@ -195,8 +199,8 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
                     onInput={() => {
                       setHasInput(inputElement.current.value.length > 0);
                     }}
-                    placeholder="create a simple blog"
-                    className="input input-bordered w-full"
+                    placeholder="by your command...tell us how to serve!"
+                    className="input input-bordered w-full relative "
                   />
                   <input
                     type="number"

@@ -163,7 +163,19 @@ function IDE({ theme }) {
 		const url = new URL(window.location.href);
 		const urlParams = new URLSearchParams(url.search);
 		const urlParam = urlParams.get('url');
+		const botParam = urlParams.get('bot');
+		const dreamParam = urlParams.get('dream');
 
+		if (!dreamParam) return;
+		
+		if (dreamParam === 'true') 
+			setShouldShowNewProject(!shouldShowNewProject);
+			
+		if (!botParam) return;
+		
+		if (botParam === 'army') 
+			setShouldShowChatGPT(!shouldShowPublish);
+			
 		if (!urlParam) return;
 
 		if (ensContext.currentEnsAddress !== urlParam)
@@ -267,6 +279,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowChatGPT(!shouldShowPublish);
 							}}
+							title='🤖Army.eth - Employ the power of AI to build your dWeb project'
 						>
 							🤖
 						</button>
@@ -275,6 +288,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowNewProject(!shouldShowNewProject);
 							}}
+							title='Dream🎨.eth - Create a new dream project'
 						>
 							🎨
 						</button>
@@ -548,10 +562,16 @@ function IDE({ theme }) {
 						>
 							{!overlayPreview ? 'Overlay' : 'Stop Overlaying'}
 						</button>
-						<button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
+						<button
+							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+							title='Save'
+						>
 							💾
 						</button>
-						<button className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black">
+						<button 
+							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+							title='Open'	
+						>
 							📁
 						</button>
 						<button
@@ -565,6 +585,7 @@ function IDE({ theme }) {
 								storage.setPagePreference(selectedTab, newCode);
 								storage.saveData();
 							}}
+							title="Prettify🧹Code"
 						>
 							🧹
 						</button>
@@ -576,6 +597,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowDebug(!shouldShowDebug);
 							}}
+							title="Debug🐛Data"
 						>
 							🐛
 						</button>
@@ -584,6 +606,7 @@ function IDE({ theme }) {
 							onClick={() => {
 								setShouldShowSettings(!shouldShowSettings);
 							}}
+							title='⚙️Settings.eth'
 						>
 							⚙️
 						</button>

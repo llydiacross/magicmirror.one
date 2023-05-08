@@ -591,28 +591,28 @@ function NewProjectModal({ hidden, onHide, tabs = {}, setCode }) {
     >
       <div className="bg-white rounded-md w-full overflow-y-auto max-h-screen shadow shadow-lg border-2">
         <div className="flex flex-col w-full">
-          <div className="bg-gray-400 p-2 text-black text-3xl">
+          <div className="bg-accent p-2 text-black text-3xl">
             <b>⚙️</b>
           </div>
           <ChatGPTHeader
-            bg="bg-gray-400"
+            bg="bg-primary"
             children={
               <>
                 <div className="p-2 w-full mt-4">
-                  <h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl text-black text-center md:text-center lg:text-right mb-4">
                     Dream🎨.eth
                   </h1>
-                  <div className="hidden md:block lg:block">
-                    <p className="text-black text-1xl lg:text-2xl text-right">
+                  <div className="block">
+                    <p className="text-black text-1xl text-center lg:text-2xl lg:text-right">
                       Welcome to the Dream🎨.eth Magic dWeb Studio.
                     </p>
-                    <p className="text-black text-1xl lg:text-2xl  text-right">
+                    <p className="text-black text-1xl text-center lg:text-2xl  lg:text-right">
                       You can use it to create <u>anything</u> you like.
                     </p>
-                    <p className="text-black text-1xl  lg:text-2xl  text-right">
+                    <p className="text-black text-1xl text-center lg:text-2xl  lg:text-right">
                       Your imagination is the limit.
                     </p>
-                    <p className="text-black text-1xl lg:text-2xl  text-right">
+                    <p className="text-black text-1xl text-center lg:text-2xl lg:text-right">
                       You can start by selecting a template.
                     </p>
                   </div>

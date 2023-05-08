@@ -197,11 +197,20 @@ function FixedElements({
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
-									history.push('/ide');
+									history.push('/ide?dream=true');
 								}}
 								title='Dream🎨.eth'
 							>
 								🎨
+							</button>
+							<button
+								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
+								onClick={() => {
+									history.push('/ide?bot=army');
+								}}
+								title='🤖Army.eth'
+							>
+								🤖
 							</button>
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
