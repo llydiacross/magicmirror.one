@@ -143,7 +143,7 @@ export const config = {
 		/**
 		 * used to get files from IPFS, can be set to local host to use the node that is inside of the server already
 		 */
-		ipfsEndpoint: 'https://gateway.pinata.cloud/api/v0/',
+		ipfsEndpoint: 'https://ipfs.io/api/v0/',
 		/**
 		 * CORS allowed origins, can be set to an empty array or removed to allow all origins
 		 */

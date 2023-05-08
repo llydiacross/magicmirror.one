@@ -13,8 +13,8 @@ const config = {
 	}),
 	providerUrl:
 		'https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c',
-	ipfsProviderURL: 'https://gateway.pinata.cloud/api/v0',
-	ipfsWebProvider: 'https://gateway.pinata.cloud/ipfs/',
+	ipfsProviderURL: 'https://ipfs.io/api/v0/',
+	ipfsWebProvider: 'https://ipfs.io/ipfs/',
 	chatGPTApiKey: '',
 	chatGPTModel: '',
 	chatGPTMaxTokens: 100,

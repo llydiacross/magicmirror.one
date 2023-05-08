@@ -447,7 +447,7 @@ export const getDefaultProvider = () => {
 	else {
 		_IPFSProvider = new IPFSWebProvider();
 		_IPFSProvider.createInstance({
-			url: config.ipfsProviderURL || 'https://dweb.link/api/v0',
+			url: config.ipfsProviderURL || 'https://ipfs.io/api/v0',
 		});
 		return _IPFSProvider;
 	}

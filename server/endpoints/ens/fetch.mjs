@@ -70,6 +70,15 @@ export const post = async (req, res) => {
 				if (!nft.title || nft.title.length === 0)
 					nft.title = 'Untitled TokenID #' + nft.tokenId;
 
+				if (
+					!(await server.prisma.stats.findUnique({
+						where: { domainName: nft.title },
+					}))
+				)
+					await server.prisma.stats.create({
+						data: { domainName: nft.title, totalViews: 0 },
+					});
+
 				await server.prisma.eNS.upsert({
 					where: {
 						tokenId: nft.tokenId,

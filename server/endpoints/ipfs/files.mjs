@@ -26,8 +26,30 @@ export const post = async (req, res) => {
 		await server.prisma.stats.upsert({
 			where: { domainName },
 			update: { totalViews },
-			create: { domainName, totalViews },
+			create: {
+				totalViews,
+				domainName,
+			},
 		});
+
+		let currentHourViews =
+			(await server.redisClient.get(domainName + '_hourlyStats')) || 0;
+		await server.redisClient.set(
+			domainName + '_hourlyStats',
+			parseInt(currentHourViews) + 1,
+			'EX',
+			60 * 60
+		);
+
+		let currentDayViews =
+			(await server.redisClient.get(domainName + '_dailyStats')) || 0;
+
+		await server.redisClient.set(
+			domainName + '_dailyStats',
+			parseInt(currentDayViews) + 1,
+			'EX',
+			60 * 60 * 24
+		);
 	}
 
 	try {
