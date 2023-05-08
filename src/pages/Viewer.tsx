@@ -156,7 +156,9 @@ function Viewer({ match }) {
 	//set the current IPFS provider for this component to be either web3-storage if they are using that or IPFS HTTP provider
 	if (ipfsProvider.current === null) {
 		if (storage.getGlobalPreference('useCustomProvider')) {
-			if (storage.getGlobalPreference('customProvider') === 'web3-storage')
+			if (
+				storage.getGlobalPreference('customProvider') === 'web3-storage'
+			)
 				ipfsProvider.current = getProvider('web3-storage', {
 					apiKey: storage.getGlobalPreference('web3StorageApiKey'),
 				});
@@ -216,7 +218,9 @@ function Viewer({ match }) {
 						try {
 							directory = await resolveDirectory(
 								ensContext.contentHash,
-								abortController
+								abortController,
+								null,
+								ensContext.currentEnsAddress
 							);
 							setDir(directory);
 							abortRef.current = null;
@@ -240,7 +244,9 @@ function Viewer({ match }) {
 						) {
 							isEmpty = true;
 						} else {
-							const parsed = await parseDirectory(directory.files);
+							const parsed = await parseDirectory(
+								directory.files
+							);
 							setPercentage(65);
 
 							if (parsed.valid) {
@@ -249,7 +255,9 @@ function Viewer({ match }) {
 								else
 									setBuffer(
 										config.ipfsWebProvider +
-											(await resolvePotentialCID(ensContext.contentHash))
+											(await resolvePotentialCID(
+												ensContext.contentHash
+											))
 									);
 							} else isEmpty = true;
 						}
@@ -264,7 +272,9 @@ function Viewer({ match }) {
 							setDirect(true);
 							setBuffer(
 								config.ipfsWebProvider +
-									(await resolvePotentialCID(ensContext.contentHash))
+									(await resolvePotentialCID(
+										ensContext.contentHash
+									))
 							);
 							isEmpty = false;
 						}
@@ -380,7 +390,8 @@ function Viewer({ match }) {
 									Bad Buffer
 								</h1>
 								<p className="mb-5 text-black">
-									It appears that the buffer is not a valid HTML file.
+									It appears that the buffer is not a valid
+									HTML file.
 								</p>
 								<button
 									className="btn btn-dark w-full"
@@ -422,10 +433,11 @@ function Viewer({ match }) {
 							Completely Empty
 						</h1>
 						<p className="mb-5 text-black">
-							This ENS address appears to have content hash associated with it.
-							We also couldn&apos;t find any files in the directory, we also
-							couldn&apos;t pull enough data including twitter, email or reddit
-							to assemble a basic template.
+							This ENS address appears to have content hash
+							associated with it. We also couldn&apos;t find any
+							files in the directory, we also couldn&apos;t pull
+							enough data including twitter, email or reddit to
+							assemble a basic template.
 						</p>
 						<button
 							className="btn btn-dark w-full"
@@ -449,7 +461,9 @@ function Viewer({ match }) {
 			{/** ENS Error Box */}
 			<div
 				className="hero min-h-screen"
-				hidden={!loaded || ensContext.ensError === null || error !== null}
+				hidden={
+					!loaded || ensContext.ensError === null || error !== null
+				}
 			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error">
@@ -458,7 +472,8 @@ function Viewer({ match }) {
 							404 Not Found
 						</h1>
 						<p className="mb-5 text-black text-center">
-							This ENS address does not exist and is can be purchased right now!
+							This ENS address does not exist and is can be
+							purchased right now!
 							<img
 								className="mx-auto mt-2"
 								src="/img/404.webp"
@@ -494,7 +509,10 @@ function Viewer({ match }) {
 						<button
 							className="btn btn-dark w-full my-2"
 							onClick={() =>
-								fetchPrompt(ensContext.currentEnsAddress, abortRef.current)
+								fetchPrompt(
+									ensContext.currentEnsAddress,
+									abortRef.current
+								)
 							}
 						>
 							Or, why not see what it could look like?
@@ -510,13 +528,16 @@ function Viewer({ match }) {
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error max-w-screen">
 					<div className="max-w-sm">
-						<h1 className="mb-5 text-5xl font-bold text-black">Malfuction</h1>
+						<h1 className="mb-5 text-5xl font-bold text-black">
+							Malfuction
+						</h1>
 						<p className="mb-5 text-black underline truncate hidden lg:block md:block">
 							{error !== null ? error.message : null}
 						</p>
 						<p className="mb-5 text-black">
-							This is likely due to an issue with the ENS address or the
-							content. If you believe this is an error, please contact us.
+							This is likely due to an issue with the ENS address
+							or the content. If you believe this is an error,
+							please contact us.
 						</p>
 						<button
 							className="btn btn-dark w-full"
@@ -555,15 +576,16 @@ function Viewer({ match }) {
 								className="alert alert-warning shadow-lg p-2 opacity-60 hover:opacity-100 cursor-pointer w-auto"
 								ref={defaultResponseElement}
 								onClick={() => {
-									defaultResponseElement.current.style.display = 'none';
+									defaultResponseElement.current.style.display =
+										'none';
 								}}
 							>
 								<div>
 									<HeartIcon />
 									<span>
 										<b>
-											This was <u>automatically</u> <u>generated</u> by
-											MagicMirror
+											This was <u>automatically</u>{' '}
+											<u>generated</u> by MagicMirror
 										</b>
 									</span>
 								</div>
@@ -571,11 +593,16 @@ function Viewer({ match }) {
 						) : (
 							<></>
 						)}
-						{loaded && error === null && ensContext.ensError === null ? (
+						{loaded &&
+						error === null &&
+						ensContext.ensError === null ? (
 							<div className="alert alert-secondary shadow-lg p-2 opacity-70 hover:opacity-100 cursor-pointer w-auto">
 								<div className="underline">
 									<span>
-										<b>Tip {ensContext.currentEnsAddress} 💰</b>
+										<b>
+											Tip {ensContext.currentEnsAddress}{' '}
+											💰
+										</b>
 									</span>
 								</div>
 							</div>

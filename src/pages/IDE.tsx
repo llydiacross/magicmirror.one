@@ -177,7 +177,10 @@ function IDE({ theme }) {
 				let potentialStats = await getStats(ensContext.contentHash);
 				setStats(potentialStats);
 				let potentialDir = await resolveDirectory(
-					ensContext.contentHash
+					ensContext.contentHash,
+					null,
+					null,
+					ensContext.currentEnsAddress
 				);
 				setDir(potentialDir);
 			})();

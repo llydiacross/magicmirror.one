@@ -43,6 +43,7 @@ model ENS {
   FakeRegistry       FakeRegistry?
   User               User?         @relation(fields: [ownerAddress], references: [address])
   Manager            Manager[]
+  Stats              Stats?
 }
 
 model Manager {
@@ -63,6 +64,18 @@ model LastFetched {
   lastFetched DateTime
   isPowerUser Boolean
   owner       User     @relation(fields: [address], references: [address])
+}
+
+model Stats {
+  domainName     String   @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  totalViews     Int
+  lastHourViews  Int
+  lastDayViews   Int
+  lastWeekViews  Int
+  lastMonthViews Int
+  ens            ENS      @relation(fields: [domainName], references: [domainName])
 }
 
 enum Role {

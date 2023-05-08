@@ -1,4 +1,4 @@
-import { success } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 /**
@@ -7,10 +7,28 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	let cid = req.body.cid;
+	let { cid, domainName } = req.body;
 	let links = [];
 
-	if (!cid) return userError(res, 'Bad CID');
+	if (!cid) return userError(res, 'No CID');
+
+	if (
+		domainName &&
+		(await server.prisma.eNS.findUnique({ where: { domainName } }))
+	) {
+		let totalViews = 0;
+		let previous = await server.prisma.stats.findUnique({
+			where: { domainName },
+		});
+
+		if (previous) totalViews = previous.totalViews + 1;
+
+		await server.prisma.stats.upsert({
+			where: { domainName },
+			update: { totalViews },
+			create: { domainName, totalViews },
+		});
+	}
 
 	try {
 		for await (const link of server.ipfs.ls(cid)) {
