@@ -148,7 +148,7 @@ export class Server {
 			dontDraw: true,
 			scriptMode: true,
 			startExpress: false,
-			startGanache: process.env.PRODUCTION !== 'true',
+			startGanache: false,
 			network: process.env.PRODUCTION === 'true' ? 'ethereum' : 'ganache',
 			//will tell InfinityMint not to pipe its outputs to the InfinityConsole and instead print them directly to the console, essentially showing all of the logs! turning this to false will only show debug and default logs
 			dontPipe: true,
