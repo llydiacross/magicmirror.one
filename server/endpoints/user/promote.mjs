@@ -29,11 +29,8 @@ export const post = async (req, res) => {
 
 	if (!user) return userError(res, 'User not found');
 
-	if (user.role === 'ADMIN')
-		return userError(
-			res,
-			'Admins cannot be modified by this endpoint, must be done manually'
-		);
+	if (user.role === 'ADMIN' && req.session.role !== 'SUPER_ADMIN')
+		return userError(res, 'Only super admins can promote or demote admins');
 
 	await server.prisma.user.update({
 		where: {

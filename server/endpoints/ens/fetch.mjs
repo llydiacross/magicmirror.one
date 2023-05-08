@@ -1,5 +1,6 @@
 import { success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
+import { ethers } from 'ethers';
 
 export const settings = {
 	requireLogin: true,
@@ -17,15 +18,16 @@ export const get = async (req, res) => {
  */
 export const post = async (req, res) => {
 	let address = req.session.siwe.address;
+
+	if (!address) return userError(res, 'Missing address');
+	if (!ethers.utils.isAddress(address))
+		return userError(res, 'Invalid address');
+
 	let lastFetched = await server.prisma.lastFetched.findFirst({
 		where: {
 			address: address,
 		},
 	});
-
-	if (!address) return userError(res, 'Missing address');
-	if (!ethers.utils.isAddress(address))
-		return userError(res, 'Invalid address');
 
 	//if last fetched less than an hour ago, return
 	if (

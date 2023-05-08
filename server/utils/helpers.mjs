@@ -20,6 +20,19 @@ export const success = (res, data) => {
 };
 
 /**
+ * Excutes keys on a row
+ * @param {*} row
+ * @param {*} keys
+ * @returns
+ */
+export const exclude = (row, keys) => {
+	for (let key of keys) {
+		delete user[key];
+	}
+	return user;
+};
+
+/**
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res

@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { success, userError } from '../../utils/helpers.mjs';
+import { exclude, success, userError } from '../../utils/helpers.mjs';
 
 /**
  *
@@ -14,7 +14,8 @@ export const get = async (req, res) => {
 			domainName,
 		},
 	});
-	if (!fakeRegistry) return userError(res, 'User not found');
+	if (!fakeRegistry) return userError(res, 'Fake registry not found');
+	exclude(fakeRegistry, ['User']);
 	return success(res, {
 		fakeRegistry,
 	});

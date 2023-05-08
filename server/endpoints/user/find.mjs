@@ -1,5 +1,6 @@
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
+import { ethers } from 'ethers';
 
 export const settings = {
 	requireLogin: true,
@@ -27,6 +28,7 @@ export const get = async (req, res) => {
 		},
 	});
 	if (!user) return userError(res, 'User not found');
+
 	return success(res, {
 		user,
 	});

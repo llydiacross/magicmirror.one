@@ -1,5 +1,6 @@
 import server from '../../server.mjs';
 import { success } from '../../utils/helpers.mjs';
+import { ethers } from 'ethers';
 
 export const settings = {
 	requireLogin: true,

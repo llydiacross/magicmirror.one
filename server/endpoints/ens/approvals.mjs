@@ -7,17 +7,23 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	let { domainName, accepted } = req.query;
-	if (accepted !== undefined) accepted = accepted === 'true' ? true : false;
+	let { domainName } = req.query;
 
-	let managers = await server.prisma.manager.findMany({
+	let nonAccepted = await server.prisma.manager.count({
 		where: {
 			domainName: domainName,
-			accepted: accepted !== undefined ? accepted : undefined,
+			accepted: false,
+		},
+	});
+	let accepted = await server.prisma.manager.count({
+		where: {
+			domainName: domainName,
+			accepted: true,
 		},
 	});
 
 	return success(res, {
-		managers,
+		nonAccepted,
+		accepted,
 	});
 };

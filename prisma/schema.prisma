@@ -51,6 +51,7 @@ model Manager {
   updatedAt      DateTime @updatedAt
   managerAddress String
   domainName     String
+  approved       Boolean
   user           User     @relation(fields: [managerAddress], references: [address])
   ens            ENS      @relation(fields: [domainName], references: [domainName])
 }
@@ -67,5 +68,6 @@ model LastFetched {
 enum Role {
   USER
   ADMIN
+  SUPER_ADMIN
   TICKET_HOLDER
 }

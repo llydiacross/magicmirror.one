@@ -1,7 +1,6 @@
-import pkg from 'siwe';
+import { SiweMessage, ErrorTypes } from 'siwe';
 import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
-const { SiweMessage, ErrorTypes } = pkg;
 
 /**
  *
@@ -13,16 +12,13 @@ export const post = async (req, res) => {
 		if (!req.body.message) return userError(res, 'Missing message.');
 
 		let SIWEObject = new SiweMessage(req.body.message);
-		const { data: message } = await SIWEObject.verify({
+		let { data: message } = await SIWEObject.verify({
 			signature: req.body.signature,
 			nonce: req.session.nonce,
 		});
+
 		req.session.siwe = message;
 		req.session.cookie.expires = new Date(message.expirationTime);
-		//save the session
-		await new Promise((resolve) => req.session.save(resolve));
-		//set the current address to equal the current sessionId, we do this to prevent session hijacking and if they switch wallet
-		await server.redisClient.set(message.address, req.sessionID);
 
 		//add them to the database if they don't exist
 		if (
@@ -38,6 +34,7 @@ export const post = async (req, res) => {
 				},
 			});
 
+		//fetch the user
 		let user = await server.prisma.user.findUnique({
 			where: {
 				address: message.address,
@@ -48,7 +45,12 @@ export const post = async (req, res) => {
 		});
 
 		req.session.role = user.role;
-		if (user.role === 'ADMIN') req.session.admin = true;
+
+		if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+			req.session.admin = true;
+
+		//set the current address to equal the current sessionId, we do this to prevent session hijacking and if they switch wallet
+		await server.redisClient.set(message.address, req.sessionID);
 		//save the session
 		await new Promise((resolve) => req.session.save(resolve));
 
@@ -59,6 +61,8 @@ export const post = async (req, res) => {
 	} catch (err) {
 		req.session.siwe = null;
 		req.session.nonce = null;
+		req.session.role = null;
+		req.session.admin = null;
 		await new Promise((resolve) => req.session.save(resolve));
 		// Log the error.
 		console.error(err);

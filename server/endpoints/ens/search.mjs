@@ -26,6 +26,11 @@ export const get = async (req, res) => {
 		take: server.config.magicMirror.pageMax,
 	});
 
+	if (enses)
+		enses = enses.map((ens) => {
+			return exclude(ens, ['FakeRegistry', 'Manager', 'User']);
+		});
+
 	return success(res, {
 		enses,
 	});
