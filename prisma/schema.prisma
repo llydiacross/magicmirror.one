@@ -17,10 +17,20 @@ model User {
   FakeRegistry FakeRegistry[]
   LastFetched  LastFetched?
   Manager      Manager[]
+  history      History[]
+}
+
+model History {
+  domainName String   @id @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  address    String
+
+  user User @relation(fields: [address], references: [address])
 }
 
 model FakeRegistry {
-  domainName   String   @unique
+  domainName   String   @id @unique
   ownerAddress String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -51,7 +61,7 @@ model Manager {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   managerAddress String
-  domainName     String
+  domainName     String   @unique
   approved       Boolean
   user           User     @relation(fields: [managerAddress], references: [address])
   ens            ENS      @relation(fields: [domainName], references: [domainName])

@@ -1,4 +1,4 @@
-import { success, userError } from '../../utils/helpers.mjs';
+import { isLoggedIn, success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 /**
@@ -23,14 +23,38 @@ export const post = async (req, res) => {
 
 		if (previous) totalViews = previous.totalViews + 1;
 
-		await server.prisma.stats.upsert({
-			where: { domainName },
-			update: { totalViews },
-			create: {
-				totalViews,
-				domainName,
-			},
-		});
+		//only update the prisma db is the user is logged in
+		if ((await isLoggedIn(req, server)) === true) {
+			//update the history table
+			if (
+				!(await server.prisma.history.findUnique({
+					where: { domainName },
+				}))
+			)
+				await server.prisma.history.create({
+					data: {
+						domainName,
+						address: req.session.siwe.address,
+					},
+				});
+			else
+				await server.prisma.history.update({
+					where: { domainName },
+					data: {
+						address: req.session.siwe.address,
+					},
+				});
+
+			//update the stats table
+			await server.prisma.stats.upsert({
+				where: { domainName },
+				update: { totalViews },
+				create: {
+					totalViews,
+					domainName,
+				},
+			});
+		}
 
 		let currentHourViews =
 			(await server.redisClient.get(domainName + '_hourlyStats')) || 0;
