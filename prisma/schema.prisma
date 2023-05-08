@@ -25,8 +25,8 @@ model History {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   address    String
-
-  user User @relation(fields: [address], references: [address])
+  ens        ENS      @relation(fields: [domainName], references: [domainName])
+  user       User     @relation(fields: [address], references: [address])
 }
 
 model FakeRegistry {
@@ -54,6 +54,7 @@ model ENS {
   User               User?         @relation(fields: [ownerAddress], references: [address])
   Manager            Manager[]
   Stats              Stats?        @relation(fields: [domainName], references: [domainName])
+  History            History?
 }
 
 model Manager {
