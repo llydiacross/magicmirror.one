@@ -20,7 +20,9 @@ export const post = async (req, res) => {
 	if (!ethers.utils.isAddress(address))
 		return userError(res, 'Invalid address');
 
-	let provider = server.infinityConsole.getProvider();
+	let provider = new ethers.providers.StaticJsonRpcProvider(
+		server.config.hardhat.networks.ethereum.url
+	);
 	let resolver = await provider.getResolver(domainName);
 	let masterAddress = await resolver.getAddress();
 	let autoAccept = false;
