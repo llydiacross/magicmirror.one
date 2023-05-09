@@ -65,7 +65,7 @@ export const post = async (req, res) => {
 				totalCount++;
 
 				if (!nft.title || nft.title.length === 0)
-					nft.title = 'Untitled TokenID #' + nft.tokenId;
+					nft.title = '#' + nft.tokenId;
 
 				if (
 					!(await server.prisma.stats.findUnique({
