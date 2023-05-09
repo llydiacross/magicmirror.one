@@ -207,6 +207,7 @@ function FixedElements({
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
 									history.push('/ide?bot=army');
+									
 								}}
 								title='🤖Army.eth'
 							>
@@ -259,14 +260,14 @@ function FixedElements({
 			{useFixed ? (
 				<div className="fixed bottom-0 w-full z-50" hidden={hideFooter}>
 					<div className="flex flex-col">
-						<div className="w-full bg-black text-white text-center p-4">
+						<div className="w-full bg-black text-accent text-center p-4">
 							{' '}
 							Created by{' '}
 							<a
 								href="https://twitter.com/0x0zAgency/"
 								className="text-yellow-100 underline"
 							>
-								0x0zAgency
+								0x0z
 							</a>
 							. Come check out our{' '}
 							<a
@@ -278,14 +279,14 @@ function FixedElements({
 							. Made with <u className="text-error">love</u> by{' '}
 							<a
 								href="/view/0xTinman.eth"
-								className="text-yellow-100 underline"
+								className="text-yellow-400 underline"
 							>
 								🤖.0xTinman.eth
 							</a>{' '}
 							-{' '}
 							<a
 								href="/view/0xWizardof0z.eth"
-								className="text-yellow-100 underline"
+								className="text-yellow-400 underline"
 							>
 								🧙🏼‍♂️.0xWizardof0z.eth
 							</a>
@@ -296,9 +297,9 @@ function FixedElements({
 			) : (
 				<footer
 					hidden={hideFooter}
-					className="flex justify-around footer z-50 p-4 bg-black text-neutral-content"
+					className="flex justify-around footer z-50 p-4 bg-black"
 				>
-					<div className="flex my-auto justify-center items-center">
+					<div className="flex my-auto justify-center text-accent items-center">
 						<img
 							width={48}
 							alt="0x0z logo"
@@ -306,7 +307,7 @@ function FixedElements({
 							src="/img/0x0zLogoTransparentWhite.png"
 						/>
 						<p>
-							Created by 0x0zAgency.
+							Created by 0x0z.
 							<br />
 							Made with ❤️ by{' '}
 							<a
@@ -325,7 +326,7 @@ function FixedElements({
 						</p>
 					</div>
 					<div>
-						<span className="footer-title">Social</span>
+						<span className="footer-title"></span>
 						<div className="grid grid-flow-col gap-4">
 							<a href="https://twitter.com/0x0zAgency">
 								<svg
