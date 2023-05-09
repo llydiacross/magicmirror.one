@@ -78,15 +78,25 @@ export default function Properties() {
 	useEffect(() => {
 		if (!context.loaded || !loginContext.loaded) return;
 		if (!loginContext.isSignedIn) return;
-		try {
-			getCount().then((count) => {
-				if (count > 0) getAllEns();
+
+		let main = async () => {
+			if (!storage.getPagePreference('firstTime')) {
+				await fetchENS();
+				storage.setPagePreference('firstTime', true);
+			}
+
+			let count = await getCount();
+			if (count > 0) getAllEns();
+		};
+
+		main()
+			.catch((err) => {
+				console.error(err);
+				setError(err);
+			})
+			.finally(() => {
+				setLoading(false);
 			});
-		} catch (error) {
-			setError(error);
-		} finally {
-			setLoading(false);
-		}
 	}, [context, loginContext]);
 
 	return (
