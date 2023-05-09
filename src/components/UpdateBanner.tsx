@@ -24,10 +24,10 @@ export default function UpdateBanner() {
 						paddingBottom: '1rem',
 						fontWeight: 'bolder',
 						marginTop: '-0.4rem',
-						color: 'red',
+						color: 'yellow',
 					}}
 				>
-					The Genesis Update
+					ALL STARS 🌟 UPDATE
 				</p>
 				<p
 					style={{
@@ -35,7 +35,7 @@ export default function UpdateBanner() {
 						textAlign: 'left',
 						paddingLeft: '2rem',
 						marginTop: '-1.7rem',
-						color: 'red',
+						color: 'yellow',
 					}}
 				>
 					Please be patient as we update the site.
@@ -46,29 +46,28 @@ export default function UpdateBanner() {
 			}
 			<div className="hidden md:block">
 				<p
-					className="font-amatic"
 					style={{
-						fontSize: '2.6rem',
+						fontSize: '1.5rem',
 						textAlign: 'left',
 						paddingLeft: '2rem',
 						paddingBottom: '1rem',
 						fontWeight: 'bolder',
-						paddingTop: '0rem',
-						color: 'red',
+						paddingTop: '0.9rem',
+						color: 'yellow',
 					}}
 				>
-					THE
+					ALL
 				</p>
 				<p
-					className="font-amatic"
+					className="font-apocalypse"
 					style={{
 						fontSize: '4.25rem',
 						textAlign: 'left',
-						paddingLeft: '4.5rem',
+						paddingLeft: '5.5rem',
 						paddingBottom: '1rem',
-						marginTop: '-94px',
+						marginTop: '-80px',
 						backgroundImage:
-							'linear-gradient(to right, red, orange)',
+							'linear-gradient(to right, yellow, orange)',
 						WebkitBackgroundClip: 'text',
 						backgroundClip: 'text',
 						WebkitTextFillColor: 'transparent',
@@ -77,23 +76,22 @@ export default function UpdateBanner() {
 						WebkitTextStroke: '0.5px #000000',
 					}}
 				>
-					Genesis Update
+					STARS 🌟 UPDATE
 				</p>
 				<p
 					style={{
 						fontSize: '1rem',
 						width: '560px',
 						textAlign: 'left',
-						marginLeft: '32.5rem',
-						padding: '12px',
-						paddingTop: '22px',
-						marginTop: '-115px',
+						marginLeft: '35.5rem',
+						padding: '6px',
+						marginTop: '-90px',
 						color: 'whitesmoke',
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					<b>OUT NOW!</b> New features include the DREAM🎨.ETH STUDIO, 🍬LAND.ETH LANDSCAPING
-					and the Virtual ENS Registry, and more!
+					Introducing <b>Leaderboards</b>, <b>Managers</b>,{' '}
+					<b>The News Ticker</b> and more!
 				</p>
 			</div>
 		</div>

@@ -2,7 +2,7 @@ import { InfinityMintProject } from '@app/interfaces';
 
 const magicmirror: InfinityMintProject = {
 	name: 'magicmirror',
-	price: '$15',
+	price: '$0.69',
 	modules: {
 		random: 'SeededRandom',
 		assets: 'SimpleImage',

@@ -12,6 +12,45 @@ export const post = async (req, res) => {
 
 	if (!cid) return userError(res, 'No CID');
 
+	try {
+		for await (const link of server.ipfs.ls(cid)) {
+			if (links.length > 32) break;
+
+			if (link.type === 'file') {
+				const stats = await server.ipfs.object.stat(link.path);
+				link.size = stats.CumulativeSize;
+
+				if (!link.name) continue;
+
+				const extension = link.name.split('.').pop();
+
+				if (
+					!server?.config?.magicMirror.allowedExtensions?.includes(
+						extension
+					)
+				)
+					continue;
+
+				if (link.size < 1024 * 1024 * 10) {
+					const resp = server.ipfs.cat(link.path);
+					let content = [];
+					for await (const chunk of resp) {
+						content = [...content, ...chunk];
+					}
+					link.content = content;
+				}
+				links.push(link);
+				continue;
+			}
+
+			// is dir
+			links.push(link);
+		}
+	} catch (error) {
+		console.log(error);
+		return userError(res, 'Bad CID');
+	}
+
 	if (
 		domainName &&
 		(await server.prisma.eNS.findUnique({ where: { domainName } }))
@@ -56,63 +95,25 @@ export const post = async (req, res) => {
 			});
 		}
 
-		let currentHourViews =
-			(await server.redisClient.get(domainName + '_hourlyStats')) || 0;
-		await server.redisClient.set(
-			domainName + '_hourlyStats',
-			parseInt(currentHourViews) + 1,
-			'EX',
-			60 * 60
-		);
+		//stop view botting
+		if (!(await server.redisClient.hGet(req.ip, domainName))) {
+			let currentHourlyViews =
+				(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
 
-		let currentDayViews =
-			(await server.redisClient.get(domainName + '_dailyStats')) || 0;
+			await server.redisClient.hSet(
+				'stats',
+				domainName,
+				parseInt(currentHourlyViews) + 1
+			);
 
-		await server.redisClient.set(
-			domainName + '_dailyStats',
-			parseInt(currentDayViews) + 1,
-			'EX',
-			60 * 60 * 24
-		);
-	}
-
-	try {
-		for await (const link of server.ipfs.ls(cid)) {
-			if (links.length > 32) break;
-
-			if (link.type === 'file') {
-				const stats = await server.ipfs.object.stat(link.path);
-				link.size = stats.CumulativeSize;
-
-				if (!link.name) continue;
-
-				const extension = link.name.split('.').pop();
-
-				if (
-					!server?.config?.magicMirror.allowedExtensions?.includes(
-						extension
-					)
-				)
-					continue;
-
-				if (link.size < 1024 * 1024 * 10) {
-					const resp = server.ipfs.cat(link.path);
-					let content = [];
-					for await (const chunk of resp) {
-						content = [...content, ...chunk];
-					}
-					link.content = content;
-				}
-				links.push(link);
-				continue;
-			}
-
-			// is dir
-			links.push(link);
+			await server.redisClient.hSet(
+				req.ip,
+				domainName,
+				true,
+				'EX',
+				60 * 1
+			);
 		}
-	} catch (error) {
-		console.log(error);
-		return userError(res, 'Bad CID');
 	}
 
 	success(res, {
