@@ -55,15 +55,15 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 					) : (
 						<>
 							<div className="bg-info p-2 text-black text-3xl mb-2">
-								<b>🌟 sign-in.eth</b>
+								<b>🌟</b>
 							</div>
 							<p className="text-center text-3xl text-black mt-2">
 								Mirror Mirror on the wall Sign In and see it
 								all...
 							</p>
 
-							<div className="flex flex-col w-full border-opacity-50 mt-2 p-2">
-								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
+							<div className="flex flex-col w-full border-opacity-50 mt-2 p-2 sm:text-center">
+								<div className="grid h-40 card bg-base-300 rounded-box place-items-center p-2 text-center">
 									Signed in creators can access the exclusive
 									and 🆓 services of{' '}
 									<u className="text-success">
@@ -75,7 +75,7 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 								</div>
 
 								<div className="divider text-black">AND</div>
-								<div className="grid h-40 card bg-base-300 rounded-box place-items-center">
+								<div className="grid h-40 card bg-base-300 rounded-box place-items-center p-2 text-center">
 									Gain access to our highly experimental, and
 									controversial Web3 Name Service Aggrigator{' '}
 									<u className="text-success">

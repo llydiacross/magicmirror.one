@@ -96,7 +96,7 @@ export const post = async (req, res) => {
 		}
 
 		//stop view botting
-		if (!(await server.redisClient.hGet(req.ip, domainName))) {
+		if ((await server.redisClient.hGet(req.ip, domainName)) !== 'true') {
 			let currentHourlyViews =
 				(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
 
@@ -109,7 +109,7 @@ export const post = async (req, res) => {
 			await server.redisClient.hSet(
 				req.ip,
 				domainName,
-				true,
+				'true',
 				'EX',
 				60 * 1
 			);
