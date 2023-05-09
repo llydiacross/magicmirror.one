@@ -1,6 +1,5 @@
 import server from '../../server.mjs';
-import { ethers } from 'ethers';
-import { exclude } from '../../utils/helpers.mjs';
+import { exclude, userError } from '../../utils/helpers.mjs';
 
 export const settings = {
 	requireLogin: false,

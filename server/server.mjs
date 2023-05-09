@@ -198,6 +198,32 @@ export class Server {
 			process.exit(129);
 		});
 
+		this.app.get('/', (_, res) => {
+			res.send(`
+			<h1>MagicMirror API</h1>
+			<p>Server is running</p>
+			<a href="https://magicmirror.one">Home</a>
+			<hr/>
+			<p>Routes:</p>
+			<ul>
+				${this.routes
+					.map(
+						(route) =>
+							`<li><a href="${route.path}">${route.path}</a> ${
+								route?.settings?.requireLogin
+									? '(Requires Login)'
+									: ''
+							} ${route?.settings?.admin ? '(Admin Only)' : ''} ${
+								route.get ? '[GET] ' : ''
+							} ${route.post ? '[POST] ' : ''}</li>`
+					)
+					.join('')}
+			</ul>
+			`);
+
+			//print out all the routes
+		});
+
 		//start listening
 		this.app.listen(this.port, () => {
 			console.log(`Server listening on port ${this.port}`);
@@ -288,7 +314,7 @@ export class Server {
 					});
 				}
 
-				this.routes.push(route);
+				this.routes.push({ ...route, path: path });
 			})
 		);
 	}

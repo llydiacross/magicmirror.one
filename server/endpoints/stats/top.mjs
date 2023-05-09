@@ -14,7 +14,12 @@ export const settings = {
  */
 export const get = async (req, res) => {
 	let parameter = req.query.parameter;
+	let order = req.query.order;
+	order = order || 'desc';
 	parameter = parameter || 'totalViews';
+
+	if (order !== 'desc' && order !== 'asc')
+		return userError(res, 'Invalid order');
 
 	if (
 		parameter !== 'totalViews' &&
@@ -28,7 +33,7 @@ export const get = async (req, res) => {
 
 	//return top 100 domains by total views
 	let top = await server.prisma.stats.findMany({
-		orderBy: { [parameter]: 'desc' },
+		orderBy: { [parameter]: order },
 		take: 100,
 	});
 	top = top.filter((x) => x.totalViews > 0);

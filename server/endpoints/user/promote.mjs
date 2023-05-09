@@ -4,8 +4,8 @@ import server from '../../server.mjs';
 import { success, userError } from '../../utils/helpers.mjs';
 
 export const settings = {
-	requireLogin: false,
-	admin: false,
+	requireLogin: true,
+	admin: true,
 };
 
 /**

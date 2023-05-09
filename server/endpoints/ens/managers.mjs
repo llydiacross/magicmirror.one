@@ -9,6 +9,7 @@ import server from '../../server.mjs';
 export const get = async (req, res) => {
 	let { domainName, accepted } = req.query;
 	if (accepted !== undefined) accepted = accepted === 'true' ? true : false;
+	if (!domainName) return userError(res, 'No domain name');
 
 	let managers = await server.prisma.manager.findMany({
 		where: {
