@@ -12,18 +12,11 @@ export const get = async (req, res) => {
 	let nonAccepted = await server.prisma.manager.count({
 		where: {
 			domainName: domainName,
-			accepted: false,
-		},
-	});
-	let accepted = await server.prisma.manager.count({
-		where: {
-			domainName: domainName,
-			accepted: true,
+			approved: false,
 		},
 	});
 
 	return success(res, {
-		nonAccepted,
 		accepted,
 	});
 };
