@@ -44,7 +44,14 @@ export default function Properties() {
 	let fetchENS = async () => {
 		setLoading(true);
 		setError(null);
-		await apiFetch('ens', 'fetch', null, 'POST');
+		await apiFetch(
+			'ens',
+			'fetch',
+			{
+				address: context.walletAddress,
+			},
+			'POST'
+		);
 		await getAllEns();
 		await getCount();
 		setLoading(false);
