@@ -130,6 +130,6 @@ export const post = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		return userError(res, 'Bad Address');
+		return userError(res, 'Failed to fetch: ' + error.message);
 	}
 };
