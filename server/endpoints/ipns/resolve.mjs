@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 
 /**
  *
@@ -29,7 +29,7 @@ export const post = async (req, res) => {
 	if (path === undefined)
 		return userError(res, 'eth address has bad IPNS resolution');
 
-	res.json({
+	return success(res, {
 		cid: path,
 	});
 };
