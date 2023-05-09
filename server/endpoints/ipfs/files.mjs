@@ -69,30 +69,29 @@ export const post = async (req, res) => {
 				!(await server.prisma.history.findUnique({
 					where: { domainName },
 				}))
-			)
+			) {
 				await server.prisma.history.create({
 					data: {
 						domainName,
 						address: req.session.siwe.address,
 					},
 				});
-			else
+				//update the stats table
+				await server.prisma.stats.upsert({
+					where: { domainName },
+					update: { totalViews },
+					create: {
+						totalViews,
+						domainName,
+					},
+				});
+			} else
 				await server.prisma.history.update({
 					where: { domainName },
 					data: {
 						address: req.session.siwe.address,
 					},
 				});
-
-			//update the stats table
-			await server.prisma.stats.upsert({
-				where: { domainName },
-				update: { totalViews },
-				create: {
-					totalViews,
-					domainName,
-				},
-			});
 		}
 
 		//stop view botting
