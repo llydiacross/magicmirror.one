@@ -175,7 +175,7 @@ export default function Properties() {
 						className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
 						id="domain"
 						type="text"
-						placeholder="Filter by name..."
+						placeholder="🔦 Filter Name..."
 						onChange={(e) => {
 							setFilterTerm(e.target.value);
 						}}
@@ -186,7 +186,7 @@ export default function Properties() {
 						className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white"
 						id="domain"
 						type="text"
-						placeholder="Search by address..."
+						placeholder="🔎 Search Name..."
 						onChange={(e) => {
 							setFilterTerm(e.target.value);
 						}}
