@@ -97,10 +97,10 @@ export default function Index() {
 								users to access Web3 websites without any
 								proxies or extensions. In other words, it's
 								built to let you build the future of the
-								internet.
+								internet. By using our Virtual Web3 Registry, you can build on all of your names and when gas is low or you are simply ready to launch your content to the world, you can deploy to the Ethereum blockchain. This lets everyone see the future of Web3 on Magic🪞.
 							</p>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-								hink of this as the Google moment of Web3. The
+								Think of this as the Google moment of Web3. The
 								interface is incredibly intuitive, much like the
 								search/address bar of Google. By simply
 								inputting an ETH domain such as 0x0z.eth, users
