@@ -90,7 +90,7 @@ export default function UpdateBanner() {
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					Introducing the 🔥️1️⃣0️⃣0️⃣.eth <b>Leaderboards</b>, <b>Buidl Managers</b>,{' '}
+					Introducing the 🔥️1️⃣0️⃣0️⃣.eth <b>Leaderboard</b>, <b>Buidl Managers</b>,{' '}
 					<b>The 📰Letter.eth Ticker</b> and more!
 				</p>
 			</div>
