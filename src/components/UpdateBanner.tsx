@@ -38,7 +38,7 @@ export default function UpdateBanner() {
 						color: 'yellow',
 					}}
 				>
-					Please be patient as we update the site.
+					🔥️1️⃣0️⃣0️⃣.eth, Buidl Managers, 📰Letter.eth Ticker and more!
 				</p>
 			</div>
 			{
@@ -90,8 +90,8 @@ export default function UpdateBanner() {
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					Introducing <b>Leaderboards</b>, <b>Managers</b>,{' '}
-					<b>The News Ticker</b> and more!
+					Introducing the 🔥️1️⃣0️⃣0️⃣.eth <b>Leaderboards</b>, <b>Buidl Managers</b>,{' '}
+					<b>The 📰Letter.eth Ticker</b> and more!
 				</p>
 			</div>
 		</div>

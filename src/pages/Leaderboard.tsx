@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default function Leaderboard() {
-	return <div>Leaderboard</div>;
+	return <div>🔥️1️⃣0️⃣0️⃣.eth</div>;
 }
