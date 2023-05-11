@@ -84,68 +84,101 @@ export default function Index() {
 				<div className="hero-content w-full">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
 						<div className="p-4">
-							<h3 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 pb-4">
+							<h3 className="text-center md:text-left text-3xl md:text-5xl lg:text-7xl font-bold mb-4 pb-4">
 								MAGIC🪞.ETH
 							</h3>
-							<h4 className="text-3xl md:text-3xl lg:text-4xl font-bold mb-4 pb-4">
+							<h4 className="text-center md:text-left text-xl md:text-3xl lg:text-4xl font-bold mb-4 pb-4">
 								Introducing Magic🪞 - the revolutionary
 								self-contained Web3 browser and builder that
 								unveils the future of the internet.
 							</h4>
-							<div className='card w-96 bg-base-100 shadow-xl p-4 m-2'>
-								<div className='card-body'>
-									<h2 className='card-title'>Your new web(3) browser 🌍</h2>
-									<hr className='bg-base-100' />
+							<div className='grid grid-cols-1 md:grid-cols-2'>
+								<div id='thebrowser' className='card w-84 glass bg-base-100 shadow-xl p-4 m-2'>
+									<div className='card-body'>
+										<h2 className='card-title'> A completely new type of registry 📔</h2>
+										<hr className='bg-base-100' />
+									</div>
+									<p>
+										This browser is a game-changer, as it enables
+										users to access Web3 websites without any
+										proxies or extensions. In other words, it's
+										designed to let you engineer the future of the
+										internet.<br />
+										<br />By using our <u>Virtual Web3 Registry</u>,
+										you can build on all of your names and when gas is low or you are simply ready to launch your content to the world, you can deploy to the Ethereum blockchain. This lets everyone see the future of Web3 on Magic🪞.
+									</p>
+									<br />
+									<div className="card-actions justify-end">
+										<a href='/properties' className="btn btn-primary">Check it out!</a>
+									</div>
 								</div>
-								<p className='text-left'>
-									This browser is a game-changer, as it enables
-									users to access Web3 websites without any
-									proxies or extensions. In other words, it's
-									built to let you build the future of the
-									internet.<br />
-									<br />By using our <u>Virtual Web3 Registry</u>,
-									you can build on all of your names and when gas is low or you are simply ready to launch your content to the world, you can deploy to the Ethereum blockchain. This lets everyone see the future of Web3 on Magic🪞.
-								</p>
-								<div className="card-actions justify-end">
-									<a href='/properties' className="btn btn-primary">Check it out!</a>
+								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
+									<div className='card-body flex-none'>
+										<h2 className='card-title'>Your new web(3) browser 🌍</h2>
+										<hr className='bg-base-100' />
+									</div>
+									<p>
+										Think of this as the Google moment of Web3. The
+										interface is incredibly intuitive, much like the
+										search/address bar of Google.
+										<br />
+										By simply inputting an ETH domain such as <i>0x0z.eth</i>,
+										users can easily access the active content tag for
+										that ENS domain.
+										<br />
+										<br />
+										But that's not all! with
+										Magic🪞, users can even skip the .eth and
+										directly jump into marketplaces like
+										[ens.vision] by typing 0x0z.vision. And this is
+										just the beginning.
+									</p>
+									<br />
+								</div>
+								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
+									<div className='card-body flex-none'>
+										<h2 className='card-title'>A completely new IDE 💻</h2>
+										<hr className='bg-base-100' />
+									</div>
+									<p>
+										But what truly sets Magic🪞 apart is its
+										dream🎨.eth dWeb Studio, the most magical way to
+										create your own decentralized websites and add
+										more power to your Web3 domains. It's a powerful
+										tool that makes website creation incredibly easy
+										and seamless.
+									</p>
+									<div className="card-actions justify-end">
+										<a href='/ide' className="btn btn-primary">Build now!</a>
+									</div>
+								</div>
+								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
+									<div className='card-body flex-none'>
+										<h2 className='card-title'>View once. Run anywhere ☕</h2>
+										<hr className='bg-base-100' />
+									</div>
+									<p>
+										Magic🪞 is a self-contained Web3 browser that
+										can be instantiated inside of any typical
+										browser, making it an incredibly versatile tool.
+										This is the future of the internet, and Magic🪞
+										is leading the way.
+									</p>
 								</div>
 							</div>
-							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-								Think of this as the Google moment of Web3. The
-								interface is incredibly intuitive, much like the
-								search/address bar of Google. By simply
-								inputting an ETH domain such as 0x0z.eth, users
-								can easily access the active content tag for
-								that ENS domain. But that's not all, with
-								Magic🪞, users can even skip the .eth and
-								directly jump into marketplaces like
-								[ens.vision] by typing 0x0z.vision. And this is
-								just the beginning.
-							</p>
-							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-								But what truly sets Magic🪞 apart is its
-								dream🎨.eth dWeb Studio, the most magical way to
-								create your own decentralized websites and add
-								more power to your Web3 domains. It's a powerful
-								tool that makes website creation incredibly easy
-								and seamless.
-							</p>
-							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-								Magic🪞 is a self-contained Web3 browser that
-								can be instantiated inside of any typical
-								browser, making it an incredibly versatile tool.
-								This is the future of the internet, and Magic🪞
-								is leading the way.
-							</p>
 						</div>
 					</div>
 				</div>
 			</Hero>
-			<Hero>
+			<br />
+			<br />
+			<br />
+			<br />
+			<div>
 				<div className="text-center w-4/3 bg-warning">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
 						<div className="lg:pl-5 lg:ml-5 md:pl-2 md:ml-2">
-							<p className="font-apocalypse text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-11x xl:text-[6rem] text-black text-center md:text-left lg:justify-center lg:items-center lg:flex xl:text-left">
+							<p className="hidden xl:block font-apocalypse text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-11x xl:text-[6rem] text-black text-center md:text-left lg:justify-center lg:items-center xl:text-left">
 								FOLLOW THE 0x🟨ROAD
 							</p>
 						</div>
@@ -155,18 +188,25 @@ export default function Index() {
 								<u>DEcentralized🌈GENeration</u> to create{' '}
 								<u>something magical</u>
 							</h1>
-							<p className="text-black text-1xl lg:text-2xl text-right">
-								Who’s the fairest browser of them all? One that
-								only shows you the true 🪞ReflectionNFT of a
-								Web3 address. .eth.sol.nft.x.next if there is a
-								🪞we can see each other through we can reset the
-								trust of the internet. Consent based browsing
-								for a reconnecting world.
-							</p>
 						</div>
 					</div>
 				</div>
-			</Hero>
+			</div>
+
+			<div className="card">
+				<div className="card-body bg-warning text-black hover:none text-xl lg:text-2xl text-center">
+					Who’s the fairest browser of them all? One that
+					only shows you the true 🪞ReflectionNFT of a
+					Web3 address. <br /> .eth.sol.nft.x.next if there is a
+					🪞we can see each other through, we can reset the
+					trust of the internet. Consent based browsing
+					for a reconnecting world.
+				</div>
+			</div>
+			<br />
+			<br />
+			<br />
+			<br />
 			{/** Contains the footer and the 0x0zLogo with the console button */}
 			<FixedElements
 				hideUserInfo={false}
