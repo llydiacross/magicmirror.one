@@ -278,6 +278,7 @@ const config = {
 		user: 'user',
 		stats: 'stats',
 		ens: 'ens',
+		history: 'history',
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
 	defaultTheme: 'forest',

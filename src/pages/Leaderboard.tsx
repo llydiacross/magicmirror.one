@@ -65,26 +65,30 @@ export default function Leaderboard() {
 								<tbody className="bg-white divide-y divide-gray-200">
 									{stats.map((stat: any, index: number) => {
 										return (
-											<tr key={index}>
-												<td className="px-6 py-4 whitespace-nowrap">
-													<div className="text-sm text-gray-900">
-														{index + 1}
-													</div>
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap">
-													<div className="text-sm text-gray-900">
-														{stat.domainName}
-													</div>
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap">
-													<div className="text-sm text-gray-900">
-														{stat.totalViews}
-													</div>
-												</td>
-											</tr>
+											<>
+												<tr
+													className={index === 0 && 'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'}
+													key={index}>
+													<td className="px-6 py-4 whitespace-nowrap">
+														<div className="text-sm text-gray-900">
+															<p>{index === 0 && ' 🏆 '}{index + 1}</p>
+														</div>
+													</td>
+													<td className="px-6 py-4 whitespace-nowrap">
+														<div className="text-sm text-gray-900">
+															{stat.domainName}
+														</div>
+													</td>
+													<td className="px-6 py-4 whitespace-nowrap">
+														<div className="text-sm text-gray-900">
+															{stat.totalViews}
+														</div>
+													</td>
+												</tr>
+											</>
 										);
 									})}
-								</tbody>
+								</tbody >
 							</table>
 						</div>
 					</div>
