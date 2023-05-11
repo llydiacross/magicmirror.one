@@ -61,7 +61,6 @@ export default function Index() {
 				'0x0z Light'
 			}
 		>
-			<UpdateBanner />
 			<div
 				className="hero-bg w-full h-screen absolute z-0 animate-pulse bg-cover bg-center backdrop-saturate-100 backdrop-opacity-20"
 				hidden={!shouldShowBackdrop}
@@ -88,112 +87,138 @@ export default function Index() {
 								self-contained Web3 browser and builder that
 								unveils the future of the internet.
 							</h4>
-							<div className="grid grid-cols-1 md:grid-cols-2">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
 								<div
-									id="thebrowser"
-									className="card w-84 glass bg-base-100 shadow-xl p-4 m-2"
+									id="registry"
+									className="card w-84 glass bg-base-100 shadow-xl"
 								>
 									<div className="card-body">
 										<h2 className="card-title">
-											{' '}
 											A completely new type of registry 📔
 										</h2>
 										<hr className="bg-base-100" />
-									</div>
-									<p>
-										This browser is a game-changer, as it
-										enables users to access Web3 websites
-										without any proxies or extensions. In
-										other words, it's designed to let you
-										engineer the future of the internet.
-										<br />
-										<br />
-										By using our{' '}
-										<u>Virtual Web3 Registry</u>, you can
-										build on all of your names and when gas
-										is low or you are simply ready to launch
-										your content to the world, you can
-										deploy to the Ethereum blockchain. This
-										lets everyone see the future of Web3 on
-										Magic🪞.
-									</p>
-									<br />
-									<div className="card-actions justify-end">
-										<a
-											href="/properties"
-											className="btn btn-primary mt-4 btn-outline"
-										>
-											Check it out!
-										</a>
+										<p className="mt-2">
+											This browser is a game-changer, as
+											it enables users to access Web3
+											websites without any proxies or
+											extensions. In other words, it's
+											designed to let you engineer the
+											future of the internet.
+											<br />
+											<br />
+											By using our{' '}
+											<u>Virtual Web3 Registry</u>, you
+											can build on all of your names and
+											when gas is low or you are simply
+											ready to launch your content to the
+											world, you can deploy to the
+											Ethereum blockchain. This lets
+											everyone see the future of Web3 on
+											Magic🪞.
+										</p>
+										<div className="card-actions justify-end mt-4">
+											<a
+												href="/properties"
+												className="btn btn-light btn-outline"
+											>
+												Check it out!
+											</a>
+										</div>
 									</div>
 								</div>
-								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
-									<div className="card-body flex-none">
+								<div
+									id="browser"
+									className="card w-84 glass bg-base-100 shadow-xl"
+								>
+									<div className="card-body">
 										<h2 className="card-title">
 											Your new web(3) browser 🌍
 										</h2>
 										<hr className="bg-base-100" />
+										<p className="mt-2">
+											Think of this as the Google moment
+											of Web3. The interface is incredibly
+											intuitive, much like the
+											search/address bar of Google.
+											<br />
+											By simply inputting an ETH domain
+											such as <i>0x0z.eth</i>, users can
+											easily access the active content tag
+											for that ENS domain.
+											<br />
+											<br />
+											But that's not all! with Magic🪞,
+											users can even skip the .eth and
+											directly jump into marketplaces like
+											[ens.vision] by typing 0x0z.vision.
+											And this is just the beginning.
+										</p>
+										<div className="card-actions justify-end mt-4">
+											<a
+												href="/view/0x0z.eth"
+												className="btn btn-light btn-outline"
+											>
+												Example
+											</a>
+										</div>
 									</div>
-									<p>
-										Think of this as the Google moment of
-										Web3. The interface is incredibly
-										intuitive, much like the search/address
-										bar of Google.
-										<br />
-										By simply inputting an ETH domain such
-										as <i>0x0z.eth</i>, users can easily
-										access the active content tag for that
-										ENS domain.
-										<br />
-										<br />
-										But that's not all! with Magic🪞, users
-										can even skip the .eth and directly jump
-										into marketplaces like [ens.vision] by
-										typing 0x0z.vision. And this is just the
-										beginning.
-									</p>
-									<br />
 								</div>
-								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
-									<div className="card-body flex-none">
+								<div
+									id="ide"
+									className="card w-84 glass bg-base-100 shadow-xl"
+								>
+									<div className="card-body">
 										<h2 className="card-title">
 											A completely new IDE 💻
 										</h2>
 										<hr className="bg-base-100" />
-									</div>
-									<p>
-										But what truly sets Magic🪞 apart is its
-										dream🎨.eth dWeb Studio, the most
-										magical way to create your own
-										decentralized websites and add more
-										power to your Web3 domains. It's a
-										powerful tool that makes website
-										creation incredibly easy and seamless.
-									</p>
-									<div className="card-actions justify-end">
-										<a
-											href="/ide"
-											className="btn btn-primary mt-4 btn-outline"
-										>
-											Build now!
-										</a>
+										<p className="mt-2">
+											But what truly sets Magic🪞 apart is
+											its dream🎨.eth dWeb Studio, the
+											most magical way to create your own
+											decentralized websites and add more
+											power to your Web3 domains. It's a
+											powerful tool that makes website
+											creation incredibly easy and
+											seamless
+										</p>
+										<div className="card-actions justify-end mt-4">
+											<a
+												href="/ide/?url=0x0z.eth"
+												className="btn btn-light btn-outline"
+											>
+												Build Now!
+											</a>
+										</div>
 									</div>
 								</div>
-								<div className="card w-84 glass bg-base-100 shadow-xl p-4 m-2">
-									<div className="card-body flex-none">
+								<div
+									id="install"
+									className="card w-84 glass bg-base-100 shadow-xl"
+								>
+									<div className="card-body">
 										<h2 className="card-title">
 											View once. Run anywhere ☕
 										</h2>
 										<hr className="bg-base-100" />
+										<p className="mt-2">
+											Magic🪞 is a self-contained Web3
+											browser that can be instantiated
+											inside of any typical browser,
+											making it an incredibly versatile
+											tool. This is the future of the
+											internet, and Magic🪞 is leading the
+											way.
+										</p>
+										<div className="card-actions justify-end mt-4">
+											<a
+												href="?install=true"
+												className="btn btn-light btn-outline"
+											>
+												Install Now
+											</a>
+										</div>
 									</div>
-									<p>
-										Magic🪞 is a self-contained Web3 browser
-										that can be instantiated inside of any
-										typical browser, making it an incredibly
-										versatile tool. This is the future of
-										the internet, and Magic🪞 is leading the
-										way.
-									</p>
 								</div>
 							</div>
 						</div>
@@ -201,6 +226,7 @@ export default function Index() {
 				</div>
 			</Hero>
 			<div className="pt-5 pb-5 bg-base-200">
+				<br />
 				<br />
 				<br />
 				<br />
@@ -224,19 +250,34 @@ export default function Index() {
 					</div>
 				</div>
 			</div>
-			<div className="card">
+			<div className="card mt-4">
 				<div className="card-body bg-warning text-black hover:none text-xl lg:text-2xl text-center">
-					Who’s the fairest browser of them all? One that only shows
-					you the true 🪞ReflectionNFT of a Web3 address. <br />{' '}
-					.eth.sol.nft.x.next if there is a 🪞we can see each other
-					through, we can reset the trust of the internet. Consent
-					based browsing for a reconnecting world.
+					<u>Who’s the fairest browser of them all?</u>
 				</div>
 			</div>
-			<br />
-			<br />
-			<br />
-			<br />
+			<div className="flex flex-col md:flex-row lg:flex-row gap-4 w-full pt-4">
+				<div className="card">
+					<div className="card-body bg-warning text-black hover:none text-xl lg:text-2xl ">
+						One that only shows you the true 🪞ReflectionNFT of a
+						Web3 address.
+					</div>
+				</div>
+				<div className="card">
+					<div className="card-body bg-base-100 text-white hover:none text-xl lg:text-2xl">
+						If there is a 🪞 we can see each other through, we can
+						reset the trust of the internet. Consent based browsing
+						for a reconnecting world.
+					</div>
+				</div>
+			</div>
+
+			<div className="pt-5 pb-5 bg-base-200">
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+			</div>
 			{/** Contains the footer and the 0x0zLogo with the console button */}
 			<FixedElements
 				hideUserInfo={false}
