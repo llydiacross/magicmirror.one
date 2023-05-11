@@ -2,7 +2,9 @@ import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { ethers } from 'ethers';
-import Header from '../../components/Header';
+import SettingsModal from '../../modals/SettingsModal';
+import storage from '../../storage';
+import config from '../../config';
 
 export default function Dashboard() {
 	const history = useHistory();
@@ -10,6 +12,7 @@ export default function Dashboard() {
 	const hash = useRef(null);
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
+	const [showSettingsModal, setShowSettingsModal] = useState(false);
 	const decode = () => {
 		setError(null);
 		try {
@@ -25,9 +28,13 @@ export default function Dashboard() {
 	};
 
 	return (
-		<>
+		<div data-theme={
+			storage.getGlobalPreference('defaultTheme') ||
+			config.defaultTheme ||
+			'forest'
+		}>
 			<div className="hero min-h-screen">
-				<div className="hero-overlay bg-opacity-60" />
+				<div className="hero-overlay bg-opacity-70" />
 				<div className="hero-content text-center bg-gray-500">
 					<div className="min-w-screen">
 						<h1 className="mb-5 text-5xl font-bold text-black">
@@ -105,7 +112,8 @@ export default function Dashboard() {
 					</div>
 				</div>
 			</div>
-			<FixedElements useFixed={false}></FixedElements>
-		</>
+			<SettingsModal onHide={() => setShowSettingsModal(false)} hidden={!showSettingsModal} />
+			<FixedElements useFixed={false} onSettings={() => setShowSettingsModal(true)}></FixedElements>
+		</div>
 	);
 }

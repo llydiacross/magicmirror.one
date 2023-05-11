@@ -5,8 +5,9 @@ coverage.json
 /typechain
 /typechain-types
 .direnv/
-
 /prisma/migrations/
+magicmirror
+logfile
 
 # Yarn
 .pnp.*

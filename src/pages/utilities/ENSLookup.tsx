@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react';
 import { Web3Context, Web3ContextType } from '../../contexts/web3Context';
 import Loading from '../../components/Loading';
+import storage from '../../storage';
+import config from '../../config';
 
 export default function ENSLookup() {
 	const history = useHistory();
@@ -58,7 +60,12 @@ export default function ENSLookup() {
 	};
 
 	return (
-		<>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-neutral-content bg-gray-500">
@@ -162,6 +169,6 @@ export default function ENSLookup() {
 				</div>
 			</div>
 			<FixedElements useFixed={false}></FixedElements>
-		</>
+		</div>
 	);
 }

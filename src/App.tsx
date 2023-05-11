@@ -15,6 +15,7 @@ import ENSLookup from './pages/utilities/ENSLookup';
 import User from './pages/utilities/User';
 import Logout from './pages/utilities/Logout';
 import Properties from './pages/Properties';
+import Leaderboard from './pages/Leaderboard';
 
 function App() {
 	return (
@@ -64,6 +65,9 @@ function App() {
 							</Route>
 							<Route exact path="/properties">
 								<Properties />
+							</Route>
+							<Route exact path="/leaderboard">
+								<Leaderboard />
 							</Route>
 							<Route exact path="*">
 								<NotFound />

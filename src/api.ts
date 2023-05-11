@@ -15,6 +15,7 @@ export const getEndpoint = (
 		| 'ipfs'
 		| 'ipns'
 		| 'wallet'
+		| 'stats'
 		| 'ens'
 		| 'user'
 ) => {
@@ -37,6 +38,7 @@ export const apiFetch = async (
 		| 'ipns'
 		| 'wallet'
 		| 'ens'
+		| 'stats'
 		| 'user',
 	method: string,
 	data: any,

@@ -5,6 +5,8 @@ import { useContext, useRef, useState } from 'react';
 import { LoginContext } from '../../contexts/loginContext';
 import { apiFetch } from '../../api';
 import WebEvents from '../../webEvents';
+import storage from '../../storage';
+import config from '../../config';
 
 export default function Logout() {
 	const history = useHistory();
@@ -29,7 +31,12 @@ export default function Logout() {
 	};
 
 	return (
-		<>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-neutral-content bg-gray-500">
@@ -84,6 +91,6 @@ export default function Logout() {
 				</div>
 			</div>
 			<FixedElements useFixed={false}></FixedElements>
-		</>
+		</div>
 	);
 }
