@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { apiFetch } from '../api'
-import storage from '../storage'
-import config from '../config'
-import FixedElements from '../components/FixedElements'
-import SettingsModal from '../modals/SettingsModal'
+import React, { useEffect, useState } from 'react';
+import storage from '../storage';
+import config from '../config';
+import { apiFetch } from '../api';
 
 export default function Leaderboard() {
-	const [stats, setStats] = useState([])
-	const [showSettingsModal, setShowSettingsModal] = useState(false);
+	const [stats, setStats] = useState({}); //stats returns a object with an array inside it
 
-	let getAllStats = async () => {
-		const result = await apiFetch('stats', 'top', {}, 'GET')
-			.then(result => result.json())
+	useEffect(() => {
+		let main = async () => {
+			let response = await apiFetch('stats', 'top', {}, 'GET');
 
-		setStats(result || [])
-	}
-	return <div
-		data-theme={
-			storage.getGlobalPreference('defaultTheme') ||
-			config.defaultTheme ||
-			'forest'
-		}
-	>
+			console.log(response);
+		};
 
+		main();
+	}, []);
 
-		<FixedElements onSettings={() => {
-			setShowSettingsModal(true)
-		}} />
-		<SettingsModal hidden={!showSettingsModal} onHide={() => {
-			setShowSettingsModal(false);
-		}} />
-	</div>
+	return (
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
+		>
+			<div className="container"></div>
+		</div>
+	);
 }

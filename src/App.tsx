@@ -66,7 +66,7 @@ function App() {
 							<Route exact path="/properties">
 								<Properties />
 							</Route>
-							<Route exact path="/leaderboard">
+							<Route exact path="/leaderboard/top">
 								<Leaderboard />
 							</Route>
 							<Route exact path="*">
