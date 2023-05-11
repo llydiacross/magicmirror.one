@@ -81,24 +81,35 @@ export default function Index() {
 			<Header title={currentDestination} />
 
 			<Hero>
-				<div className="hero-content text-center w-full bg-info">
+				<div className="hero-content w-full">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
 						<div className="p-4">
-							<p className="text-3xl md:text-5xl lg:text-7xl text-black text-center font-bold mb-4 pb-4">
+							<h3 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 pb-4">
 								MAGIC🪞.ETH
-							</p>
-							<h4 className="text-3xl md:text-3xl lg:text-4xl text-black font-bold mb-4 pb-4">
+							</h3>
+							<h4 className="text-3xl md:text-3xl lg:text-4xl font-bold mb-4 pb-4">
 								Introducing Magic🪞 - the revolutionary
 								self-contained Web3 browser and builder that
 								unveils the future of the internet.
 							</h4>
-							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
-								This browser is a game-changer, as it enables
-								users to access Web3 websites without any
-								proxies or extensions. In other words, it's
-								built to let you build the future of the
-								internet. By using our Virtual Web3 Registry, you can build on all of your names and when gas is low or you are simply ready to launch your content to the world, you can deploy to the Ethereum blockchain. This lets everyone see the future of Web3 on Magic🪞.
-							</p>
+							<div className='card w-96 bg-base-100 shadow-xl p-4 m-2'>
+								<div className='card-body'>
+									<h2 className='card-title'>Your new web(3) browser 🌍</h2>
+									<hr className='bg-base-100' />
+								</div>
+								<p className='text-left'>
+									This browser is a game-changer, as it enables
+									users to access Web3 websites without any
+									proxies or extensions. In other words, it's
+									built to let you build the future of the
+									internet.<br />
+									<br />By using our <u>Virtual Web3 Registry</u>,
+									you can build on all of your names and when gas is low or you are simply ready to launch your content to the world, you can deploy to the Ethereum blockchain. This lets everyone see the future of Web3 on Magic🪞.
+								</p>
+								<div className="card-actions justify-end">
+									<a href='/properties' className="btn btn-primary">Check it out!</a>
+								</div>
+							</div>
 							<p className="text-black text-1xl g:text-2xl text-left mb-3 pb-3">
 								Think of this as the Google moment of Web3. The
 								interface is incredibly intuitive, much like the
@@ -131,10 +142,10 @@ export default function Index() {
 				</div>
 			</Hero>
 			<Hero>
-				<div className="text-center w-full bg-warning">
+				<div className="text-center w-4/3 bg-warning">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
 						<div className="lg:pl-5 lg:ml-5 md:pl-2 md:ml-2">
-							<p className="text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-11x xl:text-[6rem] text-black text-center md:text-left lg:justify-center lg:items-center lg:flex xl:text-left">
+							<p className="font-apocalypse text-5xl lg:ml-5 lg:pl-5 md:ml-2 md:pl-2 lg:text-11x xl:text-[6rem] text-black text-center md:text-left lg:justify-center lg:items-center lg:flex xl:text-left">
 								FOLLOW THE 0x🟨ROAD
 							</p>
 						</div>
