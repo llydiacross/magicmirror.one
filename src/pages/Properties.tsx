@@ -80,13 +80,14 @@ export default function Properties() {
 		if (!loginContext.isSignedIn) return;
 
 		let main = async () => {
-			if (!storage.getPagePreference('firstTime')) {
-				await fetchENS();
-				storage.setPagePreference('firstTime', true);
-			}
-
 			let count = await getCount();
 			if (count > 0) getAllEns();
+			else {
+				if (!storage.getPagePreference('firstTime')) {
+					await fetchENS();
+					storage.setPagePreference('firstTime', true);
+				}
+			}
 		};
 
 		main()

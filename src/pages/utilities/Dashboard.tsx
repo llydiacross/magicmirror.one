@@ -13,26 +13,15 @@ export default function Dashboard() {
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
 	const [showSettingsModal, setShowSettingsModal] = useState(false);
-	const decode = () => {
-		setError(null);
-		try {
-			if (hash.current.value === '')
-				throw new Error('please enter a dns domain');
-
-			const decoded = ethers.utils.namehash(hash.current.value);
-			setDecoded(decoded);
-		} catch (e) {
-			console.log(e);
-			setError(e);
-		}
-	};
 
 	return (
-		<div data-theme={
-			storage.getGlobalPreference('defaultTheme') ||
-			config.defaultTheme ||
-			'forest'
-		}>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
+		>
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-70" />
 				<div className="hero-content text-center bg-gray-500">
@@ -112,8 +101,14 @@ export default function Dashboard() {
 					</div>
 				</div>
 			</div>
-			<SettingsModal onHide={() => setShowSettingsModal(false)} hidden={!showSettingsModal} />
-			<FixedElements useFixed={false} onSettings={() => setShowSettingsModal(true)}></FixedElements>
+			<SettingsModal
+				onHide={() => setShowSettingsModal(false)}
+				hidden={!showSettingsModal}
+			/>
+			<FixedElements
+				useFixed={false}
+				onSettings={() => setShowSettingsModal(true)}
+			></FixedElements>
 		</div>
 	);
 }
