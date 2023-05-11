@@ -6,6 +6,7 @@ import { Web3Context, Web3ContextType } from '../../contexts/web3Context';
 import Loading from '../../components/Loading';
 import storage from '../../storage';
 import config from '../../config';
+import Navbar from '../../components/Navbar';
 
 export default function ENSLookup() {
 	const history = useHistory();
@@ -65,7 +66,9 @@ export default function ENSLookup() {
 				storage.getGlobalPreference('defaultTheme') ||
 				config.defaultTheme ||
 				'forest'
-			}>
+			}
+		>
+			<Navbar />
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-neutral-content bg-gray-500">
@@ -74,8 +77,8 @@ export default function ENSLookup() {
 							WHOIS
 						</h1>
 						<p className="mb-5 text-black text-center ">
-							Enter a domain name to retrieve the owner, and resolver address
-							and the current content hash.
+							Enter a domain name to retrieve the owner, and
+							resolver address and the current content hash.
 						</p>
 						{!loading ? (
 							<>
@@ -89,13 +92,17 @@ export default function ENSLookup() {
 										if (e.key === 'Enter') decode();
 									}}
 								></input>
-								{error === null && Object.keys(registry).length !== 0 ? (
+								{error === null &&
+								Object.keys(registry).length !== 0 ? (
 									<>
 										<p className="mb-5 text-success mt-2 break-word">
 											ENS: {registry.domain}
 										</p>
 										<p className="mb-5 text-success mt-2 break-word">
-											Namehash: {ethers.utils.namehash(registry.domain)}
+											Namehash:{' '}
+											{ethers.utils.namehash(
+												registry.domain
+											)}
 										</p>
 										<p className="mb-5 text-success mt-2 break-word">
 											Owner: {registry.owner}
@@ -107,12 +114,14 @@ export default function ENSLookup() {
 											Content Hash: {registry.contentHash}
 										</p>
 										<p className="mb-5 text-success mt-2 break-word">
-											Raw Content Hash: {registry.rawContentHash}{' '}
+											Raw Content Hash:{' '}
+											{registry.rawContentHash}{' '}
 											<span
 												className="text-xs text-blue-700 cursor-pointer hover:underline"
 												onClick={() => {
 													history.push(
-														'/utilities/contenthash/' + registry.rawContentHash
+														'/utilities/contenthash/' +
+															registry.rawContentHash
 													);
 												}}
 											>
@@ -123,16 +132,20 @@ export default function ENSLookup() {
 											Registry Etherscan:{' '}
 											<a
 												href={
-													'https://etherscan.io/address/' + registry.address
+													'https://etherscan.io/address/' +
+													registry.address
 												}
 												className="text-blue-700 cursor-pointer hover:underline"
 											>
-												https://etherscan.io/address/{registry.address}
+												https://etherscan.io/address/
+												{registry.address}
 											</a>
 										</p>
 									</>
 								) : (
-									<p className="mb-5 text-error mt-2">{error?.message}</p>
+									<p className="mb-5 text-error mt-2">
+										{error?.message}
+									</p>
 								)}
 							</>
 						) : (

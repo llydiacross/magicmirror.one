@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import storage from '../../storage';
 import config from '../../config';
+import Navbar from '../../components/Navbar';
 
 export default function Converter() {
 	const history = useHistory();
@@ -36,7 +37,9 @@ export default function Converter() {
 				storage.getGlobalPreference('defaultTheme') ||
 				config.defaultTheme ||
 				'forest'
-			}>
+			}
+		>
+			<Navbar />
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
@@ -53,7 +56,7 @@ export default function Converter() {
 							onKeyDown={(e) => {
 								if (e.key === 'Enter') decode();
 							}}
-							placeholder='decode_me!'
+							placeholder="decode_me!"
 						></input>
 						{error === null ? (
 							<p className="mb-5 text-success mt-2">{decoded}</p>

@@ -55,7 +55,7 @@ function FixedElements({
 		<>
 			{/** Element for the Wallet Error */}
 			<div
-				className="fixed top-0 left-0 z-50 flex flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem] max-w-[75%] w-full"
+				className="fixed top-0 left-0 z-50 flex flex-col gap-2 md:flex-row lg:flex-row p-2 max-h-[5rem]"
 				ref={hudRef}
 			>
 				<div
@@ -181,7 +181,7 @@ function FixedElements({
 							<button
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={onSettings}
-								title='⚙️Settings.eth'
+								title="⚙️Settings.eth"
 							>
 								⚙️
 							</button>
@@ -190,7 +190,7 @@ function FixedElements({
 								onClick={() => {
 									history.push('/');
 								}}
-								title='🪞Magic.eth'
+								title="🪞Magic.eth"
 							>
 								🪞
 							</button>
@@ -199,7 +199,7 @@ function FixedElements({
 								onClick={() => {
 									history.push('/ide?dream=true');
 								}}
-								title='Dream🎨.eth'
+								title="Dream🎨.eth"
 							>
 								🎨
 							</button>
@@ -207,9 +207,8 @@ function FixedElements({
 								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
 								onClick={() => {
 									history.push('/ide?bot=army');
-									
 								}}
-								title='🤖Army.eth'
+								title="🤖Army.eth"
 							>
 								🤖
 							</button>
@@ -218,7 +217,7 @@ function FixedElements({
 								onClick={() => {
 									history.push('/properties');
 								}}
-								title='🍬Land.eth'
+								title="🍬Land.eth"
 							>
 								🍬
 							</button>
@@ -227,7 +226,7 @@ function FixedElements({
 								onClick={() => {
 									history.push('/utilities/');
 								}}
-								title='🧰time.eth'
+								title="🧰time.eth"
 							>
 								🧰
 							</button>
@@ -237,7 +236,7 @@ function FixedElements({
 									(!showHud ? 'bg-pink-500' : 'bg-black')
 								}
 								onClick={toggleHud}
-								title='Close Menu'
+								title="Close Menu"
 							>
 								{showHud ? 'ᐃ' : 'ᐁ'}
 							</button>
@@ -248,7 +247,7 @@ function FixedElements({
 									'btn btn-square rounded-none border-none text-white w-full hover:text-white hover:bg-pink-500 bg-black'
 								}
 								onClick={toggleHud}
-								title='Open Menu'
+								title="Open Menu"
 							>
 								{showHud ? 'ᐃ' : 'ᐁ'}
 							</button>

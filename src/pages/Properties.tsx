@@ -9,6 +9,7 @@ import { LoginContext } from '../contexts/loginContext';
 import { apiFetch } from '../api';
 import { useHistory } from 'react-router-dom';
 import Loading from '../components/Loading';
+import Navbar from '../components/Navbar';
 
 export default function Properties() {
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -108,36 +109,7 @@ export default function Properties() {
 				'forest'
 			}
 		>
-			<div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 bg-gray-700 p-2">
-				<div className="max-w-3xl mx-auto text-black">
-					<div className="flex flex-row justify-center gap-2">
-						<button
-							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
-							onClick={() => {
-								history.push('/');
-							}}
-						>
-							MAGIC🪞.ETH
-						</button>
-						<button
-							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
-							onClick={() => {
-								history.push('/utilities/');
-							}}
-						>
-							🧰TIME.ETH
-						</button>
-						<button
-							className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
-							onClick={() => {
-								history.push('/ide');
-							}}
-						>
-							DREAM🎨.ETH STUDIO
-						</button>
-					</div>
-				</div>
-			</div>
+			<Navbar />
 			{error ? (
 				<div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 bg-error p-2">
 					<div className="max-w-3xl mx-auto text-black">

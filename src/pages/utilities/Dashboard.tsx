@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import SettingsModal from '../../modals/SettingsModal';
 import storage from '../../storage';
 import config from '../../config';
+import Navbar from '../../components/Navbar';
 
 export default function Dashboard() {
 	const history = useHistory();
@@ -22,6 +23,7 @@ export default function Dashboard() {
 				'forest'
 			}
 		>
+			<Navbar />
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-70" />
 				<div className="hero-content text-center bg-gray-500">
@@ -106,6 +108,10 @@ export default function Dashboard() {
 				hidden={!showSettingsModal}
 			/>
 			<FixedElements
+				hideSettings={true}
+				hideUserInfo={true}
+				hideFooter={false}
+				hideOwnership
 				useFixed={false}
 				onSettings={() => setShowSettingsModal(true)}
 			></FixedElements>

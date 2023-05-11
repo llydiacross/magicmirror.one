@@ -161,7 +161,7 @@ export default function DestinationFinder() {
 					</div>
 				</div>
 				<button
-					className="btn btn-outline bg-light w-full"
+					className="btn btn-outline bg-light w-full mb-2"
 					data-loading={loading}
 					disabled={loading}
 					onClick={handleTakeMeAnywhere}
@@ -169,14 +169,11 @@ export default function DestinationFinder() {
 				>
 					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
-				<p className="text-1xl text-shadow text-white bg-secondary p-1 mt-3 lg:block">
-					<b>
-						👇 build the next <u>web</u> and unlock the magic of
-						Web3 👇
-					</b>
-				</p>
+				<div className="divider">
+					👇 build the next web and unlock the magic of Web3 👇
+				</div>
 				<button
-					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3"
+					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 mb-2"
 					data-loading={loading}
 					disabled={loading}
 					onClick={() => {
@@ -189,12 +186,9 @@ export default function DestinationFinder() {
 
 				{loginContext.isSignedIn ? (
 					<>
-						<p className="text-2xl text-shadow text-white bg-error p-1 mt-4 mb-1 lg:block">
-							<b>
-								👇 🍬Land Landscapers, Meta Real Estate & the
-								Metaverse's most exciting Candy Store! 👇
-							</b>
-						</p>
+						<div className="divider">
+							👇 check out the new stuff we have added 👇
+						</div>
 						<button
 							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
 							data-loading={loading}
@@ -213,9 +207,9 @@ export default function DestinationFinder() {
 							onClick={() => {
 								history.push('/leaderboard/top');
 							}}
-							title="Leaderboards"
+							title="🔥️1️⃣0️⃣0️⃣.eth - See who is trending in ENS"
 						>
-							Leaderboards
+							🔥️1️⃣0️⃣0️⃣.eth
 						</button>
 					</>
 				) : (
