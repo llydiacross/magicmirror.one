@@ -255,7 +255,7 @@ export default function Index() {
 					<u>Who’s the fairest browser of them all?</u>
 				</div>
 			</div>
-			<div className="flex flex-col md:flex-row lg:flex-row gap-4 w-full pt-4">
+			<div className="flex flex-col md:flex-row lg:flex-row gap-4 w-full pt-4 pb-4">
 				<div className="card">
 					<div className="card-body bg-warning text-black hover:none text-xl lg:text-2xl ">
 						One that only shows you the true 🪞ReflectionNFT of a
@@ -263,7 +263,7 @@ export default function Index() {
 					</div>
 				</div>
 				<div className="card">
-					<div className="card-body bg-base-100 text-white hover:none text-xl lg:text-2xl">
+					<div className="card-body bg-base-100 hover:none text-xl lg:text-2xl">
 						If there is a 🪞 we can see each other through, we can
 						reset the trust of the internet. Consent based browsing
 						for a reconnecting world.
