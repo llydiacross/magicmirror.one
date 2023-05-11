@@ -277,6 +277,7 @@ const config = {
 		avatar: 'avatar',
 		user: 'user',
 		ens: 'ens',
+		stats: 'stats',
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
 	defaultTheme: 'Ox0z_light',
