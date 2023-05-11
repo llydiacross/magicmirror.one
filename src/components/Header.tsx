@@ -173,7 +173,7 @@ function Header({
 					</div>
 					<div className="mt-2 max-w-screen w-full">
 						<h1
-							className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
+							className="text-3xl bg-secondary text-white lg:text-3xl p-2 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
 							style={{
 								cursor: 'pointer',
 							}}

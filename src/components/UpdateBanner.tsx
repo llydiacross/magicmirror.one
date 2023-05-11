@@ -85,13 +85,14 @@ export default function UpdateBanner() {
 						textAlign: 'left',
 						marginLeft: '35.5rem',
 						padding: '6px',
-						marginTop: '-90px',
+						marginTop: '-102px',
 						color: 'whitesmoke',
 						background: 'rgba(0,0,0,0.25)',
 					}}
 				>
-					Introducing the 🔥️1️⃣0️⃣0️⃣.eth <b>Leaderboard</b>, <b>Buidl Managers</b>,{' '}
-					<b>The 📰Letter.eth Ticker</b> and more!
+					Introducing the 🔥️1️⃣0️⃣0️⃣.eth <b>Leaderboard</b>,{' '}
+					<b>Buidl Managers</b>, <b>The 📰Letter.eth Ticker</b> and
+					more!
 				</p>
 			</div>
 		</div>
