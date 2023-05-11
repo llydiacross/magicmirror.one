@@ -9,7 +9,7 @@ export default function Navbar() {
 			<div className="mx-auto text-black">
 				<div className="flex flex-row justify-center gap-2">
 					<button
-						className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
+						className="hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={history.location.pathname === '/'}
 						onClick={() => {
 							history.push('/');
@@ -18,7 +18,7 @@ export default function Navbar() {
 						MAGIC🪞.ETH
 					</button>
 					<button
-						className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
+						className="hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={
 							history.location.pathname === '/utilities/'
 						}
@@ -29,7 +29,7 @@ export default function Navbar() {
 						🧰TIME.ETH
 					</button>
 					<button
-						className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
+						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={
 							history.location.pathname === '/properties/'
 						}
@@ -40,7 +40,7 @@ export default function Navbar() {
 						🍬LAND.eth
 					</button>
 					<button
-						className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
+						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={
 							history.location.pathname === '/leaderboard/top'
 						}
@@ -51,7 +51,7 @@ export default function Navbar() {
 						🔥️1️⃣0️⃣0️⃣.eth
 					</button>
 					<button
-						className="bg-info hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
+						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={history.location.pathname === '/ide/'}
 						onClick={() => {
 							history.push('/ide');
