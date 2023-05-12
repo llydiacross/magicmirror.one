@@ -45,7 +45,6 @@ beta/
 /alpha/__gems/
 /beta/__gems/
 /*/__gems/
-/projects/bundles/
 
 .DS_Store
 dist/
