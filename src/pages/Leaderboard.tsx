@@ -4,10 +4,11 @@ import config from '../config';
 import { apiFetch } from '../api';
 import FixedElements from '../components/FixedElements';
 import Navbar from '../components/Navbar';
+import { useHistory } from 'react-router-dom';
 
 export default function Leaderboard() {
 	const [stats, setStats] = useState([]); //stats returns a object with an array inside it
-
+	const history = useHistory();
 	useEffect(() => {
 		let main = async () => {
 			let response = await apiFetch('stats', 'top', {}, 'GET');
@@ -82,23 +83,37 @@ export default function Leaderboard() {
 														<>
 															<tr
 																className={
-																	(index === 0
-																		&& 'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
-																	)
+																	index ===
+																		0 &&
+																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
 															>
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		<p>
-																			{index + 1}
-																			{index === 0
-																				&& ' 🏆 '}
+																			{index +
+																				1}
+																			{index ===
+																				0 &&
+																				' 🏆 '}
 																		</p>
 																	</div>
 																</td>
 																<td className="px-6 py-4 whitespace-nowrap">
-																	<div className="text-sm text-gray-900">
+																	<div
+																		className="text-sm text-gray-900"
+																		style={{
+																			cursor: 'pointer',
+																			textDecoration:
+																				'underline',
+																		}}
+																		onClick={() => {
+																			history.push(
+																				`/view/${stat.domainName}`
+																			);
+																		}}
+																	>
 																		{
 																			stat.domainName
 																		}
@@ -165,7 +180,7 @@ export default function Leaderboard() {
 															<tr
 																className={
 																	index ===
-																	0 &&
+																		0 &&
 																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
@@ -173,14 +188,28 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		<p>
-																			{index + 1}
-																			{index === 0
-																				&& ' 🏆 '}
+																			{index +
+																				1}
+																			{index ===
+																				0 &&
+																				' 🏆 '}
 																		</p>
 																	</div>
 																</td>
 																<td className="px-6 py-4 whitespace-nowrap">
-																	<div className="text-sm text-gray-900">
+																	<div
+																		className="text-sm text-gray-900"
+																		style={{
+																			cursor: 'pointer',
+																			textDecoration:
+																				'underline',
+																		}}
+																		onClick={() => {
+																			history.push(
+																				`/view/${stat.domainName}`
+																			);
+																		}}
+																	>
 																		{
 																			stat.domainName
 																		}
@@ -247,7 +276,7 @@ export default function Leaderboard() {
 															<tr
 																className={
 																	index ===
-																	0 &&
+																		0 &&
 																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
@@ -255,14 +284,28 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		<p>
-																			{index + 1}
-																			{index === 0
-																				&& ' 🏆 '}
+																			{index +
+																				1}
+																			{index ===
+																				0 &&
+																				' 🏆 '}
 																		</p>
 																	</div>
 																</td>
 																<td className="px-6 py-4 whitespace-nowrap">
-																	<div className="text-sm text-gray-900">
+																	<div
+																		className="text-sm text-gray-900"
+																		style={{
+																			cursor: 'pointer',
+																			textDecoration:
+																				'underline',
+																		}}
+																		onClick={() => {
+																			history.push(
+																				`/view/${stat.domainName}`
+																			);
+																		}}
+																	>
 																		{
 																			stat.domainName
 																		}
@@ -296,6 +339,6 @@ export default function Leaderboard() {
 				hideOwnership
 				useFixed={false}
 			/>
-		</div >
+		</div>
 	);
 }
