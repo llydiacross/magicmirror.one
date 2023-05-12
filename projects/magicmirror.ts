@@ -21,6 +21,12 @@ const magicmirror: InfinityMintProject = {
 			name: 'Magic Ticket',
 			fileName: '/imports/ticket.svg',
 			settings: true,
+			content: {
+				background: {
+					fileName: '/imports/backgrounds/0x0z.png',
+					name: 'Background Image',
+				},
+			},
 		},
 	],
 };
