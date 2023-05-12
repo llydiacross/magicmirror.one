@@ -7,7 +7,7 @@ export default function Navbar() {
 	return (
 		<div className="max-w-full overflow-x-scroll text-sm lg:text-base mx-auto px-4 sm:px-6 lg:px-8 bg-gray-700 p-2">
 			<div className="mx-auto text-black">
-				<div className="flex flex-row justify-center gap-2">
+				<div className="flex flex-row justify-start md:justify-center gap-2">
 					<button
 						className="hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={history.location.pathname === '/'}
