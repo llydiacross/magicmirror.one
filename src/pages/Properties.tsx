@@ -350,6 +350,11 @@ export default function Properties() {
 											<h2 className="text-2xl font-bold">
 												No results found from our API!
 											</h2>
+											<p className='text-sm text-gray-500 text-center'>
+												Our API could not find the entry you specified! D:
+												You may either have to wait a while for it to update
+												or just try again?
+											</p>
 										</div>
 									</div>
 								) : (
