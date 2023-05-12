@@ -5,7 +5,7 @@ export default function Navbar() {
 	const history = useHistory();
 
 	return (
-		<div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 bg-gray-700 p-2">
+		<div className="max-w-full overflow-x-scroll text-sm lg:text-base mx-auto px-4 sm:px-6 lg:px-8 bg-gray-700 p-2">
 			<div className="mx-auto text-black">
 				<div className="flex flex-row justify-center gap-2">
 					<button
