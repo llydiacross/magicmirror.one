@@ -472,8 +472,7 @@ function Viewer({ match }) {
 							404 Not Found
 						</h1>
 						<p className="mb-5 text-black text-center">
-							This ENS address does not exist and is can be
-							purchased right now!
+							This ENS name does not exist, or there was an error and clueless about it so here is this cat!
 							<img
 								className="mx-auto mt-2"
 								src="/img/404.webp"
@@ -484,6 +483,7 @@ function Viewer({ match }) {
 								}}
 								onClick={() => {
 									window.open(
+										//we need to call nft directly here
 										'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/43404484862317751072749643860451660777873344222238548813148311469445141757953'
 									);
 								}}
