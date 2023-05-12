@@ -173,11 +173,9 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		<p>
-																			{index ===
-																				0 &&
-																				' 🏆 '}
-																			{index +
-																				1}
+																			{index + 1}
+																			{index === 0
+																				&& ' 🏆 '}
 																		</p>
 																	</div>
 																</td>
@@ -257,11 +255,9 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		<p>
-																			{index ===
-																				0 &&
-																				' 🏆 '}
-																			{index +
-																				1}
+																			{index + 1}
+																			{index === 0
+																				&& ' 🏆 '}
 																		</p>
 																	</div>
 																</td>
