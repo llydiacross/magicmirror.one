@@ -19,9 +19,9 @@ export default function Navbar() {
 					</button>
 					<button
 						className="hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
-						data-selected={
-							history.location.pathname === '/utilities/'
-						}
+						data-selected={history.location.pathname.includes(
+							'/utilities/'
+						)}
 						onClick={() => {
 							history.push('/utilities/');
 						}}
