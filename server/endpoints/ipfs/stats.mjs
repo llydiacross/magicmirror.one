@@ -108,7 +108,7 @@ export const post = async (req, res) => {
 			(parseInt(currentHourlyViews) + 1).toString()
 		);
 
-		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 60 * 1);
+		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 10);
 	}
 
 	success(res, {
