@@ -40,7 +40,7 @@ const useWeb3Context = () => {
 			});
 			return result && result.length !== 0;
 		} catch (error) {
-			console.error(error);
+			console.log(error);
 			return false;
 		}
 	};
@@ -76,7 +76,7 @@ const useWeb3Context = () => {
 				/* Empty */
 			} catch (walletError) {
 				WebEvents.emit('walletError', walletError);
-				console.error(walletError);
+				console.log(walletError);
 				setWalletError(walletError);
 			}
 
@@ -96,17 +96,12 @@ const useWeb3Context = () => {
 			let provider:
 				| ethers.providers.Web3Provider
 				| ethers.providers.JsonRpcProvider;
+
 			if (connected) {
+				//change provider to be the one from the wallet to grab information about the current user
 				provider = new ethers.providers.Web3Provider(
 					(window as any).ethereum
 				);
-			} else {
-				provider = new ethers.providers.JsonRpcProvider(
-					config.providerUrl
-				);
-			}
-
-			if (connected) {
 				const accounts = await requestAccounts();
 				setAccounts(accounts);
 
@@ -131,6 +126,8 @@ const useWeb3Context = () => {
 				setEnsAddresses(ensAddresses);
 			}
 
+			//use our default provider (more reliable than the users)
+			provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 			setWeb3Provider(provider);
 			setLoaded(true);
 		};
@@ -143,21 +140,39 @@ const useWeb3Context = () => {
 				return;
 
 			setLoaded(false);
-			main();
+			main().catch((error) => {
+				setWalletConnected(false);
+				setWalletInstalled(false);
+				setWalletError(error);
+				setLoaded(true);
+			});
 		};
 
 		if (refreshEvent.current === null) refreshEvent.current = main;
 		if (walletChangedEvent.current === null)
 			walletChangedEvent.current = accountsChanged;
 
+		let cb = () => {
+			main().catch((error) => {
+				setWalletConnected(false);
+				setWalletInstalled(false);
+				setWalletError(error);
+				setLoaded(true);
+			});
+		};
 		//set the reload web event to redo main
-		WebEvents.on('reload', main);
+		WebEvents.on('reload', cb);
 		//run main
-		main();
+		main().catch((error) => {
+			setWalletConnected(false);
+			setWalletInstalled(false);
+			setWalletError(error);
+			setLoaded(true);
+		});
 
 		return () => {
 			//undo main
-			WebEvents.off('reload', main);
+			WebEvents.off('reload', cb);
 		};
 	}, [loaded]);
 

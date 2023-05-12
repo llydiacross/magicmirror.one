@@ -142,7 +142,7 @@ export default function Properties() {
 
 		main()
 			.catch((err) => {
-				console.error(err);
+				console.log(err);
 				setError(err);
 			})
 			.finally(() => {

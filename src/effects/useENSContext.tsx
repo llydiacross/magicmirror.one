@@ -55,7 +55,9 @@ export const prepareAvatar = async (
 				throw new Error('bad format: "' + potentialAvatar);
 
 			const [contract, tokenId] = stub.split('/');
-			const abi = ['function uri(uint256 tokenId) view returns (string value)'];
+			const abi = [
+				'function uri(uint256 tokenId) view returns (string value)',
+			];
 			const instance = new ethers.Contract(contract, abi, web3Provider);
 
 			let decoded;
@@ -101,7 +103,8 @@ export const prepareAvatar = async (
 						image.indexOf('ipns://') !== -1 ||
 						image.indexOf('ipns/') !== -1
 					) {
-						if (image.indexOf('ipns/') !== -1) image = image.split('ipns/')[1];
+						if (image.indexOf('ipns/') !== -1)
+							image = image.split('ipns/')[1];
 
 						image = (
 							await resolveIPNS(
@@ -122,20 +125,23 @@ export const prepareAvatar = async (
 						);
 						metadataAbortController.current = null;
 						return (
-							`data:image/${decodedImage.name.split('.').pop()};base64,` +
+							`data:image/${decodedImage.name
+								.split('.')
+								.pop()};base64,` +
 							Buffer.from(
-								(await decodedImage.content.getReader().read()).value
+								(await decodedImage.content.getReader().read())
+									.value
 							).toString('base64')
 						);
 					} else return json.image;
 				} catch (error) {
 					if (error.name === 'AbortError') return;
-					console.error(error);
+					console.log(error);
 					return decoded;
 				}
 			} catch (error) {
 				if (error.name === 'AbortError') return;
-				console.error(error);
+				console.log(error);
 				return null;
 			}
 		} else {
@@ -188,7 +194,9 @@ const useENSContext = ({ ensAddress }) => {
 			console.log('resolver created for ' + currentEnsAddress);
 
 			if (resolver === null) {
-				throw new Error('No resolver found for "' + currentEnsAddress + '"');
+				throw new Error(
+					'No resolver found for "' + currentEnsAddress + '"'
+				);
 			}
 
 			setResolver(resolver);
@@ -222,7 +230,9 @@ const useENSContext = ({ ensAddress }) => {
 			}
 
 			try {
-				setOwner(await context.web3Provider.resolveName(currentEnsAddress));
+				setOwner(
+					await context.web3Provider.resolveName(currentEnsAddress)
+				);
 			} catch (error) {
 				console.log('bad owner: ' + error.message);
 				setOwner(null);
@@ -236,12 +246,18 @@ const useENSContext = ({ ensAddress }) => {
 					setContentHash(null);
 				} else {
 					//if hash has IPNS in it, resolve it
-					if (hash.indexOf('ipns://') !== -1 || hash.indexOf('ipns/') !== -1) {
+					if (
+						hash.indexOf('ipns://') !== -1 ||
+						hash.indexOf('ipns/') !== -1
+					) {
 						hash = hash.replace('ipns/', '');
 						hash = hash.replace('ipns://', '');
 
 						try {
-							hash = await resolveIPNS(hash, fetchImageAbortController.current);
+							hash = await resolveIPNS(
+								hash,
+								fetchImageAbortController.current
+							);
 						} catch (error) {
 							console.log('bad IPNS: dweb.link/ipns/' + hash);
 							throw error;

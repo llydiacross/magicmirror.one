@@ -22,6 +22,7 @@ import storage from '../storage';
 import config from '../config';
 import { LoginContext } from '../contexts/loginContext';
 import { apiFetch } from '../api';
+import { Web3Context } from '../contexts/web3Context';
 
 const parseDirectory = async (files: IPFSFile[]) => {
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
@@ -138,6 +139,7 @@ function Viewer({ match }) {
 	const ensContext = useContext(ENSContext);
 	const loginContext = useContext(LoginContext);
 	const history = useHistory();
+	const web3Context = useContext(Web3Context);
 
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
 	const [loaded, setLoaded] = useState(false);
@@ -269,7 +271,7 @@ function Viewer({ match }) {
 					} catch (error) {
 						if (error.name === 'AbortError') return;
 
-						console.error(error);
+						console.log(error);
 
 						//if it's a block with \cid error, then we can still render it if we use a direct link
 						//TODO: Find a better way to do this
@@ -497,12 +499,19 @@ function Viewer({ match }) {
 				<div className="hero-content text-center text-neutral-content bg-error">
 					<div className="max-w-md">
 						<h1 className="mb-5 text-4xl font-bold text-black">
-							404.5 No Resolver Found
+							Resolver Cannot Be Reached
 						</h1>
 						<p className="mb-5 text-black text-center">
-							No Resolver for this ENS has been found. This could
-							be due to the fact it hasn't been registered yet, or
-							simply hasn't had a resolver set yet.
+							{ensContext.ensError !== null
+								? ensContext?.ensError?.message ||
+								  ensContext?.ensError
+								: 'Unknown Web3 Malfuction'}
+							<br />
+							{web3Context.walletError !== null
+								? web3Context?.walletError?.message ||
+								  web3Context?.walletError
+								: ''}
+							<br />
 							<img
 								className="mx-auto mt-2"
 								src="/img/404.webp"

@@ -156,7 +156,7 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 											await config.onboard.walletSelect();
 											await config.onboard.walletCheck();
 										} catch (error) {
-											console.error(error);
+											console.log(error);
 										}
 										WebEvents.emit('reload');
 									}}

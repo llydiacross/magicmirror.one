@@ -145,10 +145,10 @@ function FixedElements({
 								try {
 									await config.onboard.walletSelect();
 									await config.onboard.walletCheck();
+									WebEvents.emit('reload');
 								} catch (error) {
-									console.error(error);
+									console.log(error);
 								}
-								WebEvents.emit('reload');
 							}}
 						>
 							<ErrorIcon />
