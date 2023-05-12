@@ -242,7 +242,7 @@ export default function Properties() {
 										}}
 										key={index}
 									>
-										<div className="flex flex-col">
+										<div className={'flex flex-col' + (item.domainName === searchTerm ? 'border-amber-400' : '')}>
 											<div className="text-2xl font-bold text-black">
 												{item.domainName.length > 18 ? (
 													<>
