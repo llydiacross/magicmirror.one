@@ -21,7 +21,9 @@ export const config = {
 		},
 	},
 	**/
-	express: true,
+	express: {
+		port: 1337,
+	},
 	ipfs: true,
 	hardhat: {
 		solidity: {

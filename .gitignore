@@ -27,7 +27,7 @@ artifacts/
 /deployments/ganache/
 /public/deployments/ganache/
 /public/projects/deployed/*_ganache.json
-/public/projecs/compiled/
+/public/projects/compiled/
 /projects/compiled/
 /projects/deployed/ganache/
 /projects/deployed/hardhat/
@@ -45,6 +45,7 @@ beta/
 /alpha/__gems/
 /beta/__gems/
 /*/__gems/
+
 
 .DS_Store
 dist/

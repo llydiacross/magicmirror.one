@@ -161,7 +161,7 @@
     "identity-obj-proxy": "^3.0.0",
     "idna-uts46-hx": "^5.0.7",
     "infinitymint": "^1.12.3",
-    "infinitymint-client": "^1.9.0",
+    "infinitymint-client": "^2.5.2",
     "ipfs-http-client": "^60.0.0",
     "jest": "^27.5.1",
     "jest-resolve": "^27.5.1",
