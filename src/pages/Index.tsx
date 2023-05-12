@@ -270,7 +270,6 @@ export default function Index() {
 					</div>
 				</div>
 			</div>
-
 			<div className="pt-5 pb-5 bg-base-200">
 				<br />
 				<br />
