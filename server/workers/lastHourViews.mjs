@@ -1,4 +1,5 @@
 import server from '../server.mjs';
+import { isValidENS } from '../utils/helpers.mjs';
 
 //runs every 1 hour, takes the stats from the redis db and saves them to the prisma db
 export const settings = {
@@ -8,10 +9,22 @@ export const settings = {
 export const run = async () => {
 	let domainStats = await server.redisClient.hGetAll('stats');
 
-	console.log(domainStats);
-
 	for (let domainName in domainStats) {
 		let lastHourViews = parseInt(domainStats[domainName]);
+
+		//check if domain name is a valid eth address
+		if (!domainName.indexOf('.eth') === -1) {
+			await server.redisClient.hDel('stats', domainName);
+			return console.log('Invalid domain name: ' + domainName);
+		}
+
+		if (domainName.length > 253) {
+			await server.redisClient.hDel('stats', domainName);
+			return console.log('Invalid domain name: ' + domainName);
+		}
+
+		if (!isValidENS(domainName))
+			return console.log('Invalid domain name: ' + domainName);
 
 		let stats = await server.prisma.stats.findUnique({
 			where: { domainName },

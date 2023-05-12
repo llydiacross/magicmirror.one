@@ -52,6 +52,16 @@ export const isLoggedIn = async (req, server) => {
 };
 
 /**
+ * Returns true if the string is a valid ENS domain
+ * @param {string} ens
+ * @returns
+ */
+export const isValidENS = (ens) => {
+	const reg = new RegExp(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/g);
+	return reg.test(ens);
+};
+
+/**
  *
  * @param {import('express').Response} res
  * @param {string | object} message

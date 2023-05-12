@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { success, userError } from '../../utils/helpers.mjs';
+import { isValidENS, success, userError } from '../../utils/helpers.mjs';
 
 export const settings = {
 	requireLogin: true,
@@ -15,6 +15,9 @@ export const settings = {
 export const post = async (req, res) => {
 	let { domainName } = req.body;
 	if (!domainName) return userError(res, 'No domain name provided');
+
+	if (!isValidENS(domainName))
+		return console.log('Invalid domain name: ' + domainName);
 
 	if (await server.prisma.eNS.findUnique({ where: { domainName } })) {
 		//update the views
@@ -49,28 +52,19 @@ export const post = async (req, res) => {
 				domainName,
 			},
 		});
+	}
 
-		//adds to the hourly views of this domain
-		if (
-			domainName &&
-			(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
-		) {
-			let currentHourlyViews =
-				(await server.redisClient.hGet('stats', domainName)) || 0;
+	//adds to the hourly views of this domain
+	if (domainName) {
+		let currentHourlyViews =
+			(await server.redisClient.hGet('stats', domainName)) || 0;
 
-			await server.redisClient.hSet(
-				'stats',
-				domainName,
-				(parseInt(currentHourlyViews) + 1).toString()
-			);
-
-			await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 10);
-		}
-
-		return success(res);
-	} else
-		return userError(
-			res,
-			'Domain has not been established in magicmirrors database'
+		await server.redisClient.hSet(
+			'stats',
+			domainName,
+			(parseInt(currentHourlyViews) + 1).toString()
 		);
+	}
+
+	return success(res);
 };

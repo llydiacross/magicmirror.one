@@ -1,4 +1,4 @@
-import { success, userError } from '../../utils/helpers.mjs';
+import { isValidENS, success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 /**
@@ -97,6 +97,7 @@ export const post = async (req, res) => {
 	//adds to the hourly views of this domain
 	if (
 		domainName &&
+		isValidENS(domainName) &&
 		(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
 	) {
 		let currentHourlyViews =
