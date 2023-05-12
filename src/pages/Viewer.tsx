@@ -337,7 +337,10 @@ function Viewer({ match }) {
 
 	return (
 		<div>
-			<div className="hero min-h-screen" hidden={loaded}>
+			<div
+				className="hero min-h-screen"
+				hidden={loaded || ensContext.ensError !== null}
+			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-warning">
 					<div className="max-w-md">
@@ -485,18 +488,21 @@ function Viewer({ match }) {
 			<div
 				className="hero min-h-screen"
 				hidden={
-					!loaded || ensContext.ensError === null || error !== null
+					loaded ||
+					(!loaded && ensContext.ensError === null) ||
+					error !== null
 				}
 			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error">
 					<div className="max-w-md">
-						<h1 className="mb-5 text-5xl font-bold text-black">
-							404 Not Found
+						<h1 className="mb-5 text-4xl font-bold text-black">
+							404.5 No Resolver Found
 						</h1>
 						<p className="mb-5 text-black text-center">
-							This ENS address does not exist and is can be
-							purchased right now!
+							No Resolver for this ENS has been found. This could
+							be due to the fact it hasn't been registered yet, or
+							simply hasn't had a resolver set yet.
 							<img
 								className="mx-auto mt-2"
 								src="/img/404.webp"
@@ -529,24 +535,13 @@ function Viewer({ match }) {
 						>
 							Purchase
 						</button>
-						<button
-							className="btn btn-dark w-full my-2"
-							onClick={() =>
-								fetchPrompt(
-									ensContext.currentEnsAddress,
-									abortRef.current
-								)
-							}
-						>
-							Or, why not see what it could look like?
-						</button>
 					</div>
 				</div>
 			</div>
 			{/** Error Box */}
 			<div
 				className="hero min-h-screen max-w-screen"
-				hidden={error === null || empty}
+				hidden={error === null || empty || ensContext.ensError !== null}
 			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error max-w-screen">

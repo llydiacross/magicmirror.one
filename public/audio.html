@@ -289,15 +289,15 @@
 				'avatar'
 			).style.backgroundImage = `url('${window.ensContext.avatar}')`;
 
-			if (window.ensContext.stats.files.length > 0) {
+			if (window.ensContext.dir.files.length > 0) {
 				document.getElementById('no-audio').style.display = 'none';
-				window.ensContext.stats.files.forEach((audio) => {
-					if (audio.path.indexOf('mp3') == -1) return;
+				window.ensContext.dir.files.forEach((audio) => {
+					if (audio.path.indexOf('.mp3') === -1) return;
 
 					const audioElement = document.createElement('audio');
 					audioElement.src = 'https://ipfs.io/ipfs/' + audio.path;
 					audioElement.controls = true;
-					audioElement.style.width = '25vw';
+					audioElement.style.width = '20vw';
 					audioElement.style.height = '64px';
 					audioElement.style.margin = '4px';
 					audioElement.style.borderRadius = '21px 21px 21px 21px';

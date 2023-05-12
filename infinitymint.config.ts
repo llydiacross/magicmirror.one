@@ -139,6 +139,9 @@ export const config = {
 			'htm',
 			'svg',
 			'partial',
+			'mp3',
+			'wav',
+			'flac',
 		],
 		/**
 		 * used to get files from IPFS, can be set to local host to use the node that is inside of the server already

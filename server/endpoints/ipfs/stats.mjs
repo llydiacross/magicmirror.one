@@ -18,6 +18,16 @@ export const post = async (req, res) => {
 			if (link.type === 'file') {
 				const stats = await server.ipfs.object.stat(link.path);
 				link.size = stats.CumulativeSize;
+
+				if (!link.name) continue;
+				const extension = link.name.split('.').pop();
+
+				if (
+					!server?.config?.magicMirror.allowedExtensions?.includes(
+						extension
+					)
+				)
+					continue;
 			}
 			// is dir
 			links.push(link);
