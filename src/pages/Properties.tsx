@@ -344,9 +344,13 @@ export default function Properties() {
 							})
 						) : (
 							<>
-								{loginContext.isSignedIn && ens.length !== 0 ? (
+								{loginContext.isSignedIn && ens.length === 0 ? (
 									<div className='col-span-1 md:col-span-2 lg:col-span-5 row-span-1'>
-										<div className='flex flex-col justify-center'></div>
+										<div className='flex flex-col justify-center'>
+											<h2 className="text-2xl font-bold">
+												No results found from our API!
+											</h2>
+										</div>
 									</div>
 								) : (
 									<></>
