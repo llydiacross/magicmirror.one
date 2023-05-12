@@ -25,6 +25,12 @@ artifacts/
 # Deployments
 /deployments/hardhat/
 /deployments/ganache/
+/public/deployments/ganache/
+/public/projects/deployed/*_ganache.json
+/public/projecs/compiled/
+/projects/compiled/
+/projects/deployed/ganache/
+/projects/deployed/hardhat/
 
 # Temp folder
 /temp

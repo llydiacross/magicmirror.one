@@ -21,6 +21,7 @@ export const config = {
 		},
 	},
 	**/
+	express: true,
 	ipfs: true,
 	hardhat: {
 		solidity: {
