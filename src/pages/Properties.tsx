@@ -266,9 +266,15 @@ export default function Properties() {
 						</div>
 						{item.nftMedia ? (
 							<img
+								onError={(e) => {
+									let target = e.target as HTMLImageElement;
+									target.src = '/img/0x0zLogo.jpg';
+								}}
 								src={
 									item.nftMedia[0]?.raw || '/img/0x0zLogo.jpg'
 								}
+								width="100%"
+								height="100%"
 								alt="avatar"
 								className="mt-2 border-2 border-gray-500 rounded-lg flex items-center justify-center"
 							/>

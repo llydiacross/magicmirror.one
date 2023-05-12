@@ -57,8 +57,10 @@ export const isLoggedIn = async (req, server) => {
  * @returns
  */
 export const isValidENS = (ens) => {
-	const reg = new RegExp(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/g);
-	return reg.test(ens);
+	if (ens.length > 253) return false;
+	if (!ens.endsWith('.eth')) return false;
+
+	return true;
 };
 
 /**

@@ -17,6 +17,7 @@ import Logout from './pages/utilities/Logout';
 import Properties from './pages/Properties';
 import Leaderboard from './pages/Leaderboard';
 import HistoryCapture from './components/HistoryCapture';
+import History from './pages/History';
 
 function App() {
 	return (
@@ -70,6 +71,9 @@ function App() {
 								</Route>
 								<Route exact path="/leaderboard/top">
 									<Leaderboard />
+								</Route>
+								<Route exact path="/history">
+									<History />
 								</Route>
 								<Route exact path="*">
 									<NotFound />
