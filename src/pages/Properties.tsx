@@ -17,6 +17,7 @@ export default function Properties() {
 	const [ens, setENS] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [filterTerm, setFilterTerm] = useState('');
+	const [searchTerm, setSearchTerm] = useState('');
 	const [error, setError] = useState(null);
 	const [count, setCount] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
@@ -51,10 +52,25 @@ export default function Properties() {
 			{
 				address: context.walletAddress,
 			},
-			'POST'
+			'GET'
 		);
 		await getAllEns();
 		await getCount();
+		setLoading(false);
+	};
+
+	let searchENS = async () => {
+		setLoading(true);
+		setError(null);
+		await apiFetch(
+			'ens',
+			'search',
+			{
+				domainName: searchTerm,
+			},
+			'GET'
+		);
+
 		setLoading(false);
 	};
 
@@ -137,7 +153,7 @@ export default function Properties() {
 				</div>
 			</div>
 			<div className="flex flex-row justify-center md:justify-between p-2 mt-5">
-				<div className="flex flex-col pl-4 hidden md:block">
+				<div className="hidden flex-col pl-4 md:block">
 					<div className="text-2xl font-bold">Your Properties</div>
 					<div className="text-sm text-gray-500">Total: {count}</div>
 				</div>
@@ -161,7 +177,7 @@ export default function Properties() {
 						type="text"
 						placeholder="🔎 Search Name..."
 						onChange={(e) => {
-							setFilterTerm(e.target.value);
+							setSearchTerm(e.target.value);
 						}}
 					/>
 					<button
@@ -176,6 +192,13 @@ export default function Properties() {
 								.finally(() => {
 									setLoading(false);
 								});
+							searchENS()
+								.catch(err => {
+									setError(err)
+								})
+								.finally(() => {
+									setLoading(false)
+								})
 						}}
 					>
 						🔄
@@ -245,7 +268,7 @@ export default function Properties() {
 											</div>
 											<div className="text-sm text-gray-500 break-all hidden lg:block">
 												{item.nftDescription &&
-												item.nftDescription.length >
+													item.nftDescription.length >
 													28 ? (
 													<div>
 														{item.nftDescription.substring(
@@ -321,6 +344,13 @@ export default function Properties() {
 							})
 						) : (
 							<>
+								{loginContext.isSignedIn && ens.length !== 0 ? (
+									<div className='col-span-1 md:col-span-2 lg:col-span-5 row-span-1'>
+										<div className='flex flex-col justify-center'></div>
+									</div>
+								) : (
+									<></>
+								)}
 								{loginContext.isSignedIn ? (
 									<div className="col-span-1 md:col-span-3 lg:col-span-5 row-span-1">
 										<div className="flex flex-col justify-center items-center">
@@ -394,7 +424,8 @@ export default function Properties() {
 						)}
 					</div>
 				</>
-			)}
+			)
+			}
 
 			{/** Contains the footer and the 0x0zLogo with the console button */}
 			<FixedElements
@@ -426,6 +457,6 @@ export default function Properties() {
 					await loginContext.login();
 				}}
 			/>
-		</div>
+		</div >
 	);
 }

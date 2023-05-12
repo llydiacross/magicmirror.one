@@ -40,7 +40,7 @@ export default function Leaderboard() {
 					</p>
 				</div>
 			</div>
-			<div className="flex flex-col md:flex-row">
+			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
 				<div className="flex flex-col w-full">
 					{/** Top 100 Domains (All Time) */}
 					<div className="flex flex-row justify-center p-2">
@@ -83,7 +83,7 @@ export default function Leaderboard() {
 															<tr
 																className={
 																	index ===
-																		0 &&
+																	0 &&
 																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
@@ -167,7 +167,7 @@ export default function Leaderboard() {
 															<tr
 																className={
 																	index ===
-																		0 &&
+																	0 &&
 																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
@@ -251,7 +251,7 @@ export default function Leaderboard() {
 															<tr
 																className={
 																	index ===
-																		0 &&
+																	0 &&
 																	'mix-blend-multiply shadow-md border-2 border-amber-300 shadow-amber-300 animation-pulse'
 																}
 																key={index}
