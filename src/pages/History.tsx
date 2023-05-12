@@ -6,12 +6,16 @@ import { apiFetch } from '../api';
 import { useHistory } from 'react-router-dom';
 import FixedElements from '../components/FixedElements';
 import { LoginContext } from '../contexts/loginContext';
+import LoginModal from '../modals/LoginModal';
+import { Web3Context } from '../contexts/web3Context';
 
 export default function History() {
 	const [userHistory, setUserHistory] = useState([]);
+	const [shouldShowLogin, setShouldShowLogin] = useState(false);
 	const [error, setError] = useState(null);
 	const history = useHistory();
 	const loginContext = useContext(LoginContext);
+	const web3Context = useContext(Web3Context);
 
 	useEffect(() => {
 		let main = async () => {
@@ -83,7 +87,9 @@ export default function History() {
 												<button
 													className="btn"
 													onClick={() => {
-														loginContext.login();
+														setShouldShowLogin(
+															true
+														);
 													}}
 												>
 													Sign in
@@ -163,6 +169,20 @@ export default function History() {
 				hideFooter={false}
 				hideOwnership
 				useFixed={false}
+			/>
+			<LoginModal
+				hidden={
+					shouldShowLogin !== null
+						? !shouldShowLogin
+						: loginContext.isSignedIn ||
+						  !web3Context.walletConnected
+				}
+				onHide={() => {
+					setShouldShowLogin(false);
+				}}
+				onLogin={async () => {
+					await loginContext.login();
+				}}
 			/>
 		</div>
 	);

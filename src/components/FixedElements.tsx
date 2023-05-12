@@ -142,8 +142,12 @@ function FixedElements({
 							hidden={hideAlerts}
 							className="alert alert-error shadow-lg animate-bounce p-4 mb-2 mt-4 opacity-70 hover:opacity-100 cursor-pointer w-auto"
 							onClick={async () => {
-								await config.onboard.walletSelect();
-								await config.onboard.walletCheck();
+								try {
+									await config.onboard.walletSelect();
+									await config.onboard.walletCheck();
+								} catch (error) {
+									console.error(error);
+								}
 								WebEvents.emit('reload');
 							}}
 						>
