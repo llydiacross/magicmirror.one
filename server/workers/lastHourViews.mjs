@@ -8,6 +8,8 @@ export const settings = {
 export const run = async () => {
 	let domainStats = await server.redisClient.hGetAll('stats');
 
+	console.log(domainStats);
+
 	for (let domainName in domainStats) {
 		let lastHourViews = parseInt(domainStats[domainName]);
 

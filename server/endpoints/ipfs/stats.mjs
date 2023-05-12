@@ -94,13 +94,13 @@ export const post = async (req, res) => {
 	const hasPartialJS =
 		links.filter((link) => link?.name === 'js.partial').length > 0;
 
-	//add to hourly views
+	//adds to the hourly views of this domain
 	if (
 		domainName &&
 		(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
 	) {
 		let currentHourlyViews =
-			(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
+			(await server.redisClient.hGet('stats', domainName)) || 0;
 
 		await server.redisClient.hSet(
 			'stats',
@@ -110,7 +110,6 @@ export const post = async (req, res) => {
 
 		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 10);
 	}
-
 	success(res, {
 		cid,
 		files: links,

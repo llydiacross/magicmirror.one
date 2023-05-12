@@ -24,15 +24,6 @@ export const post = async (req, res) => {
 		});
 		totalViews = previous.totalViews;
 
-		console.log(
-			await server.prisma.history.findFirst({
-				where: {
-					domainName,
-					address: req.session.siwe.address,
-				},
-			})
-		);
-
 		if (
 			!(await server.prisma.history.findFirst({
 				where: {
@@ -59,10 +50,13 @@ export const post = async (req, res) => {
 			},
 		});
 
-		//stop view botting
-		if ((await server.redisClient.hGet(req.ip, domainName)) !== 'true') {
+		//adds to the hourly views of this domain
+		if (
+			domainName &&
+			(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
+		) {
 			let currentHourlyViews =
-				(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
+				(await server.redisClient.hGet('stats', domainName)) || 0;
 
 			await server.redisClient.hSet(
 				'stats',
@@ -70,13 +64,7 @@ export const post = async (req, res) => {
 				(parseInt(currentHourlyViews) + 1).toString()
 			);
 
-			await server.redisClient.hSet(
-				req.ip,
-				domainName,
-				'true',
-				'EX',
-				60 * 1
-			);
+			await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 10);
 		}
 
 		return success(res);
