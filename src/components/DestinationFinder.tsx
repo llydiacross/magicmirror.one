@@ -169,9 +169,12 @@ export default function DestinationFinder() {
 				>
 					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
-				<div className="divider">
-					👇 build the next web and unlock the magic of Web3 👇
+				<div className="hidden md:block">
+					<div className="divider">
+						👇 build the next web and unlock the magic of Web3 👇
+					</div>
 				</div>
+
 				<button
 					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 mb-2"
 					data-loading={loading}
@@ -186,8 +189,10 @@ export default function DestinationFinder() {
 
 				{loginContext.isSignedIn ? (
 					<>
-						<div className="divider">
-							👇 check out the new stuff we have added 👇
+						<div className="hidden md:block">
+							<div className="divider">
+								👇 check out the new stuff we have added 👇
+							</div>
 						</div>
 						<button
 							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
