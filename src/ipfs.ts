@@ -74,7 +74,8 @@ export abstract class IPFSProvider {
 	): Promise<IPFSDirectory>;
 	abstract getStats(
 		cid: string,
-		abortController: AbortController
+		abortController: AbortController,
+		currentEnsDomain?: string
 	): Promise<IPFSStats>;
 	destroy() {
 		//
@@ -140,8 +141,17 @@ export class IPFSWebProvider extends IPFSProvider {
 		}
 	}
 
-	async getStats(cid: string, abortController: AbortController) {
-		let result = await apiFetch('ipfs', 'stats', { cid }, 'POST');
+	async getStats(
+		cid: string,
+		abortController: AbortController,
+		currentEnsDomain?: string
+	) {
+		let result = await apiFetch(
+			'ipfs',
+			'stats',
+			{ cid, domainName: currentEnsDomain },
+			'POST'
+		);
 		return result;
 	}
 
@@ -239,13 +249,14 @@ class Web3StorageProvider extends IPFSProvider {
 
 	async getStats(
 		cid: string,
-		abortController: AbortController
+		abortController: AbortController,
+		currentDomainName?: string
 	): Promise<IPFSStats> {
 		//replace with web3storage stats
 		let result = await apiFetch(
 			'ipfs',
 			'stats',
-			{ cid },
+			{ cid, domainName: currentDomainName },
 			'POST',
 			abortController
 		);
@@ -411,11 +422,16 @@ export const resolvePotentialCID = async (
 export const getStats = async (
 	potentialCID: string,
 	abortController?: AbortController,
-	provider?: IPFSProvider
+	provider?: IPFSProvider,
+	currentEnsDomain?: string
 ) => {
 	provider = provider || getDefaultProvider();
 	potentialCID = await resolvePotentialCID(potentialCID, abortController);
-	let result = await provider.getStats(potentialCID, abortController);
+	let result = await provider.getStats(
+		potentialCID,
+		abortController,
+		currentEnsDomain
+	);
 	return result;
 };
 

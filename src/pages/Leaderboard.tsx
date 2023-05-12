@@ -7,13 +7,39 @@ import Navbar from '../components/Navbar';
 import { useHistory } from 'react-router-dom';
 
 export default function Leaderboard() {
-	const [stats, setStats] = useState([]); //stats returns a object with an array inside it
+	const [top100, setTop100] = useState([]); //stats returns a object with an array inside it
+	const [lastHourlyViews, setLastHourlyViews] = useState([]); //stats returns a object with an array inside it
+	const [lastDailyViews, setLastDailyViews] = useState([]); //stats returns a object with an array inside it
 	const history = useHistory();
 	useEffect(() => {
 		let main = async () => {
-			let response = await apiFetch('stats', 'top', {}, 'GET');
-
-			setStats(Object.values(response));
+			let top100 = await apiFetch(
+				'stats',
+				'top',
+				{
+					parameter: 'totalViews',
+				},
+				'GET'
+			);
+			setTop100(Object.values(top100));
+			let topHour = await apiFetch(
+				'stats',
+				'top',
+				{
+					parameter: 'lastHourViews',
+				},
+				'GET'
+			);
+			setLastHourlyViews(Object.values(topHour));
+			let topDaily = await apiFetch(
+				'stats',
+				'top',
+				{
+					parameter: 'lastDayViews',
+				},
+				'GET'
+			);
+			setLastDailyViews(Object.values(topDaily));
 		};
 
 		main();
@@ -77,7 +103,7 @@ export default function Leaderboard() {
 											</tr>
 										</thead>
 										<tbody className="bg-white divide-y divide-gray-200">
-											{stats.map(
+											{top100.map(
 												(stat: any, index: number) => {
 													return (
 														<>
@@ -142,7 +168,7 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (Last Hour) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-							Top 100 Domains (Hourly)
+							Top 100 Domains (Last Hour)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -173,7 +199,7 @@ export default function Leaderboard() {
 											</tr>
 										</thead>
 										<tbody className="bg-white divide-y divide-gray-200">
-											{stats.map(
+											{lastHourlyViews.map(
 												(stat: any, index: number) => {
 													return (
 														<>
@@ -218,7 +244,7 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		{
-																			stat.totalViews
+																			stat.lastHourViews
 																		}
 																	</div>
 																</td>
@@ -235,10 +261,10 @@ export default function Leaderboard() {
 					</div>
 				</div>
 				<div className="flex flex-col w-full min-h-screen">
-					{/** Top 100 Domains (Daily) */}
+					{/** Top 100 Domains (Last Day) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-							Top 100 Domains (Daily)
+							Top 100 Domains (Last Day)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -269,7 +295,7 @@ export default function Leaderboard() {
 											</tr>
 										</thead>
 										<tbody className="bg-white divide-y divide-gray-200">
-											{stats.map(
+											{lastDailyViews.map(
 												(stat: any, index: number) => {
 													return (
 														<>
@@ -314,7 +340,7 @@ export default function Leaderboard() {
 																<td className="px-6 py-4 whitespace-nowrap">
 																	<div className="text-sm text-gray-900">
 																		{
-																			stat.totalViews
+																			stat.lastDayViews
 																		}
 																	</div>
 																</td>

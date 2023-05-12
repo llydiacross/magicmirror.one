@@ -51,68 +51,21 @@ export const post = async (req, res) => {
 		return userError(res, 'Bad CID');
 	}
 
+	//adds to the hourly views of this domain
 	if (
 		domainName &&
-		(await server.prisma.eNS.findUnique({ where: { domainName } }))
+		(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
 	) {
-		let totalViews = 0;
-		let previous = await server.prisma.stats.findUnique({
-			where: { domainName },
-		});
+		let currentHourlyViews =
+			(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
 
-		if (previous) totalViews = previous.totalViews + 1;
+		await server.redisClient.hSet(
+			'stats',
+			domainName,
+			(parseInt(currentHourlyViews) + 1).toString()
+		);
 
-		//only update the prisma db is the user is logged in
-		if ((await isLoggedIn(req, server)) === true) {
-			//update the history table
-			if (
-				!(await server.prisma.history.findUnique({
-					where: { domainName },
-				}))
-			) {
-				await server.prisma.history.create({
-					data: {
-						domainName,
-						address: req.session.siwe.address,
-					},
-				});
-				//update the stats table
-				await server.prisma.stats.upsert({
-					where: { domainName },
-					update: { totalViews },
-					create: {
-						totalViews,
-						domainName,
-					},
-				});
-			} else
-				await server.prisma.history.update({
-					where: { domainName },
-					data: {
-						address: req.session.siwe.address,
-					},
-				});
-		}
-
-		//stop view botting
-		if ((await server.redisClient.hGet(req.ip, domainName)) !== 'true') {
-			let currentHourlyViews =
-				(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
-
-			await server.redisClient.hSet(
-				'stats',
-				domainName,
-				parseInt(currentHourlyViews) + 1
-			);
-
-			await server.redisClient.hSet(
-				req.ip,
-				domainName,
-				'true',
-				'EX',
-				60 * 1
-			);
-		}
+		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 60 * 1);
 	}
 
 	success(res, {

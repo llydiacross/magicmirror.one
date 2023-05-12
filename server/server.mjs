@@ -15,6 +15,11 @@ import { PrismaClient } from '@prisma/client';
 import tsNode from 'ts-node';
 import { Configuration, OpenAIApi } from 'openai';
 import { isLoggedIn } from './utils/helpers.mjs';
+//yargs
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
+import { logDirect } from 'infinitymint/dist/app/helpers.js';
+const argv = yargs(hideBin(process.argv)).argv;
 
 // do ts node register
 tsNode.register({
@@ -136,9 +141,12 @@ export class Server {
 		);
 	}
 
-	async start() {
+	/**
+	 *
+	 * @param {boolean} startExpress
+	 */
+	async start(startExpress = true) {
 		//load InfinityMint
-
 		let wrapper = await glue.load();
 		/**
 		 * @type {import('infinitymint')}
@@ -224,10 +232,11 @@ export class Server {
 			//print out all the routes
 		});
 
-		//start listening
-		this.app.listen(this.port, () => {
-			console.log(`Server listening on port ${this.port}`);
-		});
+		if (startExpress)
+			//start listening
+			this.app.listen(this.port, () => {
+				console.log(`Server listening on port ${this.port}`);
+			});
 	}
 
 	/**
@@ -324,7 +333,24 @@ export const server = new Server();
 export default server;
 
 (async () => {
-	await server.start();
+	let startExpress = true;
+	if (argv['noExpress']) startExpress = false;
+	await server.start(startExpress);
+
+	if (argv['worker']) {
+		let result = await import(
+			'./workers/' +
+				(argv['worker'].indexOf('.mjs') !== -1
+					? argv['worker']
+					: argv['worker'] + '.mjs')
+		);
+
+		if (result.run) {
+			await result.run(server);
+		} else console.error('Worker does not have a run function');
+
+		process.exit(0);
+	}
 })().catch((err) => {
 	console.error(err.stack);
 	process.exit(1);

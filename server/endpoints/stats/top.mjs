@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { exclude, success } from '../../utils/helpers.mjs';
+import { exclude, success, userError } from '../../utils/helpers.mjs';
 
 export const settings = {
 	requireLogin: false,
@@ -23,11 +23,11 @@ export const get = async (req, res) => {
 
 	if (
 		parameter !== 'totalViews' &&
-		parameter !== 'lastHourlyViews' &&
-		parameter !== 'lastDailyViews' &&
-		parameter !== 'lastWeeklyViews' &&
-		parameter !== 'lastMonthlyViews' &&
-		parameter !== 'lastYearlyViews'
+		parameter !== 'lastHourViews' &&
+		parameter !== 'lastDayViews' &&
+		parameter !== 'lastWeekViews' &&
+		parameter !== 'lastMonthViews' &&
+		parameter !== 'lastYearViews'
 	)
 		return userError(res, 'Invalid parameter');
 
@@ -36,7 +36,7 @@ export const get = async (req, res) => {
 		orderBy: { [parameter]: order },
 		take: 100,
 	});
-	top = top.filter((x) => x.totalViews > 0);
+	top = top.filter((x) => x[parameter] > 0);
 	top = top.map((x) => {
 		return exclude(x, ['ENS']);
 	});

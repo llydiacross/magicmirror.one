@@ -20,6 +20,8 @@ import {
 import HeartIcon from '../components/Icons/HeartIcon';
 import storage from '../storage';
 import config from '../config';
+import { LoginContext } from '../contexts/loginContext';
+import { apiFetch } from '../api';
 
 const parseDirectory = async (files: IPFSFile[]) => {
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
@@ -134,6 +136,7 @@ const prepareDefaultContent = async (
 
 function Viewer({ match }) {
 	const ensContext = useContext(ENSContext);
+	const loginContext = useContext(LoginContext);
 	const history = useHistory();
 
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
@@ -183,9 +186,9 @@ function Viewer({ match }) {
 
 	useEffect(() => {
 		if (!ensContext.loaded) return;
+		if (ensContext.ensError !== null) return;
 		if (ensContext.currentEnsAddress === null) return;
 		if (ensContext.currentEnsAddress !== matchRef.current) return;
-		if (loaded) return;
 
 		const main = async () => {
 			try {
@@ -209,7 +212,9 @@ function Viewer({ match }) {
 					setPercentage(20);
 					potentialStats = await getStats(
 						ensContext.contentHash,
-						abortController
+						abortController,
+						null,
+						ensContext.currentEnsAddress
 					);
 					setStats(potentialStats);
 
@@ -310,7 +315,25 @@ function Viewer({ match }) {
 		}
 		// Call async
 		main();
-	}, [ensContext, loaded]);
+	}, [ensContext]);
+
+	useEffect(() => {
+		if (!ensContext.loaded) return;
+		if (ensContext.currentEnsAddress === null) return;
+		if (ensContext.currentEnsAddress !== matchRef.current) return;
+		if (!loaded) return;
+
+		apiFetch(
+			'history',
+			'add',
+			{
+				domainName: ensContext.currentEnsAddress,
+			},
+			'POST'
+		).catch((err) => {
+			//drop it
+		});
+	}, [loginContext, ensContext, loaded]);
 
 	return (
 		<div>

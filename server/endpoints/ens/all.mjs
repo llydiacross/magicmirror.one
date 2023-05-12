@@ -26,11 +26,18 @@ export const get = async (req, res) => {
 		statement.select = {
 			domainName: true,
 		};
-	let enses = await server.prisma.eNS.findMany(statement);
+	let enses = await server.prisma.eNS.findMany({
+		...statement,
+		include: {
+			Stats: true,
+			Manager: true,
+		},
+	});
 
 	if (enses)
 		enses = enses.map((ens) => {
-			return exclude(ens, ['Manager', 'User']);
+			if (ens.Manager) ens.managerCount = Object.keys(ens.Manager).length;
+			return exclude(ens, ['User', 'History', 'Manager']);
 		});
 
 	return success(res, {

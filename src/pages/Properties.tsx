@@ -150,6 +150,27 @@ export default function Properties() {
 			});
 	}, [context, loginContext]);
 
+	useEffect(() => {
+		const func = (e) => {
+			if (e.key === 'ArrowLeft')
+				setPage((val) => {
+					return val - 1 >= 0 ? val - 1 : val;
+				});
+
+			if (e.key === 'ArrowRight')
+				setPage((val) => {
+					if (val + 1 < Math.ceil(count / pageMax)) return val + 1;
+					return val;
+				});
+		};
+
+		document.addEventListener('keydown', func);
+
+		return () => {
+			document.removeEventListener('keydown', func);
+		};
+	}, []);
+
 	let renderedEns = (ens || [])
 		.filter((item, index) => {
 			let filtered = false;
@@ -178,15 +199,9 @@ export default function Properties() {
 			return (
 				<div
 					className="col-span-1 row-span-1 bg-white rounded-lg shadow-lg p-4"
-					style={
-						hasSearched
-							? {
-									display: filtered ? 'none' : 'block',
-							  }
-							: {
-									opacity: filtered ? 0.5 : 1,
-							  }
-					}
+					style={{
+						opacity: filtered ? 0.5 : 1,
+					}}
 					key={index}
 				>
 					<div
@@ -198,26 +213,46 @@ export default function Properties() {
 						}
 					>
 						<div className="text-2xl font-bold text-black">
-							{item.domainName.length > 18 ? (
+							{item.domainName.length > 16 ? (
 								<>
-									{item.domainName.substring(0, 18)}
+									{item.domainName.substring(0, 16)}
 									...
 								</>
 							) : (
 								<>{item.domainName}</>
 							)}
-							{item.imported ? (
-								<span className="ms-2 badge bg-error text-black">
-									Imported
-								</span>
-							) : null}
-							{item.manager ? (
-								<span className="ms-2 badge bg-error text-black">
-									Manager
-								</span>
-							) : null}
 						</div>
-						<div className="text-sm text-gray-500 break-all hidden lg:block">
+						<div className="text-2xl font-bold text-black">
+							{item.FakeRegistry ? (
+								<span className="badge bg-error text-black">
+									Has Fake Registry
+								</span>
+							) : null}
+							{item.Stats ? (
+								<span
+									className={
+										'badge text-black ' +
+										(item.Stats.totalViews <= 0
+											? 'bg-error'
+											: 'bg-success')
+									}
+								>
+									{item.Stats.totalViews} views
+								</span>
+							) : null}
+
+							<span
+								className={
+									'ms-2 badge text-black ' +
+									((item.managerCount || 0) === 0
+										? 'bg-warning'
+										: 'bg-success')
+								}
+							>
+								{item.managerCount || 0} Managers
+							</span>
+						</div>
+						<div className="text-sm text-gray-500 break-all hidden lg:block mt-2">
 							{item.nftDescription &&
 							item.nftDescription.length > 28 ? (
 								<div>
@@ -250,20 +285,7 @@ export default function Properties() {
 									history.push(`/ide?url=${item.domainName}`);
 								}}
 							>
-								🖌.DREAM🎨.ETH
-							</button>
-							<button
-								hidden={
-									!item.domainName.includes(
-										'Untitled ENS Token'
-									)
-								}
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={() => {
-									history.push(`/ide?url=${item.domainName}`);
-								}}
-							>
-								Fix
+								🖌
 							</button>
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -271,7 +293,15 @@ export default function Properties() {
 									history.push(`/ide?url=${item.domainName}`);
 								}}
 							>
-								Inspect
+								👁️
+							</button>
+							<button
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								onClick={() => {
+									history.push(`/view/${item.domainName}`);
+								}}
+							>
+								➡️
 							</button>
 						</div>
 					</div>
@@ -300,17 +330,15 @@ export default function Properties() {
 					</div>
 				</div>
 			) : null}
-			<div className="flex flex-row justify-center md:justify-between p-2 mt-5 pt-5">
-				<div className="flex flex-row justify-start gap-5">
-					<div className="hidden flex flex-col pl-4 md:block pr-5">
-						<div className="text-2xl font-bold">
-							Your Properties
-						</div>
+			<div className="flex flex-col md:flex-row justify-center md:justify-between items-center p-2 mt-5 pt-5 gap-4">
+				<div className="flex flex-row justify-start items-center gap-4">
+					<div className="hidden flex flex-col pl-4 lg:block pr-2">
+						<div className="text-2xl font-bold">Properties</div>
 						<div className="text-sm text-gray-500">
 							Total: {count}
 						</div>
 					</div>
-					<div className="flex flex-col">
+					<div className="flex flex-col pl-4 hidden lg:block">
 						<input
 							disabled={!loginContext.isSignedIn}
 							data-loading={loading}
@@ -323,17 +351,17 @@ export default function Properties() {
 							}}
 						/>
 					</div>
-					<div className="flex flex-col">
+					<div className="flex flex-col hidden lg:block">
 						<select className="bg-gray-200 h-full appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white">
 							<option value="all">All</option>
-							<option value="owned">Has Fake Registry</option>
-							<option value="owned">Has Content Hash</option>
-							<option value="owned">Has Manager</option>
+							<option value="owned">No Fake Registry</option>
+							<option value="owned">No Content Hash</option>
+							<option value="owned">Has Managers</option>
 						</select>
 					</div>
 				</div>
 				<div
-					className="flex flex-row justify-center gap-5"
+					className="flex flex-row justify-center items-center gap-5"
 					hidden={hasSearched}
 				>
 					<div className="btn-group">
@@ -379,7 +407,7 @@ export default function Properties() {
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-row gap-2 pr-0 md:pr-4">
+				<div className="flex flex-row gap-2 pr-0 md:pr-5">
 					<input
 						disabled={!loginContext.isSignedIn}
 						data-loading={loading}
@@ -425,7 +453,7 @@ export default function Properties() {
 					/>
 				</div>
 			) : (
-				<div className="p-2">
+				<div className="p-2 mt-2">
 					<div className="p-2 hidden md:block mt-2">
 						<div className="divider">
 							{context.ensAddresses[0]}

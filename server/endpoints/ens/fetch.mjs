@@ -53,7 +53,7 @@ export const post = async (req, res) => {
 			 * 0xDFF917ab602e8508b6907dE1b038dd52B24A2379
 			 */
 			let nfts = await server.alchemy.nft.getNftsForOwner(
-				address,
+				'0xDFF917ab602e8508b6907dE1b038dd52B24A2379',
 				{
 					contractAddresses: [
 						'0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',

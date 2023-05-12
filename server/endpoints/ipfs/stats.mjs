@@ -7,7 +7,7 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	let cid = req.body.cid;
+	let { cid, domainName } = req.body;
 	let links = [];
 
 	if (!cid) return userError(res, 'Bad CID');
@@ -93,6 +93,23 @@ export const post = async (req, res) => {
 		links.filter((link) => link?.name === 'css.partial').length > 0;
 	const hasPartialJS =
 		links.filter((link) => link?.name === 'js.partial').length > 0;
+
+	//add to hourly views
+	if (
+		domainName &&
+		(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
+	) {
+		let currentHourlyViews =
+			(await server.redisClient.hGet(domainName, 'hourlyViews')) || 0;
+
+		await server.redisClient.hSet(
+			'stats',
+			domainName,
+			(parseInt(currentHourlyViews) + 1).toString()
+		);
+
+		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 60 * 1);
+	}
 
 	success(res, {
 		cid,

@@ -9,6 +9,7 @@ import { exclude, success, userError } from '../../utils/helpers.mjs';
 export const get = async (req, res) => {
 	let domainName = req.query.domainName;
 	if (!domainName) return userError(res, 'No domain name provided');
+
 	let fakeRegistry = await server.prisma.fakeRegistry.findUnique({
 		where: {
 			domainName,

@@ -25,6 +25,10 @@ export const get = async (req, res) => {
 		},
 		skip: page * server.config.magicMirror.pageMax,
 		take: server.config.magicMirror.pageMax + 1, //+1 to see if there is a next page
+		include: {
+			Stats: true,
+			Manager: true,
+		},
 	});
 
 	//if there is a next page, remove the last element
@@ -36,7 +40,8 @@ export const get = async (req, res) => {
 
 	if (enses)
 		enses = enses.map((ens) => {
-			return exclude(ens, ['FakeRegistry', 'Manager', 'User']);
+			if (ens.Manager) ens.managerCount = Object.keys(ens.Manager).length;
+			return exclude(ens, ['User', 'History', 'Manager']);
 		});
 
 	return success(res, {
