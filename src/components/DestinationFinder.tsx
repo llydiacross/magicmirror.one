@@ -117,7 +117,7 @@ export default function DestinationFinder() {
 
 	return (
 		<div className="w-full max-w-screen">
-			<div className="alert alert-error shadow-lg mb-3" hidden={!error}>
+			<div className="alert alert-error shadow-lg mb-2" hidden={!error}>
 				<div>
 					<ErrorIcon />
 					<span>
@@ -128,7 +128,7 @@ export default function DestinationFinder() {
 			</div>
 			<div className="flex flex-col">
 				<div className="form-control w-full">
-					<div className="input-group w-75 p-6">
+					<div className="input-group w-75 mb-4 mt-4">
 						<input
 							type="text"
 							data-loading={loading}
@@ -145,8 +145,10 @@ export default function DestinationFinder() {
 							}}
 							placeholder="Enter a destination..."
 							className={`input input-bordered w-full ${
-								!loading ? 'animate-pulse hover:animation-play-state:paused' : ''
-							  }`}
+								!loading
+									? 'animate-pulse hover:animation-play-state:paused'
+									: ''
+							}`}
 						/>
 						<button
 							data-loading={loading}
@@ -159,37 +161,39 @@ export default function DestinationFinder() {
 					</div>
 				</div>
 				<button
-					className="btn btn-outline bg-light w-full mt-4 sm:mt-2"
+					className="btn btn-outline bg-light w-full mb-2"
 					data-loading={loading}
 					disabled={loading}
 					onClick={handleTakeMeAnywhere}
-					title='Trancend spacetime and visit a random destination in the 🟨 Metaverse!'
+					title="Trancend spacetime and visit a random destination in the 🟨 Metaverse!"
 				>
 					🐈 TAKE ME ANYWHERE 🐈‍⬛
 				</button>
-				<p className="text-1xl text-shadow text-white bg-secondary p-1 mt-4 mb-1 lg:block">
-					<b>
-						👇 build the next <u>web</u> and unlock the magic of
-						Web3 👇
-					</b>
-				</p>
+				<div className="hidden md:block">
+					<div className="divider">
+						👇 build the next web and unlock the magic of Web3 👇
+					</div>
+				</div>
+
 				<button
-					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3"
+					className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 mb-2"
 					data-loading={loading}
 					disabled={loading}
 					onClick={() => {
 						history.push('/ide');
 					}}
-					title='Dream a little dream of Web3 with the Dream🎨.eth Studio!'
+					title="Dream a little dream of Web3 with the Dream🎨.eth Studio!"
 				>
 					DREAM🎨.ETH STUDIO
 				</button>
 
 				{loginContext.isSignedIn ? (
 					<>
-						<p className="text-2xl text-shadow text-white bg-error p-1 mt-4 mb-1 lg:block">
-							<b>👇 🍬Land Landscapers, Meta Real Estate & the Metaverse's most exciting Candy Store! 👇</b>
-						</p>
+						<div className="hidden md:block">
+							<div className="divider">
+								👇 check out the new stuff we have added 👇
+							</div>
+						</div>
 						<button
 							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
 							data-loading={loading}
@@ -197,9 +201,20 @@ export default function DestinationFinder() {
 							onClick={() => {
 								history.push('/properties');
 							}}
-							title='🍬Land.eth - Manage your ENS Property, Web3 Landing Pages, Marketplaces, NFTs, and more!'
+							title="🍬Land.eth - Manage your ENS Property, Web3 Landing Pages, Marketplaces, NFTs, and more!"
 						>
 							🍬LAND.ETH
+						</button>
+						<button
+							className="btn btn-outline bg-light hover:bg-accent-500 w-full mt-4 lg:mt-3 animate-pulse"
+							data-loading={loading}
+							disabled={loading}
+							onClick={() => {
+								history.push('/leaderboard/top');
+							}}
+							title="🔥️1️⃣0️⃣0️⃣.eth - See who is trending in ENS"
+						>
+							🔥️1️⃣0️⃣0️⃣.eth
 						</button>
 					</>
 				) : (

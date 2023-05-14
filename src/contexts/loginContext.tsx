@@ -52,15 +52,7 @@ function LoginContextProvider({ children }) {
 				} as loginContextType
 			}
 		>
-			{loaded ? (
-				<>{children}</>
-			) : (
-				<Header
-					theme="acid"
-					initialText="Logging Into MagicMirror..."
-					showFinder={false}
-				/>
-			)}
+			<>{children}</>
 		</LoginContext.Provider>
 	);
 }

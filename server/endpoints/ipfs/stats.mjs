@@ -1,4 +1,4 @@
-import { success, userError } from '../../utils/helpers.mjs';
+import { isValidENS, success, userError } from '../../utils/helpers.mjs';
 import server from '../../server.mjs';
 
 /**
@@ -7,7 +7,7 @@ import server from '../../server.mjs';
  * @param {import('express').Response} res
  */
 export const post = async (req, res) => {
-	let cid = req.body.cid;
+	let { cid, domainName } = req.body;
 	let links = [];
 
 	if (!cid) return userError(res, 'Bad CID');
@@ -18,6 +18,16 @@ export const post = async (req, res) => {
 			if (link.type === 'file') {
 				const stats = await server.ipfs.object.stat(link.path);
 				link.size = stats.CumulativeSize;
+
+				if (!link.name) continue;
+				const extension = link.name.split('.').pop();
+
+				if (
+					!server?.config?.magicMirror.allowedExtensions?.includes(
+						extension
+					)
+				)
+					continue;
 			}
 			// is dir
 			links.push(link);
@@ -94,6 +104,23 @@ export const post = async (req, res) => {
 	const hasPartialJS =
 		links.filter((link) => link?.name === 'js.partial').length > 0;
 
+	//adds to the hourly views of this domain
+	if (
+		domainName &&
+		isValidENS(domainName) &&
+		(await server.redisClient.hGet(req.ip, domainName)) !== 'true'
+	) {
+		let currentHourlyViews =
+			(await server.redisClient.hGet('stats', domainName)) || 0;
+
+		await server.redisClient.hSet(
+			'stats',
+			domainName,
+			(parseInt(currentHourlyViews) + 1).toString()
+		);
+
+		await server.redisClient.hSet(req.ip, domainName, 'true', 'EX', 10);
+	}
 	success(res, {
 		cid,
 		files: links,

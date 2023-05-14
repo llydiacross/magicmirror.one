@@ -5,7 +5,7 @@ const magicmirror: InfinityMintProject = {
 	price: '$0.69',
 	modules: {
 		random: 'SeededRandom',
-		assets: 'SimpleImage',
+		assets: 'SimpleSVG',
 		minter: 'DefaultMinter',
 		royalty: 'DefaultRoyalty',
 	},
@@ -16,32 +16,19 @@ const magicmirror: InfinityMintProject = {
 	permissions: {
 		all: [],
 	},
-	assets: [
-		{
-			name: 'Example Asset',
-			fileName: '/imports/example-asset.svg',
-			settings: true,
-		},
-	],
 	paths: [
 		{
-			name: 'Example Token',
-			fileName: '/imports/example.svg',
+			name: 'Magic Ticket',
+			fileName: '/imports/ticket.svg',
 			settings: true,
+			content: {
+				background: {
+					fileName: '/imports/backgrounds/0x0z.png',
+					name: 'Background Image',
+				},
+			},
 		},
 	],
-	events: {
-		async initialized({ log, eventEmitter }) {
-			log('project initialized');
-		},
-		async failure({ log, event: error }) {
-			log('failed to launch successfully');
-			console.error(error);
-		},
-		async success({ log }) {
-			log('successfully launched example project');
-		},
-	},
 };
 
 export default magicmirror;

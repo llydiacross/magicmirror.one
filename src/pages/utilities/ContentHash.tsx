@@ -2,6 +2,9 @@ import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
 import contentHash from 'content-hash';
 import { useRef, useState } from 'react';
+import storage from '../../storage';
+import config from '../../config';
+import Navbar from '../../components/Navbar';
 
 export default function ContentHash() {
 	const history = useHistory();
@@ -23,7 +26,14 @@ export default function ContentHash() {
 	};
 
 	return (
-		<>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
+		>
+			<Navbar />
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
@@ -37,11 +47,14 @@ export default function ContentHash() {
 						<input
 							className="input input-bordered w-full mb-2"
 							ref={hash}
+							placeholder="myspecialcontenthashtodecode"
 						></input>
 						{error === null ? (
 							<p className="mb-5 text-success mt-2">{decoded}</p>
 						) : (
-							<p className="mb-5 text-error mt-2">{error.message}</p>
+							<p className="mb-5 text-error mt-2">
+								{error.message}
+							</p>
 						)}
 						<button
 							className="btn btn-dark w-full"
@@ -71,6 +84,6 @@ export default function ContentHash() {
 				</div>
 			</div>
 			<FixedElements useFixed={false}></FixedElements>
-		</>
+		</div>
 	);
 }

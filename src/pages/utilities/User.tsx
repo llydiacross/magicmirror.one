@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react';
 import { LoginContext } from '../../contexts/loginContext';
 import { apiFetch } from '../../api';
+import storage from '../../storage';
+import config from '../../config';
+import Navbar from '../../components/Navbar';
 
 export default function User() {
 	const history = useHistory();
@@ -27,7 +30,14 @@ export default function User() {
 	};
 
 	return (
-		<>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
+		>
+			<Navbar />
 			<div className="hero min-h-screen">
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-neutral-content bg-gray-500">
@@ -99,6 +109,6 @@ export default function User() {
 				</div>
 			</div>
 			<FixedElements useFixed={false}></FixedElements>
-		</>
+		</div>
 	);
 }

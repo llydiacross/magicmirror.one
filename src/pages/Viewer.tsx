@@ -20,6 +20,9 @@ import {
 import HeartIcon from '../components/Icons/HeartIcon';
 import storage from '../storage';
 import config from '../config';
+import { LoginContext } from '../contexts/loginContext';
+import { apiFetch } from '../api';
+import { Web3Context } from '../contexts/web3Context';
 
 const parseDirectory = async (files: IPFSFile[]) => {
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
@@ -134,7 +137,9 @@ const prepareDefaultContent = async (
 
 function Viewer({ match }) {
 	const ensContext = useContext(ENSContext);
+	const loginContext = useContext(LoginContext);
 	const history = useHistory();
+	const web3Context = useContext(Web3Context);
 
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
 	const [loaded, setLoaded] = useState(false);
@@ -183,9 +188,9 @@ function Viewer({ match }) {
 
 	useEffect(() => {
 		if (!ensContext.loaded) return;
+		if (ensContext.ensError !== null) return;
 		if (ensContext.currentEnsAddress === null) return;
 		if (ensContext.currentEnsAddress !== matchRef.current) return;
-		if (loaded) return;
 
 		const main = async () => {
 			try {
@@ -209,7 +214,9 @@ function Viewer({ match }) {
 					setPercentage(20);
 					potentialStats = await getStats(
 						ensContext.contentHash,
-						abortController
+						abortController,
+						null,
+						ensContext.currentEnsAddress
 					);
 					setStats(potentialStats);
 
@@ -264,7 +271,7 @@ function Viewer({ match }) {
 					} catch (error) {
 						if (error.name === 'AbortError') return;
 
-						console.error(error);
+						console.log(error);
 
 						//if it's a block with \cid error, then we can still render it if we use a direct link
 						//TODO: Find a better way to do this
@@ -310,11 +317,32 @@ function Viewer({ match }) {
 		}
 		// Call async
 		main();
-	}, [ensContext, loaded]);
+	}, [ensContext]);
+
+	useEffect(() => {
+		if (!ensContext.loaded) return;
+		if (ensContext.currentEnsAddress === null) return;
+		if (ensContext.currentEnsAddress !== matchRef.current) return;
+		if (!loaded) return;
+
+		apiFetch(
+			'history',
+			'add',
+			{
+				domainName: ensContext.currentEnsAddress,
+			},
+			'POST'
+		).catch((err) => {
+			//drop it
+		});
+	}, [loginContext, ensContext, loaded]);
 
 	return (
 		<div>
-			<div className="hero min-h-screen" hidden={loaded}>
+			<div
+				className="hero min-h-screen"
+				hidden={loaded || ensContext.ensError !== null}
+			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-warning">
 					<div className="max-w-md">
@@ -462,17 +490,29 @@ function Viewer({ match }) {
 			<div
 				className="hero min-h-screen"
 				hidden={
-					!loaded || ensContext.ensError === null || error !== null
+					loaded ||
+					(!loaded && ensContext.ensError === null) ||
+					error !== null
 				}
 			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error">
 					<div className="max-w-md">
-						<h1 className="mb-5 text-5xl font-bold text-black">
-							404 Not Found
+						<h1 className="mb-5 text-4xl font-bold text-black">
+							Resolver Cannot Be Reached
 						</h1>
 						<p className="mb-5 text-black text-center">
 							This ENS name does not exist, or there was an error and clueless about it so here is this cat!
+							{ensContext.ensError !== null
+								? ensContext?.ensError?.message ||
+								  ensContext?.ensError
+								: 'Unknown Web3 Malfuction'}
+							<br />
+							{web3Context.walletError !== null
+								? web3Context?.walletError?.message ||
+								  web3Context?.walletError
+								: ''}
+							<br />
 							<img
 								className="mx-auto mt-2"
 								src="/img/404.webp"
@@ -506,24 +546,13 @@ function Viewer({ match }) {
 						>
 							Purchase
 						</button>
-						<button
-							className="btn btn-dark w-full my-2"
-							onClick={() =>
-								fetchPrompt(
-									ensContext.currentEnsAddress,
-									abortRef.current
-								)
-							}
-						>
-							Or, why not see what it could look like?
-						</button>
 					</div>
 				</div>
 			</div>
 			{/** Error Box */}
 			<div
 				className="hero min-h-screen max-w-screen"
-				hidden={error === null || empty}
+				hidden={error === null || empty || ensContext.ensError !== null}
 			>
 				<div className="hero-overlay bg-opacity-60" />
 				<div className="hero-content text-center text-neutral-content bg-error max-w-screen">

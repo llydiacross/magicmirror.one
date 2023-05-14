@@ -174,7 +174,12 @@ function IDE({ theme }) {
 
 		if (ensContext.loaded && ensContext.contentHash !== null) {
 			(async () => {
-				let potentialStats = await getStats(ensContext.contentHash);
+				let potentialStats = await getStats(
+					ensContext.contentHash,
+					null,
+					null,
+					ensContext.currentEnsAddress
+				);
 				setStats(potentialStats);
 				let potentialDir = await resolveDirectory(
 					ensContext.contentHash,

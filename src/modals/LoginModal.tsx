@@ -4,12 +4,14 @@ import Loading from '../components/Loading';
 import WebEvents from '../webEvents';
 import storage from '../storage';
 import { LoginContext } from '../contexts/loginContext';
+import { Web3Context } from '../contexts/web3Context';
 
 export default function LoginModal({ hidden, onLogin, onHide }: any) {
 	const [loading, setLoading] = useState(false);
 	const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
 	const eventEmitterCallbackRef = useRef(null);
 	const loginContext = useContext(LoginContext);
+	const web3Context = useContext(Web3Context);
 
 	useEffect(() => {
 		if (storage.getGlobalPreference('defaultTheme')) {
@@ -116,7 +118,13 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 							) : (
 								<></>
 							)}
-							<div className="flex flex-col gap-2 w-full p-2">
+							<div
+								className="flex flex-col gap-2 w-full p-2"
+								hidden={
+									!web3Context.walletConnected ||
+									!web3Context.walletInstalled
+								}
+							>
 								<button
 									className="btn btn-primary"
 									onClick={() => {
@@ -133,6 +141,27 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 									}}
 								>
 									Cancel
+								</button>
+							</div>
+							<div
+								className="flex flex-col gap-2 w-full p-2"
+								hidden={web3Context.walletConnected}
+							>
+								<button
+									className="btn btn-primary"
+									hidden={web3Context.walletConnected}
+									onClick={async () => {
+										onHide();
+										try {
+											await config.onboard.walletSelect();
+											await config.onboard.walletCheck();
+										} catch (error) {
+											console.log(error);
+										}
+										WebEvents.emit('reload');
+									}}
+								>
+									Connect Wallet
 								</button>
 							</div>
 						</>

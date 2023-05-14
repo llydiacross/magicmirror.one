@@ -1,23 +1,15 @@
 import config from './config';
 
+type Routes = typeof config.routes;
+type Keys = keyof Routes;
+
 export const getEndpointHref = () => {
 	const isLocalhost = window.location.href.includes('localhost');
 	if (isLocalhost && config.useLocalApi) return config.localApiEndpoint;
 	else return config.apiEndpoint;
 };
 
-export const getEndpoint = (
-	type:
-		| 'chat'
-		| 'gpt3'
-		| 'search'
-		| 'nft'
-		| 'ipfs'
-		| 'ipns'
-		| 'wallet'
-		| 'ens'
-		| 'user'
-) => {
+export const getEndpoint = (type: Keys) => {
 	if (config.routes[type] === undefined)
 		throw new Error('invalid api type: ' + type);
 
@@ -28,16 +20,7 @@ export const getEndpoint = (
 };
 
 export const apiFetch = async (
-	type:
-		| 'chat'
-		| 'gpt3'
-		| 'search'
-		| 'nft'
-		| 'ipfs'
-		| 'ipns'
-		| 'wallet'
-		| 'ens'
-		| 'user',
+	type: Keys,
 	method: string,
 	data: any,
 	requestMethod: 'GET' | 'POST',

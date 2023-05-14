@@ -52,6 +52,18 @@ export const isLoggedIn = async (req, server) => {
 };
 
 /**
+ * Returns true if the string is a valid ENS domain
+ * @param {string} ens
+ * @returns
+ */
+export const isValidENS = (ens) => {
+	if (ens.length > 253) return false;
+	if (!ens.endsWith('.eth')) return false;
+
+	return true;
+};
+
+/**
  *
  * @param {import('express').Response} res
  * @param {string | object} message

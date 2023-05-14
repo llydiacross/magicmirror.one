@@ -11,7 +11,7 @@ function SettingsModal({ hidden, onHide }) {
 	const ipfsCompanionRef = useRef(null);
 	const defaultThemeRef = useRef(null);
 	const context = useContext(Web3Context);
-	const [currentTheme, setCurrentTheme] = useState('Ox0z_light');
+	const [currentTheme, setCurrentTheme] = useState('forest');
 	const [currentIPFSProvider, setCurrentIPFSProvider] = useState(
 		storage.getGlobalPreference('ipfsProvider') || 'web3.storage'
 	);
@@ -60,7 +60,8 @@ function SettingsModal({ hidden, onHide }) {
 					</div>
 					<div className="flex flex-col flex-1 p-3">
 						<p className="mt-4 text-black">
-							Welcome to ⚙️settings.eth! Here you can configure important aspects of your Magic🪞Mirror experience.
+							Welcome to ⚙️settings.eth! Here you can configure
+							important aspects of your Magic🪞Mirror experience.
 						</p>
 
 						<div className="form-control mt-4">
@@ -169,7 +170,6 @@ function SettingsModal({ hidden, onHide }) {
 												<th />
 												<th>ENS Address</th>
 												<th>Wallet Address</th>
-												
 											</tr>
 										</thead>
 										<tbody>
@@ -178,7 +178,7 @@ function SettingsModal({ hidden, onHide }) {
 													return (
 														<tr key={index}>
 															<th>{index}</th>
-															
+
 															<td
 																className="cursor-pointer underline"
 																onClick={() => {

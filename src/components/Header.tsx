@@ -159,7 +159,7 @@ function Header({
 				<div className="flex flex-col gap-4 lg:gap-3 w-full">
 					{/** Mobile title */}
 					<div className="max-w-screen mb-2">
-						<h1 className="text-6xl md:hidden lg:hidden title max-w-screen break-all pt-4 mt-6">
+						<h1 className="text-4xl md:hidden lg:hidden title max-w-screen break-all pt-4 mt-6">
 							{!title || title.length === 0
 								? 'Magic🪞.eth'
 								: title}
@@ -173,7 +173,7 @@ function Header({
 					</div>
 					<div className="mt-2 max-w-screen w-full">
 						<h1
-							className="text-3xl bg-secondary text-white lg:text-3xl p-2 mb-4 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
+							className="text-2xl bg-secondary text-white lg:text-3xl p-2 max-w-screen hover:bg-primary hover:text-white transition-all duration-300 ease-in-out rounded-md"
 							style={{
 								cursor: 'pointer',
 							}}

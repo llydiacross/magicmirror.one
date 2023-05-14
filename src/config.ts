@@ -276,10 +276,12 @@ const config = {
 		theme: 'theme',
 		avatar: 'avatar',
 		user: 'user',
+		stats: 'stats',
 		ens: 'ens',
+		history: 'history',
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
-	defaultTheme: 'Ox0z_light',
+	defaultTheme: 'forest',
 	themes: [
 		'Ox0z_light',
 		'Ox0z_dark',

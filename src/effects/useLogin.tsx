@@ -35,13 +35,13 @@ export const useLogin = () => {
 	const timerHandle = useRef(null);
 
 	useEffect(() => {
-		setLoaded(false);
-		setError(null);
-
 		if (!web3Context.loaded) return;
+		if (!web3Context.walletConnected) return;
 
 		if (timerHandle.current) clearInterval(timerHandle.current);
 
+		setLoaded(false);
+		setError(null);
 		checkLogin()
 			.then((result) => {
 				if (!result) {
@@ -93,7 +93,7 @@ export const useLogin = () => {
 			.finally(() => {
 				setLoaded(true);
 			});
-	}, [web3Context.loaded]);
+	}, [web3Context]);
 
 	const checkLogin = async () => {
 		let result = await apiFetch('wallet', 'verify', null, 'GET');
