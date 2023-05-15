@@ -12,19 +12,27 @@ export const run = async () => {
 	for (let domainName in domainStats) {
 		let lastHourViews = parseInt(domainStats[domainName]);
 
-		//check if domain name is a valid eth address
-		if (!domainName.indexOf('.eth') === -1) {
+		if (!isValidENS(domainName)) {
 			await server.redisClient.hDel('stats', domainName);
-			return console.log('Invalid domain name: ' + domainName);
+			console.log('Invalid domain name: ' + domainName);
+			continue;
 		}
 
-		if (domainName.length > 253) {
-			await server.redisClient.hDel('stats', domainName);
-			return console.log('Invalid domain name: ' + domainName);
-		}
+		//if the domain name is not in ENS Table, do a further chec
+		if (!(await server.prisma.eNS.findUnique({ where: { domainName } }))) {
+			//check if ENS exists in the blockchain
+			let provider = server.infinityConsole.getProvider();
+			let ens = await provider.getResolver(domainName);
 
-		if (!isValidENS(domainName))
-			return console.log('Invalid domain name: ' + domainName);
+			if (!ens) {
+				await server.redisClient.hDel('stats', domainName);
+				console.log(
+					'Domain name not found in blockchain or no resolver set: ' +
+						domainName
+				);
+				continue;
+			}
+		}
 
 		let stats = await server.prisma.stats.findUnique({
 			where: { domainName },
