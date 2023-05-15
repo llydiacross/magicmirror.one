@@ -14,4 +14,10 @@ export const run = async () => {
 			data: { lastDayViews: 0 },
 		});
 	}
+
+	//clean the redis db
+	let domainStats = await server.redisClient.hGetAll('stats');
+	for (let domainName in domainStats) {
+		await server.redisClient.hDel('stats', domainName);
+	}
 };
