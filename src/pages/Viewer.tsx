@@ -502,6 +502,7 @@ function Viewer({ match }) {
 							Resolver Cannot Be Reached
 						</h1>
 						<p className="mb-5 text-black text-center">
+							This ENS name does not exist, or there was an error and clueless about it so here is this cat!
 							{ensContext.ensError !== null
 								? ensContext?.ensError?.message ||
 								  ensContext?.ensError
@@ -522,6 +523,7 @@ function Viewer({ match }) {
 								}}
 								onClick={() => {
 									window.open(
+										//we need to call nft directly here
 										'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/43404484862317751072749643860451660777873344222238548813148311469445141757953'
 									);
 								}}
