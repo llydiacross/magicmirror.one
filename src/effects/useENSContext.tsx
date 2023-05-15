@@ -4,7 +4,7 @@ import config from '../config';
 import { Web3Context, Web3ContextType } from '../contexts/web3Context';
 import { resolveDirectory, resolveFile, resolveIPNS } from '../ipfs';
 import { Buffer } from 'buffer';
-import { convertContentHash, decodeContentHash } from '../helpers';
+import { upgradeCID, decodeContentHash } from '../helpers';
 
 export const prepareAvatar = async (
 	resolver: ethers.providers.Resolver,
@@ -241,7 +241,7 @@ const useENSContext = ({ ensAddress }) => {
 
 			try {
 				let hash = await resolver.getContentHash();
-				hash = convertContentHash(hash);
+				hash = upgradeCID(hash);
 				console.log('Your content hash is ' + hash);
 
 				if (!hash) {

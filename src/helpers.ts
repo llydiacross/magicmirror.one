@@ -5,7 +5,7 @@ import contentHash from 'content-hash';
 import { CID } from 'multiformats';
 
 /**
- * Will convert hash to V0
+ * NOTE: This will convert a CIDv1 to CIDv0 if you enter CIDv1, you can just updateCID to get the cid version back
  * @param hash
  * @returns
  */
@@ -18,7 +18,12 @@ export const encodeContentHash = (hash: string) => {
 	return contentHash.fromIpfs(_hash);
 };
 
-export const convertContentHash = (hash: string) => {
+/**
+ * Will try and convert a base56/base32 hash to V1, if it can't it will return the original hash (assuming its v0)
+ * @param hash
+ * @returns
+ */
+export const upgradeCID = (hash: string) => {
 	let tempHash = hash;
 	if (hash.indexOf('ipfs://')) tempHash = hash.replace('ipfs://', '');
 	if (hash.indexOf('ipns://')) tempHash = hash.replace('ipns://', '');
@@ -40,7 +45,7 @@ export const convertContentHash = (hash: string) => {
  */
 export const decodeContentHash = (hash: string) => {
 	let decoded = contentHash.decode(hash);
-	return convertContentHash(decoded);
+	return upgradeCID(decoded);
 };
 
 export const getFastAvatar = async (address: string, web3Provider) => {
