@@ -85,7 +85,10 @@ export const setENSContentHash = async (
 	let encodedHash = encodeContentHash(ipfsContentHash);
 	const contract = new ethers.Contract(resolverAddress, abi, provider);
 	const contractWithSigner = contract.connect(signer);
-	const tx = await contractWithSigner.setContenthash(node, encodedHash);
+	const tx = await contractWithSigner.setContenthash(
+		node,
+		'0x' + encodedHash
+	);
 	return tx;
 };
 
