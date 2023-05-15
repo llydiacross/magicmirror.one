@@ -52,11 +52,9 @@ export const useLogin = () => {
 
 				(async () => {
 					if ((await getAddress()) !== web3Context.walletAddress) {
-						setIsSignedIn(false);
+						await destroy();
 						setError('Incorrect address');
 						setIsIncorrectAddress(true);
-						setLoaded(true);
-						console.log('incorrect address');
 						return;
 					}
 
@@ -101,6 +99,7 @@ export const useLogin = () => {
 	};
 
 	const destroy = async () => {
+		setLoaded(false);
 		try {
 			let result = await apiFetch('wallet', 'destroy', null, 'POST');
 		} catch (error) {
@@ -109,6 +108,7 @@ export const useLogin = () => {
 			setAddress(null);
 			setIsIncorrectAddress(false);
 			setError(null);
+			setLoaded(true);
 		}
 	};
 

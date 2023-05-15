@@ -18,16 +18,16 @@ export default function History() {
 	const web3Context = useContext(Web3Context);
 
 	useEffect(() => {
+		if (!loginContext.isSignedIn) return;
+
 		let main = async () => {
-			let result = await apiFetch('history', 'get', {}, 'GET').catch(
-				(err) => {
-					setError(err);
-				}
-			);
+			let result = await apiFetch('history', 'get', {}, 'GET');
 			setUserHistory(result);
 		};
-		main();
-	}, []);
+		main().catch((e) => {
+			setError(e);
+		});
+	}, [loginContext.isSignedIn]);
 
 	return (
 		<div
@@ -61,7 +61,7 @@ export default function History() {
 				{(() => {
 					let historyList = [];
 
-					if (error) {
+					if (error || !loginContext.isSignedIn) {
 						return (
 							<>
 								<svg
@@ -78,8 +78,9 @@ export default function History() {
 										<div className="card-body text-center text-black">
 											<p className="text-3xl ">Error</p>
 											<p>
-												{error?.message ||
-													'Unknown error'}
+												{error?.message
+													? error.message
+													: 'You must be signed in to view your history.'}
 											</p>
 											<div
 												hidden={loginContext.isSignedIn}
@@ -182,6 +183,7 @@ export default function History() {
 				}}
 				onLogin={async () => {
 					await loginContext.login();
+					setShouldShowLogin(false);
 				}}
 			/>
 		</div>
