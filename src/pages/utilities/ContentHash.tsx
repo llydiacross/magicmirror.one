@@ -54,7 +54,8 @@ export default function ContentHash() {
 							Content Hash Encoder/Decoder
 						</h1>
 						<p className="mb-5 text-black">
-							Please enter a content hash to decode
+							Enter a content hash to decode, or enter IPFS hash
+							to encode a content hash
 						</p>
 						<input
 							className="input input-bordered w-full mb-2"
@@ -62,27 +63,23 @@ export default function ContentHash() {
 							placeholder="myspecialcontenthashtodecode"
 						></input>
 						{error === null ? (
-							<p className="mb-5 text-success mt-2">{decoded}</p>
+							<p className="mb-5 text-success mt-2 break-all">
+								{decoded}
+							</p>
 						) : (
-							<p className="mb-5 text-error mt-2">
+							<p className="mb-5 text-error mt-2 break-all">
 								{error.message}
 							</p>
 						)}
 						<button
 							className="btn btn-dark w-full"
 							onClick={() => {
-								encode();
+								if (hash.current.value.startsWith('0x'))
+									decode();
+								else encode();
 							}}
 						>
-							Encode
-						</button>
-						<button
-							className="btn btn-dark w-full mt-2"
-							onClick={() => {
-								decode();
-							}}
-						>
-							Decode
+							Convert
 						</button>
 						<button
 							className="btn btn-dark w-full mt-2"
