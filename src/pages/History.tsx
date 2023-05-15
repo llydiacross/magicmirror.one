@@ -18,7 +18,12 @@ export default function History() {
 	const web3Context = useContext(Web3Context);
 
 	useEffect(() => {
-		if (!loginContext.isSignedIn) return;
+		setError(null);
+
+		if (!loginContext.isSignedIn) {
+			setError(new Error('You must be signed in to view your history'));
+			return;
+		}
 
 		let main = async () => {
 			let result = await apiFetch('history', 'get', {}, 'GET');
@@ -80,7 +85,7 @@ export default function History() {
 											<p>
 												{error?.message
 													? error.message
-													: 'You must be signed in to view your history.'}
+													: 'Unknown error'}
 											</p>
 											<div
 												hidden={loginContext.isSignedIn}

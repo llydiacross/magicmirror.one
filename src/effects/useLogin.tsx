@@ -52,9 +52,11 @@ export const useLogin = () => {
 
 				(async () => {
 					if ((await getAddress()) !== web3Context.walletAddress) {
-						await destroy();
 						setError('Incorrect address');
+						setIsSignedIn(false);
+						setAddress(null);
 						setIsIncorrectAddress(true);
+						setLoaded(true);
 						return;
 					}
 
