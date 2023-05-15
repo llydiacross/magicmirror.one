@@ -2,6 +2,46 @@ import prettier from 'html-prettify';
 import { ethers } from 'ethers';
 import { prepareAvatar } from './effects/useENSContext';
 import contentHash from 'content-hash';
+import { CID } from 'multiformats';
+
+/**
+ * Will convert hash to V0
+ * @param hash
+ * @returns
+ */
+export const encodeContentHash = (hash: string) => {
+	let _hash: string;
+	hash = hash.trim();
+	if (hash.startsWith('bafy')) {
+		_hash = CID.parse(hash).toV0().toString();
+	} else _hash = hash;
+	return contentHash.fromIpfs(_hash);
+};
+
+export const convertContentHash = (hash: string) => {
+	let tempHash = hash;
+	if (hash.indexOf('ipfs://')) tempHash = hash.replace('ipfs://', '');
+	if (hash.indexOf('ipns://')) tempHash = hash.replace('ipns://', '');
+
+	try {
+		let result = CID.parse(tempHash).toV1().toString();
+		if (hash.indexOf('ipfs://') !== -1) return `ipfs://${result}`;
+		if (hash.indexOf('ipns://') !== -1) return `ipns://${result}`;
+		return result;
+	} catch (error) {
+		return hash;
+	}
+};
+
+/**
+ * Will try and convert a hash to V1, if it can't it will return the original hash
+ * @param hash
+ * @returns
+ */
+export const decodeContentHash = (hash: string) => {
+	let decoded = contentHash.decode(hash);
+	return convertContentHash(decoded);
+};
 
 export const getFastAvatar = async (address: string, web3Provider) => {
 	const resolver = await web3Provider.getResolver(address);
@@ -38,15 +78,14 @@ export const setENSContentHash = async (
 	resolverAddress: string,
 	ipfsContentHash: string,
 	provider: ethers.providers.Provider,
-	signer: ethers.Signer,
-	encoding: 'ipfs-ns' | 'ipns-ns' | 'swarm-ns' = 'ipfs-ns'
+	signer: ethers.Signer
 ) => {
 	let node = ethers.utils.namehash(ensDomain);
 	let abi = ['function setContenthash(bytes32 node, bytes hash)'];
-	let hash = contentHash.encode(ipfsContentHash, encoding);
+	let encodedHash = encodeContentHash(ipfsContentHash);
 	const contract = new ethers.Contract(resolverAddress, abi, provider);
 	const contractWithSigner = contract.connect(signer);
-	const tx = await contractWithSigner.setContenthash(node, hash);
+	const tx = await contractWithSigner.setContenthash(node, encodedHash);
 	return tx;
 };
 

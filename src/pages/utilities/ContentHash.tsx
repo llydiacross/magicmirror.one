@@ -1,10 +1,10 @@
 import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
-import contentHash from 'content-hash';
 import { useRef, useState } from 'react';
 import storage from '../../storage';
 import config from '../../config';
 import Navbar from '../../components/Navbar';
+import { decodeContentHash, encodeContentHash } from '../../helpers';
 
 export default function ContentHash() {
 	const history = useHistory();
@@ -17,8 +17,20 @@ export default function ContentHash() {
 			if (hash.current.value === '')
 				throw new Error('please enter a content hash');
 
-			const decoded = contentHash.decode(hash.current.value);
-			setDecoded(decoded);
+			setDecoded(decodeContentHash(hash.current.value));
+		} catch (e) {
+			console.log(e);
+			setError(e);
+		}
+	};
+
+	const encode = () => {
+		setError(null);
+		try {
+			if (hash.current.value === '')
+				throw new Error('please enter a content hash');
+
+			setDecoded('0x' + encodeContentHash(hash.current.value));
 		} catch (e) {
 			console.log(e);
 			setError(e);
@@ -39,7 +51,7 @@ export default function ContentHash() {
 				<div className="hero-content text-center text-neutral-content bg-gray-500">
 					<div className="max-w-xl">
 						<h1 className="mb-5 text-5xl font-bold text-black">
-							Content Hash Decoder
+							Content Hash Encoder/Decoder
 						</h1>
 						<p className="mb-5 text-black">
 							Please enter a content hash to decode
@@ -58,6 +70,14 @@ export default function ContentHash() {
 						)}
 						<button
 							className="btn btn-dark w-full"
+							onClick={() => {
+								encode();
+							}}
+						>
+							Encode
+						</button>
+						<button
+							className="btn btn-dark w-full mt-2"
 							onClick={() => {
 								decode();
 							}}
