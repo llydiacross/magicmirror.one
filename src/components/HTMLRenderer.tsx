@@ -13,8 +13,6 @@ export const renderHTML = (
 	// Remove html tags from savejs code
 	safeCSS = safeCSS.replace(/<[^>]*>?/gm, '');
 
-	console.log(code);
-
 	const head = `
       <head>
         <!--Web.eth Site Builder by Llydia Cross (0x0zAgency) @lydsmas-->
@@ -140,8 +138,6 @@ function HTMLRenderer({
 	scripts = [],
 	meta = [],
 }) {
-	console.log(code);
-
 	let html: string;
 
 	if (!implicit)

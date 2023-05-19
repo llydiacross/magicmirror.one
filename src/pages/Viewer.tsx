@@ -26,8 +26,6 @@ import { Web3Context } from '../contexts/web3Context';
 import { fetchIPFSFromEndpoint } from '../helpers';
 
 const parseDirectory = async (files: IPFSFile[]) => {
-	console.log(files);
-
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
 	const indexFiles = files.filter((file) => file.name === 'index.html');
 
