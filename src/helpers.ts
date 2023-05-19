@@ -5,6 +5,25 @@ import contentHash from 'content-hash';
 import { CID } from 'multiformats';
 
 /**
+ *
+ * @param fileHash
+ * @param text
+ * @returns
+ */
+export const fetchIPFSFromEndpoint = async (
+	fileHash: string,
+	text: boolean = true
+) => {
+	let result = await fetch(`https://ipfs.io/ipfs/${fileHash}`);
+
+	if (result.status === 200) {
+		if (text) return await result.text();
+		else return await result.blob();
+	}
+	return null;
+};
+
+/**
  * NOTE: This will convert a CIDv1 to CIDv0 if you enter CIDv1, you can just updateCID to get the cid version back
  * @param hash
  * @returns

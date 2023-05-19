@@ -23,8 +23,11 @@ import config from '../config';
 import { LoginContext } from '../contexts/loginContext';
 import { apiFetch } from '../api';
 import { Web3Context } from '../contexts/web3Context';
+import { fetchIPFSFromEndpoint } from '../helpers';
 
 const parseDirectory = async (files: IPFSFile[]) => {
+	console.log(files);
+
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
 	const indexFiles = files.filter((file) => file.name === 'index.html');
 
@@ -51,26 +54,18 @@ const parseDirectory = async (files: IPFSFile[]) => {
 
 		const struct: any = {};
 		if (partialHtml !== undefined) {
-			struct.html = new TextDecoder().decode(
-				(await partialHtml.content.getReader().read()).value
-			);
+			struct.html = await fetchIPFSFromEndpoint(partialHtml.path);
 		}
 
 		if (partialCss !== undefined) {
-			struct.css = new TextDecoder().decode(
-				(await partialCss.content.getReader().read()).value
-			);
+			struct.css = await fetchIPFSFromEndpoint(partialCss.path);
 		}
 		if (partialJS !== undefined) {
-			struct.js = new TextDecoder().decode(
-				(await partialJS.content.getReader().read()).value
-			);
+			struct.js = await fetchIPFSFromEndpoint(partialJS.path);
 		}
 
 		if (partialXens !== undefined) {
-			struct['.xens'] = new TextDecoder().decode(
-				(await partialXens.content.getReader().read()).value
-			);
+			struct['.xens'] = await fetchIPFSFromEndpoint(partialXens.path);
 		}
 
 		return {
@@ -254,10 +249,11 @@ function Viewer({ match }) {
 							const parsed = await parseDirectory(
 								directory.files
 							);
+
 							setPercentage(65);
 
 							if (parsed.valid) {
-								setDirect(parsed.direct);
+								setDirect(parsed.direct === true);
 								if (!parsed.direct) setBuffer(parsed.source);
 								else
 									setBuffer(
@@ -298,7 +294,7 @@ function Viewer({ match }) {
 					setDefaultResponse(defaultContent !== null);
 					setBuffer(defaultContent);
 					isEmpty = defaultContent === null;
-				}
+				} else setDefaultResponse(false);
 
 				setPercentage(100);
 				setEmpty(isEmpty);
@@ -385,28 +381,32 @@ function Viewer({ match }) {
 									dir: dir,
 									stats: stats,
 								}}
-								code={buffer.source}
+								code={buffer}
 							/>
 						) : (
-							<> </>
-						)}
-						{direct && !defaultResponse ? (
-							<iframe
-								title={ensContext.currentEnsAddress}
-								style={{ width: '100%', height: '100%' }}
-								src={buffer}
-							/>
-						) : (
-							<HTMLRenderer
-								ensContext={{
-									...ensContext,
-									setCurrentENSAddress: null,
-									resolver: null,
-									dir: dir,
-									stats: stats,
-								}}
-								implicit={buffer}
-							/>
+							<>
+								{direct && !defaultResponse ? (
+									<iframe
+										title={ensContext.currentEnsAddress}
+										style={{
+											width: '100%',
+											height: '100%',
+										}}
+										src={buffer}
+									/>
+								) : (
+									<HTMLRenderer
+										ensContext={{
+											...ensContext,
+											setCurrentENSAddress: null,
+											resolver: null,
+											dir: dir,
+											stats: stats,
+										}}
+										implicit={buffer}
+									/>
+								)}
+							</>
 						)}
 					</>
 				) : (
@@ -502,7 +502,8 @@ function Viewer({ match }) {
 							Resolver Cannot Be Reached
 						</h1>
 						<p className="mb-5 text-black text-center">
-							This ENS name does not exist, or there was an error and clueless about it so here is this cat!
+							This ENS name does not exist, or there was an error
+							and clueless about it so here is this cat!
 							{ensContext.ensError !== null
 								? ensContext?.ensError?.message ||
 								  ensContext?.ensError
