@@ -9,7 +9,7 @@ export const run = async () => {
 	//loop through all the ENS records and set lastDayViews to 0
 	let ens = await server.prisma.eNS.findMany();
 	for (let record of ens) {
-		await server.prisma.eNS.update({
+		await server.prisma.stats.update({
 			where: { domainName: record.domainName },
 			data: { lastDayViews: 0 },
 		});
