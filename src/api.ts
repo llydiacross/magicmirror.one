@@ -3,12 +3,21 @@ import config from './config';
 type Routes = typeof config.routes;
 type Keys = keyof Routes;
 
+/**
+ *
+ * @returns
+ */
 export const getEndpointHref = () => {
 	const isLocalhost = window.location.href.includes('localhost');
 	if (isLocalhost && config.useLocalApi) return config.localApiEndpoint;
 	else return config.apiEndpoint;
 };
 
+/**
+ *
+ * @param type
+ * @returns
+ */
 export const getEndpoint = (type: Keys) => {
 	if (config.routes[type] === undefined)
 		throw new Error('invalid api type: ' + type);
@@ -19,6 +28,15 @@ export const getEndpoint = (type: Keys) => {
 	return getEndpointHref() + route;
 };
 
+/**
+ *
+ * @param type
+ * @param method
+ * @param data
+ * @param requestMethod
+ * @param abortController
+ * @returns
+ */
 export const apiFetch = async (
 	type: Keys,
 	method: string,

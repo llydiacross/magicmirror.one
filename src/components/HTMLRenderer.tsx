@@ -143,6 +143,8 @@ function HTMLRenderer({
 	if (!implicit)
 		html = renderHTML(code, stylesheets, meta, scripts, ensContext);
 
+	console.log(implicit);
+
 	if (implicit)
 		implicit = `
       <script>
@@ -154,7 +156,7 @@ function HTMLRenderer({
 	return (
 		<iframe
 			style={style}
-			srcDoc={html || 'No Content'}
+			srcDoc={implicit || html || 'No Content'}
 			seamless
 			title="preview"
 			sandbox="allow-scripts allow-same-origin allow-forms"
