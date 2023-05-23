@@ -102,7 +102,7 @@ function SettingsModal({ hidden, onHide }) {
 									}
 									ref={ipfsCompanionRef}
 									placeholder="Enter your IPFS Companion Endpoint..."
-									className="input input-bordered  w-full"
+									className="input input-bordered w-full"
 								/>
 								<button className="btn bg-black w-[14em] text-white">
 									Test Connection

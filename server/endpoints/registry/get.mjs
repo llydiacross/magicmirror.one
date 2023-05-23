@@ -15,7 +15,10 @@ export const get = async (req, res) => {
 			domainName,
 		},
 	});
-	if (!fakeRegistry) return userError(res, 'Fake registry not found');
+	if (!fakeRegistry)
+		return success(res, {
+			fakeRegistry: {},
+		});
 	exclude(fakeRegistry, ['User']);
 	return success(res, {
 		fakeRegistry,

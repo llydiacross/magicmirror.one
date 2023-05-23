@@ -296,7 +296,9 @@ export default function Properties() {
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={() => {
-									history.push(`/ide?url=${item.domainName}`);
+									history.push(
+										`/registry/${item.domainName}`
+									);
 								}}
 							>
 								👁️

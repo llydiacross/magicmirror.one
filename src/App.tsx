@@ -20,6 +20,7 @@ import HistoryCapture from './components/HistoryCapture';
 import History from './pages/History';
 import ClientProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
 import config from 'infinitymint-client/dist/src/config';
+import VirtualRegistry from './pages/VirtualRegistry';
 
 function App() {
 	return (
@@ -113,6 +114,9 @@ function App() {
 								</Route>
 								<Route path="/🧱/:token">
 									<Viewer />
+								</Route>
+								<Route path="/registry/:domain">
+									<VirtualRegistry />
 								</Route>
 								<Route exact path="/utilities/converter">
 									<Converter />
