@@ -20,6 +20,8 @@ export const run = async () => {
 
 		//if the domain name is not in ENS Table, do a further chec
 		if (!(await server.prisma.eNS.findUnique({ where: { domainName } }))) {
+			//make it lower case
+			domainName = domainName.toLowerCase();
 			//check if ENS exists in the blockchain
 			let provider = server.infinityConsole.getProvider();
 			let ens = await provider.getResolver(domainName);
