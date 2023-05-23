@@ -143,8 +143,6 @@ function HTMLRenderer({
 	if (!implicit)
 		html = renderHTML(code, stylesheets, meta, scripts, ensContext);
 
-	console.log(implicit);
-
 	if (implicit)
 		implicit = `
       <script>

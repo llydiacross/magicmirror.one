@@ -235,6 +235,24 @@ function FixedElements({
 								🧰
 							</button>
 							<button
+								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
+								onClick={() => {
+									history.goBack();
+								}}
+								title="go back"
+							>
+								🔙
+							</button>
+							<button
+								className="btn btn-square rounded-none bg-black border-none text-white w-full hover:text-white hover:bg-pink-500"
+								onClick={() => {
+									history.goForward();
+								}}
+								title="go foward"
+							>
+								🔜
+							</button>
+							<button
 								className={
 									'btn btn-square rounded-none border-none text-white w-full hover:text-white hover:bg-pink-500 ' +
 									(!showHud ? 'bg-pink-500' : 'bg-black')
