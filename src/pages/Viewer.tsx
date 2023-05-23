@@ -500,7 +500,7 @@ function Viewer({ match }) {
 						</h1>
 						<p className="mb-5 text-black text-center">
 							This ENS name does not exist, or there was an error
-							and clueless about it so here is this cat!
+							and clueless about it so here is this cat! <br />
 							{ensContext.ensError !== null
 								? ensContext?.ensError?.message ||
 								  ensContext?.ensError
@@ -539,12 +539,28 @@ function Viewer({ match }) {
 						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
-								window.location.reload();
+								window.open(
+									//default should be ENS regitrar, however there is an opportunity to link other registrars here
+									//'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
+									'https://app.ens.domains/' + ensContext.currentEnsAddress + '/register'
+									);
 							}}
 						>
-							Purchase
+							Register on ENS
 						</button>
 					</div>
+					<button
+							className="btn btn-dark w-full mt-2"
+							onClick={() => {
+								window.open(
+									//default should be ENS regitrar, however there is an opportunity to link other registrars here
+									'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
+									//'https://app.ens.domains/' + ensContext.currentEnsAddress + '/register'
+									);
+							}}
+						>
+							Bulk-Register on ENS.Vision
+						</button>
 				</div>
 			</div>
 			{/** Error Box */}
