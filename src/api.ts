@@ -41,7 +41,7 @@ export const apiFetch = async (
 	type: Keys,
 	method: string,
 	data: any,
-	requestMethod: 'GET' | 'POST',
+	requestMethod: 'GET' | 'POST' = 'GET',
 	abortController?: AbortController
 ) => {
 	let endPoint = getEndpoint(type);

@@ -6,7 +6,6 @@ import SettingsModal from '../modals/SettingsModal';
 import { ENSContext } from '../contexts/ensContext';
 import { withRouter, useHistory } from 'react-router-dom';
 import HTMLRenderer from '../components/HTMLRenderer';
-import { fetchPrompt } from '../gpt3';
 import {
 	getProvider,
 	getStats,
