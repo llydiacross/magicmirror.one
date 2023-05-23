@@ -212,22 +212,40 @@ export default function Properties() {
 								: '')
 						}
 					>
-						<div className="text-2xl font-bold text-black">
+						<div
+							className="text-2xl font-bold text-black mb-2"
+							style={{
+								display: 'flex',
+							}}
+						>
 							{item.domainName.length > 16 ? (
-								<>
-									{item.domainName.substring(0, 16)}
-									...
-								</>
+								<>{item.domainName.substring(0, 15)}...</>
 							) : (
 								<>{item.domainName}</>
 							)}
+
+							<button
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-auto"
+								style={{
+									fontSize: '0.5rem',
+								}}
+								onClick={() => {
+									history.push(`/view/${item.domainName}`);
+								}}
+							>
+								View
+							</button>
 						</div>
 						<div className="text-2xl font-bold text-black">
 							{item.FakeRegistry ? (
-								<span className="badge bg-error text-black">
-									Has Fake Registry
+								<span className="badge bg-success text-black me-2">
+									📝
 								</span>
-							) : null}
+							) : (
+								<span className="badge bg-error text-black me-2">
+									📝
+								</span>
+							)}
 							{item.Stats ? (
 								<span
 									className={
@@ -296,20 +314,20 @@ export default function Properties() {
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={() => {
+									history.push(`/ens/${item.domainName}`);
+								}}
+							>
+								🔍
+							</button>
+							<button
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								onClick={() => {
 									history.push(
 										`/registry/${item.domainName}`
 									);
 								}}
 							>
-								👁️
-							</button>
-							<button
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={() => {
-									history.push(`/view/${item.domainName}`);
-								}}
-							>
-								➡️
+								📝
 							</button>
 						</div>
 					</div>

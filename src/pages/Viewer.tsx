@@ -485,7 +485,7 @@ function Viewer({ match }) {
 			</div>
 			{/** ENS Error Box */}
 			<div
-				className="hero min-h-screen"
+				className="hero min-h-screen mb-5 pb-5"
 				hidden={
 					loaded ||
 					(!loaded && ensContext.ensError === null) ||
@@ -542,30 +542,34 @@ function Viewer({ match }) {
 								window.open(
 									//default should be ENS regitrar, however there is an opportunity to link other registrars here
 									//'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
-									'https://app.ens.domains/' + ensContext.currentEnsAddress + '/register'
-									);
+									'https://app.ens.domains/' +
+										ensContext.currentEnsAddress +
+										'/register'
+								);
 							}}
 						>
 							Register on ENS
 						</button>
-					</div>
-					<button
+						<button
 							className="btn btn-dark w-full mt-2"
 							onClick={() => {
 								window.open(
 									//default should be ENS regitrar, however there is an opportunity to link other registrars here
-									'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
+									'https://ens.vision/name/' +
+										ensContext.currentEnsAddress +
+										'#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
 									//'https://app.ens.domains/' + ensContext.currentEnsAddress + '/register'
-									);
+								);
 							}}
 						>
 							Bulk-Register on ENS.Vision
 						</button>
+					</div>
 				</div>
 			</div>
 			{/** Error Box */}
 			<div
-				className="hero min-h-screen max-w-screen"
+				className="hero min-h-screen max-w-screen mb-5 pb-5"
 				hidden={error === null || empty || ensContext.ensError !== null}
 			>
 				<div className="hero-overlay bg-opacity-60" />
@@ -600,6 +604,9 @@ function Viewer({ match }) {
 						</button>
 					</div>
 				</div>
+				<br />
+				<br />
+				<br />
 			</div>
 			<FixedElements
 				linkHref="/"
