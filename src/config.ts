@@ -281,21 +281,56 @@ const config = {
 		registry: 'registry',
 		history: 'history',
 	},
-	fakeRegistryFields: [
-		'contentHash',
-		'contentType',
-		'creationDate',
-		'lastUpdateDate',
-		'owner',
-		'twitter',
-		'github',
-		'instagram',
-		'facebook',
-		'linkedin',
-		'youtube',
-		'twitch',
-		'website',
-	],
+	fakeRegistryFields: {
+		contentHash: {
+			type: 'string',
+			help: 'You create your content hash from your IPFS link, go to the content hash utility page to create one or set your content through the IDE.',
+		},
+		contentType: {
+			type: 'select',
+			default: 'website',
+			alwaysToggled: true,
+			options: [
+				'image',
+				'video',
+				'audio',
+				'text',
+				'application',
+				'website',
+			],
+			help: 'Helps the browser know how to display your content. This is set automatically when you set your content through the IDE.',
+		},
+		twitter: {
+			type: 'string',
+			help: "Your twitter username, don't include the @ symbol.",
+		},
+		github: {
+			type: 'string',
+			help: "Your github username, don't include the @ symbol.",
+		},
+		instagram: {
+			type: 'string',
+		},
+		facebook: {
+			type: 'string',
+		},
+		linkedin: {
+			type: 'string',
+		},
+		youtube: {
+			type: 'string',
+		},
+		twitch: {
+			type: 'string',
+		},
+		erc721: {
+			type: 'string',
+			help: 'Please enter your ERC721 contract address followed by the tokenId in the following format <contractAddress>:<tokenId>',
+		},
+		website: {
+			type: 'string',
+		},
+	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
 	defaultTheme: 'forest',
 	themes: [
