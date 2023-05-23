@@ -286,6 +286,10 @@ const config = {
 			type: 'string',
 			help: 'You create your content hash from your IPFS link, go to the content hash utility page to create one or set your content through the IDE.',
 		},
+		avatar: {
+			type: 'string',
+			help: 'Your avatar is an image which is attached to the ENS. You can use a direct link or a link to an ERC721 token.',
+		},
 		contentType: {
 			type: 'select',
 			default: 'website',

@@ -21,6 +21,7 @@ import History from './pages/History';
 import ClientProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
 import config from 'infinitymint-client/dist/src/config';
 import VirtualRegistry from './pages/VirtualRegistry';
+import ENS from './pages/ENS';
 
 function App() {
 	return (
@@ -117,6 +118,9 @@ function App() {
 								</Route>
 								<Route path="/registry/:domain">
 									<VirtualRegistry />
+								</Route>
+								<Route path="/ens/:domain">
+									<ENS />
 								</Route>
 								<Route exact path="/utilities/converter">
 									<Converter />

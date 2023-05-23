@@ -50,7 +50,6 @@ function VirtualRegistry({ match }) {
 				);
 
 				if (!approval?.ok) return setError('Invalid Domain');
-
 				if (approval.approved) setIsApproved(true);
 			} catch (error) {
 				setError('Invalid Domain');
@@ -385,9 +384,11 @@ function VirtualRegistry({ match }) {
 									<p className="text-lg">
 										You can enter a value you would like to
 										use, then use the button on the right to
-										toggle it or detoggle it. Red means that
-										it will not use the value you entered,
-										green means it will.
+										toggle it. Red means that it will not
+										use the value you entered and use what
+										ever is in the ENS registry. If it is
+										green then it will use the value you
+										enter over your ENS registry value.
 									</p>
 								</div>
 							</div>
@@ -417,7 +418,7 @@ function VirtualRegistry({ match }) {
 								<button
 									className="btn btn-warning"
 									onClick={() => {
-										history.goBack();
+										history.push('/properties');
 									}}
 								>
 									Back
