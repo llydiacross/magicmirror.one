@@ -16,7 +16,7 @@ function VirtualRegistry({ match }) {
 	const loginContext = useContext(LoginContext);
 	const context = useContext(Web3Context);
 	const [error, setError] = useState(null);
-	const [shouldShowLogin, setShouldShowLogin] = useState(false);
+	const [shouldShowLogin, setShouldShowLogin] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [hasChanges, setHasChanges] = useState(false);
 	const [isApproved, setIsApproved] = useState(false);
@@ -31,6 +31,7 @@ function VirtualRegistry({ match }) {
 
 	useEffect(() => {
 		if (!domain) return;
+		if (domain.indexOf('.') === -1) return setError('Invalid domain name');
 
 		let main = async () => {
 			if (!loginContext.loaded) return;
@@ -40,19 +41,21 @@ function VirtualRegistry({ match }) {
 				return;
 			}
 
-			let approval = await apiFetch(
-				'ens',
-				'approved',
-				{ domainName: domain, address: loginContext.address },
-				'GET'
-			);
-
-			if (!approval.ok)
-				return setError(
-					approval.error || approval.message || 'Unknown Error'
+			try {
+				let approval = await apiFetch(
+					'ens',
+					'approved',
+					{ domainName: domain, address: loginContext.address },
+					'GET'
 				);
 
-			if (approval.approved) setIsApproved(true);
+				if (!approval?.ok) return setError('Invalid Domain');
+
+				if (approval.approved) setIsApproved(true);
+			} catch (error) {
+				setError('Invalid Domain');
+				return;
+			}
 
 			try {
 				let result = await apiFetch(
@@ -117,39 +120,216 @@ function VirtualRegistry({ match }) {
 								<div className="bg-info p-2 text-black text-3xl">
 									<b>⚙️{domain}</b>
 								</div>
-								{Object.keys(config.fakeRegistryFields).map(
-									(key, index) => {
-										let type =
-											config.fakeRegistryFields[key]
-												.type || 'text';
+								{!isApproved && !error ? (
+									<div className="p-2">
+										<div className="alert alert-error">
+											You are not approved to edit this
+											domain. You can how ever view the
+											current settings.
+										</div>
+									</div>
+								) : (
+									<></>
+								)}
+								{error ? (
+									<div className="p-2">
+										<div className="alert alert-error">
+											{error.message || error}
+										</div>
+									</div>
+								) : (
+									<>
+										{Object.keys(
+											config.fakeRegistryFields
+										).map((key, index) => {
+											let type =
+												config.fakeRegistryFields[key]
+													.type || 'text';
 
-										if (type === 'string') type = 'text';
+											if (type === 'string')
+												type = 'text';
 
-										return (
-											<div className="border border-gray-300">
-												<div className="flex flex-row p-2 ">
-													<div className="flex flex-col w-2/5 p-2 text-center">
-														<label className="md:text-2xl text-1xl text-black">
-															<u>{key}</u>
-														</label>
-													</div>
-													<div className="flex flex-col w-3/5 p-2">
-														{type !== 'select' &&
-														type !== 'checkbox' ? (
+											return (
+												<div className="border border-gray-300">
+													<div className="flex flex-row p-2 ">
+														<div className="flex flex-col w-2/5 p-2 text-center">
+															<label className="md:text-2xl text-1xl text-black">
+																<u>{key}</u>
+															</label>
+														</div>
+														<div className="flex flex-col w-3/5 p-2">
+															{type !==
+																'select' &&
+															type !==
+																'checkbox' ? (
+																<input
+																	className="md:text-2xl text-1xl input input-bordered w-full"
+																	placeholder=""
+																	type={type}
+																	disabled={
+																		!isApproved
+																	}
+																	onChange={(
+																		event
+																	) => {
+																		let _vr =
+																			{};
+																		if (
+																			virtualRegistry
+																		)
+																			_vr =
+																				{
+																					...virtualRegistry,
+																				};
+
+																		_vr[
+																			key
+																		] =
+																			event.target.value;
+																		setHasChanges(
+																			true
+																		);
+																		setVirtualRegistry(
+																			_vr
+																		);
+																	}}
+																	value={
+																		virtualRegistry?.[
+																			key
+																		] ||
+																		config
+																			.fakeRegistryFields[
+																			key
+																		]
+																			.default ||
+																		''
+																	}
+																/>
+															) : null}
+															{type ===
+															'select' ? (
+																<select
+																	className="md:text-2xl text-1xl input input-bordered w-full"
+																	placeholder=""
+																	disabled={
+																		!isApproved
+																	}
+																	onChange={(
+																		event
+																	) => {
+																		let _vr =
+																			{};
+																		if (
+																			virtualRegistry
+																		)
+																			_vr =
+																				{
+																					...virtualRegistry,
+																				};
+
+																		_vr[
+																			key
+																		] =
+																			event.target.value;
+																		setHasChanges(
+																			true
+																		);
+																		setVirtualRegistry(
+																			_vr
+																		);
+																	}}
+																	value={
+																		virtualRegistry?.[
+																			key
+																		] ||
+																		config
+																			.fakeRegistryFields[
+																			key
+																		]
+																			.default ||
+																		''
+																	}
+																>
+																	{config.fakeRegistryFields[
+																		key
+																	].options.map(
+																		(
+																			option,
+																			index
+																		) => {
+																			return (
+																				<option
+																					key={
+																						index
+																					}
+																					value={
+																						option
+																					}
+																				>
+																					{
+																						option
+																					}
+																				</option>
+																			);
+																		}
+																	)}
+																</select>
+															) : null}
+														</div>
+														<div className="flex flex-col w-1/5 p-2">
 															<input
-																className="md:text-2xl text-1xl input input-bordered w-full"
-																placeholder=""
-																type={type}
+																className={
+																	'md:text-2xl text-1xl input input-bordered w-full' +
+																	(virtualRegistryToggles?.[
+																		key
+																	] ===
+																		true ||
+																	config
+																		.fakeRegistryFields[
+																		key
+																	]
+																		.alwaysToggled
+																		? ' bg-success'
+																		: ' bg-error')
+																}
+																disabled={
+																	!isApproved
+																}
+																placeholder="?"
+																type="checkbox"
+																onClick={(
+																	e
+																) => {
+																	if (
+																		config
+																			.fakeRegistryFields[
+																			key
+																		]
+																			.alwaysToggled ||
+																		!virtualRegistry[
+																			key
+																		]
+																	)
+																		e.preventDefault();
+																}}
 																onChange={(
 																	event
 																) => {
 																	let _vr =
 																		{};
+
 																	if (
-																		virtualRegistry
+																		!virtualRegistry[
+																			key
+																		]
+																	)
+																		return;
+
+																	if (
+																		virtualRegistryToggles
 																	)
 																		_vr = {
-																			...virtualRegistry,
+																			...virtualRegistryToggles,
 																		};
 
 																	_vr[key] =
@@ -157,172 +337,45 @@ function VirtualRegistry({ match }) {
 																	setHasChanges(
 																		true
 																	);
-																	setVirtualRegistry(
+																	setVirtualRegistryToggles(
 																		_vr
 																	);
 																}}
 																value={
-																	virtualRegistry?.[
-																		key
-																	] ||
 																	config
 																		.fakeRegistryFields[
 																		key
-																	].default ||
-																	''
+																	]
+																		.alwaysToggled
+																		? true
+																		: virtualRegistryToggles?.[
+																				key
+																		  ] ||
+																		  false
 																}
 															/>
-														) : null}
-														{type === 'select' ? (
-															<select
-																className="md:text-2xl text-1xl input input-bordered w-full"
-																placeholder=""
-																onChange={(
-																	event
-																) => {
-																	let _vr =
-																		{};
-																	if (
-																		virtualRegistry
-																	)
-																		_vr = {
-																			...virtualRegistry,
-																		};
-
-																	_vr[key] =
-																		event.target.value;
-																	setHasChanges(
-																		true
-																	);
-																	setVirtualRegistry(
-																		_vr
-																	);
-																}}
-																value={
-																	virtualRegistry?.[
-																		key
-																	] ||
-																	config
-																		.fakeRegistryFields[
-																		key
-																	].default ||
-																	''
-																}
-															>
-																{config.fakeRegistryFields[
-																	key
-																].options.map(
-																	(
-																		option,
-																		index
-																	) => {
-																		return (
-																			<option
-																				key={
-																					index
-																				}
-																				value={
-																					option
-																				}
-																			>
-																				{
-																					option
-																				}
-																			</option>
-																		);
-																	}
-																)}
-															</select>
-														) : null}
-													</div>
-													<div className="flex flex-col w-1/5 p-2">
-														<input
-															className={
-																'md:text-2xl text-1xl input input-bordered w-full' +
-																(virtualRegistryToggles?.[
-																	key
-																] === true ||
-																config
-																	.fakeRegistryFields[
-																	key
-																].alwaysToggled
-																	? ' bg-success'
-																	: ' bg-error')
-															}
-															placeholder="?"
-															type="checkbox"
-															onClick={(e) => {
-																if (
-																	config
-																		.fakeRegistryFields[
-																		key
-																	]
-																		.alwaysToggled ||
-																	!virtualRegistry[
-																		key
-																	]
-																)
-																	e.preventDefault();
-															}}
-															onChange={(
-																event
-															) => {
-																let _vr = {};
-
-																if (
-																	!virtualRegistry[
-																		key
-																	]
-																)
-																	return;
-
-																if (
-																	virtualRegistryToggles
-																)
-																	_vr = {
-																		...virtualRegistryToggles,
-																	};
-
-																_vr[key] =
-																	event.target.value;
-																setHasChanges(
-																	true
-																);
-																setVirtualRegistryToggles(
-																	_vr
-																);
-															}}
-															value={
-																config
-																	.fakeRegistryFields[
-																	key
-																].alwaysToggled
-																	? true
-																	: virtualRegistryToggles?.[
-																			key
-																	  ] || false
-															}
-														/>
-													</div>
-												</div>
-												{config.fakeRegistryFields[key]
-													.help ? (
-													<div className="p-2">
-														<div className="alert bg-gray-200 p-4 mb-2">
-															<p className="text-1xl text-black">
-																{
-																	config
-																		.fakeRegistryFields[
-																		key
-																	].help
-																}
-															</p>
 														</div>
 													</div>
-												) : null}
-											</div>
-										);
-									}
+													{config.fakeRegistryFields[
+														key
+													].help ? (
+														<div className="p-2">
+															<div className="alert bg-gray-200 p-4 mb-2">
+																<p className="text-1xl text-black">
+																	{
+																		config
+																			.fakeRegistryFields[
+																			key
+																		].help
+																	}
+																</p>
+															</div>
+														</div>
+													) : null}
+												</div>
+											);
+										})}
+									</>
 								)}
 							</div>
 						</div>
