@@ -57,12 +57,12 @@ export default function Leaderboard() {
 			<div className="flex flex-row bg-gray-500 pt-4 mb-5">
 				<div className="flex flex-col w-2/5 p-2">
 					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-						Welcome To <u>🔥️1️⃣0️⃣0️⃣.eth</u>
+						Welcome To The <u>🔥️1️⃣0️⃣0️⃣.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
 					<p className="text-3xl">
-						See whos rising above the stars with our ENS
+						See what names are going from an ember to the stars with our ENS
 						Leaderboards!
 					</p>
 				</div>
@@ -72,7 +72,7 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (All Time) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-							Top 100 Domains (All Time)
+							Hot 1️⃣0️⃣0️⃣ Names<br />(All Time)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -92,13 +92,13 @@ export default function Leaderboard() {
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Domain Name
+													Name
 												</th>
 												<th
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Total Views
+													Total Visits
 												</th>
 											</tr>
 										</thead>
@@ -168,7 +168,7 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (Last Hour) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-							Top 100 Domains (Last Hour)
+							Hot 1️⃣0️⃣0️⃣ Names<br />(Last Hour)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -188,13 +188,13 @@ export default function Leaderboard() {
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Domain Name
+													Name
 												</th>
 												<th
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Total Views
+													Total Visits
 												</th>
 											</tr>
 										</thead>
@@ -264,7 +264,7 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (Last Day) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-							Top 100 Domains (Last Day)
+							Hot 1️⃣0️⃣0️⃣ Names<br /> (Last Day)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -284,13 +284,13 @@ export default function Leaderboard() {
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Domain Name
+													Name
 												</th>
 												<th
 													scope="col"
 													className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 												>
-													Total Views
+													Total Visits
 												</th>
 											</tr>
 										</thead>
