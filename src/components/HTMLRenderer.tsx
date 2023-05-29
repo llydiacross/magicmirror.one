@@ -24,7 +24,7 @@ export const renderHTML = (
 
 	const head = `
       <head>
-        <!--Web.eth Site Builder by Llydia Cross (0x0zAgency) @lydsmas-->
+        <!--Reflected by Magic🪞.eth Site Builder by 0x0z.xyz | The Magic of Web3-->
         ${stylesheets.map((sheet) => {
 			return `<link href="${sheet}" rel="stylesheet" type="text/css" />`;
 		})}

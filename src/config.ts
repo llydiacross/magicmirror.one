@@ -98,7 +98,7 @@ const config = {
 		'👑Label.eth',
 		'👟Mint.eth',
 		'👟Club.eth',
-		'Imapact🎛.eth',
+		'Impact🎛.eth',
 		'Tech🏜.eth',
 		'🌎Sport.eth',
 		'🧱Jungle.eth',
