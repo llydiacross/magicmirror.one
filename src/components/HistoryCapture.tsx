@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
+/**
+ * This fixes foward and back button when navigating around the website
+ */
 export default function HistoryCapture({ children }) {
-	/**
-	 * This fixes foward and back button when navigating around the website
-	 */
-
 	useEffect(() => {
 		let change = () => {
 			if ((window as any).innerDocClick) {

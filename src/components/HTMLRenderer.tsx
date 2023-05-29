@@ -2,6 +2,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Renders HTML from a code object, each key in the code object is the language, so css, js, html, etc. Stylesheets refer to
+ * @param code
+ * @param stylesheets
+ * @param meta
+ * @param scripts
+ * @param ensContext
+ * @returns
+ */
 export const renderHTML = (
 	code: any = {},
 	stylesheets: any = [],
@@ -137,6 +146,14 @@ function HTMLRenderer({
 	stylesheets = [],
 	scripts = [],
 	meta = [],
+}: {
+	style?: any;
+	code?: any;
+	implicit?: any;
+	ensContext?: any;
+	stylesheets?: string[];
+	scripts?: string[];
+	meta?: any;
 }) {
 	let html: string;
 

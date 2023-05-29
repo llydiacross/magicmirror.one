@@ -2,20 +2,23 @@
 import React, { useRef, useState, useContext } from 'react';
 import ErrorIcon from './Icons/ErrorIcon';
 import WebEvents from '../webEvents';
-import { ENSContext } from '../contexts/ensContext';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../contexts/loginContext';
 import config from '../config';
 
 export default function DestinationFinder() {
 	const inputElement = useRef(null);
-	const ensContext = useContext(ENSContext);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [hasInput, setHasInput] = useState(false);
 	const errorRef = useRef(null);
 	const history = useHistory();
 	const loginContext = useContext(LoginContext);
+
+	/**
+	 *
+	 * @param destination The destination to go to
+	 */
 	const gotoAddress = async (destination: string) => {
 		setError(false);
 		destination = destination.toString();

@@ -11,7 +11,6 @@ import { getFastAvatar } from '../helpers';
 import { Web3Context } from '../contexts/web3Context';
 import LoginModal from '../modals/LoginModal';
 import { LoginContext } from '../contexts/loginContext';
-import UpdateBanner from '../components/UpdateBanner';
 
 export default function Index() {
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);

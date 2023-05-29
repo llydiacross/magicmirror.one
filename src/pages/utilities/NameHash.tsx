@@ -8,10 +8,10 @@ import Navbar from '../../components/Navbar';
 
 export default function NameHash() {
 	const history = useHistory();
-
 	const hash = useRef(null);
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
+
 	const decode = () => {
 		setError(null);
 		try {

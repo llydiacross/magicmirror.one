@@ -19,6 +19,16 @@ function FixedElements({
 	useFixed = true,
 	children = null,
 	linkHref = null,
+}: {
+	onSettings?: () => void;
+	hideAlerts?: boolean;
+	hideSettings?: boolean;
+	hideFooter?: boolean;
+	hideUserInfo?: boolean;
+	hideOwnership?: boolean;
+	useFixed?: boolean;
+	children?: any;
+	linkHref?: string;
 }) {
 	const context = useContext(Web3Context);
 	const ensContext = useContext(ENSContext);

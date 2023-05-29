@@ -1,7 +1,6 @@
 import FixedElements from '../../components/FixedElements';
 import { useHistory } from 'react-router-dom';
 import { useRef, useState } from 'react';
-import { ethers } from 'ethers';
 import SettingsModal from '../../modals/SettingsModal';
 import storage from '../../storage';
 import config from '../../config';

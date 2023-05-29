@@ -4,7 +4,7 @@ import ENSContextProvider from './contexts/ensContext';
 import IDE from './pages/IDE';
 import Index from './pages/Index';
 import Viewer from './pages/Viewer';
-import { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import LoginContextProvider from './contexts/loginContext';
 import Converter from './pages/utilities/Converter';
@@ -18,14 +18,15 @@ import Properties from './pages/Properties';
 import Leaderboard from './pages/Leaderboard';
 import HistoryCapture from './components/HistoryCapture';
 import History from './pages/History';
-import ClientProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
-import config from 'infinitymint-client/dist/src/config';
+//import ClientProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
+//import config from 'infinitymint-client/dist/src/config';
 import VirtualRegistry from './pages/VirtualRegistry';
 import ENS from './pages/ENS';
 
 function App() {
 	return (
 		/**
+		 * We wrap the entire app in the ClientProvider, which provides the InfinityMint client
 		<ClientProvider config={config}>
 			<Web3ContextProvider>
 				<LoginContextProvider>

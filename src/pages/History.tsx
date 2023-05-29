@@ -17,6 +17,9 @@ export default function History() {
 	const loginContext = useContext(LoginContext);
 	const web3Context = useContext(Web3Context);
 
+	/**
+	 * Fetch the user's history from the API
+	 */
 	useEffect(() => {
 		setError(null);
 

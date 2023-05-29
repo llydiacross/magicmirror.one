@@ -62,9 +62,6 @@ function IDE({ theme }) {
 	const [codeBuffer, setCodeBuffer] = useState(currentCode);
 	const [width, setWidth] = useState(50);
 	const [overlayPreview, setOverlayPreview] = React.useState(false);
-	const [currentTheme, setCurrentTheme] = useState(
-		theme || config.defaultTheme || null
-	);
 	const [shouldShowSettings, setShouldShowSettings] = useState(false);
 	const [shouldShowPublish, setShouldShowPublish] = useState(false);
 	const [shouldShowChatGPT, setShouldShowChatGPT] = useState(false);
@@ -81,9 +78,7 @@ function IDE({ theme }) {
 	const ensContext = useContext(ENSContext);
 
 	const onResize = () => {
-		if (window.innerWidth < 800 && width !== 100) {
-			setWidth(100);
-		}
+		if (window.innerWidth < 800 && width !== 100) setWidth(100);
 	};
 
 	useEffect(() => {
@@ -121,29 +116,6 @@ function IDE({ theme }) {
 
 		if (allCodeEmpty) setShouldShowNewProject(true);
 
-		if (
-			themeRef.current === null &&
-			storage.getGlobalPreference('defaultTheme')
-		) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
-
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (
-					themeRef.current === null &&
-					storage.getGlobalPreference('defaultTheme')
-				) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
 		//if the screen is below mobile size, set the width to 100%
 		if (window.innerWidth < 900) {
 			setWidth(100);
@@ -153,7 +125,6 @@ function IDE({ theme }) {
 		window.addEventListener('resize', onResize);
 
 		return () => {
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
 			window.removeEventListener('resize', onResize);
 		};
 	}, []);
@@ -201,7 +172,13 @@ function IDE({ theme }) {
 		storage.getPagePreference(selectedTab) || currentCode;
 
 	return (
-		<div data-theme={currentTheme}>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'0x0z Light'
+			}
+		>
 			<div className="flex flex-col lg:flex-row w-full overflow-hidden">
 				<div
 					style={{

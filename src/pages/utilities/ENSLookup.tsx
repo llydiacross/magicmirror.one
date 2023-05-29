@@ -1,7 +1,7 @@
 import FixedElements from '../../components/FixedElements';
 import { ethers } from 'ethers';
 import { useHistory } from 'react-router-dom';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Web3Context, Web3ContextType } from '../../contexts/web3Context';
 import Loading from '../../components/Loading';
 import storage from '../../storage';
@@ -23,6 +23,7 @@ export default function ENSLookup() {
 	);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+
 	const decode = async () => {
 		let domain = hash;
 		setError(null);

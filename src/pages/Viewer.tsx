@@ -14,7 +14,6 @@ import {
 	IPFSProvider,
 	IPFSStats,
 	resolveDirectory,
-	resolvePotentialCID,
 } from '../ipfs';
 import HeartIcon from '../components/Icons/HeartIcon';
 import storage from '../storage';
@@ -22,7 +21,7 @@ import config from '../config';
 import { LoginContext } from '../contexts/loginContext';
 import { apiFetch } from '../api';
 import { Web3Context } from '../contexts/web3Context';
-import { fetchIPFSFromEndpoint } from '../helpers';
+import { fetchIPFSFromEndpoint, resolvePotentialCID } from '../helpers';
 
 const parseDirectory = async (files: IPFSFile[]) => {
 	const partialFiles = files.filter((file) => file.name.includes('.partial'));
@@ -151,22 +150,28 @@ function Viewer({ match }) {
 	const defaultResponseElement = useRef(null);
 
 	//set the current IPFS provider for this component to be either web3-storage if they are using that or IPFS HTTP provider
-	if (ipfsProvider.current === null) {
-		if (storage.getGlobalPreference('useCustomProvider')) {
-			if (
-				storage.getGlobalPreference('customProvider') === 'web3-storage'
-			)
-				ipfsProvider.current = getProvider('web3-storage', {
-					apiKey: storage.getGlobalPreference('web3StorageApiKey'),
-				});
-			else
-				ipfsProvider.current = getProvider('ipfs-http', {
-					url:
-						storage.getGlobalPreference('customProviderUrl') ||
-						config.ipfsProviderURL,
-				});
+	useEffect(() => {
+		if (ipfsProvider.current === null) {
+			if (storage.getGlobalPreference('useCustomProvider')) {
+				if (
+					storage.getGlobalPreference('customProvider') ===
+					'web3-storage'
+				)
+					ipfsProvider.current = getProvider('web3-storage', {
+						apiKey: storage.getGlobalPreference(
+							'web3StorageApiKey'
+						),
+					});
+				else
+					ipfsProvider.current = getProvider('ipfs-http', {
+						url:
+							storage.getGlobalPreference('customProviderUrl') ||
+							config.ipfsProviderURL,
+					});
+			}
 		}
-	}
+	});
+
 	// If the current ens address is not the same as the one in the url, update it
 	useEffect(() => {
 		matchRef.current = match.params.token;
@@ -178,6 +183,9 @@ function Viewer({ match }) {
 		}
 	}, [ensContext, match.params.token]);
 
+	/**
+	 * Loads the content from the IPFS directory of the current ENS address
+	 */
 	useEffect(() => {
 		if (!ensContext.loaded) return;
 		if (ensContext.ensError !== null) return;
@@ -312,6 +320,9 @@ function Viewer({ match }) {
 		main();
 	}, [ensContext]);
 
+	/**
+	 * Add the current ENS address to the history
+	 */
 	useEffect(() => {
 		if (!ensContext.loaded) return;
 		if (ensContext.currentEnsAddress === null) return;
@@ -331,7 +342,13 @@ function Viewer({ match }) {
 	}, [loginContext, ensContext, loaded]);
 
 	return (
-		<div>
+		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'0x0z Light'
+			}
+		>
 			<div
 				className="hero min-h-screen"
 				hidden={loaded || ensContext.ensError !== null}
@@ -617,6 +634,7 @@ function Viewer({ match }) {
 				}}
 			>
 				{
+					//Tip stuff, children are put to the top left of the screen
 					<>
 						{defaultResponse &&
 						error === null &&

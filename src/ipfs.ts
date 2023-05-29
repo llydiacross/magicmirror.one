@@ -2,6 +2,7 @@ import { Web3Storage, File, Web3File } from 'web3.storage';
 import { apiFetch } from './api';
 import config from './config';
 import storage from './storage';
+import { resolvePotentialCID } from './helpers';
 
 /**
  * IPFS File interface
@@ -217,18 +218,7 @@ class Web3StorageProvider extends IPFSProvider {
 	 * @returns
 	 */
 	async uploadFile(filename: string, data: any, type = 'image/png') {
-		if (this.instance === undefined || this.instance === null) {
-			throw new Error('create instance needs to be ran first');
-		}
-
-		let file: any;
-		if (type !== null) {
-			file = new File([data], filename, {
-				type,
-			});
-		} else file = new File([data], filename);
-
-		return await this.instance.put([file]);
+		return await this.uploadFiles([{ name: filename, data, type }]);
 	}
 
 	async uploadFiles(
@@ -252,7 +242,7 @@ class Web3StorageProvider extends IPFSProvider {
 		abortController: AbortController,
 		currentDomainName?: string
 	): Promise<IPFSStats> {
-		//replace with web3storage stats
+		//web3 doesn't do stats so pull them from our api
 		let result = await apiFetch(
 			'ipfs',
 			'stats',
@@ -305,9 +295,8 @@ class Web3StorageProvider extends IPFSProvider {
 	): Promise<IPFSFile> {
 		let result = await this.getDirectory(cid, abortController, domainName);
 		let file = result.files.find((file) => file.name === fileName);
-		if (!file) {
-			throw new Error('File not found');
-		}
+		if (!file) throw new Error('File not found');
+
 		return file;
 	}
 
@@ -326,7 +315,7 @@ class Web3StorageProvider extends IPFSProvider {
 		}
 	}
 
-	getContentExtension(type) {
+	getContentExtension(type: string) {
 		type = type.toLowerCase();
 		switch (type) {
 			case 'image/png':
@@ -359,6 +348,12 @@ export {
 	Web3StorageProvider,
 };
 
+/**
+ * Will resolve an IPNS hash to a CID
+ * @param ipnsHash
+ * @param abortController
+ * @returns
+ */
 export const resolveIPNS = async (
 	ipnsHash: string,
 	abortController?: AbortController
@@ -401,24 +396,14 @@ export const resolveFile = async (
 	return result.files.filter((file) => file.name === fileName)[0];
 };
 
-export const resolvePotentialCID = async (
-	potentialCID: string,
-	abortController?: AbortController
-) => {
-	if (potentialCID.includes('ipfs://'))
-		potentialCID = potentialCID.split('ipfs://')[1];
-	else if (potentialCID.includes('ipns://')) {
-		potentialCID = potentialCID.split('ipns://')[1];
-		potentialCID = await resolveIPNS(potentialCID, abortController);
-	}
-
-	if (potentialCID.includes('ipfs/'))
-		potentialCID = potentialCID.split('ipfs/')[1];
-
-	potentialCID = potentialCID.split('/')[0];
-	return potentialCID;
-};
-
+/**
+ * gets stats for a CID using the default provider
+ * @param potentialCID
+ * @param abortController
+ * @param provider
+ * @param currentEnsDomain
+ * @returns
+ */
 export const getStats = async (
 	potentialCID: string,
 	abortController?: AbortController,
@@ -436,7 +421,7 @@ export const getStats = async (
 };
 
 /**
- *
+ * resolves a CID to a directory using the default provider
  * @param potentialCID
  * @param provider
  * @returns
@@ -458,8 +443,14 @@ export const resolveDirectory = async (
 };
 
 let _IPFSProvider: IPFSProvider;
-export const getDefaultProvider = () => {
-	if (_IPFSProvider) return _IPFSProvider;
+
+/**
+ * returns the default provider as set in the settings modal
+ * @param recreateProvider
+ * @returns
+ */
+export const getDefaultProvider = (recreateProvider?: boolean) => {
+	if (_IPFSProvider && !recreateProvider) return _IPFSProvider;
 	else {
 		_IPFSProvider = new IPFSWebProvider();
 		_IPFSProvider.createInstance({
@@ -472,17 +463,22 @@ export const getDefaultProvider = () => {
 let _IPFSCustomProvider: IPFSWebProvider;
 let _IPFSApiProvider: IPFSWebProvider;
 let _Web3StorageProvider: Web3StorageProvider;
+
+export type ProviderType = 'web3-storage' | 'ipfs-http' | 'ipfs-api';
+
 export const getProvider = (
-	provider?: 'web3-storage' | 'ipfs-http' | 'ipfs-api',
+	provider?: ProviderType,
 	options?: {
 		apiKey?: string;
 		url?: string;
-	}
+	},
+	recreateProvider?: boolean
 ) => {
 	provider = provider || 'web3-storage';
 	switch (provider) {
 		case 'ipfs-http':
-			if (_IPFSCustomProvider) return _IPFSCustomProvider;
+			if (_IPFSCustomProvider && !recreateProvider)
+				return _IPFSCustomProvider;
 			else {
 				_IPFSCustomProvider = new IPFSWebProvider();
 				_IPFSCustomProvider.createInstance(options);
@@ -490,14 +486,15 @@ export const getProvider = (
 
 			return _IPFSCustomProvider;
 		case 'ipfs-api':
-			if (_IPFSApiProvider) return _IPFSApiProvider;
+			if (_IPFSApiProvider && !recreateProvider) return _IPFSApiProvider;
 			else {
 				_IPFSApiProvider = new IPFSWebProvider();
 				_IPFSApiProvider.createInstance(options);
 			}
 			return _IPFSApiProvider;
 		case 'web3-storage':
-			if (_Web3StorageProvider) return _Web3StorageProvider;
+			if (_Web3StorageProvider && !recreateProvider)
+				return _Web3StorageProvider;
 			else {
 				_Web3StorageProvider = new Web3StorageProvider();
 				_Web3StorageProvider.createInstance(options);
@@ -509,24 +506,11 @@ export const getProvider = (
 };
 
 export const recreateProvider = (
-	provider?: 'web3-storage' | 'ipfs-http',
+	provider?: ProviderType,
 	options?: {
 		apiKey: string;
 	}
 ) => {
 	provider = provider || 'web3-storage';
-	switch (provider) {
-		case 'ipfs-http':
-			if (_IPFSCustomProvider) _IPFSCustomProvider.destroy();
-			_IPFSCustomProvider = new IPFSWebProvider();
-			_IPFSCustomProvider.createInstance(options);
-			return _IPFSCustomProvider;
-		case 'web3-storage':
-			if (_Web3StorageProvider) _Web3StorageProvider.destroy();
-			_Web3StorageProvider = new Web3StorageProvider();
-			_Web3StorageProvider.createInstance(options);
-			return _Web3StorageProvider;
-		default:
-			throw new Error('invalid provider');
-	}
+	getProvider(provider, options, true);
 };

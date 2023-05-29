@@ -1,15 +1,12 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import storage from '../storage';
-import WebEvents from '../webEvents';
 import ChatGPTHeader from '../components/ChatGPTHeader';
-import { useHistory } from 'react-router-dom';
 import HeartIcon from '../components/Icons/HeartIcon';
 import ViewIcon from '../components/Icons/ViewIcon';
 import Loading from '../components/Loading';
 import { fetchPrompt } from '../gpt3';
 import Editor from 'react-simple-code-editor';
-
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-markup';
@@ -21,56 +18,133 @@ import config from '../config';
 
 function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
 	const [loading, setLoading] = useState(false);
-	const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
-	const eventEmitterCallbackRef = useRef(null);
-
+	const [hasCode, setHasCode] = useState(false);
 	const [percentage, setPercentage] = useState(0);
 	const [hasInput, setHasInput] = useState(false);
 	const [gptResult, setGptResult] = useState(
 		storage.getPagePreference('gptResult') || null
 	);
-	const [gptFinalPrompt, setGptFinalPrompt] = useState(
-		storage.getPagePreference('gptFinalPrompt') || null
-	);
 	const [gptPrompt, setGptPrompt] = useState(
 		storage.getPagePreference('gptPrompt') || null
 	);
+
 	const [gptError, setGptError] = useState(null);
 	const abortRef = useRef(null);
 	const inputElement = useRef(null);
 	const tempElement = useRef(null);
 	const nElement = useRef(null);
 	const libraryElement = useRef(null);
-	// eslint-disable-next-line no-unused-vars
-	const history = useHistory();
 
-	useEffect(() => {
-		if (storage.getGlobalPreference('defaultTheme')) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
+	/**
+	 * Called when the user clicks the "Generate" button
+	 */
+	const onPrompt = async () => {
+		setPercentage(0);
+		if (hasInput) {
+			setLoading(true);
+			setGptError(null);
+			setPercentage(50);
 
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (storage.getGlobalPreference('defaultTheme')) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
-		return () => {
 			if (abortRef.current !== null) abortRef.current.abort();
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
-		};
-	}, []);
+			abortRef.current = new AbortController();
 
-	if (inputElement?.current?.value?.length > 0 && !hasInput) {
-		setHasInput(true);
-	}
+			let prompt = inputElement.current.value;
+
+			//fixes some prompts breaking, will find a WAY better method for this LOL
+			prompt = prompt.replace(' Tailwind,', '');
+			prompt = prompt.replace(' css3,', '');
+			prompt = prompt.replace(' JQuery,', '');
+			prompt = prompt.replace(' javascript,', '');
+			prompt = prompt.replace(' Javascript,', '');
+			prompt = prompt.replace(' svg', '');
+			prompt = prompt.replace(' SVG', '');
+			prompt = prompt.replace(' jquery,', '');
+			prompt = prompt.replace(' canvas,', '');
+			prompt = prompt.replace(' Canvas,', '');
+			prompt = prompt.replace(' bootstrap4,', '');
+			prompt = prompt.replace(' Bootstrap4,', '');
+			prompt = prompt.replace(' bootstrap5,', '');
+			prompt = prompt.replace(' Bootstrap5,', '');
+			prompt = prompt.replace(' bootstrap 4,', '');
+			prompt = prompt.replace(' Bootstrap 4,', '');
+			prompt = prompt.replace(' bootstrap 5,', '');
+			prompt = prompt.replace(' Bootstrap 5,', '');
+			prompt = prompt.replace('Using HTML, ', '');
+
+			let stub = 'Using HTML, ' + libraryElement.current.value + ', ';
+			let end =
+				". Don't reference any local files. Don't include HTML opening and closing tag. Finish your answer.";
+
+			prompt = prompt.trim().replace('  ', ' ');
+			prompt = prompt.replace(stub, '');
+			prompt = prompt.replace(end, '');
+
+			//add create
+			if (
+				prompt
+					.split(' ')
+					.filter(
+						(word: string) =>
+							word.toLowerCase() === 'create' ||
+							word.toLowerCase() === 'make' ||
+							word.toLowerCase() === 'draw' ||
+							word.toLowerCase() === 'embed'
+					).length === 0
+			)
+				prompt = 'create ' + prompt;
+
+			storage.setPagePreference('gptPrompt', prompt);
+			storage.saveData();
+			//update
+			inputElement.current.value = prompt;
+
+			prompt = stub + prompt + end;
+
+			setPercentage(75);
+			const result = await fetchPrompt(prompt, abortRef.current, {
+				n: nElement?.current.value || 1,
+				temp: tempElement?.current.value || 0.6,
+			})
+				.catch((error) => {
+					setGptError(error);
+					setLoading(false);
+				})
+				.finally(() => {
+					abortRef.current = null;
+				});
+
+			storage.setPagePreference('gptPrompt', prompt);
+			storage.setPagePreference('gptResult', result);
+			storage.saveData();
+
+			setGptPrompt(prompt);
+			setPercentage(100);
+			setGptResult(result);
+			setLoading(false);
+		}
+	};
+
+	/**
+	 * Hack
+	 */
+	useEffect(() => {
+		if (inputElement?.current?.value?.length > 0 && !hasInput)
+			setHasInput(true);
+	}, [inputElement?.current?.value]);
+
+	/**
+	 * Checks if any of the tabs have code
+	 */
+	useEffect(() => {
+		let _hasCode = false;
+		for (let key in tabs) {
+			if (tabs[key].code !== '') {
+				_hasCode = true;
+				break;
+			}
+		}
+		setHasCode(_hasCode);
+	}, []);
 
 	// disables scrolling while this modal is active
 	useEffect(() => {
@@ -78,17 +152,13 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
 		else document.body.style.overflow = 'auto';
 	}, [hidden]);
 
-	let hasCode = false;
-	for (let key in tabs) {
-		if (tabs[key].code !== '') {
-			hasCode = true;
-			break;
-		}
-	}
-
 	return (
 		<div
-			data-theme={currentTheme}
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
 			className="mx-auto sm:w-full md:w-full lg:w-5/6 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
 			hidden={hidden}
 		>
@@ -258,192 +328,7 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
 										data-loading={loading}
 										type="submit"
 										disabled={loading || !hasInput}
-										onClick={async () => {
-											setPercentage(0);
-											if (hasInput) {
-												setGptPrompt(null);
-												setLoading(true);
-												setGptError(null);
-												setPercentage(50);
-
-												if (abortRef.current !== null)
-													abortRef.current.abort();
-												abortRef.current =
-													new AbortController();
-
-												let prompt =
-													inputElement.current.value;
-
-												//fixes some prompts breaking, will find a WAY better method for this LOL
-												prompt = prompt.replace(
-													' Tailwind,',
-													''
-												);
-												prompt = prompt.replace(
-													' css3,',
-													''
-												);
-												prompt = prompt.replace(
-													' JQuery,',
-													''
-												);
-												prompt = prompt.replace(
-													' javascript,',
-													''
-												);
-												prompt = prompt.replace(
-													' Javascript,',
-													''
-												);
-												prompt = prompt.replace(
-													' svg',
-													''
-												);
-												prompt = prompt.replace(
-													' SVG',
-													''
-												);
-												prompt = prompt.replace(
-													' jquery,',
-													''
-												);
-												prompt = prompt.replace(
-													' canvas,',
-													''
-												);
-												prompt = prompt.replace(
-													' Canvas,',
-													''
-												);
-												prompt = prompt.replace(
-													' bootstrap4,',
-													''
-												);
-												prompt = prompt.replace(
-													' Bootstrap4,',
-													''
-												);
-												prompt = prompt.replace(
-													' bootstrap5,',
-													''
-												);
-												prompt = prompt.replace(
-													' Bootstrap5,',
-													''
-												);
-												prompt = prompt.replace(
-													' bootstrap 4,',
-													''
-												);
-												prompt = prompt.replace(
-													' Bootstrap 4,',
-													''
-												);
-												prompt = prompt.replace(
-													' bootstrap 5,',
-													''
-												);
-												prompt = prompt.replace(
-													' Bootstrap 5,',
-													''
-												);
-												prompt = prompt.replace(
-													'Using HTML, ',
-													''
-												);
-
-												let stub =
-													'Using HTML, ' +
-													libraryElement.current
-														.value +
-													', ';
-												let end =
-													". Don't reference any local files. Don't include HTML opening and closing tag. Finish your answer.";
-
-												prompt = prompt
-													.trim()
-													.replace('  ', ' ');
-												prompt = prompt.replace(
-													stub,
-													''
-												);
-												prompt = prompt.replace(
-													end,
-													''
-												);
-
-												//add create
-												if (
-													prompt
-														.split(' ')
-														.filter(
-															(word: string) =>
-																word.toLowerCase() ===
-																	'create' ||
-																word.toLowerCase() ===
-																	'make' ||
-																word.toLowerCase() ===
-																	'draw' ||
-																word.toLowerCase() ===
-																	'embed'
-														).length === 0
-												)
-													prompt = 'create ' + prompt;
-
-												setGptPrompt(prompt);
-												storage.setPagePreference(
-													'gptPrompt',
-													prompt
-												);
-												storage.saveData();
-												//update
-												inputElement.current.value =
-													prompt;
-
-												prompt = stub + prompt + end;
-
-												setPercentage(75);
-												const result =
-													await fetchPrompt(
-														prompt,
-														abortRef.current,
-														{
-															n:
-																nElement
-																	?.current
-																	.value || 1,
-															temp:
-																tempElement
-																	?.current
-																	.value ||
-																0.6,
-														}
-													)
-														.catch((error) => {
-															setGptError(error);
-															setLoading(false);
-														})
-														.finally(() => {
-															abortRef.current =
-																null;
-														});
-
-												storage.setPagePreference(
-													'gptFinalPrompt',
-													prompt
-												);
-												storage.setPagePreference(
-													'gptResult',
-													result
-												);
-												storage.saveData();
-
-												setGptFinalPrompt(prompt);
-												setPercentage(100);
-												setGptResult(result);
-												setLoading(false);
-											}
-										}}
+										onClick={onPrompt}
 										className="btn bg-success text-black hover:bg-black hover:text-yellow-500"
 									>
 										Ask
@@ -455,10 +340,10 @@ function ChatGPTModal({ hidden, onHide, onSetHTML = (code) => {}, tabs = {} }) {
 							<div className="flex flex-col gap-2 mt-4">
 								<p
 									className="break-words"
-									hidden={gptFinalPrompt === null}
+									hidden={gptPrompt === null}
 								>
 									<span className="badge badge-lg mr-2 text-white h-full w-full rounded-none p-2">
-										🤖 {gptFinalPrompt || ''}
+										🤖 {gptPrompt || ''}
 									</span>
 								</p>
 								{gptResult?.choices?.map((choice, index) => {

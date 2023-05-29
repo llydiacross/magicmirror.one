@@ -8,41 +8,22 @@ import { Web3Context } from '../contexts/web3Context';
 
 export default function LoginModal({ hidden, onLogin, onHide }: any) {
 	const [loading, setLoading] = useState(false);
-	const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
-	const eventEmitterCallbackRef = useRef(null);
 	const loginContext = useContext(LoginContext);
 	const web3Context = useContext(Web3Context);
-
-	useEffect(() => {
-		if (storage.getGlobalPreference('defaultTheme')) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
-
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (storage.getGlobalPreference('defaultTheme')) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
-		return () => {
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
-		};
-	}, []);
 
 	// Disables scrolling while this modal is active
 	useEffect(() => {
 		if (!hidden) document.body.style.overflow = 'hidden';
 		else document.body.style.overflow = 'auto';
 	}, [hidden]);
+
 	return (
 		<div
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
 			className="mx-auto sm:w-3/5 md:w-3/5 lg:w-4/5 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
 			hidden={hidden}
 		>

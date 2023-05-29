@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect } from 'react';
-import Header from '../components/Header';
 import PropTypes from 'prop-types';
 import { useLogin } from '../effects/useLogin';
 

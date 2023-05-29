@@ -1,6 +1,9 @@
 import OnBoard from 'bnc-onboard';
 import WebEvents from './webEvents';
 
+/**
+ * Client configuration for the app
+ */
 const config = {
 	onboard: OnBoard({
 		dappId: 'a67bbab8-49d6-4fb3-88d3-2446be6c37d7',

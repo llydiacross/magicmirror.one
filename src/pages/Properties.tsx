@@ -30,7 +30,10 @@ export default function Properties() {
 	const history = useHistory();
 	const loginContext = useContext(LoginContext);
 
-	let getAllEns = async () => {
+	/**
+	 * Returns all the ENS names owned by the current user for the current page
+	 */
+	const getAllEns = async () => {
 		setHasSearched(false);
 		setLoading(true);
 		setError(null);
@@ -48,7 +51,10 @@ export default function Properties() {
 		setLoading(false);
 	};
 
-	let fetchENS = async () => {
+	/**
+	 * Will refetch ENS addresses on the server. Call this when you want to refresh the ENS list
+	 */
+	const fetchENS = async () => {
 		setHasSearched(false);
 		setLoading(true);
 		setError(null);
@@ -65,7 +71,11 @@ export default function Properties() {
 		setLoading(false);
 	};
 
-	let searchENS = async () => {
+	/**
+	 * Will search for ENS names on the server. Call this when you want to search for ENS names
+	 * @returns
+	 */
+	const searchENS = async () => {
 		if (searchTerm === '') return;
 
 		setHasSearched(true);
@@ -88,7 +98,11 @@ export default function Properties() {
 		else setENS(result.nfts || []);
 	};
 
-	let getCount = async () => {
+	/**
+	 * Returns the count of all ENS names owned by the current user
+	 * @returns
+	 */
+	const getCount = async () => {
 		setLoading(true);
 		setError(null);
 		let result = await apiFetch(
@@ -106,71 +120,9 @@ export default function Properties() {
 		return result.count;
 	};
 
-	useEffect(() => {
-		if (!context.loaded || !loginContext.isSignedIn) return;
-
-		if (searchTerm === '') getAllEns().catch((err) => setError(err));
-		else searchENS().catch((err) => setError(err));
-
-		if (!hasSearched) storage.setPagePreference('page', page);
-	}, [page]);
-
-	useEffect(() => {
-		if (!context.loaded || !loginContext.isSignedIn) return;
-		if (searchTerm === '' && lastSearchTerm !== '') {
-			setPage(0);
-			getAllEns().catch((err) => setError(err));
-		}
-
-		storage.setPagePreference('searchTerm', searchTerm);
-	}, [searchTerm]);
-
-	useEffect(() => {
-		if (!context.loaded || !loginContext.loaded) return;
-		if (!loginContext.isSignedIn) return;
-
-		let main = async () => {
-			let count = await getCount();
-			if (count > 0) getAllEns();
-			else {
-				if (!storage.getPagePreference('firstTime')) {
-					await fetchENS();
-					storage.setPagePreference('firstTime', true);
-				}
-			}
-		};
-
-		main()
-			.catch((err) => {
-				console.log(err);
-				setError(err);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	}, [context, loginContext]);
-
-	useEffect(() => {
-		const func = (e) => {
-			if (e.key === 'ArrowLeft')
-				setPage((val) => {
-					return val - 1 >= 0 ? val - 1 : val;
-				});
-
-			if (e.key === 'ArrowRight')
-				setPage((val) => {
-					if (val + 1 < Math.ceil(count / pageMax)) return val + 1;
-					return val;
-				});
-		};
-
-		document.addEventListener('keydown', func);
-
-		return () => {
-			document.removeEventListener('keydown', func);
-		};
-	}, []);
-
+	/**
+	 * is an array of ENS components
+	 */
 	let renderedEns = (ens || [])
 		.filter((item, index) => {
 			let filtered = false;
@@ -334,6 +286,83 @@ export default function Properties() {
 				</div>
 			);
 		});
+
+	/**
+	 * Kinda hacky
+	 */
+	useEffect(() => {
+		if (!context.loaded || !loginContext.isSignedIn) return;
+
+		if (searchTerm === '') getAllEns().catch((err) => setError(err));
+		else searchENS().catch((err) => setError(err));
+
+		if (!hasSearched) storage.setPagePreference('page', page);
+	}, [page]);
+
+	/**
+	 * Save search term
+	 */
+	useEffect(() => {
+		if (!context.loaded || !loginContext.isSignedIn) return;
+		if (searchTerm === '' && lastSearchTerm !== '') {
+			setPage(0);
+			getAllEns().catch((err) => setError(err));
+		}
+
+		storage.setPagePreference('searchTerm', searchTerm);
+	}, [searchTerm]);
+
+	/**
+	 * If the user is viewing the page for the first time, fetch all ENS
+	 */
+	useEffect(() => {
+		if (!context.loaded || !loginContext.loaded) return;
+		if (!loginContext.isSignedIn) return;
+
+		let main = async () => {
+			let count = await getCount();
+			if (count > 0) getAllEns();
+			else {
+				if (!storage.getPagePreference('firstTime')) {
+					await fetchENS();
+					storage.setPagePreference('firstTime', true);
+				}
+			}
+		};
+
+		main()
+			.catch((err) => {
+				console.log(err);
+				setError(err);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}, [context, loginContext]);
+
+	/**
+	 * Page navigation with arrow keys
+	 */
+	useEffect(() => {
+		const func = (e) => {
+			if (e.key === 'ArrowLeft')
+				setPage((val) => {
+					return val - 1 >= 0 ? val - 1 : val;
+				});
+
+			if (e.key === 'ArrowRight')
+				setPage((val) => {
+					if (val + 1 < Math.ceil(count / pageMax)) return val + 1;
+					return val;
+				});
+		};
+
+		document.addEventListener('keydown', func);
+
+		return () => {
+			document.removeEventListener('keydown', func);
+		};
+	}, []);
 
 	return (
 		<div

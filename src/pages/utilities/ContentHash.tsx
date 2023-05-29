@@ -11,6 +11,7 @@ export default function ContentHash() {
 	const hash = useRef(null);
 	const [decoded, setDecoded] = useState('');
 	const [error, setError] = useState(null);
+
 	const decode = () => {
 		setError(null);
 		try {

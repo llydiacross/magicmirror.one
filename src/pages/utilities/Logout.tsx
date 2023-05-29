@@ -1,10 +1,7 @@
 import FixedElements from '../../components/FixedElements';
-import { ethers } from 'ethers';
 import { useHistory } from 'react-router-dom';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { LoginContext } from '../../contexts/loginContext';
-import { apiFetch } from '../../api';
-import WebEvents from '../../webEvents';
 import storage from '../../storage';
 import config from '../../config';
 import Navbar from '../../components/Navbar';

@@ -7,13 +7,23 @@ import storage from '../storage';
 import config from '../config';
 import { LoginContext } from '../contexts/loginContext';
 
-// Handle for the typeWriter animation
+/**
+ *
+ * @param param0
+ * @returns
+ */
 function Header({
 	theme,
 	title,
 	typeWriterSpeed = 75,
 	initialText = 'Where will you go today?',
 	showFinder = true,
+}: {
+	theme?: string;
+	title?: string;
+	typeWriterSpeed?: number;
+	initialText?: string;
+	showFinder?: boolean;
 }) {
 	const history = useHistory();
 	const pickDestinationHandle = useRef(null);

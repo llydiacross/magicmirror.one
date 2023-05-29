@@ -11,35 +11,10 @@ function SettingsModal({ hidden, onHide }) {
 	const ipfsCompanionRef = useRef(null);
 	const defaultThemeRef = useRef(null);
 	const context = useContext(Web3Context);
-	const [currentTheme, setCurrentTheme] = useState('forest');
 	const [currentIPFSProvider, setCurrentIPFSProvider] = useState(
 		storage.getGlobalPreference('ipfsProvider') || 'web3.storage'
 	);
-	const eventEmitterCallbackRef = useRef(null);
 	const history = useHistory();
-
-	useEffect(() => {
-		if (storage.getGlobalPreference('defaultTheme')) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
-
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (storage.getGlobalPreference('defaultTheme')) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
-		return () => {
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
-		};
-	}, []);
 
 	// Disables scrolling while this modal is active
 	useEffect(() => {
@@ -49,7 +24,11 @@ function SettingsModal({ hidden, onHide }) {
 
 	return (
 		<div
-			data-theme={currentTheme}
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
 			className="mx-auto sm:w-3/5 md:w-3/5 lg:w-4/5 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
 			hidden={hidden}
 		>

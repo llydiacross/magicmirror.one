@@ -8,7 +8,7 @@ import WebEvents from '../webEvents';
 import HeartIcon from '../components/Icons/HeartIcon';
 import ViewIcon from '../components/Icons/ViewIcon';
 import config from '../config';
-import { recreateProvider } from '../ipfs';
+import { getProvider, recreateProvider } from '../ipfs';
 import Loading from '../components/Loading';
 import { Web3ContextType } from '../contexts/web3Context';
 import { ENSContext } from '../contexts/ensContext';
@@ -33,8 +33,7 @@ function PublishModal({
 }) {
 	const context = useContext<Web3ContextType>(Web3Context);
 	const ensContext = useContext(ENSContext);
-	const [currentTheme, setCurrentTheme] = useState(config.defaultTheme);
-	const eventEmitterCallbackRef = useRef(null);
+
 	const [loading, setLoading] = useState(false);
 	const [savedCid, setSavedCid] = useState(storage.getPagePreference('cid'));
 	const [error, setError] = useState(null);
@@ -64,8 +63,8 @@ function PublishModal({
 
 	const publish = async () => {
 		setLoading(true);
-		let ipfsProvider = recreateProvider('web3-storage');
 
+		let ipfsProvider = getProvider('web3-storage');
 		let files = Object.values(tabs).map((tab: any) => {
 			let name = tab.name;
 
@@ -128,29 +127,6 @@ function PublishModal({
 		setLoading(false);
 	};
 
-	useEffect(() => {
-		if (storage.getGlobalPreference('defaultTheme')) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
-
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (storage.getGlobalPreference('defaultTheme')) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
-		return () => {
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
-		};
-	}, []);
-
 	// Disables scrolling while this modal is active
 	useEffect(() => {
 		if (!hidden) document.body.style.overflow = 'hidden';
@@ -175,7 +151,11 @@ function PublishModal({
 
 	return (
 		<div
-			data-theme={currentTheme}
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') ||
+				config.defaultTheme ||
+				'forest'
+			}
 			className="mx-auto sm:w-3/5 md:w-3/5 lg:w-4/5 fixed inset-0 flex items-center overflow-y-auto z-50 bg-transparent"
 			hidden={hidden}
 		>

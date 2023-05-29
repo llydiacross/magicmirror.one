@@ -4,7 +4,7 @@ import WebEvents from '../webEvents';
 import storage from '../storage';
 
 // Handle for the typeWriter animation
-function Hero({ theme, children }: any) {
+function Hero({ theme, children }: { theme?: string; children?: any }) {
 	const [currentTheme, setCurrentTheme] = useState(theme || null);
 	const eventEmitterCallbackRef = useRef(null);
 	const themeRef = useRef(theme || null);
