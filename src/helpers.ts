@@ -3,6 +3,36 @@ import { ethers } from 'ethers';
 import { prepareAvatar } from './effects/useENSContext';
 import contentHash from 'content-hash';
 import { CID } from 'multiformats';
+import { resolveIPNS } from './ipfs';
+
+/**
+ * Will fetch content from a given URL and return the parsed HTML, script and style
+ * @param contentIndex
+ * @returns
+ */
+export const fetchContent = async (contentIndex: string = 'audio.html') => {
+	if (contentIndex[0] !== '/') contentIndex = '/' + contentIndex;
+	// Get the default content
+	const defaultContent = await fetch(contentIndex);
+	const html = await defaultContent.text();
+	//take everything inbetween script tags
+	let script = html.match(/<script>(.*?)<\/script>/s);
+	let fScript = (script[1] as any) || '';
+	//take everything inbetween style tags
+	let style = html.match(/<style>(.*?)<\/style>/s);
+	let fStyle = (style[1] as any) || '';
+
+	//remove script tags from html
+	let parsedHTML = html.replace(/<script>(.*?)<\/script>/s, '');
+
+	//also remove script tags that have attributes in the tag
+	parsedHTML = parsedHTML.replace(/<script(.*?)>(.*?)<\/script>/s, '');
+
+	//remove style tags
+	parsedHTML = parsedHTML.replace(/<style>(.*?)<\/style>/s, '');
+
+	return { parsedHTML, script: fScript, style: fStyle };
+};
 
 /**
  *
@@ -21,6 +51,30 @@ export const fetchIPFSFromEndpoint = async (
 		else return await result.blob();
 	}
 	return null;
+};
+
+/**
+ * Will check if the potential cid is an ipfs or ipns hash and resolve it to a CID always
+ * @param potentialCID
+ * @param abortController
+ * @returns
+ */
+export const resolvePotentialCID = async (
+	potentialCID: string,
+	abortController?: AbortController
+) => {
+	if (potentialCID.includes('ipfs://'))
+		potentialCID = potentialCID.split('ipfs://')[1];
+	else if (potentialCID.includes('ipns://')) {
+		potentialCID = potentialCID.split('ipns://')[1];
+		potentialCID = await resolveIPNS(potentialCID, abortController);
+	}
+
+	if (potentialCID.includes('ipfs/'))
+		potentialCID = potentialCID.split('ipfs/')[1];
+
+	potentialCID = potentialCID.split('/')[0];
+	return potentialCID;
 };
 
 /**
