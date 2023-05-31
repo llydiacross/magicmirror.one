@@ -35,6 +35,7 @@ const config: InfinityMintClientConfig = {
 		},
 		default: {
 			dev: 'magicmirror@1.0.0_ganache',
+			production: 'magicmirror@1.0.0_polygon',
 		},
 		useInfinityMintApi: true,
 	},
