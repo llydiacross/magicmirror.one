@@ -19,9 +19,9 @@ import Leaderboard from './pages/Leaderboard';
 import HistoryCapture from './components/HistoryCapture';
 import History from './pages/History';
 import ClientProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
-import config from 'infinitymint-client/dist/src/infinitymint.client.config';
 import VirtualRegistry from './pages/VirtualRegistry';
 import ENS from './pages/ENS';
+import config from './infinitymint.client.config';
 
 function App() {
 	return (
