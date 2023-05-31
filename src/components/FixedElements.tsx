@@ -174,7 +174,7 @@ function FixedElements({
 					)}
 					<div>
 						<img
-							src={ensContext.avatar || '/img/0x0zLogo.jpg'}
+							src={ensContext.avatar || '/img/magicmirrorLogo.jpg'}
 							alt="Magic🪞"
 							className="w-24 cursor-pointer"
 							onClick={() => {

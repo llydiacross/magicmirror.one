@@ -15,7 +15,7 @@ export default function Navbar() {
 							history.push('/');
 						}}
 					>
-						MAGIC🪞.ETH
+						MAGIC🪞
 					</button>
 					<button
 						className="hover:bg-accent hover:text-black text-white font-bold py-2 px-4 rounded"
@@ -26,7 +26,7 @@ export default function Navbar() {
 							history.push('/utilities/');
 						}}
 					>
-						🧰TIME.ETH
+						🧰TIME
 					</button>
 					<button
 						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
@@ -37,7 +37,7 @@ export default function Navbar() {
 							history.push('/properties/');
 						}}
 					>
-						🍬LAND.eth
+						🍬LAND
 					</button>
 					<button
 						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
@@ -48,7 +48,7 @@ export default function Navbar() {
 							history.push('/leaderboard/top');
 						}}
 					>
-						🔥️1️⃣0️⃣0️⃣.eth
+						🔥️1️⃣0️⃣0️⃣
 					</button>
 					<button
 						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
@@ -57,7 +57,7 @@ export default function Navbar() {
 							history.push('/history');
 						}}
 					>
-						📍egps.eth
+						📍EGPS
 					</button>
 					<button
 						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
@@ -66,7 +66,7 @@ export default function Navbar() {
 							history.push('/ide');
 						}}
 					>
-						DREAM🎨.ETH STUDIO
+						DREAM🎨
 					</button>
 				</div>
 			</div>
