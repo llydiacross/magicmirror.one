@@ -57,7 +57,7 @@ export default function Leaderboard() {
 			<div className="flex flex-row bg-primary pt-4 mb-5">
 				<div className="flex flex-col w-2/5 p-2">
 					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-					The <u>🔥️1️⃣0️⃣0️⃣.eth</u>
+					<u>🔥️1️⃣0️⃣0️⃣.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
