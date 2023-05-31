@@ -287,11 +287,11 @@ const config = {
 	fakeRegistryFields: {
 		contentHash: {
 			type: 'string',
-			help: 'You create your content hash from your IPFS link, go to the content hash utility page to create one or set your content through the IDE.',
+			help: 'You create an ENS Content Hash from your IPFS link. Go to the Content Hash utility page to create one or set your content through our IDE, the Dream🎨 Studio.',
 		},
 		avatar: {
 			type: 'string',
-			help: 'Your avatar is an image which is attached to the ENS. You can use a direct link or a link to an ERC721 token.',
+			help: 'Your avatar is an image which is attached to your ENS name. You can use a direct link or a link to an ERC721 token.',
 		},
 		contentType: {
 			type: 'select',
@@ -305,7 +305,7 @@ const config = {
 				'application',
 				'website',
 			],
-			help: 'Helps the browser know how to display your content. This is set automatically when you set your content through the IDE.',
+			help: 'Helps the browser know how to display your content. This is set automatically when you set your content through our IDE, the Dream🎨 Studio.',
 		},
 		twitter: {
 			type: 'string',
@@ -339,7 +339,7 @@ const config = {
 		},
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
-	defaultTheme: 'forest',
+	defaultTheme: '0x0z_light',
 	themes: [
 		'Ox0z_light',
 		'Ox0z_dark',
@@ -394,10 +394,12 @@ const config = {
 		'winter',
 	],
 	resolvers: [
+		//Mirror,Resolver
 		['.vision', 'ens.vision'],
-		['.im', ''],
+		['.im', 'infinitymint.app'],
 		['.infinitymint', '.eth'],
 		['.ethereum', '.eth'],
+		['.art','.art']
 	],
 };
 
