@@ -135,8 +135,8 @@ export class StorageController {
 	 * @returns
 	 */
 	getPagePreference(key: string, id?: any, log = true) {
-		if (id !== null && typeof id !== 'string') {
-			id = id.id || id.name || 'default';
+		if (id && typeof id !== 'string') {
+			id = id?.id || id?.name || 'default';
 		} else if (
 			id === null ||
 			(typeof id === 'string' && id.toLowerCase() === 'global')

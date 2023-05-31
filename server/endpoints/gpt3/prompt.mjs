@@ -22,6 +22,7 @@ export const post = async (req, res) => {
 	let n = parseInt(req.body.n) || 2;
 	if (isNaN(n)) n = 2;
 	if (n > 6) n = 6;
+	if (n < 0) n = 1;
 
 	try {
 		const completion = await server.openAI.createCompletion({
