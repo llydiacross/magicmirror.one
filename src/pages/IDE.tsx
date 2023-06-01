@@ -22,6 +22,7 @@ import { IPFSDirectory, IPFSStats, getStats, resolveDirectory } from '../ipfs';
 import NewProjectModal from '../modals/NewProjectModal';
 import { prettifyCode } from '../helpers';
 import config from '../config';
+import Navbar from '../components/Navbar';
 
 const defaultTabs = {
 	html: {
@@ -179,6 +180,8 @@ function IDE({ theme }) {
 				'0x0z Light'
 			}
 		>
+			<Navbar />
+			
 			<div className="flex flex-col lg:flex-row w-full overflow-hidden">
 				<div
 					style={{
