@@ -18,7 +18,7 @@ const magicmirror: InfinityMintProject = {
 	},
 	paths: [
 		{
-			name: 'Magic Ticket',
+			name: 'Magic🎫',
 			fileName: '/imports/ticket.svg',
 			settings: true,
 			content: {
