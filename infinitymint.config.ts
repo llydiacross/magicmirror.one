@@ -1,15 +1,11 @@
 import { InfinityMintConfig } from 'infinitymint/dist/app/interfaces';
-import {
-	getExpressConfig,
-	readGlobalSession,
-} from 'infinitymint/dist/app/helpers';
+import { readGlobalSession } from 'infinitymint/dist/app/helpers';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
-import cors from 'cors';
-import { ServerOptions } from 'ganache';
 
 //the session
 let session = readGlobalSession();
+
 //please visit docs.infinitymint.app
 const config: InfinityMintConfig = {
 	console: {
@@ -36,32 +32,13 @@ const config: InfinityMintConfig = {
 		],
 		startup: async (server) => {
 			let app = server.app;
-			let config = getExpressConfig();
 
 			//helmet
 			app.use(helmet());
 
-			//allows CORS headers to work
-			app.use((_, res, next) => {
-				res.header(
-					'Access-Control-Allow-Headers',
-					'Origin, X-Requested-With, Content-Type, Accept'
-				);
-
-				next();
-			});
-
 			//the json body parser
 			app.use(bodyParser.json());
 			app.use(bodyParser.urlencoded({ extended: true }));
-			app.use(
-				cors({
-					origin:
-						config.cors && config.cors.length !== 0
-							? config.cors
-							: '*',
-				})
-			);
 		},
 	},
 	hardhat: {
@@ -131,7 +108,7 @@ const config: InfinityMintConfig = {
 			totalAccounts: 20,
 			defaultBalance: 69420,
 		},
-	} as ServerOptions,
+	},
 	settings: {
 		networks: {
 			hardhat: {
@@ -166,6 +143,7 @@ const config: InfinityMintConfig = {
 	export: {},
 };
 
+//the magic mirror
 (config as any).magicMirror = {
 	pageMax: 100,
 	/**
@@ -198,16 +176,7 @@ const config: InfinityMintConfig = {
 	/**
 	 * CORS allowed origins, can be set to an empty array or removed to allow all origins
 	 */
-	cors: [
-		'http://localhost:3000',
-		'https://webx.infinitymint.app',
-		'https://magicmirror.one',
-		'https://reflect.magicmirror.one',
-		'https://geocities.com',
-		'https://infinitymint.app',
-		'https://web.infinitymint.app',
-		'https://web-api.infinitymint.app',
-	],
+	cors: (config.express as any)?.cors || ['*'],
 };
 
 export default config;

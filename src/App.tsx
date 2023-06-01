@@ -25,77 +25,75 @@ import config from './infinitymint.client.config';
 
 function App() {
 	return (
-		<ClientProvider config={config}>
-			<Web3ContextProvider>
-				<LoginContextProvider>
-					<ENSContextProvider>
-						<BrowserRouter>
-							<HistoryCapture>
-								<Switch>
-									<Route path="/ide">
-										<IDE />
-									</Route>
-									<Route exact path="/">
-										<Index />
-									</Route>
-									<Route exact path="/index">
-										<Index />
-									</Route>
-									<Route path="/view/:token">
-										<Viewer />
-									</Route>
-									<Route path="/viewer/:token">
-										<Viewer />
-									</Route>
-									<Route path="/🧱/:token">
-										<Viewer />
-									</Route>
-									<Route path="/registry/:domain">
-										<VirtualRegistry />
-									</Route>
-									<Route path="/ens/:domain">
-										<ENS />
-									</Route>
-									<Route exact path="/utilities/converter">
-										<Converter />
-									</Route>
-									<Route exact path="/utilities/contenthash">
-										<ContentHash />
-									</Route>
-									<Route exact path="/utilities/ens">
-										<ENSLookup />
-									</Route>
-									<Route exact path="/utilities/">
-										<Dashboard />
-									</Route>
-									<Route exact path="/utilities/namehash">
-										<NameHash />
-									</Route>
-									<Route exact path="/utilities/user">
-										<User />
-									</Route>
-									<Route exact path="/utilities/logout">
-										<Logout />
-									</Route>
-									<Route exact path="/properties">
-										<Properties />
-									</Route>
-									<Route exact path="/leaderboard/top">
-										<Leaderboard />
-									</Route>
-									<Route exact path="/history">
-										<History />
-									</Route>
-									<Route exact path="*">
-										<NotFound />
-									</Route>
-								</Switch>
-							</HistoryCapture>
-						</BrowserRouter>
-					</ENSContextProvider>
-				</LoginContextProvider>
-			</Web3ContextProvider>
-		</ClientProvider>
+		<Web3ContextProvider>
+			<LoginContextProvider>
+				<ENSContextProvider>
+					<BrowserRouter>
+						<HistoryCapture>
+							<Switch>
+								<Route path="/ide">
+									<IDE />
+								</Route>
+								<Route exact path="/">
+									<Index />
+								</Route>
+								<Route exact path="/index">
+									<Index />
+								</Route>
+								<Route path="/view/:token">
+									<Viewer />
+								</Route>
+								<Route path="/viewer/:token">
+									<Viewer />
+								</Route>
+								<Route path="/🧱/:token">
+									<Viewer />
+								</Route>
+								<Route path="/registry/:domain">
+									<VirtualRegistry />
+								</Route>
+								<Route path="/ens/:domain">
+									<ENS />
+								</Route>
+								<Route exact path="/utilities/converter">
+									<Converter />
+								</Route>
+								<Route exact path="/utilities/contenthash">
+									<ContentHash />
+								</Route>
+								<Route exact path="/utilities/ens">
+									<ENSLookup />
+								</Route>
+								<Route exact path="/utilities/">
+									<Dashboard />
+								</Route>
+								<Route exact path="/utilities/namehash">
+									<NameHash />
+								</Route>
+								<Route exact path="/utilities/user">
+									<User />
+								</Route>
+								<Route exact path="/utilities/logout">
+									<Logout />
+								</Route>
+								<Route exact path="/properties">
+									<Properties />
+								</Route>
+								<Route exact path="/leaderboard/top">
+									<Leaderboard />
+								</Route>
+								<Route exact path="/history">
+									<History />
+								</Route>
+								<Route exact path="*">
+									<NotFound />
+								</Route>
+							</Switch>
+						</HistoryCapture>
+					</BrowserRouter>
+				</ENSContextProvider>
+			</LoginContextProvider>
+		</Web3ContextProvider>
 	);
 }
 
