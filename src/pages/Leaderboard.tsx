@@ -54,16 +54,16 @@ export default function Leaderboard() {
 			}
 		>
 			<Navbar />
-			<div className="flex flex-row bg-primary pt-4 mb-5">
+			<div className="flex flex-row bg-gray-500 pt-4 mb-5">
 				<div className="flex flex-col w-2/5 p-2">
 					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-					<u>🔥️1️⃣0️⃣0️⃣.eth</u>
+						<u>🔥️1️⃣0️⃣0️⃣.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
-					<p className="text-3xl text-accent">
-						See what names hot or not, which ones are going from an ember to the stars with our ENS
-						Leaderboards!
+					<p className="text-3xl text-black">
+						See what names hot or not, which ones are going from an
+						ember to the stars with our ENS Leaderboards!
 					</p>
 				</div>
 			</div>
@@ -72,7 +72,9 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (All Time) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-						🔥️1️⃣0️⃣0️⃣<br />(All Time)
+							🔥️1️⃣0️⃣0️⃣
+							<br />
+							(All Time)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -168,7 +170,9 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (Last Hour) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-						🔥️1️⃣0️⃣0️⃣<br />(Last Hour)
+							🔥️1️⃣0️⃣0️⃣
+							<br />
+							(Last Hour)
 						</div>
 					</div>
 					<div className="flex flex-col">
@@ -264,7 +268,8 @@ export default function Leaderboard() {
 					{/** Top 100 Domains (Last Day) */}
 					<div className="flex flex-row justify-center p-2">
 						<div className="text-3xl text-center font-bold mt-2">
-						🔥️1️⃣0️⃣0️⃣<br /> (Last Day)
+							🔥️1️⃣0️⃣0️⃣
+							<br /> (Last Day)
 						</div>
 					</div>
 					<div className="flex flex-col">

@@ -181,7 +181,7 @@ function IDE({ theme }) {
 			}
 		>
 			<Navbar />
-			
+
 			<div className="flex flex-col lg:flex-row w-full overflow-hidden">
 				<div
 					style={{
@@ -190,8 +190,9 @@ function IDE({ theme }) {
 								? width + '%'
 								: '100%',
 						minWidth: '536px',
+						maxHeight: 'calc(100vh - 124px)',
 					}}
-					className="w-full overflow-y-scroll overflow-x-hidden min-h-screen max-h-screen"
+					className="w-full overflow-y-scroll overflow-x-hidden"
 					hidden={!showCode || (overlayPreview && !showPreview)}
 				>
 					<div
@@ -358,6 +359,7 @@ function IDE({ theme }) {
 								: `${showPreview ? '100' : '0'}%`,
 						borderLeft: '1px solid black',
 						minWidth: '375px',
+						maxHeight: 'calc(100vh - 124px)',
 						...(overlayPreview
 							? {
 									position: 'absolute',
@@ -511,100 +513,93 @@ function IDE({ theme }) {
 							</div>
 						)}
 					</div>
-					<div
-						className={
-							'w-full bg-gray-700 border-1 border-black p-2 ' +
-							(showPreview
-								? 'flex flex-col lg:flex-row md:flex-row'
-								: 'flex flex-col') +
-							' ' +
-							(overlayPreview && showPreview ? 'h-40' : '')
-						}
-					>
-						<button
-							className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
-							onClick={() => setShowPreview(!showPreview)}
-						>
-							{!showPreview ? 'Show Preview' : 'Hide Preview'}
-						</button>
-						<button
-							className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
-							onClick={() => setShowCode(!showCode)}
-						>
-							{!showCode ? 'Show Code' : 'Hide Code'}
-						</button>
-						<button
-							className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
-							onClick={() => setOverlayPreview(!overlayPreview)}
-						>
-							{!overlayPreview ? 'Overlay' : 'Stop Overlaying'}
-						</button>
-						<button
-							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
-							title="Save"
-						>
-							💾
-						</button>
-						<button
-							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
-							title="Open"
-						>
-							📁
-						</button>
-						<button
-							className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
-							onClick={() => {
-								let newCode = prettifyCode(
-									currentCode,
-									selectedTab
-								);
-								setCode(newCode);
-								storage.setPagePreference(selectedTab, newCode);
-								storage.saveData();
-							}}
-							title="Prettify🧹Code"
-						>
-							🧹
-						</button>
-						<button
-							className={
-								'btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black ' +
-								(shouldShowDebug ? 'bg-success' : 'bg-info')
-							}
-							onClick={() => {
-								setShouldShowDebug(!shouldShowDebug);
-							}}
-							title="Debug🐛Data"
-						>
-							🐛
-						</button>
-						<button
-							className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
-							onClick={() => {
-								setShouldShowSettings(!shouldShowSettings);
-							}}
-							title="⚙️Settings.eth"
-						>
-							⚙️
-						</button>
-						<button
-							className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
-							onClick={() => {
-								history.push('/');
-							}}
-						>
-							🪞
-						</button>
-						<button
-							className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
-							onClick={() => {
-								history.push('/properties');
-							}}
-						>
-							🍬
-						</button>
-					</div>
 				</div>
+			</div>
+			<div
+				className={
+					'w-full bg-gray-700 border-1 border-black p-2 ' +
+					'flex flex-col lg:flex-row md:flex-row'
+				}
+			>
+				<button
+					className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
+					onClick={() => setShowPreview(!showPreview)}
+				>
+					{!showPreview ? 'Show Preview' : 'Hide Preview'}
+				</button>
+				<button
+					className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
+					onClick={() => setShowCode(!showCode)}
+				>
+					{!showCode ? 'Show Code' : 'Hide Code'}
+				</button>
+				<button
+					className="btn rounded-none bg-pink-500 border-none text-white hover:text-white hover:bg-black"
+					onClick={() => setOverlayPreview(!overlayPreview)}
+				>
+					{!overlayPreview ? 'Overlay' : 'Stop Overlaying'}
+				</button>
+				<button
+					className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+					title="Save"
+				>
+					💾
+				</button>
+				<button
+					className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+					title="Open"
+				>
+					📁
+				</button>
+				<button
+					className="btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black"
+					onClick={() => {
+						let newCode = prettifyCode(currentCode, selectedTab);
+						setCode(newCode);
+						storage.setPagePreference(selectedTab, newCode);
+						storage.saveData();
+					}}
+					title="Prettify🧹Code"
+				>
+					🧹
+				</button>
+				<button
+					className={
+						'btn rounded-none bg-info border-none text-white hover:text-white hover:bg-black ' +
+						(shouldShowDebug ? 'bg-success' : 'bg-info')
+					}
+					onClick={() => {
+						setShouldShowDebug(!shouldShowDebug);
+					}}
+					title="Debug🐛Data"
+				>
+					🐛
+				</button>
+				<button
+					className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
+					onClick={() => {
+						setShouldShowSettings(!shouldShowSettings);
+					}}
+					title="⚙️Settings.eth"
+				>
+					⚙️
+				</button>
+				<button
+					className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
+					onClick={() => {
+						history.push('/');
+					}}
+				>
+					🪞
+				</button>
+				<button
+					className="btn rounded-none bg-transparent border-none text-white hover:text-white hover:bg-black w-50"
+					onClick={() => {
+						history.push('/properties');
+					}}
+				>
+					🍬
+				</button>
 			</div>
 			<FixedElements
 				hideAlerts={false}

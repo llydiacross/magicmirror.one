@@ -106,11 +106,14 @@ export default function Index() {
 											<br />
 											<br />
 											By using our{' '}
-											<u>⭐️Atlas.eth - Virtual Web3 Registry</u>, you
-											can build on all of your names and
-											when gas is low or you are simply
-											ready to launch your content to the
-											world, you can deploy to the
+											<u>
+												⭐️Atlas.eth - Virtual Web3
+												Registry
+											</u>
+											, you can build on all of your names
+											and when gas is low or you are
+											simply ready to launch your content
+											to the world, you can deploy to the
 											Ethereum blockchain. This lets
 											everyone see the future of Web3 on
 											Magic🪞.
@@ -173,8 +176,8 @@ export default function Index() {
 										<hr className="bg-base-100" />
 										<p className="mt-2">
 											But what truly sets Magic🪞 apart is
-											the Dream🎨.eth Studio. A
-											most magical way to create your own
+											the Dream🎨.eth Studio. A most
+											magical way to create your own
 											decentralized websites and add more
 											power to your Web3 domains. It's a
 											powerful tool that makes website
@@ -221,57 +224,120 @@ export default function Index() {
 								</div>
 							</div>
 
-							<div className="pt-4">
-							
-							<div>
-								<div
-									id="features"
-									className="card glass bg-accent shadow-xl hover:bg-accent"
-								>
-									<div className="card-body text-white">
-										
-										<p className="mt-2 lg:text-5xl md:text-3xl">
-											Magic🪞 means to normalize consent based browsing for a reconnecting world and reset the foundation of the internet.
-										</p>
-										<h2 className="card-title text-3xl md:text-xl">
-										Features / Tools:
-										</h2>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">⚙️settings.eth</span><hr className="bg-primary mb-2" />Manage your Magic🪞 experience and settings such as your decentralized storage options such as IPFS, Web3.Storage, NFT.Storage, your mirror’s theme or Frame, authorized wallets and many more.
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">Dream🎨.eth</span><hr className="bg-primary mb-2" />The most magical way to create your own decentralized websites and add more power to your Web3 domains. It’s a powerful tool that makes digital content creation incredibly easy and seamless by simply selecting what template you want to execute and fill in the blanks!
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">🤖Army.eth</span><hr className="bg-primary mb-2" />Magic🪞 integrates the power of AI building along side you, Websites, Landing Pages, Marketplaces via ♾️Mint.eth 3 Integration, and vast monetization methods enabled by our Ethereum Ads Service (🪧EADS.eth), a new Web is at our fingertips!
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">🍬Land.eth</span><hr className="bg-primary mb-2" />Web3 Landscaping and Property Management Services! Manage all of the builds, on all of your properties, all in one place.
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">🧰time.eth</span><hr className="bg-primary mb-2" />An evolving set of powertools for your Web3 browsing and ENS MGMT experience.
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">🔥1️⃣0️⃣0️⃣.eth</span><hr className="bg-primary mb-2" />The fairest domains of them all. See whos rising above the stars with our ENS Leaderboards!
-										</p>
-										<p className="mt-2">
-										<span className="text-2xl md:text-xl">📍egps.eth</span><hr className="bg-primary mb-2" />In Web3 🖖 marks the spot. Keep track of your journey, your assets and your favorite things both IRL and URL. (History)
-										</p>
-										
+							<div className="pt-4 mt-2">
+								<div>
+									<p className="mt-2 lg:text-3xl md:text-3xl">
+										Magic🪞 means to normalize consent based
+										browsing for a reconnecting world and
+										reset the foundation of the internet.
+									</p>
+									<div
+										id="features"
+										className="card glass shadow-xl mt-5"
+									>
+										<div className="card-body text-white">
+											<div className="flex flex-col gap-2 justify-center">
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														⚙️settings.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													Manage your Magic🪞
+													experience and settings such
+													as your decentralized
+													storage options such as
+													IPFS, Web3.Storage,
+													NFT.Storage, your mirror’s
+													theme or Frame, authorized
+													wallets and many more.
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														Dream🎨.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													The most magical way to
+													create your own
+													decentralized websites and
+													add more power to your Web3
+													domains. It’s a powerful
+													tool that makes digital
+													content creation incredibly
+													easy and seamless by simply
+													selecting what template you
+													want to execute and fill in
+													the blanks!
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														🤖Army.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													Magic🪞 integrates the power
+													of AI building along side
+													you, Websites, Landing
+													Pages, Marketplaces via
+													♾️Mint.eth 3 Integration,
+													and vast monetization
+													methods enabled by our
+													Ethereum Ads Service
+													(🪧EADS.eth), a new Web is
+													at our fingertips!
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														🍬Land.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													Web3 Landscaping and
+													Property Management
+													Services! Manage all of the
+													builds, on all of your
+													properties, all in one
+													place.
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														🧰time.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													An evolving set of
+													powertools for your Web3
+													browsing and ENS MGMT
+													experience.
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														🔥1️⃣0️⃣0️⃣.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													The fairest domains of them
+													all. See whos rising above
+													the stars with our ENS
+													Leaderboards!
+												</p>
+												<p className="mt-2">
+													<span className="text-2xl md:text-xl">
+														📍egps.eth
+													</span>
+													<hr className="bg-primary mb-2" />
+													In Web3 🖖 marks the spot.
+													Keep track of your journey,
+													your assets and your
+													favorite things both IRL and
+													URL. (History)
+												</p>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-
-						</div>
 					</div>
 				</div>
-				
 			</Hero>
-			
-			<div className="pt-5 pb-5 bg-base-200">
-				
-			</div>
+
+			<div className="pt-5 pb-5 bg-base-200"></div>
 			<div className="pt-5">
 				<div className="text-center w-4/3 bg-warning pt-5">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">

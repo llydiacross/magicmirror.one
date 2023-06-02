@@ -373,15 +373,16 @@ export default function Properties() {
 			}
 		>
 			<Navbar />
-			<div className="flex flex-row bg-primary pt-4 pb-5">
+			<div className="flex flex-row bg-gray-500 pt-4 pb-5">
 				<div className="flex flex-col w-2/5 p-2">
 					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
 						<u>🍬LAND.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
-					<p className="text-3xl text-accent">
-					Web3 Landscaping, Content Development, and Property Management Services!
+					<p className="text-3xl text-black">
+						Web3 Landscaping, Content Development, and Property
+						Management Services!
 					</p>
 				</div>
 			</div>
