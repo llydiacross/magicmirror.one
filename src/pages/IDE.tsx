@@ -386,42 +386,6 @@ function IDE({ theme }) {
 								: {}),
 						}}
 					>
-						{ensContext.loaded && ensContext.ensError !== null ? (
-							<>
-								<div className="bg-red-500 text-white p-2 rounded-md">
-									<p className="font-bold">ENS Error</p>
-									<p>{ensContext.ensError}</p>
-									<p
-										style={{
-											fontSize: 10,
-										}}
-									>
-										Preview might contain broken ENS
-										information!
-									</p>
-								</div>
-							</>
-						) : (
-							<></>
-						)}
-						{ensContext.currentEnsAddress === null ? (
-							<>
-								<div className="bg-red-500 text-white p-2 rounded-md">
-									<p className="font-bold">ENS Error</p>
-									<p>No Current ENS</p>
-									<p
-										style={{
-											fontSize: 10,
-										}}
-									>
-										Preview might contain broken ENS
-										information!
-									</p>
-								</div>
-							</>
-						) : (
-							<></>
-						)}
 						{!shouldShowDebug ? (
 							<>
 								<HTMLRenderer
@@ -605,8 +569,71 @@ function IDE({ theme }) {
 				hideAlerts={false}
 				hideSettings
 				hideFooter
+				forceAlerts={true}
 				hideUserInfo
-			/>
+			>
+				{ensContext.loaded && ensContext.ensError !== null ? (
+					<div
+						className="flex flex-col"
+						style={{
+							opacity: 0.5,
+							cursor: 'pointer',
+						}}
+					>
+						<div
+							className="bg-red-500 text-white p-1 rounded-md"
+							onClick={(e) => {
+								//hide the div
+								e.currentTarget.style.display = 'none';
+							}}
+						>
+							<p className="font-bold">
+								ENS Error:{' '}
+								<small>{ensContext.ensError?.message}</small>
+							</p>
+
+							<p
+								style={{
+									fontSize: 8,
+								}}
+							>
+								Preview might contain broken ENS information!
+							</p>
+						</div>
+					</div>
+				) : (
+					<></>
+				)}
+				{ensContext.currentEnsAddress === null ? (
+					<div
+						className="flex flex-col"
+						style={{
+							opacity: 0.5,
+							cursor: 'pointer',
+						}}
+						onClick={(e) => {
+							//hide the div
+							e.currentTarget.style.display = 'none';
+						}}
+					>
+						<div className="bg-red-500 text-white p-1 rounded-md">
+							<p className="font-bold">
+								ENS Error:{' '}
+								<small>{ensContext.ensError?.message}</small>
+							</p>
+							<p
+								style={{
+									fontSize: 8,
+								}}
+							>
+								Preview might contain broken ENS information!
+							</p>
+						</div>
+					</div>
+				) : (
+					<></>
+				)}
+			</FixedElements>
 			<ChatGPTModal
 				tabs={tabs}
 				onSetHTML={(code) => {

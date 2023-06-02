@@ -16,12 +16,14 @@ function FixedElements({
 	hideFooter = false,
 	hideUserInfo = false,
 	hideOwnership = false,
+	forceAlerts = false,
 	useFixed = true,
 	children = null,
 	linkHref = null,
 }: {
 	onSettings?: () => void;
 	hideAlerts?: boolean;
+	forceAlerts?: boolean;
 	hideSettings?: boolean;
 	hideFooter?: boolean;
 	hideUserInfo?: boolean;
@@ -42,13 +44,18 @@ function FixedElements({
 
 	useEffect(() => {
 		if (hudRef.current !== null) {
-			if (storage.getGlobalPreference('hideAlerts')) {
+			if (storage.getGlobalPreference('hideAlerts') && !forceAlerts) {
 				hudRef.current.style.display = 'none';
 			} else hudRef.current.style.display = 'flex';
 		}
 	});
 
 	const toggleHud = () => {
+		if (forceAlerts) {
+			hudRef.current.style.display = 'flex';
+			return;
+		}
+
 		if (
 			hudRef.current.style.display === 'block' ||
 			hudRef.current.style.display === 'none'
@@ -174,7 +181,9 @@ function FixedElements({
 					)}
 					<div>
 						<img
-							src={ensContext.avatar || '/img/magicmirrorLogo.jpg'}
+							src={
+								ensContext.avatar || '/img/magicmirrorLogo.jpg'
+							}
 							alt="Magic🪞"
 							className="w-24 cursor-pointer"
 							onClick={() => {
