@@ -134,7 +134,7 @@ export class StorageController {
 	 * @param {any} id
 	 * @returns
 	 */
-	getPagePreference(key: string, id?: any, log = true) {
+	getPagePreference(key: string, id: any = null, log = true) {
 		if (id && typeof id !== 'string') {
 			id = id?.id || id?.name || 'default';
 		} else if (
