@@ -62,9 +62,9 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 									Gain access to our highly experimental, and
 									controversial Web3 Name Service Aggrigator{' '}
 									<u className="text-success">
-										Virtual Web3 Registry Service
+										⭐️ATLAS.ETH - Virtual Web3 Registry Service
 									</u>
-									Preview the Content Hash and other Metadata
+									Preview the Content Hash and other Metadata updates
 									on your ENS Name absolutely free.
 								</div>
 							</div>
