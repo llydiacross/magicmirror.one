@@ -70,13 +70,13 @@ export default function LoginModal({ hidden, onLogin, onHide }: any) {
 							</div>
 
 							<p className="text-center text-1xl text-black p-2">
-								<b>Note:</b> We use industry standard{' '}
-								<u>Sign In With Ethereum</u> to handle your
-								session information. Rest assured that we only
-								use your address to identify your account. We do
-								not store, track or siphon any other information
+								
+								<u>Sign In</u> 
+								Rest assured that we only
+								use your address to identify your account and count how many visits domain has had on Magic🪞. We do
+								not store, track or siphon information
 								about you, your account, the sites you create,
-								etc..
+								what domains you own, or any other information.
 							</p>
 							{loginContext.loaded && loginContext.error ? (
 								<p className="mt-2 text-center text-2xl text-error">

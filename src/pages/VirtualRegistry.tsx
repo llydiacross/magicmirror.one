@@ -102,13 +102,13 @@ function VirtualRegistry({ match }) {
 					<div className="flex flex-row bg-gray-500 pt-4 pb-5">
 						<div className="flex flex-col w-2/5 p-2">
 							<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-								Virtual Registry for <u>{domain}</u>
+								<u>{domain}</u>.⭐️ATLAS.eth
 							</h1>
 						</div>
 						<div className="flex flex-col w-2/5 p-2">
 							<p className="text-3xl">
-								Your virutal registry is a mirror of your ENS
-								Registry allowing you to change things for free!
+								Your ⭐️ATLAS.eth virutal registry entry is a mirror of your ENS
+								Registry allowing you to change things for free! What's more, when gas is high, Magic🪞 will always reflect you.
 							</p>
 						</div>
 					</div>

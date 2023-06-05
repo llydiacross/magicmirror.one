@@ -79,14 +79,12 @@ function ENS({ match }) {
 					<div className="flex flex-row bg-gray-500 pt-4 pb-5">
 						<div className="flex flex-col w-2/5 p-2">
 							<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-								<u>{domain}</u> Inspector
+								<u>{domain}</u>.Meta🏷️.eth
 							</h1>
 						</div>
 						<div className="flex flex-col w-2/5 p-2">
 							<p className="text-3xl">
-								Heres where you can see which variables are
-								currently inside of your registry and change
-								them.
+								Here's you can manage all aspects of your ENS domains metadata.
 							</p>
 						</div>
 					</div>
@@ -128,16 +126,16 @@ function ENS({ match }) {
 									<div className="divider">Registry</div>
 									<div className="flex flex-col w-full">
 										<button className="bg-gray-500 text-white p-2 rounded-md">
-											View Virtual Registry
+											⭐️atlas.eth - Virtual Registry
 										</button>
 									</div>
 									<div className="flex flex-col w-full">
 										<button className="bg-gray-500 text-white p-2 rounded-md">
-											Deploy ENS Registry
+											🚀Launcher.eth - Deploy to ENS Registry
 										</button>
 									</div>
 									<div className="divider">
-										Sub Domains & Content Records
+										Subdomain🔄.eth - Subdomains Content Manager
 									</div>
 									<div className="flex flex-col w-full">
 										<button className="bg-gray-500 text-white p-2 rounded-md">
@@ -146,7 +144,7 @@ function ENS({ match }) {
 									</div>
 									<div className="flex flex-col w-full">
 										<button className="bg-gray-500 text-white p-2 rounded-md">
-											Set Content Record
+											Set Content Hash for Subdomain
 										</button>
 									</div>
 									<div className="flex flex-col w-full">
