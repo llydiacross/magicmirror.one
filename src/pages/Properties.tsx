@@ -191,11 +191,11 @@ export default function Properties() {
 						<div className="text-2xl font-bold text-black">
 							{item.FakeRegistry ? (
 								<span className="badge bg-success text-black me-2">
-									📝
+									⭐️
 								</span>
 							) : (
 								<span className="badge bg-error text-black me-2">
-									📝
+									⭐️
 								</span>
 							)}
 							{item.Stats ? (
@@ -261,25 +261,27 @@ export default function Properties() {
 									history.push(`/ide?url=${item.domainName}`);
 								}}
 							>
-								🖌
+								🎨
 							</button>
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								title="View and manage your ENS Metadata on Meta🏷️.eth"
 								onClick={() => {
 									history.push(`/ens/${item.domainName}`);
 								}}
 							>
-								🔍
+								🏷️
 							</button>
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								title="Manage entry on the ⭐️Atlas.eth Virtual Registry"
 								onClick={() => {
 									history.push(
 										`/registry/${item.domainName}`
 									);
 								}}
 							>
-								📝
+								⭐️
 							</button>
 						</div>
 					</div>
