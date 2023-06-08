@@ -99,25 +99,23 @@ function VirtualRegistry({ match }) {
 				<Loading />
 			) : (
 				<>
-					<div className="flex flex-row bg-gray-500 pt-4 pb-5">
+					<div className="flex flex-row bg-accent pt-4 pb-5">
 						<div className="flex flex-col w-2/5 p-2">
-							<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-								<u>{domain}</u>.⭐️ATLAS.eth
+							<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
+								<u>⭐️ATLAS.eth</u>
 							</h1>
 						</div>
 						<div className="flex flex-col w-2/5 p-2">
-							<p className="text-3xl">
-								Your ⭐️ATLAS.eth virutal registry entry is a mirror of your ENS
-								Registry allowing you to change things for free! What's more, when gas is high, Magic🪞 will always reflect you.
+							<p className="text-3xl text-primary">
+							Manage all aspects of {domain}'s metadata, manage subdomains, content managers, and much more.
 							</p>
 						</div>
 					</div>
-
 					<div className="flex flex-col md:flex-row sm:w-full md:w-4/5 justify-content-center mx-auto mt-2 mb-2 p-2 gap-2">
 						<div className="flex flex-row md:flex-col md:w-4/5 sm:w-full">
 							<div className="align-middle inline-block min-w-full bg-white">
 								<div className="bg-info p-2 text-black text-3xl">
-									<b>⚙️{domain}</b>
+									<b>⭐️{domain}</b>
 								</div>
 								{!isApproved && !error ? (
 									<div className="p-2">

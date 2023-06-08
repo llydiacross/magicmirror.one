@@ -76,22 +76,23 @@ function ENS({ match }) {
 				<Loading />
 			) : (
 				<>
-					<div className="flex flex-row bg-gray-500 pt-4 pb-5">
-						<div className="flex flex-col w-2/5 p-2">
-							<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
-								<u>{domain}</u>.Meta🏷️.eth
-							</h1>
-						</div>
-						<div className="flex flex-col w-2/5 p-2">
-							<p className="text-3xl">
-								Here's you can manage all aspects of your ENS domains metadata.
-							</p>
-						</div>
+				<div className="flex flex-row bg-accent pt-4 pb-5">
+					<div className="flex flex-col w-2/5 p-2">
+						<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
+							<u>Meta🏷️.eth</u>
+						</h1>
 					</div>
+					<div className="flex flex-col w-2/5 p-2">
+						<p className="text-3xl text-primary">
+						Manage all aspects of {domain}'s metadata, manage subdomains, content managers, and much more.
+						</p>
+					</div>
+				</div>
+
 					<div className="flex flex-row p-2">
 						<div className="flex flex-col w-2/5 p-2">
-							<div className="bg-warning p-2 text-black text-3xl">
-								<b>🛠️ Tools</b>
+							<div className="bg-info p-2 text-black text-3xl">
+								<b>Meta🏷️ Tools</b>
 							</div>
 							<div className="w-full h-full bg-gray-200 text-black p-2">
 								<div className="flex flex-col w-full gap-2">

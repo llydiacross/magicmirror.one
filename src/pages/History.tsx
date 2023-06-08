@@ -46,14 +46,14 @@ export default function History() {
 			}
 		>
 			<Navbar />
-			<div className="flex flex-row bg-gray-500 pt-4 pb-5">
+			<div className="flex flex-row bg-accent pt-4 pb-5">
 				<div className="flex flex-col w-2/5 p-2">
-					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
+					<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
 						<u>📍EGPS.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
-					<p className="text-3xl text-black">
+					<p className="text-3xl text-primary">
 						🖖 Marks the spot in the Metaverse. Here's your journey
 						through the Magic so far!
 					</p>
