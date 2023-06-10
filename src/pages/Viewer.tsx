@@ -560,7 +560,7 @@ function Viewer({ match }) {
 									//default should be ENS regitrar, however there is an opportunity to link other registrars here
 									//'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
 									'https://app.ens.domains/' +
-										ensContext.currentEnsAddress +
+									ensContext.currentEnsAddress.replace(/\.eth/g, '') +
 										'/register'
 								);
 							}}
