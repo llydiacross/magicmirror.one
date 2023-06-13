@@ -19,6 +19,9 @@ const config: InfinityMintConfig = {
 			useAlways: true,
 		},
 	},
+	roots: [
+		"/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"
+	],
 	express: {
 		port: 1337,
 		cors: [
@@ -137,7 +140,11 @@ const config: InfinityMintConfig = {
 			supportedExtensions: ['.flac'],
 		},
 		build: {},
-		scripts: {},
+		scripts: {
+			classicScripts: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+			disableDeployScripts: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+			disableMainExecution: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+		},
 		deploy: {},
 	},
 	export: {},

@@ -519,7 +519,7 @@ export default function Properties() {
 				<div className="p-2">
 					<Loading
 						showLoadingBar={false}
-						loadingReason="Fetching your ENS from the Virtual Web3 Registry."
+						loadingReason="Fetching your ENS from the ⭐️Atlas - The Virtual Web3 Registry."
 					/>
 				</div>
 			) : (

@@ -32,6 +32,7 @@ const config: InfinityMintClientConfig = {
 	projects: {
 		require: {
 			magicmirror: {},
+			'CHRONICLES 🎫 @1.0.0': {}
 		},
 		default: {
 			dev: 'magicmirror@1.0.0_ganache',
