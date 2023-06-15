@@ -76,18 +76,18 @@ function ENS({ match }) {
 				<Loading />
 			) : (
 				<>
-				<div className="flex flex-row bg-accent pt-4 pb-5">
-					<div className="flex flex-col w-2/5 p-2">
-						<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
-							<u>Meta🏷️.eth</u>
-						</h1>
+					<div className="flex flex-row bg-accent pt-4 pb-5">
+						<div className="flex flex-col w-2/5 p-2">
+							<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
+								<u>Meta🏷️.eth</u>
+							</h1>
+						</div>
+						<div className="flex flex-col w-2/5 p-2">
+							<p className="text-3xl text-primary">
+							Manage all aspects of {domain}'s metadata, manage subdomains, content managers, and much more.
+							</p>
+						</div>
 					</div>
-					<div className="flex flex-col w-2/5 p-2">
-						<p className="text-3xl text-primary">
-						Manage all aspects of {domain}'s metadata, manage subdomains, content managers, and much more.
-						</p>
-					</div>
-				</div>
 
 					<div className="flex flex-row p-2">
 						<div className="flex flex-col w-2/5 p-2">
