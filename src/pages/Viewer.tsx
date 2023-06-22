@@ -395,6 +395,7 @@ function Viewer({ match }) {
 									dir: dir,
 									stats: stats,
 								}}
+								stylesheets={['https://cdn.tailwindcss.com']}
 								code={buffer}
 							/>
 						) : (
@@ -560,16 +561,18 @@ function Viewer({ match }) {
 									//default should be ENS regitrar, however there is an opportunity to link other registrars here
 									//'https://ens.vision/name/' + ensContext.currentEnsAddress + '#:~:text=ENS%20registration%20costs.-,Register,-on%20Vision'
 									'https://app.ens.domains/' +
-									ensContext.currentEnsAddress.replace(/\.eth/g, '') +
+										ensContext.currentEnsAddress.replace(
+											/\.eth/g,
+											''
+										) +
 										'/register'
 								);
 							}}
 						>
 							Register on ENS
 						</button>
-						
+
 						<button
-							
 							className="btn btn-dark w-full mt-2 hidden"
 							onClick={() => {
 								window.open(
