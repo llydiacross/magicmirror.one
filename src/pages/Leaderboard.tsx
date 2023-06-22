@@ -55,17 +55,18 @@ export default function Leaderboard() {
 		>
 			<Navbar />
 			<div className="flex flex-row bg-accent pt-4 pb-5">
-						<div className="flex flex-col w-2/5 p-2">
-							<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
-								<u>🔥️1️⃣0️⃣0️⃣.eth</u>
-							</h1>
-						</div>
-						<div className="flex flex-col w-2/5 p-2">
-							<p className="text-3xl text-primary">
-								See what names hot or not, which ones are going from an ember to the stars with our ENS Leaderboards!
-							</p>
-						</div>
-					</div>
+				<div className="flex flex-col w-2/5 p-2">
+					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
+						<u>🔥️1️⃣0️⃣0️⃣.eth</u>
+					</h1>
+				</div>
+				<div className="flex flex-col w-2/5 p-2">
+					<p className="text-3xl text-black">
+						See what names hot or not, which ones are going from an
+						ember to the stars with our ENS Leaderboards!
+					</p>
+				</div>
+			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
 				<div className="flex flex-col w-full">
 					{/** Top 100 Domains (All Time) */}
