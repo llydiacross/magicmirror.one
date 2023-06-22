@@ -395,7 +395,7 @@ function Viewer({ match }) {
 									dir: dir,
 									stats: stats,
 								}}
-								stylesheets={['https://cdn.tailwindcss.com']}
+								scripts={['https://cdn.tailwindcss.com']}
 								code={buffer}
 							/>
 						) : (

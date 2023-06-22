@@ -26,7 +26,7 @@ export const renderHTML = (
       <head>
         <!--Reflected by Magic🪞.eth Site Builder by 0x0z.xyz | The Magic of Web3-->
         ${stylesheets.map((sheet) => {
-			return `<link href="${sheet}" rel="stylesheet" type="text/css" />`;
+			return `<link href="${sheet}" rel="stylesheet"/>`;
 		})}
         ${meta.map((meta) => {
 			return `<${meta.tag} ${meta.properties || ''}>${meta.children}</${
@@ -67,9 +67,9 @@ export const renderHTML = (
             padding: 0;
           }
         </style>
-        <style>
-          ${safeCSS}
-        </style>
+
+        ${safeCSS ? `<style>${safeCSS}</style>` : ''}
+     
         ${scripts.map((script) => {
 			return `<script src="${script}"></script>`;
 		})}
