@@ -13,12 +13,14 @@ const config: InfinityMintConfig = {
 			fullUnicode: false,
 		},
 	},
+	/**
 	ipfs: {
 		web3Storage: {
 			token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZjZWYwNjFCYTkxNGZhYTdFNjU3NEI2N0E0NjU4YjIyNzgwMTYxQmQiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTA0MTM0MTMzMjgsIm5hbWUiOiJpbmZpbml0eS1taW50In0.se1kP3g-ssSs0G8DjIrd2pbUeq1b_OzuCqFoxzepZVA',
 			useAlways: true,
 		},
 	},
+	**/
 	express: {
 		port: 1337,
 		cors: [
@@ -137,9 +139,14 @@ const config: InfinityMintConfig = {
 			supportedExtensions: ['.flac'],
 		},
 		build: {},
-		scripts: {},
+		scripts: {
+			disableDeployScripts: ['/infinitymint-buildtools/'],
+			disableMainExecution: ['/infinitymint-buildtools/'],
+			classicScripts: ['/infinitymint-buildtools/'],
+		},
 		deploy: {},
 	},
+	roots: ['../infinitymint-buildtools/'],
 	export: {},
 };
 
