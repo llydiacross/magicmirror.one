@@ -261,7 +261,7 @@ const useENSContext = ({ ensAddress }) => {
 								fetchImageAbortController.current
 							);
 						} catch (error) {
-							console.log('bad IPNS: dweb.link/ipns/' + hash);
+							console.log('bad /ipns/' + hash);
 							throw error;
 						}
 					}

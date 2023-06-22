@@ -336,8 +336,12 @@ export default function Index() {
 					</div>
 				</div>
 			</Hero>
-
-			<div className="pt-5 pb-5 bg-base-200"></div>
+			<div
+				style={{
+					paddingTop: '6rem',
+				}}
+				className="pb-5 bg-base-200"
+			></div>
 			<div className="pt-5">
 				<div className="text-center w-4/3 bg-warning pt-5">
 					<div className="flex flex-col md:flex-row lg:flex-row gap-2 w-full pt-5">
@@ -376,13 +380,12 @@ export default function Index() {
 					</div>
 				</div>
 			</div>
-			<div className="pt-5 pb-5 bg-base-200">
-				<br />
-				<br />
-				<br />
-				<br />
-				<br />
-			</div>
+			<div
+				className="pt-5 pb-5 bg-base-200"
+				style={{
+					paddingTop: '6rem',
+				}}
+			></div>
 			{/** Contains the footer and the 0x0zLogo with the console button */}
 			<FixedElements
 				hideUserInfo={false}
