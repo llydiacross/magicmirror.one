@@ -191,11 +191,11 @@ export default function Properties() {
 						<div className="text-2xl font-bold text-black">
 							{item.FakeRegistry ? (
 								<span className="badge bg-success text-black me-2">
-									📝
+									⭐️
 								</span>
 							) : (
 								<span className="badge bg-error text-black me-2">
-									📝
+									⭐️
 								</span>
 							)}
 							{item.Stats ? (
@@ -261,25 +261,27 @@ export default function Properties() {
 									history.push(`/ide?url=${item.domainName}`);
 								}}
 							>
-								🖌
+								🎨
 							</button>
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								title="View and manage your ENS Metadata on Meta🏷️.eth"
 								onClick={() => {
 									history.push(`/ens/${item.domainName}`);
 								}}
 							>
-								🔍
+								🏷️
 							</button>
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								title="Manage entry on the ⭐️Atlas.eth Virtual Registry"
 								onClick={() => {
 									history.push(
 										`/registry/${item.domainName}`
 									);
 								}}
 							>
-								📝
+								⭐️
 							</button>
 						</div>
 					</div>
@@ -373,14 +375,14 @@ export default function Properties() {
 			}
 		>
 			<Navbar />
-			<div className="flex flex-row bg-gray-500 pt-4 pb-5">
+			<div className="flex flex-row bg-accent pt-4 pb-5">
 				<div className="flex flex-col w-2/5 p-2">
-					<h1 className="text-3xl md:text-5xl lg:text-6xl text-black text-center md:text-right lg:text-right mb-4">
+					<h1 className="text-3xl md:text-5xl lg:text-6xl text-primary text-center md:text-right lg:text-right mb-4">
 						<u>🍬LAND.eth</u>
 					</h1>
 				</div>
 				<div className="flex flex-col w-2/5 p-2">
-					<p className="text-3xl text-black">
+					<p className="text-3xl text-primary">
 						Web3 Landscaping, Content Development, and Property
 						Management Services!
 					</p>
@@ -517,7 +519,7 @@ export default function Properties() {
 				<div className="p-2">
 					<Loading
 						showLoadingBar={false}
-						loadingReason="Fetching your ENS from the Virtual Web3 Registry."
+						loadingReason="Fetching your ENS from the ⭐️Atlas - The Virtual Web3 Registry."
 					/>
 				</div>
 			) : (

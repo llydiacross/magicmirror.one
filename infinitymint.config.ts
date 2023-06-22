@@ -140,9 +140,15 @@ const config: InfinityMintConfig = {
 		},
 		build: {},
 		scripts: {
+<<<<<<< HEAD
 			disableDeployScripts: ['/infinitymint-buildtools/'],
 			disableMainExecution: ['/infinitymint-buildtools/'],
 			classicScripts: ['/infinitymint-buildtools/'],
+=======
+			classicScripts: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+			disableDeployScripts: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+			disableMainExecution: ["/Users/zyonjosh/Desktop/0x0z/GITHUB/infinitymint-buildtools/"],
+>>>>>>> 87fe9a1953ba785f73d12d71d72014f16708d09c
 		},
 		deploy: {},
 	},
