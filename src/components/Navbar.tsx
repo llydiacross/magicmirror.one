@@ -61,6 +61,15 @@ export default function Navbar() {
 					</button>
 					<button
 						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
+						data-selected={history.location.pathname === '/history'}
+						onClick={() => {
+							history.push('/history');
+						}}
+					>
+						MAGIC 🎫
+					</button>
+					<button
+						className="hover:bg-info hover:text-black text-white font-bold py-2 px-4 rounded"
 						data-selected={history.location.pathname === '/ide/'}
 						onClick={() => {
 							history.push('/ide');
