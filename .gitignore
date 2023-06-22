@@ -31,6 +31,8 @@ artifacts/
 /projects/compiled/
 /projects/deployed/ganache/
 /projects/deployed/hardhat/
+/public/imports/
+/public/import/
 
 # Temp folder
 /temp
