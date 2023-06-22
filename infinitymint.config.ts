@@ -29,6 +29,7 @@ const config: InfinityMintConfig = {
 			'http://localhost:3000',
 			'https://webx.infinitymint.app',
 			'https://infinitymint.app',
+			'https://magicmirror.one',
 			'https://web.infinitymint.app',
 			'https://web-api.infinitymint.app',
 		],
