@@ -17,7 +17,7 @@ export const get = async (req, res) => {
 
 	if (!tokenId) return userError(res, 'Missing tokenId');
 
-	let ens = await server.prisma.ens.findFirst({
+	let ens = await server.prisma.eNS.findFirst({
 		where: {
 			tokenId: tokenId,
 		},
