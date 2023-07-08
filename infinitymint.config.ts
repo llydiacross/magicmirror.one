@@ -32,6 +32,8 @@ const config: InfinityMintConfig = {
 			'https://magicmirror.one',
 			'https://web.infinitymint.app',
 			'https://web-api.infinitymint.app',
+			'https://10kclub.infinitymint.app',
+			'https://infinitymint.app',
 		],
 		startup: async (server) => {
 			let app = server.app;
