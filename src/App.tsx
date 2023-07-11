@@ -25,7 +25,7 @@ import ClientContextProvider from 'infinitymint-client/dist/src/contexts/clientP
 
 function App() {
 	return (
-		<ClientContextProvider config={config}>
+		<ClientContextProvider config={config as any}>
 			<Web3ContextProvider>
 				<LoginContextProvider>
 					<ENSContextProvider>
