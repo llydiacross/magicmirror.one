@@ -410,21 +410,6 @@ export default function Properties() {
 						</div>
 					</div>
 					<div className="flex flex-col pl-4 hidden lg:block">
-						<button
-							disabled={loading || !loginContext.isSignedIn}
-							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-							onClick={() => {
-								fetchENS()
-									.catch((error) => {
-										setError(error);
-									})
-									.finally(() => {
-										setLoading(false);
-									});
-							}}
-						>
-							Fetch
-						</button>
 						<input
 							disabled={!loginContext.isSignedIn}
 							data-loading={loading}
@@ -450,6 +435,21 @@ export default function Properties() {
 					className="flex flex-row justify-center items-center gap-5"
 					hidden={hasSearched}
 				>
+					<button
+						disabled={loading || !loginContext.isSignedIn}
+						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+						onClick={() => {
+							fetchENS()
+								.catch((error) => {
+									setError(error);
+								})
+								.finally(() => {
+									setLoading(false);
+								});
+						}}
+					>
+						Fetch ENS
+					</button>
 					<div className="btn-group">
 						<button
 							disabled={page === 0}
