@@ -142,14 +142,8 @@ const config: InfinityMintConfig = {
 			supportedExtensions: ['.flac'],
 		},
 		build: {},
-		scripts: {
-			disableDeployScripts: ['/infinitymint-buildtools/'],
-			disableMainExecution: ['/infinitymint-buildtools/'],
-			classicScripts: ['/infinitymint-buildtools/'],
-		},
 		deploy: {},
 	},
-	roots: ['../infinitymint-buildtools/'],
 	export: {},
 };
 

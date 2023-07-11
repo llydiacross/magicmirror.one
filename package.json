@@ -15,7 +15,7 @@
     "build": "node react/build.js",
     "console": "npx infinitymint --console",
     "ganache": "npx infinitymint --start-ganache --stay-open --start-express 'false' --show-all-logs",
-    "socket": "npx infinitymint --start-ganache 'false' --stay-open --start-express 'false' --start-web-socket --show-all-logs",
+    "api": "npx infinitymint --start-ganache 'false' --stay-open --start-express 'true' --start-web-socket --show-all-logs",
     "deploy:dev": "npx infinitymint make --start-express 'false' --start-ganache 'false' --project 'magicmirror' --network 'ganache' --recompile --redeploy",
     "deploy": "npx infinitymint make --start-express 'false' --start-ganache 'false' --project 'magicmirror' --network 'polygon' --recompile --redeploy",
     "server": "npx pm2 start server/server.mjs",
