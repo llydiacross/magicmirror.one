@@ -11,7 +11,7 @@ export const run = async () => {
 	for (let record of ens) {
 		await server.prisma.stats.update({
 			where: { domainName: record.domainName },
-			data: { lastDayViews: 0 },
+			data: { lastDayViews: 0, lastHourViews: 0 },
 		});
 	}
 
