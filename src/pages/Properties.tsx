@@ -86,6 +86,7 @@ export default function Properties() {
 			'search',
 			{
 				domainName: searchTerm,
+				address: context.walletAddress,
 				page: page,
 			},
 			'GET'
@@ -409,6 +410,21 @@ export default function Properties() {
 						</div>
 					</div>
 					<div className="flex flex-col pl-4 hidden lg:block">
+						<button
+							disabled={loading || !loginContext.isSignedIn}
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							onClick={() => {
+								fetchENS()
+									.catch((error) => {
+										setError(error);
+									})
+									.finally(() => {
+										setLoading(false);
+									});
+							}}
+						>
+							Fetch
+						</button>
 						<input
 							disabled={!loginContext.isSignedIn}
 							data-loading={loading}

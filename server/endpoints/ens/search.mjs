@@ -12,15 +12,22 @@ export const settings = {
  * @param {import('express').Response} res
  */
 export const get = async (req, res) => {
-	let { page, domainName } = req.query;
+	let { page, domainName, address } = req.query;
 	page = parseInt(page) || 0;
 
 	if (!domainName) return userError(res, 'No domain name provided');
+	if (!address) return userError(res, 'No address provided');
+
 	//search for the address in the database
 	let enses = await server.prisma.eNS.findMany({
 		where: {
 			domainName: {
 				contains: domainName,
+			},
+			AND: {
+				ownerAddress: {
+					contains: address,
+				},
 			},
 		},
 		skip: page * server.config.magicMirror.pageMax,
