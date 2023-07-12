@@ -13,45 +13,17 @@ function Hero({
 	children?: any;
 	style?: any;
 }) {
-	const [currentTheme, setCurrentTheme] = useState(theme || null);
-	const eventEmitterCallbackRef = useRef(null);
-	const themeRef = useRef(theme || null);
-
-	// Code for the h1 text animation is in the animation.ts file
-	useEffect(() => {
-		if (
-			themeRef.current === null &&
-			storage.getGlobalPreference('defaultTheme')
-		) {
-			setCurrentTheme(storage.getGlobalPreference('defaultTheme'));
-		}
-
-		if (eventEmitterCallbackRef.current === null) {
-			eventEmitterCallbackRef.current = () => {
-				if (
-					themeRef.current === null &&
-					storage.getGlobalPreference('defaultTheme')
-				) {
-					setCurrentTheme(
-						storage.getGlobalPreference('defaultTheme')
-					);
-				}
-			};
-		}
-
-		WebEvents.off('reload', eventEmitterCallbackRef.current);
-		WebEvents.on('reload', eventEmitterCallbackRef.current);
-
-		return () => {
-			WebEvents.off('reload', eventEmitterCallbackRef.current);
-		};
-	}, []);
+	console.log(style);
 
 	return (
 		<div
 			className={'hero min-h-screen bg-base-200 w-full z-50 max-w-screen'}
-			data-theme={currentTheme}
-			style={style}
+			data-theme={
+				storage.getGlobalPreference('defaultTheme') || theme || 'forest'
+			}
+			style={{
+				...style,
+			}}
 		>
 			{children}
 		</div>

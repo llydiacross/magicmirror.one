@@ -74,8 +74,7 @@ function EnsClub() {
 		>
 			<Hero
 				style={{
-					background:
-						'url(/img/10kbg.png) no-repeat center contain black',
+					backgroundImage: 'url(/img/10kbg.png)',
 				}}
 			>
 				<div className="hero-content">
