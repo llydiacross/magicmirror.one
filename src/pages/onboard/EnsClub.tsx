@@ -54,9 +54,6 @@ function EnsClub() {
 		) {
 			setSuccess(true);
 			setHasOnboard(true);
-			setTimeout(() => {
-				window.close();
-			}, 5000);
 		}
 	}, [fetchENS, context, loginContext]);
 
@@ -156,6 +153,25 @@ function EnsClub() {
 											<u>{context.walletAddress}</u> has
 											been connected to Magic Mirror
 										</p>
+										<br />
+										<p>
+											<b>
+												If this is the incorrect wallet,
+												you might need to visit
+												<a
+													href="https://magicmirror.one"
+													target="_blank"
+												>
+													{' '}
+													<u>Magic🪞.eth</u>
+												</a>
+												in a new browser tab and connect
+												the correct wallet. This is due
+												to a security feature of your
+												wallet.
+											</b>
+										</p>
+
 										<p>
 											You have successfully connected your
 											ethereum properties to magic mirror
@@ -168,10 +184,7 @@ function EnsClub() {
 													window.close();
 												}}
 											>
-												<u>
-													Closing in 5 seconds...
-													(click here to close)
-												</u>
+												<u>Close This Window</u>
 											</a>
 										</p>
 									</div>
