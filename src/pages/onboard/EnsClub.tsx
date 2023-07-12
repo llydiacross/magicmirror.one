@@ -292,7 +292,9 @@ function EnsClub() {
 										<button
 											className="btn btn-primary"
 											hidden={!context.walletConnected}
-											onClick={async () => {}}
+											onClick={async () => {
+												fetchENS();
+											}}
 										>
 											Fetch Properties
 										</button>
