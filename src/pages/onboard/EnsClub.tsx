@@ -12,10 +12,8 @@ import { apiFetch } from '../../api';
 import Loading from '../../components/Loading';
 import storage from '../../storage';
 
-let oldTitle = document.title;
 function EnsClub() {
 	const context = useContext(Web3Context);
-	const history = useHistory();
 	const loginContext = useContext(LoginContext);
 
 	const [loading, setLoading] = useState(false);
@@ -40,13 +38,12 @@ function EnsClub() {
 			true
 		);
 		setHasOnboard(true);
-		//change title so iframe can read it
-		document.title = '%ONBOARD_SUCCESS%';
+		window.postMessage({
+			onboard: true,
+		});
 	}, []);
 
 	useEffect(() => {
-		//change title so iframe can read it
-		document.title = oldTitle;
 		if (!context.loaded || !loginContext.loaded) return;
 		if (context.walletConnected && loginContext.isSignedIn) {
 			if (
@@ -58,8 +55,9 @@ function EnsClub() {
 			else {
 				setSuccess(true);
 				setHasOnboard(true);
-				//change title so iframe can read it
-				document.title = '%ONBOARD_SUCCESS%';
+				window.postMessage({
+					onboard: true,
+				});
 			}
 		}
 	}, [fetchENS, context, loginContext]);
