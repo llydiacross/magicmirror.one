@@ -47,24 +47,16 @@ function EnsClub() {
 
 	useEffect(() => {
 		if (!context.loaded || !loginContext.loaded) return;
-		if (context.walletConnected && loginContext.isSignedIn) {
-			if (
-				!storage.getGlobalPreference(
-					'hasOnboard_' + context.walletAddress
-				)
-			)
-				fetchENS();
-			else {
-				setSuccess(true);
-				setHasOnboard(true);
-				window.postMessage({
-					onboard: true,
-				});
-
-				setTimeout(() => {
-					window.close();
-				}, 5000);
-			}
+		if (
+			context.walletConnected &&
+			loginContext.isSignedIn &&
+			storage.getGlobalPreference('hasOnboard_' + context.walletAddress)
+		) {
+			setSuccess(true);
+			setHasOnboard(true);
+			setTimeout(() => {
+				window.close();
+			}, 5000);
 		}
 	}, [fetchENS, context, loginContext]);
 
