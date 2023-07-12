@@ -153,23 +153,24 @@ function EnsClub() {
 											<u>{context.walletAddress}</u> has
 											been connected to Magic Mirror
 										</p>
-										<br />
 										<p>
 											<b>
 												If this is the incorrect wallet,
-												you might need to visit
+												you might need to visit{' '}
 												<a
 													href="https://magicmirror.one"
 													target="_blank"
 												>
 													{' '}
 													<u>Magic🪞.eth</u>
-												</a>
+												</a>{' '}
 												in a new browser tab and connect
 												the correct wallet. This is due
 												to a security feature of your
 												wallet.
 											</b>
+											<br />
+											<br />
 											<br />
 											After connecting your wallet, please
 											refresh this window.
@@ -182,15 +183,15 @@ function EnsClub() {
 												}}
 												target="_blank"
 											>
-												Refresh
+												<u>Refresh Window</u>
 											</a>
 										</p>
-
 										<p>
 											You have successfully connected your
 											ethereum properties to magic mirror
 											and they can now be accessed by the
-											10k club minter.
+											10k club minter. Please close this
+											window to continue.
 										</p>
 										<p className="pt-5 border-t border-green-500">
 											<a
