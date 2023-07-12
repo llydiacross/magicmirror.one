@@ -172,6 +172,16 @@ function EnsClub() {
 												wallet.
 											</b>
 											<br />
+											<a
+												href="https://magicmirror.one"
+												target="_blank"
+											>
+												<u>
+													Visit Magic🪞.eth to conncet
+													wallet
+												</u>
+											</a>
+											<br />
 											<br />
 											<br />
 											After connecting your wallet, please
