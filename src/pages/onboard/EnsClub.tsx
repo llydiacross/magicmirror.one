@@ -95,6 +95,7 @@ function EnsClub() {
 											<u>{context.walletAddress}</u> will
 											be connected to magicmirror!
 											<br />
+											<br />
 											<b>
 												If this is the incorrect wallet,
 												you might need to visit{' '}
@@ -125,7 +126,6 @@ function EnsClub() {
 											refresh this window.
 											<br />
 											<br />
-											<br />
 											<a
 												href="#"
 												onClick={(e) => {
@@ -134,7 +134,7 @@ function EnsClub() {
 												}}
 												target="_blank"
 											>
-												Refresh
+												<u>Refresh Window</u>
 											</a>
 										</p>
 
