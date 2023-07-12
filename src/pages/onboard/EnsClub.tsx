@@ -39,6 +39,10 @@ function EnsClub() {
 		window.postMessage({
 			onboard: true,
 		});
+
+		setTimeout(() => {
+			window.close();
+		}, 5000);
 	}, []);
 
 	useEffect(() => {
@@ -98,10 +102,34 @@ function EnsClub() {
 										<p hidden={loginContext.isSignedIn}>
 											Please login to Magic🪞.eth.
 										</p>
-										<p>
-											Wallet{' '}
+										<p hidden={!loginContext.isSignedIn}>
 											<u>{context.walletAddress}</u> will
 											be connected to magicmirror!
+											<br />
+											<b>
+												If this is the incorrect wallet,
+												you might need to visit
+												<a
+													href="https://magicmirror.one"
+													target="_blank"
+												>
+													{' '}
+													Magic🪞.eth
+												</a>
+												in a new browser tab and connect
+												the correct wallet. This is due
+												to a security feature of your
+												wallet.
+											</b>
+											<br />
+											<a
+												href="https://magicmirror.one"
+												target="_blank"
+											>
+												{' '}
+												Visit Magic🪞.eth to conncet
+												wallet
+											</a>
 										</p>
 
 										<p className="pt-5 border-t border-sky-500">
@@ -133,7 +161,10 @@ function EnsClub() {
 													window.close();
 												}}
 											>
-												<u>Closing in 5 seconds...</u>
+												<u>
+													Closing in 5 seconds (click
+													here to close)...
+												</u>
 											</a>
 										</p>
 									</div>
