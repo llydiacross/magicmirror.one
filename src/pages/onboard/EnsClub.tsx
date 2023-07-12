@@ -11,8 +11,8 @@ import WebEvents from '../../webEvents';
 import { apiFetch } from '../../api';
 import Loading from '../../components/Loading';
 import storage from '../../storage';
-import { use } from 'chai';
 
+let oldTitle = document.title;
 function EnsClub() {
 	const context = useContext(Web3Context);
 	const history = useHistory();
@@ -45,6 +45,8 @@ function EnsClub() {
 	}, []);
 
 	useEffect(() => {
+		//change title so iframe can read it
+		document.title = oldTitle;
 		if (!context.loaded || !loginContext.loaded) return;
 		if (context.walletConnected && loginContext.isSignedIn) {
 			if (
