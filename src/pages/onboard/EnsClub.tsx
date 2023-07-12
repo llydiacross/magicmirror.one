@@ -162,8 +162,8 @@ function EnsClub() {
 												}}
 											>
 												<u>
-													Closing in 5 seconds (click
-													here to close)...
+													Closing in 5 seconds...
+													(click here to close)
 												</u>
 											</a>
 										</p>
