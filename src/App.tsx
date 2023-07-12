@@ -1,10 +1,13 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Web3ContextProvider from './contexts/web3Context';
 import ENSContextProvider from './contexts/ensContext';
+import ClientContextProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
+import config from './infinitymint.client.config';
+
 import IDE from './pages/IDE';
 import Index from './pages/Index';
 import Viewer from './pages/Viewer';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import LoginContextProvider from './contexts/loginContext';
 import Converter from './pages/utilities/Converter';
@@ -20,9 +23,7 @@ import HistoryCapture from './components/HistoryCapture';
 import History from './pages/History';
 import VirtualRegistry from './pages/VirtualRegistry';
 import ENS from './pages/ENS';
-import config from './infinitymint.client.config';
-import ClientContextProvider from 'infinitymint-client/dist/src/contexts/clientProvider';
-
+import EnsClub from './pages/onboard/EnsClub';
 function App() {
 	return (
 		<ClientContextProvider config={config as any}>
@@ -85,6 +86,9 @@ function App() {
 									</Route>
 									<Route exact path="/history">
 										<History />
+									</Route>
+									<Route exact path="/onboard/10kclub">
+										<EnsClub />
 									</Route>
 									<Route exact path="*">
 										<NotFound />

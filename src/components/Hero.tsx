@@ -4,7 +4,15 @@ import WebEvents from '../webEvents';
 import storage from '../storage';
 
 // Handle for the typeWriter animation
-function Hero({ theme, children }: { theme?: string; children?: any }) {
+function Hero({
+	theme,
+	children,
+	style = {},
+}: {
+	theme?: string;
+	children?: any;
+	style?: any;
+}) {
 	const [currentTheme, setCurrentTheme] = useState(theme || null);
 	const eventEmitterCallbackRef = useRef(null);
 	const themeRef = useRef(theme || null);
@@ -43,6 +51,7 @@ function Hero({ theme, children }: { theme?: string; children?: any }) {
 		<div
 			className={'hero min-h-screen bg-base-200 w-full z-50 max-w-screen'}
 			data-theme={currentTheme}
+			style={style}
 		>
 			{children}
 		</div>

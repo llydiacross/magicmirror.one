@@ -38,7 +38,12 @@ const useWeb3Context = () => {
 			const result = await (window as any).ethereum.request({
 				method: 'eth_accounts',
 			});
-			return result && result.length !== 0;
+			if (!result || result.length === 0) return false;
+
+			//now check chainId to see if it is ethereum
+			if (parseInt(window.ethereum.networkVersion) !== 1) return false;
+
+			return true;
 		} catch (error) {
 			console.log(error);
 			return false;

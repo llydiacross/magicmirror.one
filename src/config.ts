@@ -339,7 +339,7 @@ const config = {
 		},
 	},
 	defaultAvatar: '/img/0x0zLogo.jpg',
-	defaultTheme: '0x0z_light',
+	defaultTheme: 'forest',
 	themes: [
 		'Ox0z_light',
 		'Ox0z_dark',
@@ -399,7 +399,7 @@ const config = {
 		['.im', 'infinitymint.app'],
 		['.infinitymint', '.eth'],
 		['.ethereum', '.eth'],
-		['.art','.art']
+		['.art', '.art'],
 	],
 };
 
