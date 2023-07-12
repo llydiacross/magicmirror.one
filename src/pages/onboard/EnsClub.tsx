@@ -97,14 +97,13 @@ function EnsClub() {
 											<br />
 											<b>
 												If this is the incorrect wallet,
-												you might need to visit
+												you might need to visit{' '}
 												<a
 													href="https://magicmirror.one"
 													target="_blank"
 												>
-													{' '}
 													<u>Magic🪞.eth</u>
-												</a>
+												</a>{' '}
 												in a new browser tab and connect
 												the correct wallet. This is due
 												to a security feature of your
@@ -121,8 +120,11 @@ function EnsClub() {
 												</u>
 											</a>
 											<br />
+											<br />
+											<br />
 											After connecting your wallet, please
 											refresh this window.
+											<br />
 											<br />
 											<a
 												href="#"
