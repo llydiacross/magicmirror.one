@@ -114,7 +114,7 @@ function EnsClub() {
 													target="_blank"
 												>
 													{' '}
-													Magic🪞.eth
+													<u>Magic🪞.eth</u>
 												</a>
 												in a new browser tab and connect
 												the correct wallet. This is due
@@ -126,9 +126,24 @@ function EnsClub() {
 												href="https://magicmirror.one"
 												target="_blank"
 											>
-												{' '}
-												Visit Magic🪞.eth to conncet
-												wallet
+												<u>
+													Visit Magic🪞.eth to conncet
+													wallet
+												</u>
+											</a>
+											<br />
+											After connecting your wallet, please
+											refresh this window.
+											<br />
+											<a
+												href="#"
+												onClick={(e) => {
+													e.preventDefault();
+													window.location.reload();
+												}}
+												target="_blank"
+											>
+												Refresh
 											</a>
 										</p>
 
