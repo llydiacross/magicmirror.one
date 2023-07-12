@@ -24,12 +24,12 @@ export const post = async (req, res) => {
 	let validUser = await server.prisma.user.findUnique({ where: { address } });
 
 	if (!validUser) {
-		return {
+		return success(res, {
 			exists: false,
-		};
+		});
 	}
 
-	return {
+	return success(res, {
 		exists: true,
-	};
+	});
 };
