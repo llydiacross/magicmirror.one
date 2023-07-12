@@ -170,6 +170,20 @@ function EnsClub() {
 												to a security feature of your
 												wallet.
 											</b>
+											<br />
+											After connecting your wallet, please
+											refresh this window.
+											<br />
+											<a
+												href="#"
+												onClick={(e) => {
+													e.preventDefault();
+													window.location.reload();
+												}}
+												target="_blank"
+											>
+												Refresh
+											</a>
 										</p>
 
 										<p>
