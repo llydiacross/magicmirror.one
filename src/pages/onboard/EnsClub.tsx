@@ -19,7 +19,6 @@ function EnsClub() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(false);
-
 	const [hasOnboard, setHasOnboard] = useState(false);
 
 	const fetchENS = useCallback(async () => {
@@ -32,7 +31,6 @@ function EnsClub() {
 
 		setSuccess(true);
 		setLoading(false);
-
 		storage.setGlobalPreference(
 			'hasOnboard_' + context.walletAddress,
 			true
@@ -58,6 +56,10 @@ function EnsClub() {
 				window.postMessage({
 					onboard: true,
 				});
+
+				setTimeout(() => {
+					window.close();
+				}, 5000);
 			}
 		}
 	}, [fetchENS, context, loginContext]);
@@ -116,8 +118,12 @@ function EnsClub() {
 											10k club minter.
 										</p>
 										<p className="pt-5 border-t border-green-500">
-											<a href="https://10kclub.infinitymint.app/mint">
-												<u>Go to 10k Club Minter</u>
+											<a
+												onClick={() => {
+													window.close();
+												}}
+											>
+												<u>Closing in 5 seconds...</u>
 											</a>
 										</p>
 									</div>
