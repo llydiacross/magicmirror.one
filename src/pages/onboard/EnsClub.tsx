@@ -121,9 +121,9 @@ function EnsClub() {
 											</a>
 											<br />
 											<br />
-											<br />
 											After connecting your wallet, please
 											refresh this window.
+											<br />
 											<br />
 											<br />
 											<a
@@ -151,9 +151,21 @@ function EnsClub() {
 									<div className="card-body text-center text-black">
 										<p className="text-3xl ">Success</p>
 										<p>
+											You have successfully connected your
+											ethereum properties to magic mirror
+											and they can now be accessed by the
+											10k club minter.
+										</p>
+										<p>
 											Wallet{' '}
 											<u>{context.walletAddress}</u> has
 											been connected to Magic Mirror
+										</p>
+										<p className="p-4">
+											<b>
+												Please Close This Window To
+												Continue...
+											</b>
 										</p>
 										<p>
 											<b>
@@ -183,9 +195,9 @@ function EnsClub() {
 											</a>
 											<br />
 											<br />
-											<br />
 											After connecting your wallet, please
 											refresh this window.
+											<br />
 											<br />
 											<a
 												href="#"
@@ -198,13 +210,7 @@ function EnsClub() {
 												<u>Refresh Window</u>
 											</a>
 										</p>
-										<p>
-											You have successfully connected your
-											ethereum properties to magic mirror
-											and they can now be accessed by the
-											10k club minter. Please close this
-											window to continue.
-										</p>
+
 										<p className="pt-5 border-t border-green-500">
 											<a
 												onClick={() => {
