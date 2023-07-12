@@ -1,5 +1,5 @@
 import server from '../../server.mjs';
-import { userError } from '../../utils/helpers.mjs';
+import { success, userError } from '../../utils/helpers.mjs';
 import { ethers } from 'ethers';
 
 export const settings = {
