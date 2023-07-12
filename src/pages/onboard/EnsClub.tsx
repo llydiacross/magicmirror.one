@@ -55,7 +55,7 @@ function EnsClub() {
 			setSuccess(true);
 			setHasOnboard(true);
 		}
-	}, [fetchENS, context, loginContext]);
+	}, [context, loginContext]);
 
 	return (
 		<div
