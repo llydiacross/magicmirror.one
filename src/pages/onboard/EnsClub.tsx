@@ -40,6 +40,8 @@ function EnsClub() {
 			true
 		);
 		setHasOnboard(true);
+		//change title so iframe can read it
+		document.title = '%ONBOARD_SUCCESS%';
 	}, []);
 
 	useEffect(() => {
