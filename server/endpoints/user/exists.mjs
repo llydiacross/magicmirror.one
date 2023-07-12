@@ -18,9 +18,8 @@ export const post = async (req, res) => {
 		return userError(res, 'No address provided in field!');
 	}
 
-	if (!ethers.utils.isAddress(address)) {
+	if (!ethers.utils.isAddress(address))
 		return userError(res, 'Invalid address');
-	}
 
 	let validUser = await server.prisma.user.findUnique({ where: { address } });
 
