@@ -56,6 +56,8 @@ function EnsClub() {
 			else {
 				setSuccess(true);
 				setHasOnboard(true);
+				//change title so iframe can read it
+				document.title = '%ONBOARD_SUCCESS%';
 			}
 		}
 	}, [fetchENS, context, loginContext]);
