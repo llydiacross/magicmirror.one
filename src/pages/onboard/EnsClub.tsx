@@ -98,6 +98,11 @@ function EnsClub() {
 										<p hidden={loginContext.isSignedIn}>
 											Please login to Magic🪞.eth.
 										</p>
+										<p>
+											Wallet{' '}
+											<u>{context.walletAddress}</u> will
+											be connected to magicmirror!
+										</p>
 
 										<p className="pt-5 border-t border-sky-500">
 											Once you have connected and we have
@@ -111,6 +116,11 @@ function EnsClub() {
 								<div className="card bg-success mt-2 mb-2">
 									<div className="card-body text-center text-black">
 										<p className="text-3xl ">Success</p>
+										<p>
+											Wallet{' '}
+											<u>{context.walletAddress}</u> has
+											been connected to Magic Mirror
+										</p>
 										<p>
 											You have successfully connected your
 											ethereum properties to magic mirror
