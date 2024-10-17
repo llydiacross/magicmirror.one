@@ -1,46 +1,127 @@
 {
-  description = "www.eth Nix Flake";
+
+  # Copyright (C) {0x0zAgency} - All Rights Reserved
+  #
+  # Unauthorized copying of this file, via any medium is strictly prohibited
+  # Proprietary and confidential
+  # Written by Llydia Cross <llydia@0x0zAgency.me> 2021-2024
+
+  description = "Gaia Nix Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-    yarn2nix = {
-      url = "github:nix-community/yarn2nix";
-      flake = false;
-      inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs = { nixpkgs.follows = "nixpkgs"; };
     };
+    napalm = { url = "github:nix-community/napalm"; };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system:
-    let
-      pkgs = nixpkgs.legacyPackages.${system};
-      yarn2nix = import inputs.yarn2nix {inherit pkgs;};
-      builtProject = yarn2nix.mkYarnPackage {
-        name = "www-eth_infinitymint";
-        src = ./.;
-        packageJSON = ./package.json;
-        yarnLock = ./yarn.lock;
-        # NOTE: this is optional and generated dynamically if omitted
-        # yarnNix = ./yarn.nix;
-      };
-      reactFrontend = yarn2nix.mkYarnPackage {
-        name = "www-eth_react_build";
-        src = ./.;
-        yarnLock = ./yarn.lock;
-        packageJSON = ./package.json;
-      };
-    in {
-      devShells.default = import ./shell.nix { inherit pkgs; };
+  outputs = { self, nixpkgs, flake-utils, napalm, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        inputLock = (builtins.fromJSON (builtins.readFile ./package-lock.json));
+        version = builtins.substring 0 8 self.lastModifiedDate;
+        supportedSystems = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "i686-linux"
+          "x86_64-darwin"
+          "aarch64-darwin"
+        ];
 
-      installHook = ''
-        yarn set version berry
-        yarn
-      '';
+        forAllSystems = f:
+          nixpkgs.lib.genAttrs supportedSystems (system: f system);
 
-      packages.www_eth = builtProject;
-      packages.reactFrontend = reactFrontend;
-      packages.default = self.packages.${system}.www_eth;
-    }
-  );
+        # Nixpkgs instantiated for supported system types.
+        nixpkgsFor = forAllSystems (system:
+          import nixpkgs {
+            inherit system;
+            overlays = [ self.overlays.default napalm.overlays.default ];
+          });
+
+        
+        rewriteDep = package:
+          package // (if package ? resolved then {
+            resolved = "file://${
+                pkgs.fetchurl {
+                  url = package.resolved;
+                  outputHashAlgo =
+                    builtins.elemAt (builtins.split "-" package.integrity) 0;
+                  outputHash =
+                    builtins.elemAt (builtins.split "-" package.integrity) 2;
+                }
+              }";
+          } else
+            { }) // (if package ? dependencies then {
+              dependencies = rewriteDeps package.dependencies;
+            } else
+              { });
+
+        rewriteDeps = dependencies:
+          builtins.mapAttrs (name: rewriteDep) dependencies;
+
+        outputLock = builtins.toJSON ({
+          lockfileVersion = 2;
+          dependencies = rewriteDeps inputLock.dependencies;
+        });
+
+        gaia = pkgs.stdenv.mkDerivation {
+          name = "gaia";
+
+          nativeBuildInputs = [ pkgs.nodejs-18_x ];
+
+          src = ./.;
+
+          passAsFile = [ "packageLock" ];
+
+          packageLock = outputLock;
+
+          NO_UPDATE_NOTIFIER = true;
+
+          installPhase = ''
+            cp --no-preserve=mode -r $src $out
+            cd $out
+            cp $packageLockPath package-lock.json
+            npm ci --production
+          '';
+        };
+      in {
+        devShells.default = import ./shell.nix { inherit pkgs; };
+        overlays = {
+          default = final: prev: {
+            gaia = final.napalm.buildPackage ./gaia-result { };
+          };
+        };
+
+        buildInputs = with pkgs; [
+          bashInteractive
+          jq
+          nodejs-18_x
+          nodePackages.pnpm
+          python3
+          gcc
+        ];
+        shellHook = ''
+          export PATH="$PWD/node_modules/.bin/:$PATH"
+          alias scripts='jq ".scripts" package.json'
+          alias run='npm run'
+          alias g='git' \
+              ga='g add' \
+              gl='g pull' \
+              gf='g fetch' \
+              gp='g push' \
+              gst='g status' \
+              gcm='g commit -m' \
+              gcmsg='g add -A; g commit -am'
+        '';
+
+        packages = forAllSystems (system: {
+          inherit (nixpkgsFor.${system}) gaia;
+
+          docker = import ./docker.nix { inherit pkgs; };
+          default = self.packages.${system}.gaia;
+        });
+      });
 }
-
