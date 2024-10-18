@@ -16,7 +16,7 @@ const config = {
 	}),
 	providerUrl:
 		'https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c',
-	ipfsProviderURL: 'https://ipfs.io/api/v0/',
+	ipfsProviderURL: 'https://localhost:5001/api/v0/',
 	ipfsWebProvider: 'https://ipfs.io/ipfs/',
 	chatGPTApiKey: '',
 	chatGPTModel: '',
@@ -25,7 +25,7 @@ const config = {
 	chatGPTTopP: 1,
 	fileSizeLimit: 10, //10mb
 	useLocalApi: true,
-	localApiEndpoint: 'http://localhost:9090/',
+	localApiEndpoint: 'http://localhost:/',
 	apiEndpoint: 'https://reflect.magicmirror.one/',
 	destinations: [
 		//EADS.eth can control sponsored destinations

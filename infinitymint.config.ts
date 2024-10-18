@@ -93,7 +93,7 @@ const config: InfinityMintConfig = {
 				},
 			},
 			mumbai: {
-				url: 'https://matic-mumbai.chainstacklabs.com',
+				url: 'https://polygon-mumbai.g.alchemy.com/v2/demo',
 				accounts: {
 					mnemonic:
 						process.env.DEFAULT_WALLET_MNEMONIC ||
@@ -176,7 +176,7 @@ const config: InfinityMintConfig = {
 	/**
 	 * used to get files from IPFS, can be set to local host to use the node that is inside of the server already
 	 */
-	ipfsEndpoint: 'https://ipfs.io/api/v0/',
+	ipfsEndpoint: 'https://localhost:5001/api/v0/',
 	/**
 	 * CORS allowed origins, can be set to an empty array or removed to allow all origins
 	 */

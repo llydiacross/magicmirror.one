@@ -21,7 +21,6 @@ const config: InfinityMintClientConfig = {
 			ethereum:
 				'https://mainnet.infura.io/v3/ef00c000f793483bbf8506235ba4439b',
 			polygon: 'https://polygon-rpc.com',
-			mumbai: 'https://matic-mumbai.chainstacklabs.com',
 		},
 		alwaysCreateStaticProviders: true,
 		setDefaultUsingApi: true,

@@ -86,7 +86,7 @@ export class Server {
 	 */
 	config;
 
-	constructor(port = 9090) {
+	constructor(port = 1337) {
 		if (!process.env.SIWE_SECRET)
 			throw new Error(
 				'SIWE_SECRET not set in .env. Please make sure to set it. It can equal any random base64 string.'
@@ -163,9 +163,11 @@ export class Server {
 		});
 		this.config = this.infinityConsole.Helpers.getConfigFile();
 		this.ipfs = create({
+			port: 5050,
 			url:
 				this.config.magicMirror.ipfsEndpoint ||
-				'https://dweb.link/api/v0',
+				'https://ipfs.io/ipfs/',
+			
 		});
 		this.alchemy = new Alchemy({
 			apiKey: process.env.ALCHEMY_API_KEY,

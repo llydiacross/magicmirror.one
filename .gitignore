@@ -9,6 +9,8 @@ coverage.json
 magicmirror
 logfile
 
+.nix-shell/
+
 # Yarn
 .pnp.*
 .yarn/*
