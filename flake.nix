@@ -95,32 +95,9 @@
           };
         };
 
-        buildInputs = with pkgs; [
-          bashInteractive
-          jq
-          nodejs-18_x
-          nodePackages.pnpm
-          python3
-          gcc
-        ];
-        shellHook = ''
-          export PATH="$PWD/node_modules/.bin/:$PATH"
-          alias scripts='jq ".scripts" package.json'
-          alias run='npm run'
-          alias g='git' \
-              ga='g add' \
-              gl='g pull' \
-              gf='g fetch' \
-              gp='g push' \
-              gst='g status' \
-              gcm='g commit -m' \
-              gcmsg='g add -A; g commit -am'
-        '';
-
         packages = forAllSystems (system: {
           inherit (nixpkgsFor.${system}) gaia;
 
-          docker = import ./docker.nix { inherit pkgs; };
           default = self.packages.${system}.gaia;
         });
       });

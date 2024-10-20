@@ -86,7 +86,7 @@ export class Server {
 	 */
 	config;
 
-	constructor(port = 1337) {
+	constructor(port = 9090) {
 		if (!process.env.SIWE_SECRET)
 			throw new Error(
 				'SIWE_SECRET not set in .env. Please make sure to set it. It can equal any random base64 string.'

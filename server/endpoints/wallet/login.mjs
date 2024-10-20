@@ -1,6 +1,6 @@
-import siwe from 'siwe';
-import server from '../../server.mjs';
-import { success, userError } from '../../utils/helpers.mjs';
+import siwe from "siwe";
+import server from "../../server.mjs";
+import { success, userError } from "../../utils/helpers.mjs";
 //siwe stuff
 const { SiweMessage, ErrorTypes } = siwe;
 /**
@@ -10,10 +10,10 @@ const { SiweMessage, ErrorTypes } = siwe;
  */
 export const post = async (req, res) => {
 	try {
-		if (!req.body.message) return userError(res, 'Missing message.');
+		if (!req.body.message) return userError(res, "Missing message.");
 
-		let SIWEObject = new SiweMessage(req.body.message);
-		let { data: message } = await SIWEObject.verify({
+		const SIWEObject = new SiweMessage(req.body.message);
+		const { data: message } = await SIWEObject.verify({
 			signature: req.body.signature,
 			nonce: req.session.nonce,
 		});
@@ -36,7 +36,7 @@ export const post = async (req, res) => {
 			});
 
 		//fetch the user
-		let user = await server.prisma.user.findUnique({
+		const user = await server.prisma.user.findUnique({
 			where: {
 				address: message.address,
 			},
@@ -47,7 +47,7 @@ export const post = async (req, res) => {
 
 		req.session.role = user.role;
 
-		if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+		if (user.role === "ADMIN" || user.role === "SUPER_ADMIN")
 			req.session.admin = true;
 
 		//set the current address to equal the current sessionId, we do this to prevent session hijacking and if they switch wallet
@@ -70,10 +70,10 @@ export const post = async (req, res) => {
 		// Very specifc error handling.
 		switch (err) {
 			case ErrorTypes.EXPIRED_MESSAGE:
-				return userError(res, 'Expired message.');
+				return userError(res, "Expired message.");
 
 			case ErrorTypes.INVALID_SIGNATURE:
-				return userError(res, 'Invalid signature.');
+				return userError(res, "Invalid signature.");
 			default:
 				return userError(res, err.message);
 		}

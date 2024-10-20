@@ -25,7 +25,7 @@ const config = {
 	chatGPTTopP: 1,
 	fileSizeLimit: 10, //10mb
 	useLocalApi: true,
-	localApiEndpoint: 'http://localhost:/',
+	localApiEndpoint: 'http://localhost:9090/',
 	apiEndpoint: 'https://reflect.magicmirror.one/',
 	destinations: [
 		//EADS.eth can control sponsored destinations

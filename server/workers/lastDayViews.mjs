@@ -1,4 +1,4 @@
-import server from '../server.mjs';
+import server from "../server.mjs";
 
 //runs every 1 hour, takes the stats from the redis db and saves them to the prisma db
 export const settings = {
@@ -16,8 +16,8 @@ export const run = async () => {
 	}
 
 	//clean the redis db
-	let domainStats = await server.redisClient.hGetAll('stats');
+	let domainStats = await server.redisClient.hGetAll("stats");
 	for (let domainName in domainStats) {
-		await server.redisClient.hDel('stats', domainName);
+		await server.redisClient.hDel("stats", domainName);
 	}
 };
