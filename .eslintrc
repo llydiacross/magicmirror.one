@@ -1,0 +1,11 @@
+{
+	"ignorePatterns": ["server/utils/wrapper.mjs"],
+	"rules": {},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": "latest"
+	},
+	"env": {
+		"es6": true
+	}
+}
