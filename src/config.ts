@@ -14,8 +14,7 @@ const config = {
 			},
 		},
 	}),
-	providerUrl:
-		'https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c',
+	providerUrl: 'https://mainnet.infura.io/v3/669e602e2d6f4709a305b9e619d6020c',
 	ipfsProviderURL: 'https://localhost:5001/api/v0/',
 	ipfsWebProvider: 'https://ipfs.io/ipfs/',
 	chatGPTApiKey: '',
@@ -26,7 +25,7 @@ const config = {
 	fileSizeLimit: 10, //10mb
 	useLocalApi: true,
 	localApiEndpoint: 'http://localhost:9090/',
-	apiEndpoint: 'https://reflect.magicmirror.one/',
+	apiEndpoint: window.location.origin.toString() + ':9090',
 	destinations: [
 		//EADS.eth can control sponsored destinations
 		'infinitymint.eth',
@@ -297,14 +296,7 @@ const config = {
 			type: 'select',
 			default: 'website',
 			alwaysToggled: true,
-			options: [
-				'image',
-				'video',
-				'audio',
-				'text',
-				'application',
-				'website',
-			],
+			options: ['image', 'video', 'audio', 'text', 'application', 'website'],
 			help: 'Helps the browser know how to display your content. This is set automatically when you set your content through our IDE, the Dream🎨 Studio.',
 		},
 		twitter: {
